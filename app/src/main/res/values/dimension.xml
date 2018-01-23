@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="login_profile_image_size">100dp</dimen>
+    <dimen name="login_margin_large">65dp</dimen>
+    <dimen name="login_margin_small">20dp</dimen>
+    <dimen name="login_edit_text_width">180dp</dimen>
+    <dimen name="common_margin_small">5dp</dimen>
+    <dimen name="common_margin_large">20dp</dimen>
+</resources>
