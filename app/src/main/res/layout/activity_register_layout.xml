@@ -28,16 +28,67 @@
         android:layout_below="@id/RegisterActivity_password_custom_holder"
         app:text="@string/confirm_password"
         app:input_password="true"/>
-    <com.example.zzu.huzhucommunity.customlayout.RegisterEditTextLayout
+    <RelativeLayout
         android:id="@+id/RegisterActivity_sex_custom_holder"
-        style="@style/RegisterActivityCustomHolder"
         android:layout_below="@id/RegisterActivity_confirm_password_custom_holder"
-        app:text="@string/sex"/>
-    <com.example.zzu.huzhucommunity.customlayout.RegisterEditTextLayout
+        style="@style/RegisterActivityCustomHolder">
+        <TextView
+            android:id="@+id/RegisterActivity_set_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="false"
+            android:textSize="18sp"
+            android:textColor="@color/colorWhite"
+            android:text="@string/sex"/>
+        <RadioGroup
+            android:id="@+id/RegisterActivity_sex_custom_radio_group"
+            android:layout_centerVertical="true"
+            android:layout_alignTop="@+id/RegisterActivity_set_text_view"
+            android:layout_toEndOf="@id/RegisterActivity_set_text_view"
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <RadioButton
+                android:id="@+id/RegisterActivity_sex_custom_radio_male_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:buttonTint="@color/colorWhite"
+                android:textColor="@color/colorWhite"
+                android:textSize="18sp"
+                android:text="@string/male"/>
+            <RadioButton
+                android:id="@+id/RegisterActivity_sex_custom_radio_female_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:buttonTint="@color/colorWhite"
+                android:textSize="18sp"
+                android:textColor="@color/colorWhite"
+                android:text="@string/female"/>
+        </RadioGroup>
+    </RelativeLayout>
+    <RelativeLayout
         android:id="@+id/RegisterActivity_grade_custom_holder"
-        style="@style/RegisterActivityCustomHolder"
         android:layout_below="@id/RegisterActivity_sex_custom_holder"
-        app:text="@string/grade"/>
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/RegisterActivityCustomHolder">
+        <TextView
+            android:id="@+id/RegisterActivity_grade_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="false"
+            android:textSize="18sp"
+            android:textColor="@color/colorWhite"
+            android:text="@string/grade"/>
+        <Spinner
+            android:id="@+id/RegisterActivity_grade_spinner"
+            android:layout_toEndOf="@id/RegisterActivity_grade_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </RelativeLayout>
     <com.example.zzu.huzhucommunity.customlayout.RegisterEditTextLayout
         android:id="@+id/RegisterActivity_department_custom_holder"
         style="@style/RegisterActivityCustomHolder"

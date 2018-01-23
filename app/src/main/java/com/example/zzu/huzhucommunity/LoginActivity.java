@@ -30,6 +30,7 @@ public class LoginActivity extends AppCompatActivity {
 
         addListener(R.id.LoginActivity_login_button);
         addListener(R.id.LoginActivity_register_text_view);
+        addListener(R.id.LoginActivity_password_cancel_button);
     }
 
     /**
@@ -47,6 +48,9 @@ public class LoginActivity extends AppCompatActivity {
                     case R.id.LoginActivity_register_text_view:
                         Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
                         startActivity(intent);
+                        break;
+                    case R.id.LoginActivity_password_cancel_button:
+                        passwordEditText.setText("");
                         break;
                 }
             }
@@ -71,6 +75,7 @@ public class LoginActivity extends AppCompatActivity {
                 Toast.makeText(LoginActivity.this, "success", Toast.LENGTH_SHORT).show();
                 if(bytes != null) {
                     Log.d("LoginActivity", "onSuccess: " + (new String(bytes)));
+                    Toast.makeText(LoginActivity.this, "登录成功...", Toast.LENGTH_SHORT).show();
                 }
             }
 

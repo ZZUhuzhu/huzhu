@@ -32,34 +32,48 @@
         android:layout_below="@id/LoginActivity_account_edit_text"
         android:layout_height="0.5dp"
         android:layout_centerHorizontal="true"
-        android:background="@color/colorWhite"/>
-    <EditText
-        android:id="@+id/LoginActivity_password_edit_text"
+        android:background="@color/colorLightGray"/>
+    <RelativeLayout
+        android:id="@+id/LoginActivity_password_holder"
         android:layout_below="@id/LoginActivity_account_edit_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:minWidth="@dimen/login_edit_text_width"
-        android:layout_centerHorizontal="true"
         android:layout_marginTop="@dimen/login_margin_small"
-        android:gravity="center_horizontal"
-        android:inputType="textPassword"
-        android:maxLines="1"
-        android:background="@null"
-        android:textColor="@color/colorWhite"
-        android:textColorHint="@color/colorWhite"
-        android:hint="@string/password"/>
+        android:layout_centerHorizontal="true">
+        <EditText
+            android:id="@+id/LoginActivity_password_edit_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minWidth="@dimen/login_edit_text_width"
+            android:gravity="center_horizontal"
+            android:inputType="textPassword"
+            android:maxLines="1"
+            android:background="@null"
+            android:textColor="@color/colorWhite"
+            android:textColorHint="@color/colorWhite"
+            android:hint="@string/password"/>
+        <ImageButton
+            android:id="@+id/LoginActivity_password_cancel_button"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:background="@null"
+            android:layout_centerVertical="true"
+            android:layout_margin="5dp"
+            android:layout_alignEnd="@id/LoginActivity_password_edit_text"
+            android:src="@drawable/cancel_white_pressed_gray"/>
+    </RelativeLayout>
     <View
         android:layout_width="@dimen/login_edit_text_width"
-        android:layout_below="@id/LoginActivity_password_edit_text"
+        android:layout_below="@id/LoginActivity_password_holder"
         android:layout_height="0.5dp"
         android:layout_centerHorizontal="true"
-        android:background="@color/colorWhite"/>
+        android:background="@color/colorLightGray"/>
     <Button
         android:id="@+id/LoginActivity_login_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/login_margin_large"
-        android:layout_below="@id/LoginActivity_password_edit_text"
+        android:layout_below="@id/LoginActivity_password_holder"
         android:layout_centerHorizontal="true"
         android:background="@drawable/round_rectangle_blue_button"
         android:textColor="@color/colorWhite"
@@ -70,10 +84,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="10dp"
-        android:layout_marginBottom="10dp"
+        android:layout_marginStart="@dimen/common_margin_large"
+        android:layout_marginBottom="@dimen/common_margin_large"
         android:clickable="true"
         android:focusable="true"
+        android:textSize="16sp"
         android:textColor="@color/colorWhite"
         android:text="@string/new_user_register"/>
     <TextView
@@ -82,10 +97,11 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginEnd="10dp"
-        android:layout_marginBottom="10dp"
+        android:layout_marginEnd="@dimen/common_margin_large"
+        android:layout_marginBottom="@dimen/common_margin_large"
         android:clickable="true"
         android:focusable="true"
         android:textColor="@color/colorWhite"
+        android:textSize="16sp"
         android:text="@string/forget_password" />
 </RelativeLayout>

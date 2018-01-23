@@ -7,8 +7,8 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
-
-import com.example.zzu.huzhucommunity.R;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -27,7 +27,10 @@ public class RegisterActivity extends AppCompatActivity {
         toolbar.setTitleTextColor(Color.WHITE);
         toolbar.setTitle("注册");
 
-
+        ArrayAdapter<CharSequence> arrayAdapter = ArrayAdapter.createFromResource(this, R.array.Grades, R.layout.grade_spinner_item_view);
+        arrayAdapter.setDropDownViewResource(R.layout.grade_spinner_item_drop_down_view);
+        Spinner spinner = findViewById(R.id.RegisterActivity_grade_spinner);
+        spinner.setAdapter(arrayAdapter);
     }
 
     /**

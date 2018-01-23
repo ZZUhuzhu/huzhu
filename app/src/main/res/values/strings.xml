@@ -8,7 +8,16 @@
     <string name="forget_password">忘记密码</string>
     <string name="register">注册</string>
     <string name="phone">手机号码</string>
-    <string name="sex">性别</string>
-    <string name="grade">年纪</string>
+    <string name="sex">性别:</string>
+    <string name="grade">年级:</string>
     <string name="department">院系</string>
+    <string name="male">男</string>
+    <string name="female">女</string>
+
+    <string-array name="Grades">
+        <item>2014</item>
+        <item>2015</item>
+        <item>2016</item>
+        <item>2017</item>
+    </string-array>
 </resources>
