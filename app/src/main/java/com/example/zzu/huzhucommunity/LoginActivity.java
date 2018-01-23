@@ -4,9 +4,15 @@ import android.content.Intent;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
+
 
 public class LoginActivity extends AppCompatActivity {
     private EditText accountEditText;
@@ -53,6 +59,25 @@ public class LoginActivity extends AppCompatActivity {
      * @param password 用户输入的密码
      */
     public void login(String account, String password){
-        Toast.makeText(this, "Now Login...", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "Now Login...", Toast.LENGTH_SHORT).show();
+        AsyncHttpClient client = new AsyncHttpClient();
+        RequestParams params = new RequestParams();
+        params.put("account", account);
+        params.put("password", password);
+        String path = "http://www.idooooo.tk/huzhu/php/login.php";
+        client.post(path, params, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int i, org.apache.http.Header[] headers, byte[] bytes) {
+                Toast.makeText(LoginActivity.this, "success", Toast.LENGTH_SHORT).show();
+                if(bytes != null) {
+                    Log.d("LoginActivity", "onSuccess: " + (new String(bytes)));
+                }
+            }
+
+            @Override
+            public void onFailure(int i, org.apache.http.Header[] headers, byte[] bytes, Throwable throwable) {
+                Toast.makeText(LoginActivity.this, "网络不好，请稍后重试……", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

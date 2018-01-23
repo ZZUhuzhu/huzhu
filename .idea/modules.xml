@@ -2,10 +2,6 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-<<<<<<< HEAD
-      <module fileurl="file://D:\coding\repository\huzhu\HuzhuCommunity.iml" filepath="D:\coding\repository\huzhu\HuzhuCommunity.iml" />
-=======
->>>>>>> ae8355093c810c137392f15a1f73310bd7d9b3b1
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/huzhu.iml" filepath="$PROJECT_DIR$/huzhu.iml" />
     </modules>
