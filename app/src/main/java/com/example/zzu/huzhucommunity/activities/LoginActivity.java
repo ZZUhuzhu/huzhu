@@ -4,9 +4,13 @@ import android.content.Intent;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.example.zzu.huzhucommunity.R;
@@ -19,6 +23,19 @@ public class LoginActivity extends AppCompatActivity {
     private EditText accountEditText;
     private EditText passwordEditText;
 
+    private ImageButton cancelButton;
+    private TextWatcher textWatcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {}
+        @Override
+        public void afterTextChanged(Editable s) {
+            if(TextUtils.isEmpty(s)) cancelButton.setVisibility(View.GONE);
+            else cancelButton.setVisibility(View.VISIBLE);
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,8 +43,10 @@ public class LoginActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         if(actionBar != null) actionBar.hide();
 
+        cancelButton = findViewById(R.id.LoginActivity_password_cancel_button);
         accountEditText = findViewById(R.id.LoginActivity_account_edit_text);
         passwordEditText = findViewById(R.id.LoginActivity_password_edit_text);
+        passwordEditText.addTextChangedListener(textWatcher);
 
         addListener(R.id.LoginActivity_login_button);
         addListener(R.id.LoginActivity_register_text_view);

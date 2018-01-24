@@ -59,6 +59,7 @@
             android:background="@null"
             android:layout_centerVertical="true"
             android:layout_margin="5dp"
+            android:visibility="gone"
             android:layout_alignEnd="@id/LoginActivity_password_edit_text"
             android:src="@drawable/cancel_white_pressed_gray"/>
     </RelativeLayout>
@@ -88,8 +89,8 @@
         android:layout_marginBottom="@dimen/common_margin_large"
         android:clickable="true"
         android:focusable="true"
-        android:textSize="16sp"
-        android:textColor="@color/colorWhite"
+        android:textSize="@dimen/common_text_size_normal"
+        android:textColor="@drawable/text_white_pressed_gray"
         android:text="@string/new_user_register"/>
     <TextView
         android:id="@+id/LoginActivity_forget_password_text_view"
@@ -101,7 +102,7 @@
         android:layout_marginBottom="@dimen/common_margin_large"
         android:clickable="true"
         android:focusable="true"
-        android:textColor="@color/colorWhite"
-        android:textSize="16sp"
+        android:textColor="@drawable/text_white_pressed_gray"
+        android:textSize="@dimen/common_text_size_normal"
         android:text="@string/forget_password" />
 </RelativeLayout>

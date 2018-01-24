@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     android:background="@color/colorWhite">
     <LinearLayout
+        android:id="@+id/MainActivity_search_bar_holder"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -32,13 +33,128 @@
             android:id="@+id/MainActivity_message_button"
             android:contentDescription="@string/app_name"
             android:layout_width="30dp"
-            android:layout_height="match_parent"
+            android:layout_height="30dp"
             android:layout_gravity="center_vertical"
-            android:scaleType="center"
+            android:scaleType="fitCenter"
             android:padding="@dimen/common_margin_small"
             android:layout_marginEnd="@dimen/common_margin_small"
             android:background="@null"
             android:src="@drawable/message_blue_pressed_dark"/>
     </LinearLayout>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/MainActivity_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/MainActivity_search_bar_holder"
+        android:background="@color/colorWhite"
+        android:layout_marginBottom="52dp"/>
+    <View
+        android:elevation="1dp"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_above="@id/MainActivity_recycler_view"
+        android:background="@color/colorLightGray"/>
 
+    <LinearLayout
+        android:id="@+id/MainActivity_bottom_bar_holder"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:baselineAligned="false"
+        android:orientation="horizontal"
+        android:background="@null">
+        <LinearLayout
+            android:elevation="5dp"
+            android:layout_marginTop="@dimen/common_margin_large"
+            android:paddingBottom="@dimen/common_margin_small"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:background="@color/colorWhite"
+            android:orientation="vertical">
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/colorLightGray"
+                android:layout_marginBottom="@dimen/common_margin_small"/>
+            <ImageButton
+                android:id="@+id/MainActivity_resource_button"
+                android:contentDescription="@string/publish"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:background="@null"
+                android:layout_gravity="center"
+                android:scaleType="fitCenter"
+                android:src="@drawable/resource_yellow"/>
+            <TextView
+                android:id="@+id/MainActivity_resource_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/resource"
+                android:textSize="12sp"
+                android:layout_marginTop="@dimen/common_margin_small"/>
+        </LinearLayout>
+        <LinearLayout
+            android:elevation="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="2dp"
+            android:paddingStart="@dimen/common_margin_small"
+            android:paddingEnd="@dimen/common_margin_small"
+            android:paddingTop="@dimen/common_margin_small"
+            android:background="@drawable/top_half_round_rectangle">
+            <ImageButton
+                android:id="@+id/MainActivity_publish_button"
+                android:contentDescription="@string/resource"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@drawable/oval_blue_pressed_deep_button"
+                android:layout_gravity="center"
+                android:scaleType="fitCenter"
+                android:src="@drawable/plus_icon"/>
+            <TextView
+                android:id="@+id/MainActivity_publish_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/common_margin_small"
+                android:layout_marginBottom="@dimen/common_margin_small"
+                android:text="@string/publish"/>
+        </LinearLayout>
+        <LinearLayout
+            android:elevation="5dp"
+            android:layout_marginTop="@dimen/common_margin_large"
+            android:paddingBottom="@dimen/common_margin_small"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@color/colorWhite"
+            android:orientation="vertical">
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/colorLightGray"
+                android:layout_marginBottom="@dimen/common_margin_small"/>
+            <ImageButton
+                android:id="@+id/MainActivity_request_button"
+                android:contentDescription="@string/request"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:background="@null"
+                android:layout_gravity="center"
+                android:scaleType="fitCenter"
+                android:src="@drawable/request_gray"/>
+            <TextView
+                android:id="@+id/MainActivity_request_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/request"
+                android:textSize="12sp"
+                android:layout_marginTop="@dimen/common_margin_small"/>
+        </LinearLayout>
+    </LinearLayout>
 </RelativeLayout>

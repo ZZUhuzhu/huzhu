@@ -5,6 +5,6 @@
     android:layout_height="wrap_content"
     android:background="@color/colorDeepSkyBlue"
     android:textSize="@dimen/common_text_size_large"
-    android:gravity="start"
+    android:gravity="center"
     android:textColor="@color/colorWhite"
     android:padding="@dimen/common_margin_normal"/>
