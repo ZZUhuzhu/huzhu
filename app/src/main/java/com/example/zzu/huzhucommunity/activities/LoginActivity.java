@@ -10,12 +10,14 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.zzu.huzhucommunity.R;
+import com.example.zzu.huzhucommunity.asynchttp.asyncHttpCallback;
+import com.example.zzu.huzhucommunity.asynchttp.loginRegister;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity implements asyncHttpCallback {
     private EditText accountEditText;
     private EditText passwordEditText;
 
@@ -44,7 +46,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 switch (res){
                     case R.id.LoginActivity_login_button:
-                        login(accountEditText.getText().toString(), passwordEditText.getText().toString());
+                        loginRegister.getOurInstance().login(accountEditText.getText().toString(), passwordEditText.getText().toString(),LoginActivity.this);
                         break;
                     case R.id.LoginActivity_register_text_view:
                         Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
@@ -59,35 +61,22 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     /**
-     * 获取用户输入的账号和密码后登录
-     * @param account 用户输入的账号
-     * @param password 用户输入的密码
+     * 回调处理HTTP请求成功
+     *
+     * @param code 返回状态
      */
-    public void login(String account, String password){
-        Toast.makeText(this, "正在登陆...", Toast.LENGTH_SHORT).show();
-        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-        startActivity(intent);
-        finish();
-        //Toast.makeText(this, "Now Login...", Toast.LENGTH_SHORT).show();
-//        AsyncHttpClient client = new AsyncHttpClient();
-//        client.setTimeout(3000);
-//        RequestParams params = new RequestParams();
-//        params.put("account", account);
-//        params.put("password", password);
-//        String path = "http://www.idooooo.tk/huzhu/php/login.php";
-//        client.post(path, params, new AsyncHttpResponseHandler() {
-//            @Override
-//            public void onSuccess(int i, org.apache.http.Header[] headers, byte[] bytes) {
-//                Toast.makeText(LoginActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
-//                if(bytes != null) {
-//                    Log.d("LoginActivity", "onSuccess: " + (new String(bytes)));
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(int i, org.apache.http.Header[] headers, byte[] bytes, Throwable throwable) {
-//                Toast.makeText(LoginActivity.this, "网络错误，请稍后重试……", Toast.LENGTH_SHORT).show();
-//            }
-//        });
+    @Override
+    public void onSuccess(int code) {
+        Toast.makeText(this, "Success login", Toast.LENGTH_SHORT).show();
+    }
+
+    /**
+     * 回调处理HTTP请求异常
+     *
+     * @param code 返回状态
+     */
+    @Override
+    public void onError(int code) {
+        Toast.makeText(this, "Error on login", Toast.LENGTH_SHORT).show();
     }
 }

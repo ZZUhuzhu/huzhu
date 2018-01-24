@@ -10,7 +10,7 @@ public interface asyncHttpCallback {
      * 回调处理HTTP请求成功
      * @param code 返回状态
      */
-    void onFinish(int code);
+    void onSuccess(int code);
 
     /**
      * 回调处理HTTP请求异常
