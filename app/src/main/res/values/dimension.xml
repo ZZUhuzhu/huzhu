@@ -4,6 +4,10 @@
     <dimen name="login_margin_large">65dp</dimen>
     <dimen name="login_margin_small">20dp</dimen>
     <dimen name="login_edit_text_width">180dp</dimen>
+    <dimen name="common_margin_normal">10dp</dimen>
     <dimen name="common_margin_small">5dp</dimen>
     <dimen name="common_margin_large">20dp</dimen>
+    <dimen name="common_margin_huge">25dp</dimen>
+    <dimen name="common_text_size_normal">16sp</dimen>
+    <dimen name="common_text_size_large">18sp</dimen>
 </resources>

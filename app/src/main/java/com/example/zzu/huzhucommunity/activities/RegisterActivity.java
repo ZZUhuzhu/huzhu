@@ -1,4 +1,4 @@
-package com.example.zzu.huzhucommunity;
+package com.example.zzu.huzhucommunity.activities;
 
 import android.graphics.Color;
 import android.support.v7.app.ActionBar;
@@ -9,6 +9,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.Toast;
+
+import com.example.zzu.huzhucommunity.R;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -31,6 +34,13 @@ public class RegisterActivity extends AppCompatActivity {
         arrayAdapter.setDropDownViewResource(R.layout.grade_spinner_item_drop_down_view);
         Spinner spinner = findViewById(R.id.RegisterActivity_grade_spinner);
         spinner.setAdapter(arrayAdapter);
+
+        arrayAdapter = ArrayAdapter.createFromResource(this, R.array.Departments, R.layout.grade_spinner_item_view);
+        arrayAdapter.setDropDownViewResource(R.layout.grade_spinner_item_drop_down_view);
+        spinner = findViewById(R.id.RegisterActivity_department_spinner);
+        spinner.setAdapter(arrayAdapter);
+
+        addListener(R.id.RegisterActivity_register_button);
     }
 
     /**
@@ -47,12 +57,18 @@ public class RegisterActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    /**
+     * 为控件添加监听器
+     * @param res 控件ID
+     */
     public void addListener(final int res){
         findViewById(res).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 switch (res){
                     case R.id.RegisterActivity_register_button:
+                        Toast.makeText(RegisterActivity.this, "正在注册", Toast.LENGTH_SHORT).show();
                         break;
                 }
             }

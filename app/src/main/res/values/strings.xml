@@ -10,14 +10,64 @@
     <string name="phone">手机号码</string>
     <string name="sex">性别:</string>
     <string name="grade">年级:</string>
-    <string name="department">院系</string>
+    <string name="department">院系:</string>
     <string name="male">男</string>
     <string name="female">女</string>
+    <string name="search">搜索</string>
 
     <string-array name="Grades">
         <item>2014</item>
         <item>2015</item>
         <item>2016</item>
         <item>2017</item>
+    </string-array>
+    <string-array name="Departments">
+        <item>水利与环境学院</item>
+        <item>物理工程学院</item>
+        <item>机械工程学院</item>
+        <item>电气工程学院</item>
+        <item>信息工程学院</item>
+        <item>材料科学与工程学院</item>
+        <item>化工与能源学院</item>
+        <item>土木工程学院</item>
+        <item>建筑学院</item>
+        <item>数学系</item>
+        <item>化学系</item>
+        <item>生物工程系</item>
+        <item>理工程学院</item>
+        <item>工程力学系</item>
+        <item>文学院</item>
+        <item>新闻与传播学院</item>
+        <item>历史学院</item>
+        <item>外语学院</item>
+        <item>公共管理学院</item>
+        <item>法学院</item>
+        <item>商学院</item>
+        <item>旅游管理学院</item>
+        <item>教育系</item>
+        <item>马克思主义学院</item>
+        <item>体育系</item>
+        <item>音乐系</item>
+        <item>美术系</item>
+        <item>嵩阳书院</item>
+        <item>基础医学院</item>
+        <item>临床医学院</item>
+        <item>第一临床学院</item>
+        <item>第二临床学院</item>
+        <item>第三临床学院</item>
+        <item>第四临床学院</item>
+        <item>第五临床学院</item>
+        <item>药学院</item>
+        <item>护理学院</item>
+        <item>口腔医学院</item>
+        <item>临床医学系</item>
+        <item>医学检验系</item>
+        <item>远程教育学院</item>
+        <item>应用科技学院</item>
+        <item>软件技术学院</item>
+        <item>软件学院</item>
+        <item>国际教育学院</item>
+        <item>成人教育学院</item>
+        <item>城市学院</item>
     </string-array>
 </resources>

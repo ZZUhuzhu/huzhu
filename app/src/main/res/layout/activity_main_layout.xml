@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorWhite">
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@null">
+        <ImageButton
+            android:contentDescription="@string/app_name"
+            android:id="@+id/MainActivity_head_button"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_margin="@dimen/common_margin_normal"
+            android:background="@null"
+            android:scaleType="fitXY"
+            android:src="@drawable/profile_head"/>
+        <TextView
+            android:id="@+id/MainActivity_search_text_view"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:padding="@dimen/common_margin_small"
+            android:layout_marginEnd="@dimen/common_margin_small"
+            android:background="@drawable/text_view_border"
+            android:hint="@string/search"
+            android:layout_weight="1" />
+        <ImageButton
+            android:id="@+id/MainActivity_message_button"
+            android:contentDescription="@string/app_name"
+            android:layout_width="30dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:scaleType="center"
+            android:padding="@dimen/common_margin_small"
+            android:layout_marginEnd="@dimen/common_margin_small"
+            android:background="@null"
+            android:src="@drawable/message_blue_pressed_dark"/>
+    </LinearLayout>
+
+</RelativeLayout>
