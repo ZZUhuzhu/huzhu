@@ -3,13 +3,13 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorWhite">
+    android:background="@color/colorAccent">
     <LinearLayout
         android:id="@+id/MainActivity_search_bar_holder"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@null">
+        android:background="@color/colorAccent">
         <ImageButton
             android:contentDescription="@string/app_name"
             android:id="@+id/MainActivity_head_button"
@@ -28,6 +28,7 @@
             android:layout_marginEnd="@dimen/common_margin_small"
             android:background="@drawable/text_view_border"
             android:hint="@string/search"
+            android:textColorHint="@color/colorWhite"
             android:layout_weight="1" />
         <ImageButton
             android:id="@+id/MainActivity_message_button"
@@ -39,7 +40,7 @@
             android:padding="@dimen/common_margin_small"
             android:layout_marginEnd="@dimen/common_margin_small"
             android:background="@null"
-            android:src="@drawable/message_blue_pressed_dark"/>
+            android:src="@drawable/message_white_pressed_gray"/>
     </LinearLayout>
     <android.support.v7.widget.RecyclerView
         android:id="@+id/MainActivity_recycler_view"
@@ -70,7 +71,7 @@
             android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:background="@color/colorWhite"
+            android:background="@color/colorAccent"
             android:orientation="vertical">
             <View
                 android:layout_width="match_parent"
@@ -92,7 +93,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="@string/resource"
-                android:textSize="12sp"
+                android:textColor="@color/colorWhite"
+                android:textSize="@dimen/common_text_size_small"
                 android:layout_marginTop="@dimen/common_margin_small"/>
         </LinearLayout>
         <LinearLayout
@@ -118,9 +120,9 @@
                 android:id="@+id/MainActivity_publish_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="12sp"
+                android:textSize="@dimen/common_text_size_small"
                 android:layout_gravity="center"
-                android:layout_marginTop="@dimen/common_margin_small"
+                android:layout_marginTop="4dp"
                 android:layout_marginBottom="@dimen/common_margin_small"
                 android:text="@string/publish"/>
         </LinearLayout>
@@ -130,8 +132,8 @@
             android:paddingBottom="@dimen/common_margin_small"
             android:layout_weight="1"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:background="@color/colorWhite"
+            android:layout_height="match_parent"
+            android:background="@color/colorAccent"
             android:orientation="vertical">
             <View
                 android:layout_width="match_parent"
@@ -146,14 +148,15 @@
                 android:background="@null"
                 android:layout_gravity="center"
                 android:scaleType="fitCenter"
-                android:src="@drawable/request_gray"/>
+                android:src="@drawable/request_white"/>
             <TextView
                 android:id="@+id/MainActivity_request_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="@string/request"
-                android:textSize="12sp"
+                android:textColor="@color/colorWhite"
+                android:textSize="@dimen/common_text_size_small"
                 android:layout_marginTop="@dimen/common_margin_small"/>
         </LinearLayout>
     </LinearLayout>

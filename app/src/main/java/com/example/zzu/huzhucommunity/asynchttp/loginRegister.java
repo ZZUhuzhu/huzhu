@@ -61,7 +61,7 @@ public class loginRegister {
                 RequestParams params = new RequestParams();
                 params.put("account", account);
                 params.put("password", password);
-                String path = "http://www.idooooo.tk/huzhu/php/login.php";
+                String path = "http://139.199.38.177/huzhu/php/login.php";
                 client.post(path, params, new AsyncHttpResponseHandler() {
                     @Override
                     public void onSuccess(int i, org.apache.http.Header[] headers, byte[] bytes) {
