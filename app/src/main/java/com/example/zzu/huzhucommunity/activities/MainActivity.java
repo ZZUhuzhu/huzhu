@@ -18,7 +18,6 @@ import com.example.zzu.huzhucommunity.commonclass.NewResourceItem;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
-    private static final String TAG = "MainActivity";
     private ImageButton resourceButton;
     private ImageButton requestButton;
     private ArrayList<NewResourceItem> list = new ArrayList<>();
@@ -28,9 +27,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_layout);
-        ActionBar actionBar = getSupportActionBar();
-        if(actionBar != null) actionBar.hide();
-        getWindow().setStatusBarColor(Color.TRANSPARENT);
 
         resourceButton = findViewById(R.id.MainActivity_resource_button);
         requestButton = findViewById(R.id.MainActivity_request_button);
@@ -81,12 +77,12 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.MainActivity_resource_button:
                     case R.id.MainActivity_resource_text_view:
                         resourceButton.setImageResource(R.drawable.resource_yellow);
-                        requestButton.setImageResource(R.drawable.request_white);
+                        requestButton.setImageResource(R.drawable.request_gray);
                         break;
                     case R.id.MainActivity_request_button:
                     case R.id.MainActivity_request_text_view:
-                        resourceButton.setImageResource(R.drawable.resource_white);
-                        requestButton.setImageResource(R.drawable.request_white_fill_yellow);
+                        resourceButton.setImageResource(R.drawable.resource_gray);
+                        requestButton.setImageResource(R.drawable.request_yellow);
                         break;
                 }
             }

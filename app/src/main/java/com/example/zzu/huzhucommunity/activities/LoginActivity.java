@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +25,9 @@ import com.example.zzu.huzhucommunity.asynchttp.loginRegister;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
+
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 
 public class LoginActivity extends AppCompatActivity implements asyncHttpCallback {
@@ -71,7 +75,15 @@ public class LoginActivity extends AppCompatActivity implements asyncHttpCallbac
                 Intent intent;
                 switch (res){
                     case R.id.LoginActivity_login_button:
-                        loginRegister.getOurInstance().login(accountEditText.getText().toString(), passwordEditText.getText().toString(),LoginActivity.this);
+                        String account = accountEditText.getText().toString();
+                        String password = passwordEditText.getText().toString();
+                        if(TextUtils.isEmpty(account) || TextUtils.isEmpty(password)){
+                            Toast.makeText(LoginActivity.this, "请输入账号和密码", Toast.LENGTH_SHORT).show();
+                            break;
+                        }
+                        onSuccess(1);
+                        finish();
+//                        loginRegister.getOurInstance().login(account, password,LoginActivity.this);
                         break;
                     case R.id.LoginActivity_register_text_view:
                         intent = new Intent(LoginActivity.this, RegisterActivity.class);
