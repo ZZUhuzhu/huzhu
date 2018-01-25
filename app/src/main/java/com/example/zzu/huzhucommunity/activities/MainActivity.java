@@ -1,5 +1,6 @@
 package com.example.zzu.huzhucommunity.activities;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -41,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
         addListener(R.id.MainActivity_resource_text_view);
         addListener(R.id.MainActivity_request_button);
         addListener(R.id.MainActivity_request_text_view);
+        addListener(R.id.MainActivity_head_button);
 
         initList();
     }
@@ -73,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
         findViewById(res).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent;
                 switch (res){
                     case R.id.MainActivity_resource_button:
                     case R.id.MainActivity_resource_text_view:
@@ -83,6 +86,10 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.MainActivity_request_text_view:
                         resourceButton.setImageResource(R.drawable.resource_gray);
                         requestButton.setImageResource(R.drawable.request_yellow);
+                        break;
+                    case R.id.MainActivity_head_button:
+                        intent = new Intent(MainActivity.this, UserProfileActivity.class);
+                        startActivity(intent);
                         break;
                 }
             }

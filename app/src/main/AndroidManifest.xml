@@ -18,14 +18,17 @@
             android:theme="@style/TranslucentTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".activities.RegisterActivity"
             android:theme="@style/TranslucentTheme" />
-        <activity android:name=".activities.MainActivity"
-            android:theme="@style/TranslucentTheme"/>
+        <activity
+            android:name=".activities.MainActivity"
+            android:theme="@style/TranslucentTheme" />
+        <activity android:name=".activities.UserProfileActivity" android:theme="@style/TranslucentTheme"/>
     </application>
 
 </manifest>

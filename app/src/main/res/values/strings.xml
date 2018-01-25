@@ -17,6 +17,14 @@
     <string name="resource">资源</string>
     <string name="request">请求</string>
     <string name="publish">发布</string>
+    <string name="resourcePublished">我发布的资源</string>
+    <string name="resourceReceived">我接收的资源</string>
+    <string name="setting">设置</string>
+    <string name="comment">评论</string>
+    <string name="star">收藏</string>
+    <string name="track">足迹</string>
+    <string name="userProfile">个人信息</string>
+    <string name="nothing"> </string>
 
     <string-array name="Grades">
         <item>2014</item>

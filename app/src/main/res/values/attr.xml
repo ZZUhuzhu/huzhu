@@ -4,4 +4,8 @@
         <attr name="text" format="string"/>
         <attr name="input_password" format="boolean"/>
     </declare-styleable>
+    <declare-styleable name="UserProfileItemLayout">
+        <attr name="item_text" format="reference"/>
+        <attr name="image_src" format="reference"/>
+    </declare-styleable>
 </resources>
