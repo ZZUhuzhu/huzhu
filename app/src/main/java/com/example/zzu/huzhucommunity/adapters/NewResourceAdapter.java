@@ -1,6 +1,7 @@
 package com.example.zzu.huzhucommunity.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.zzu.huzhucommunity.R;
+import com.example.zzu.huzhucommunity.activities.ResourceDetailActivity;
 import com.example.zzu.huzhucommunity.commonclass.NewResourceItem;
 
 import java.util.ArrayList;
@@ -21,8 +23,15 @@ import java.util.ArrayList;
 public class NewResourceAdapter extends RecyclerView.Adapter<NewResourceAdapter.ViewHolder> {
     private ArrayList<NewResourceItem> list;
     @Override
-    public NewResourceAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public NewResourceAdapter.ViewHolder onCreateViewHolder(final ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.new_resource_item_view, parent, false);
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(parent.getContext(), ResourceDetailActivity.class);
+                parent.getContext().startActivity(intent);
+            }
+        });
         return new ViewHolder(view);
     }
     public NewResourceAdapter( ArrayList<NewResourceItem> list){

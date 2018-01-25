@@ -6,7 +6,7 @@
     android:fitsSystemWindows="true"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/login_background">
+    android:background="@drawable/background_small">
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="200dp">
@@ -21,11 +21,10 @@
             android:id="@+id/UserProfile_me_top_toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:layout_gravity="start|top"
-            android:theme="@style/ThemeOverlay.AppCompat.Dark"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
             app:titleTextColor="@color/colorWhite"
-            app:title="@string/userProfile"
-            app:layout_collapseMode="pin"/>
+            app:contentInsetStart="0dp"
+            app:contentInsetStartWithNavigation="0dp"/>
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -48,7 +47,7 @@
                 android:textColor="@color/colorWhite"
                 android:textSize="@dimen/common_text_size_large"
                 android:layout_marginStart="@dimen/common_margin_normal"
-                android:text="@string/setting"/>
+                android:text="@string/solider"/>
         </RelativeLayout>
     </FrameLayout>
     <ScrollView
@@ -60,34 +59,40 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <com.example.zzu.huzhucommunity.customlayout.UserProfileItemLayout
+                android:id="@+id/UserProfile_resource_published_item"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:image_src="@drawable/publish_plane"
                 app:item_text="@string/resourcePublished"/>
             <com.example.zzu.huzhucommunity.customlayout.UserProfileItemLayout
+                android:id="@+id/UserProfile_resource_received_item"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:item_text="@string/resourceReceived"
                 app:image_src="@drawable/receive"/>
             <com.example.zzu.huzhucommunity.customlayout.UserProfileItemLayout
+                android:id="@+id/UserProfile_star_item"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:image_src="@drawable/star"
                 app:item_text="@string/star" />
             <com.example.zzu.huzhucommunity.customlayout.UserProfileItemLayout
+                android:id="@+id/UserProfile_track_item"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:item_text="@string/track"
                 app:image_src="@drawable/track"/>
             <com.example.zzu.huzhucommunity.customlayout.UserProfileItemLayout
+                android:id="@+id/UserProfile_comment_item"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:image_src="@drawable/comment"
                 app:item_text="@string/comment"/>
             <com.example.zzu.huzhucommunity.customlayout.UserProfileItemLayout
+                android:id="@+id/UserProfile_setting_item"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:image_src="@drawable/setting"
+                app:image_src="@drawable/setting_gray"
                 app:item_text="@string/setting"/>
         </LinearLayout>
     </ScrollView>

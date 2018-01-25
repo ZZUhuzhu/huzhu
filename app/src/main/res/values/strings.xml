@@ -25,6 +25,14 @@
     <string name="track">足迹</string>
     <string name="userProfile">个人信息</string>
     <string name="nothing"> </string>
+    <string name="solider">小美</string>
+    <string name="resourceDetail">资源详情</string>
+    <string name="twoHoursAgo">2小时前</string>
+    <string name="twoDaysLater">2天后</string>
+    <string name="twoYuan">2￥</string>
+    <string name="virtualResourceDetail">这是一个每个人多需要的富含咖啡因，内啡肽，以及各种有助于健康的神经递质的只要998的含片</string>
+    <string name="virtualComment">这玩意儿用着还不错，比较上手</string>
+    <string name="virtualTime">2018–1–25 20:48:50</string>
 
     <string-array name="Grades">
         <item>2014</item>

@@ -28,7 +28,13 @@
         <activity
             android:name=".activities.MainActivity"
             android:theme="@style/TranslucentTheme" />
-        <activity android:name=".activities.UserProfileActivity" android:theme="@style/TranslucentTheme"/>
+        <activity
+            android:name=".activities.UserProfileActivity"
+            android:label="@string/userProfile"
+            android:theme="@style/TranslucentTheme" />
+        <activity android:name=".activities.ResourceDetailActivity"
+            android:theme="@style/TranslucentTheme"
+            android:label="@string/resourceDetail"/>
     </application>
 
 </manifest>
