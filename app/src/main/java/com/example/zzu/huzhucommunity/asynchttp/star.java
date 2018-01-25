@@ -1,7 +1,5 @@
 package com.example.zzu.huzhucommunity.asynchttp;
 
-import android.util.Log;
-
 import android.os.Handler;
 import android.os.Message;
 
@@ -15,32 +13,32 @@ import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 
-import static android.content.ContentValues.TAG;
 
 /**
- * Created by do_pc on 2018/1/24.
+ * Created by do_pc on 2018/1/25.
  *
  */
 
-public class loginRegister {
-    private static final loginRegister ourInstance = new loginRegister();
+public class star {
+
+    private static final star ourInstance = new star();
     private asyncHttpCallback callback;
-    private static final int LOGIN = 10101;
-    private static final int REGISTER = 10102;
+    private static final int GET_STAR = 11101;
+    private static final int CANCEL_STAR = 11102;
 
     /**
      * 外部调用类方法，获得单体实例
      *
      * @return 单体实例
      */
-    public static loginRegister getOurInstance() {
+    public static star getOurInstance() {
         return ourInstance;
     }
 
     /**
      * 私有构造方法
      */
-    private loginRegister() {
+    private star() {
 
     }
 
@@ -48,122 +46,116 @@ public class loginRegister {
         return this.callback;
     }
 
-
-
-    /**
-     * 获取用户输入的账号和密码后登录
-     *
-     * @param account  用户输入的账号
-     * @param password 用户输入的密码
-     */
-    public void login(final String account, final String password, final asyncHttpCallback cBack) {
+    public void getStar(final String userID, final asyncHttpCallback cBack) {
         try {
-            if (account != null && password != null && cBack != null) {
+            if (userID != null && cBack != null) {
                 this.callback = cBack;
                 AsyncHttpClient client = new AsyncHttpClient();
                 client.setTimeout(3000);
                 RequestParams params = new RequestParams();
-                params.put("account", account);
-                params.put("password", password);
-                String path = "http://139.199.38.177/huzhu/php/login.php";
+                params.put("userID", userID);
+                String path = "http://139.199.38.177/huzhu/php/getStar.php";
                 client.post(path, params, new AsyncHttpResponseHandler() {
                     @Override
                     public void onSuccess(int i, org.apache.http.Header[] headers, byte[] bytes) {
                         //判断状态码
-                        if(i == 200){
+                        if (i == 200) {
                             //获取结果
                             try {
-                                String result = new String(bytes,"utf-8");
-                                Message message = new Message();//在子线程中将Message对象发出去
-                                message.what = LOGIN;
+                                String result = new String(bytes, "utf-8");
+                                Message message = new Message();
+                                message.what = GET_STAR;
                                 message.obj = result;
                                 handler.sendMessage(message);
                                 cBack.onSuccess(i);
                             } catch (UnsupportedEncodingException e) {
                                 e.printStackTrace();
                             }
-                        }else{
+                        } else {
                             cBack.onError(i);
                         }
                     }
+
                     @Override
                     public void onFailure(int i, Header[] headers, byte[] bytes, Throwable throwable) {
                         cBack.onError(i);
                     }
                 });
             } else {
-                throw new Exception("context == null OR username&password == null");
+                throw new Exception("参数传递错误");
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public void register(final String account, final String password,
-                         final String phoneNumber, final String gender,
-                         final String grade, final String department,
-                         final asyncHttpCallback cBack) {
+    public void cancelStar(final String userID,final String resourceID, final asyncHttpCallback cBack) {
         try {
-            if (account != null && password != null && cBack != null) {
+            if (userID !=null && resourceID !=null && cBack != null){
                 this.callback = cBack;
                 AsyncHttpClient client = new AsyncHttpClient();
                 client.setTimeout(3000);
                 RequestParams params = new RequestParams();
-                params.put("account", account);
-                params.put("password", password);
-                params.put("phoneNumber", phoneNumber);
-                params.put("gender", gender);
-                params.put("grade",grade);
-                params.put("department",department);
-                String path = "http://139.199.38.177/huzhu/php/register.php";
+                params.put("userID", userID);
+                params.put("resourceID", resourceID);
+                String path = "http://139.199.38.177/huzhu/php/cancelStar.php";
                 client.post(path, params, new AsyncHttpResponseHandler() {
                     @Override
-                    public void onSuccess(int i, Header[] headers, byte[] bytes) {
+                    public void onSuccess(int i, org.apache.http.Header[] headers, byte[] bytes) {
                         //判断状态码
-                        if(i == 200){
+                        if (i == 200) {
                             //获取结果
                             try {
-                                String result = new String(bytes,"utf-8");
-                                Message message = new Message();//在子线程中将Message对象发出去
-                                message.what = REGISTER;
+                                String result = new String(bytes, "utf-8");
+                                Message message = new Message();
+                                message.what = CANCEL_STAR;
                                 message.obj = result;
                                 handler.sendMessage(message);
+                                cBack.onSuccess(i);
                             } catch (UnsupportedEncodingException e) {
                                 e.printStackTrace();
                             }
-                        }else {
+                        } else {
                             cBack.onError(i);
                         }
                     }
+
                     @Override
                     public void onFailure(int i, Header[] headers, byte[] bytes, Throwable throwable) {
                         cBack.onError(i);
                     }
                 });
-            } else {
-                throw new Exception("context == null OR username&password == null");
+            } else{
+                throw new Exception("参数传递错误");
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
 
     private Handler handler = new Handler(new Handler.Callback() {
         @Override
         public boolean handleMessage(Message message) {
             String Response = message.toString();
             switch (message.what) {
-                case LOGIN:
+                case GET_STAR:
                     try {
                         JSONObject userObject = new JSONObject(Response);
-                        int code=userObject.getInt("status");
+                        int code = userObject.getInt("status");
                         callback.onSuccess(code);
-                        Log.d(TAG, "handleMessage: "+code);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
                     break;
-                case REGISTER:
+                case CANCEL_STAR:
+                    try {
+                        JSONObject userObject = new JSONObject(Response);
+                        int code = userObject.getInt("status");
+                        callback.onSuccess(code);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                     break;
                 default:
                     break;
@@ -171,6 +163,6 @@ public class loginRegister {
             return true;
         }
     });
+
+
 }
-
-
