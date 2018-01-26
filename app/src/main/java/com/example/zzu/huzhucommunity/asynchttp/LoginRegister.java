@@ -1,10 +1,13 @@
 package com.example.zzu.huzhucommunity.asynchttp;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import android.os.Handler;
 import android.os.Message;
 
+import com.example.zzu.huzhucommunity.commonclass.MyApplication;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -15,7 +18,6 @@ import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 
-import static android.content.ContentValues.TAG;
 
 /**
  * Created by do_pc on 2018/1/24.
@@ -23,11 +25,11 @@ import static android.content.ContentValues.TAG;
  */
 
 public class LoginRegister {
+    private static final String TAG = "LoginRegister";
     private static final LoginRegister ourInstance = new LoginRegister();
     private AsyncHttpCallback callback;
     private static final int LOGIN = 10101;
     private static final int REGISTER = 10102;
-
     /**
      * 外部调用类方法，获得单体实例
      *
@@ -57,6 +59,7 @@ public class LoginRegister {
      * @param password 用户输入的密码
      */
     public void login(final String account, final String password, final AsyncHttpCallback cBack) {
+        Log.e(TAG, "login: now login");
         try {
             if (account != null && password != null && cBack != null) {
                 this.callback = cBack;
@@ -69,6 +72,7 @@ public class LoginRegister {
                 client.post(path, params, new AsyncHttpResponseHandler() {
                     @Override
                     public void onSuccess(int i, org.apache.http.Header[] headers, byte[] bytes) {
+                        Log.d(TAG, ("onSuccess: 访问文件成功"));
                         //判断状态码
                         if(i == 200){
                             //获取结果
@@ -78,7 +82,6 @@ public class LoginRegister {
                                 message.what = LOGIN;
                                 message.obj = result;
                                 handler.sendMessage(message);
-                                cBack.onSuccess(i);
                             } catch (UnsupportedEncodingException e) {
                                 e.printStackTrace();
                             }
@@ -88,6 +91,7 @@ public class LoginRegister {
                     }
                     @Override
                     public void onFailure(int i, Header[] headers, byte[] bytes, Throwable throwable) {
+                        Log.d(TAG, "onFailure: 访问文件失败");
                         cBack.onError(i);
                     }
                 });
@@ -151,14 +155,26 @@ public class LoginRegister {
     private Handler handler = new Handler(new Handler.Callback() {
         @Override
         public boolean handleMessage(Message message) {
-            String Response = message.toString();
+            String responseStr = message.obj.toString();
+            //String responseStr = "{\"status\":200,\"User_id\":0,\"User_name\":null,\"User_head\":null}";
             switch (message.what) {
                 case LOGIN:
                     try {
-                        JSONObject userObject = new JSONObject(Response);
+                        JSONObject userObject = new JSONObject(responseStr);
                         int code=userObject.getInt("status");
-                        callback.onSuccess(code);
-                        Log.d(TAG, "handleMessage: "+code);
+                        if(code == 200) {
+                            SharedPreferences.Editor editor = MyApplication.getContext().getSharedPreferences(
+                                    userObject.getString("User_name"), Context.MODE_PRIVATE).edit();
+                            editor.putInt("User_ID", userObject.getInt("User_id"));
+                            editor.putString("User_name", userObject.getString("User_name"));
+                            editor.putString("USer_head", userObject.getString("User_head"));
+                            editor.apply();
+                            callback.onSuccess(code);
+                        }
+                        else {
+                            callback.onError(code);
+                        }
+                        //Log.d(TAG, "handleMessage: "+code);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }

@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.example.zzu.huzhucommunity.R;
 import com.example.zzu.huzhucommunity.asynchttp.AsyncHttpCallback;
+import com.example.zzu.huzhucommunity.asynchttp.LoginRegister;
 
 
 public class LoginActivity extends AppCompatActivity implements AsyncHttpCallback {
@@ -61,15 +62,13 @@ public class LoginActivity extends AppCompatActivity implements AsyncHttpCallbac
                 Intent intent;
                 switch (res){
                     case R.id.LoginActivity_login_button:
-                        onSuccess(1);
-//                        String account = accountEditText.getText().toString();
-//                        String password = passwordEditText.getText().toString();
-//                        if(TextUtils.isEmpty(account) || TextUtils.isEmpty(password)){
-//                            Toast.makeText(LoginActivity.this, "请输入账号和密码", Toast.LENGTH_SHORT).show();
-//                            break;
-//                        }
-                        finish();
-//                        LoginRegister.getOurInstance().login(account, password,LoginActivity.this);
+                        String account = accountEditText.getText().toString();
+                        String password = passwordEditText.getText().toString();
+                        if(TextUtils.isEmpty(account) || TextUtils.isEmpty(password)){
+                            Toast.makeText(LoginActivity.this, "请输入账号和密码", Toast.LENGTH_SHORT).show();
+                            break;
+                        }
+                        LoginRegister.getOurInstance().login(account, password,LoginActivity.this);
                         break;
                     case R.id.LoginActivity_register_text_view:
                         intent = new Intent(LoginActivity.this, RegisterActivity.class);
