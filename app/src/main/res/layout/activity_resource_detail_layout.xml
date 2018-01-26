@@ -22,7 +22,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:theme="@style/ThemeOverlay.AppCompat.Light"
-                android:background="@color/colorWhite"
+                android:background="@drawable/rectangle_white_bottom_stroke_black"
                 app:layout_scrollFlags="snap|scroll|enterAlways"/>
         </android.support.design.widget.AppBarLayout>
         <android.support.v4.widget.NestedScrollView
@@ -124,27 +124,27 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorWhite"
-        android:layout_alignParentBottom="true">
-        <ImageButton
+        android:layout_alignParentBottom="true"
+        android:baselineAligned="false">
+        <com.example.zzu.huzhucommunity.customlayout.ResourceDetailBottomButtonLayout
             android:id="@+id/ResourceDetail_star_button"
-            android:contentDescription="@string/app_name"
-            style="@style/ResourceDetailBottomFourButton"
-            android:src="@drawable/star" />
-        <ImageButton
-            android:id="@+id/ResourceDetail_comment_button"
-            android:contentDescription="@string/app_name"
-            style="@style/ResourceDetailBottomFourButton"
-            android:scaleType="fitCenter"
+            style="@style/ResourceDetailBottomButtonHolder"
+            android:text="@string/star"
+            android:src="@drawable/star"/>
+        <com.example.zzu.huzhucommunity.customlayout.ResourceDetailBottomButtonLayout
+            android:id="@+id/ResourceDetail_comment_it_button"
+            style="@style/ResourceDetailBottomButtonHolder"
+            android:text="@string/comment"
             android:src="@drawable/comment"/>
-        <ImageButton
+        <com.example.zzu.huzhucommunity.customlayout.ResourceDetailBottomButtonLayout
             android:id="@+id/ResourceDetail_chat_button"
-            android:contentDescription="@string/app_name"
-            style="@style/ResourceDetailBottomFourButton"
+            style="@style/ResourceDetailBottomButtonHolder"
+            android:text="@string/chat"
             android:src="@drawable/chat"/>
-        <ImageButton
+        <com.example.zzu.huzhucommunity.customlayout.ResourceDetailBottomButtonLayout
             android:id="@+id/ResourceDetail_receive_it_button"
-            android:contentDescription="@string/app_name"
-            style="@style/ResourceDetailBottomFourButton"
-            android:src="@drawable/receive_now"/>
+            android:text="@string/receive"
+            android:src="@drawable/receive_now"
+            style="@style/ResourceDetailBottomButtonHolder"/>
     </LinearLayout>
 </RelativeLayout>

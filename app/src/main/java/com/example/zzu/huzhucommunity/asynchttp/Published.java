@@ -15,37 +15,37 @@ import java.io.UnsupportedEncodingException;
 
 /**
  * Created by do_pc on 2018/1/25.
- *
+ * 
  */
 
-public class received {
+public class Published {
 
-    private static final received ourInstance = new received();
-    private asyncHttpCallback callback;
-    private static final int GET_RECEIVED_RESOURCE = 11301;
-    private static final int DELETE_RECEIVED_RESOURCE = 11302;
+    private static final Published ourInstance = new Published();
+    private AsyncHttpCallback callback;
+    private static final int GET_PUBLISHED = 11201;
+    private static final int DELETE_USER_RESOURCE = 11202;
 
     /**
      * 外部调用类方法，获得单体实例
      *
      * @return 单体实例
      */
-    public static received getOurInstance() {
+    public static Published getOurInstance() {
         return ourInstance;
     }
 
     /**
      * 私有构造方法
      */
-    private received() {
+    private Published() {
 
     }
 
-    public asyncHttpCallback getCallback() {
+    public AsyncHttpCallback getCallback() {
         return this.callback;
     }
 
-    public void getReceivedResource(final String userID, final asyncHttpCallback cBack) {
+    public void getPublished(final String userID, final AsyncHttpCallback cBack) {
         try {
             if (userID != null && cBack != null) {
                 this.callback = cBack;
@@ -53,7 +53,7 @@ public class received {
                 client.setTimeout(3000);
                 RequestParams params = new RequestParams();
                 params.put("userID", userID);
-                String path = "http://139.199.38.177/huzhu/php/getReceivedResource.php";
+                String path = "http://139.199.38.177/huzhu/php/getPublished.php";
                 client.post(path, params, new AsyncHttpResponseHandler() {
                     @Override
                     public void onSuccess(int i, org.apache.http.Header[] headers, byte[] bytes) {
@@ -63,7 +63,7 @@ public class received {
                             try {
                                 String result = new String(bytes,"utf-8");
                                 Message message = new Message();
-                                message.what = GET_RECEIVED_RESOURCE;
+                                message.what = GET_PUBLISHED;
                                 message.obj = result;
                                 handler.sendMessage(message);
                                 cBack.onSuccess(i);
@@ -87,7 +87,7 @@ public class received {
         }
     }
 
-    public void deleteReceivedResource(final String resourceID, final String userID, final asyncHttpCallback cBack) {
+    public void deleteUserResource(final String resourceID, final String userID, final AsyncHttpCallback cBack) {
         try {
             if (resourceID != null && userID != null && cBack != null) {
                 this.callback = cBack;
@@ -96,7 +96,7 @@ public class received {
                 RequestParams params = new RequestParams();
                 params.put("resourceID", resourceID);
                 params.put("userID", userID);
-                String path = "http://139.199.38.177/huzhu/php/deleteReceivedResource.php";
+                String path = "http://139.199.38.177/huzhu/php/deleteUserResource.php";
                 client.post(path, params, new AsyncHttpResponseHandler() {
                     @Override
                     public void onSuccess(int i, org.apache.http.Header[] headers, byte[] bytes) {
@@ -106,7 +106,7 @@ public class received {
                             try {
                                 String result = new String(bytes,"utf-8");
                                 Message message = new Message();
-                                message.what = DELETE_RECEIVED_RESOURCE;
+                                message.what = DELETE_USER_RESOURCE;
                                 message.obj = result;
                                 handler.sendMessage(message);
                                 cBack.onSuccess(i);
@@ -135,7 +135,7 @@ public class received {
         public boolean handleMessage(Message message) {
             String Response = message.toString();
             switch (message.what) {
-                case GET_RECEIVED_RESOURCE:
+                case GET_PUBLISHED:
                     try {
                         JSONObject userObject = new JSONObject(Response);
                         int code=userObject.getInt("status");
@@ -144,7 +144,7 @@ public class received {
                         e.printStackTrace();
                     }
                     break;
-                case DELETE_RECEIVED_RESOURCE:
+                case DELETE_USER_RESOURCE:
                     try {
                         JSONObject userObject = new JSONObject(Response);
                         int code=userObject.getInt("status");
@@ -162,4 +162,3 @@ public class received {
 
 
 }
-

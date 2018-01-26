@@ -21,16 +21,21 @@
     <string name="resourceReceived">我接收的资源</string>
     <string name="setting">设置</string>
     <string name="comment">评论</string>
+    <string name="myComment">我的评论</string>
     <string name="star">收藏</string>
+    <string name="myStar">我的收藏</string>
     <string name="track">足迹</string>
+    <string name="myTrack">我的足迹</string>
+    <string name="chat">交流</string>
+    <string name="receive">接单</string>
     <string name="userProfile">个人信息</string>
-    <string name="nothing"> </string>
+    <string name="publishNewResource">发布新资源</string>
     <string name="solider">小美</string>
     <string name="resourceDetail">资源详情</string>
     <string name="twoHoursAgo">2小时前</string>
     <string name="twoDaysLater">2天后</string>
     <string name="twoYuan">2￥</string>
-    <string name="virtualResourceDetail">这是一个每个人多需要的富含咖啡因，内啡肽，以及各种有助于健康的神经递质的只要998的含片</string>
+    <string name="virtualResourceDetail">这是一个每个人都需要的富含咖啡因，内啡肽，以及各种有助于健康的神经递质的只要998的含片</string>
     <string name="virtualComment">这玩意儿用着还不错，比较上手</string>
     <string name="virtualTime">2018–1–25 20:48:50</string>
 
@@ -88,5 +93,9 @@
         <item>国际教育学院</item>
         <item>成人教育学院</item>
         <item>城市学院</item>
+    </string-array>
+    <string-array name="publishType">
+        <item>发布我的资源</item>
+        <item>寻求他人帮助</item>
     </string-array>
 </resources>

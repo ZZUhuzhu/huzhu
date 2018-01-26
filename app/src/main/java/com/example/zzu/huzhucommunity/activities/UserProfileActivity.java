@@ -4,13 +4,16 @@ import android.support.v7.widget.Toolbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Toast;
 
 import com.example.zzu.huzhucommunity.R;
 
 public class UserProfileActivity extends AppCompatActivity {
-
+    private static final String TAG = "UserProfileActivity";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -21,6 +24,13 @@ public class UserProfileActivity extends AppCompatActivity {
         if(actionBar != null){
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
+
+        addListener(R.id.UserProfile_resource_published_item);
+        addListener(R.id.UserProfile_resource_received_item);
+        addListener(R.id.UserProfile_setting_item);
+        addListener(R.id.UserProfile_star_item);
+        addListener(R.id.UserProfile_track_item);
+        addListener(R.id.UserProfile_comment_item);
     }
 
     @Override
@@ -29,6 +39,28 @@ public class UserProfileActivity extends AppCompatActivity {
         return true;
     }
 
+    /**
+     * 为每个控件添加监听器
+     * @param res 控件ID
+     */
+    public void addListener(final int res){
+        Log.e(TAG, "addListener: " + findViewById(res).isClickable());
+        findViewById(res).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switch (res){
+                    case R.id.UserProfile_resource_published_item:
+                    case R.id.UserProfile_resource_received_item:
+                    case R.id.UserProfile_setting_item:
+                    case R.id.UserProfile_star_item:
+                    case R.id.UserProfile_track_item:
+                    case R.id.UserProfile_comment_item:
+                        Toast.makeText(UserProfileActivity.this, "正在全力开发中...", Toast.LENGTH_SHORT).show();
+                        break;
+                }
+            }
+        });
+    }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){

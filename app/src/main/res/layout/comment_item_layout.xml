@@ -8,8 +8,9 @@
     <ImageView
         android:id="@+id/CommentItem_user_head_image"
         android:contentDescription="@string/app_name"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_centerVertical="true"
         android:src="@drawable/profile_head"/>
     <TextView
         android:id="@+id/CommentItem_user_name_text_view"

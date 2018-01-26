@@ -8,15 +8,16 @@
     <TextView
         android:id="@+id/register_input_custom_text_view"
         style="@style/RegisterActivityEditText"
-        android:minWidth="0dp"
-        android:text="@string/account"/>
+        android:minWidth="0dp"/>
     <LinearLayout
         android:layout_marginStart="@dimen/common_margin_small"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical">
         <EditText
+            android:labelFor="@id/register_input_custom_edit_text"
             android:id="@+id/register_input_custom_edit_text"
+            android:inputType="text"
             style="@style/RegisterActivityEditText" />
         <View
             android:layout_width="match_parent"

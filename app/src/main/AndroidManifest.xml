@@ -32,9 +32,13 @@
             android:name=".activities.UserProfileActivity"
             android:label="@string/userProfile"
             android:theme="@style/TranslucentTheme" />
-        <activity android:name=".activities.ResourceDetailActivity"
-            android:theme="@style/TranslucentTheme"
-            android:label="@string/resourceDetail"/>
+        <activity
+            android:name=".activities.ResourceDetailActivity"
+            android:label="@string/resourceDetail"
+            android:theme="@style/TranslucentTheme" />
+        <activity android:name=".activities.PublishNewResActivity"
+            android:label="@string/publishNewResource"
+            android:theme="@style/TranslucentTheme"/>
     </application>
 
 </manifest>

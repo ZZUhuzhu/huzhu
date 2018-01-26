@@ -5,7 +5,7 @@ package com.example.zzu.huzhucommunity.asynchttp;
  * asyncHttp回调接口
  */
 
-public interface asyncHttpCallback {
+public interface AsyncHttpCallback {
     /**
      * 回调处理HTTP请求成功
      * @param code 返回状态

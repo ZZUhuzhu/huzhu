@@ -18,86 +18,44 @@ import java.io.UnsupportedEncodingException;
  *
  */
 
-public class main {
-    private static final main ourInstance = new main();
-    private asyncHttpCallback callback;
-    private static final int GET_NEW_RESOURCE = 10301;
-    private static final int GET_REQUEST = 10302;
-    private static final int GET_RESOURCE_BY_TYPE = 10303;
+public class UserProfile {
+
+    private static final UserProfile ourInstance = new UserProfile();
+    private AsyncHttpCallback callback;
+    private static final int GET_USER_ALL_KINDS_NUMBER = 10601;
+    private static final int GET_USER_PROFILE = 10901;
+
 
     /**
      * 外部调用类方法，获得单体实例
      *
      * @return 单体实例
      */
-    public static main getOurInstance() {
+    public static UserProfile getOurInstance() {
         return ourInstance;
     }
 
     /**
      * 私有构造方法
      */
-    private main() {
+    private UserProfile() {
 
     }
 
-    public asyncHttpCallback getCallback() {
+    public AsyncHttpCallback getCallback() {
         return this.callback;
     }
 
-    public void getNewResource(final String times, final asyncHttpCallback cBack) {
+
+    public void getUserAllKindsNumber(final String userId, final AsyncHttpCallback cBack) {
         try {
-            if (times != null && cBack != null) {
+            if (userId != null && cBack != null) {
                 this.callback = cBack;
                 AsyncHttpClient client = new AsyncHttpClient();
                 client.setTimeout(3000);
                 RequestParams params = new RequestParams();
-                params.put("times", times);
-                String path = "http://139.199.38.177/huzhu/php/getNewResource.php";
-                client.post(path, params, new AsyncHttpResponseHandler() {
-                    @Override
-                    public void onSuccess(int i, Header[] headers, byte[] bytes) {
-                        //判断状态码
-                        if (i == 200) {
-                            //获取结果
-                            try {
-                                String result = new String(bytes, "utf-8");
-                                Message message = new Message();
-                                message.what = GET_NEW_RESOURCE;
-                                message.obj = result;
-                                handler.sendMessage(message);
-                                cBack.onSuccess(i);
-                            } catch (UnsupportedEncodingException e) {
-                                e.printStackTrace();
-                            }
-                        } else {
-                            cBack.onError(i);
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(int i, Header[] headers, byte[] bytes, Throwable throwable) {
-                        cBack.onError(i);
-                    }
-                });
-            } else {
-                throw new Exception("参数传递错误");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-
-    public void getRequest(final String times, final asyncHttpCallback cBack) {
-        try {
-            if (times != null && cBack != null) {
-                this.callback = cBack;
-                AsyncHttpClient client = new AsyncHttpClient();
-                client.setTimeout(3000);
-                RequestParams params = new RequestParams();
-                params.put("times", times);
-                String path = "http://139.199.38.177/huzhu/php/getRequest.php";
+                params.put("userId",userId);
+                String path = "http://139.199.38.177/huzhu/php/getUserAllKindsNumber.php";
                 client.post(path, params, new AsyncHttpResponseHandler() {
                     @Override
                     public void onSuccess(int i, org.apache.http.Header[] headers, byte[] bytes) {
@@ -107,7 +65,7 @@ public class main {
                             try {
                                 String result = new String(bytes, "utf-8");
                                 Message message = new Message();
-                                message.what = GET_REQUEST;
+                                message.what = GET_USER_ALL_KINDS_NUMBER;
                                 message.obj = result;
                                 handler.sendMessage(message);
                                 cBack.onSuccess(i);
@@ -132,33 +90,32 @@ public class main {
         }
     }
 
-    public void getResourceByType(final String resourceType, final String times, final asyncHttpCallback cBack) {
+    public void getUserProfile(final String userID, final AsyncHttpCallback cBack) {
         try {
-            if (resourceType != null && times != null && cBack != null) {
+            if (userID != null && cBack != null) {
                 this.callback = cBack;
                 AsyncHttpClient client = new AsyncHttpClient();
                 client.setTimeout(3000);
                 RequestParams params = new RequestParams();
-                params.put("resourceType", resourceType);
-                params.put("times", times);
-                String path = "http://139.199.38.177/huzhu/php/getResourceByType.php";
+                params.put("userID", userID);
+                String path = "http://139.199.38.177/huzhu/php/getUserProfile.php";
                 client.post(path, params, new AsyncHttpResponseHandler() {
                     @Override
                     public void onSuccess(int i, org.apache.http.Header[] headers, byte[] bytes) {
                         //判断状态码
-                        if (i == 200) {
+                        if(i == 200){
                             //获取结果
                             try {
-                                String result = new String(bytes, "utf-8");
+                                String result = new String(bytes,"utf-8");
                                 Message message = new Message();
-                                message.what = GET_RESOURCE_BY_TYPE;
+                                message.what = GET_USER_PROFILE;
                                 message.obj = result;
                                 handler.sendMessage(message);
                                 cBack.onSuccess(i);
                             } catch (UnsupportedEncodingException e) {
                                 e.printStackTrace();
                             }
-                        } else {
+                        }else{
                             cBack.onError(i);
                         }
                     }
@@ -174,6 +131,7 @@ public class main {
             e.printStackTrace();
         }
     }
+
 
 
     private Handler handler = new Handler(new Handler.Callback() {
@@ -181,29 +139,19 @@ public class main {
         public boolean handleMessage(Message message) {
             String Response = message.toString();
             switch (message.what) {
-                case GET_NEW_RESOURCE:
+                case GET_USER_ALL_KINDS_NUMBER:
                     try {
                         JSONObject userObject = new JSONObject(Response);
-                        int code = userObject.getInt("status");
-                        //TODO 判断返回状态码&将返回数据写进本地数据库
+                        int code=userObject.getInt("status");
                         callback.onSuccess(code);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
                     break;
-                case GET_REQUEST:
+                case GET_USER_PROFILE:
                     try {
                         JSONObject userObject = new JSONObject(Response);
-                        int code = userObject.getInt("status");
-                        callback.onSuccess(code);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    break;
-                case GET_RESOURCE_BY_TYPE:
-                    try {
-                        JSONObject userObject = new JSONObject(Response);
-                        int code = userObject.getInt("status");
+                        int code=userObject.getInt("status");
                         callback.onSuccess(code);
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -215,4 +163,5 @@ public class main {
             return true;
         }
     });
+
 }

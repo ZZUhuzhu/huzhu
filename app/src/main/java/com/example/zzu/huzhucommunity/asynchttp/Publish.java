@@ -3,7 +3,6 @@ package com.example.zzu.huzhucommunity.asynchttp;
 
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -20,9 +19,9 @@ import java.io.UnsupportedEncodingException;
  *
  */
 
-public class publish {
-    private static final publish ourInstance = new publish();
-    private asyncHttpCallback callback;
+public class Publish {
+    private static final Publish ourInstance = new Publish();
+    private AsyncHttpCallback callback;
     private static final int PUBLISH_RESOURCE = 10501;
 
     /**
@@ -30,18 +29,18 @@ public class publish {
      *
      * @return 单体实例
      */
-    public static publish getOurInstance() {
+    public static Publish getOurInstance() {
         return ourInstance;
     }
 
     /**
      * 私有构造方法
      */
-    private publish() {
+    private Publish() {
 
     }
 
-    public asyncHttpCallback getCallback() {
+    public AsyncHttpCallback getCallback() {
         return this.callback;
     }
 
@@ -52,7 +51,7 @@ public class publish {
                                 final String resourceTitle, final String resourceDetail,
                                 final String resourceImageNumber, final String resourcePrice,
                                 final String resourceDeadline, final String resourceImages,
-                                final asyncHttpCallback cBack) {
+                                final AsyncHttpCallback cBack) {
         try {
             //Images 允许为NUll
             if (userID != null && resourceType != null && resourceTitle != null && resourceDetail != null && resourceImageNumber != null && resourcePrice != null && resourceDeadline != null && cBack != null) {

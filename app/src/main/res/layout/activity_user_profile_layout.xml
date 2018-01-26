@@ -62,36 +62,48 @@
                 android:id="@+id/UserProfile_resource_published_item"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:clickable="true"
+                android:focusable="true"
                 app:image_src="@drawable/publish_plane"
                 app:item_text="@string/resourcePublished"/>
             <com.example.zzu.huzhucommunity.customlayout.UserProfileItemLayout
                 android:id="@+id/UserProfile_resource_received_item"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:clickable="true"
+                android:focusable="true"
                 app:item_text="@string/resourceReceived"
                 app:image_src="@drawable/receive"/>
             <com.example.zzu.huzhucommunity.customlayout.UserProfileItemLayout
                 android:id="@+id/UserProfile_star_item"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:clickable="true"
+                android:focusable="true"
                 app:image_src="@drawable/star"
-                app:item_text="@string/star" />
+                app:item_text="@string/myStar" />
             <com.example.zzu.huzhucommunity.customlayout.UserProfileItemLayout
                 android:id="@+id/UserProfile_track_item"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:item_text="@string/track"
+                android:clickable="true"
+                android:focusable="true"
+                app:item_text="@string/myTrack"
                 app:image_src="@drawable/track"/>
             <com.example.zzu.huzhucommunity.customlayout.UserProfileItemLayout
                 android:id="@+id/UserProfile_comment_item"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:clickable="true"
+                android:focusable="true"
                 app:image_src="@drawable/comment"
-                app:item_text="@string/comment"/>
+                app:item_text="@string/myComment"/>
             <com.example.zzu.huzhucommunity.customlayout.UserProfileItemLayout
                 android:id="@+id/UserProfile_setting_item"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:clickable="true"
+                android:focusable="true"
                 app:image_src="@drawable/setting_gray"
                 app:item_text="@string/setting"/>
         </LinearLayout>

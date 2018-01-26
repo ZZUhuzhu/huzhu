@@ -1,7 +1,6 @@
 package com.example.zzu.huzhucommunity.asynchttp;
 
 import android.os.Handler;
-import android.os.Message;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -13,40 +12,40 @@ import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 
-
 /**
  * Created by do_pc on 2018/1/25.
  *
  */
 
-public class star {
+public class Message {
 
-    private static final star ourInstance = new star();
-    private asyncHttpCallback callback;
-    private static final int GET_STAR = 11101;
-    private static final int CANCEL_STAR = 11102;
+    private static final Message ourInstance = new Message();
+    private AsyncHttpCallback callback;
+    private static final int GET_RELATED_USER_ID = 10701;
+    private static final int GET_CHAT_RECORDS = 10702;
 
     /**
      * 外部调用类方法，获得单体实例
      *
      * @return 单体实例
      */
-    public static star getOurInstance() {
+    public static Message getOurInstance() {
         return ourInstance;
     }
 
     /**
      * 私有构造方法
      */
-    private star() {
-
+    private Message() {
     }
 
-    public asyncHttpCallback getCallback() {
+    public AsyncHttpCallback getCallback() {
         return this.callback;
     }
 
-    public void getStar(final String userID, final asyncHttpCallback cBack) {
+
+
+    public void getRelatedUserID(final String userID,final AsyncHttpCallback cBack) {
         try {
             if (userID != null && cBack != null) {
                 this.callback = cBack;
@@ -54,28 +53,27 @@ public class star {
                 client.setTimeout(3000);
                 RequestParams params = new RequestParams();
                 params.put("userID", userID);
-                String path = "http://139.199.38.177/huzhu/php/getStar.php";
+                String path = "http://139.199.38.177/huzhu/php/getRelatedUserID.php";
                 client.post(path, params, new AsyncHttpResponseHandler() {
                     @Override
                     public void onSuccess(int i, org.apache.http.Header[] headers, byte[] bytes) {
                         //判断状态码
-                        if (i == 200) {
+                        if(i == 200){
                             //获取结果
                             try {
-                                String result = new String(bytes, "utf-8");
-                                Message message = new Message();
-                                message.what = GET_STAR;
+                                String result = new String(bytes,"utf-8");
+                                android.os.Message message = new android.os.Message();
+                                message.what = GET_RELATED_USER_ID;
                                 message.obj = result;
                                 handler.sendMessage(message);
                                 cBack.onSuccess(i);
                             } catch (UnsupportedEncodingException e) {
                                 e.printStackTrace();
                             }
-                        } else {
+                        }else{
                             cBack.onError(i);
                         }
                     }
-
                     @Override
                     public void onFailure(int i, Header[] headers, byte[] bytes, Throwable throwable) {
                         cBack.onError(i);
@@ -89,43 +87,44 @@ public class star {
         }
     }
 
-    public void cancelStar(final String userID,final String resourceID, final asyncHttpCallback cBack) {
+
+    public void getChatRecords(final String myID, final String oppositeID, final String times,final AsyncHttpCallback cBack) {
         try {
-            if (userID !=null && resourceID !=null && cBack != null){
+            if (myID != null && oppositeID != null && times != null && cBack != null) {
                 this.callback = cBack;
                 AsyncHttpClient client = new AsyncHttpClient();
                 client.setTimeout(3000);
                 RequestParams params = new RequestParams();
-                params.put("userID", userID);
-                params.put("resourceID", resourceID);
-                String path = "http://139.199.38.177/huzhu/php/cancelStar.php";
+                params.put("myID", myID);
+                params.put("oppositeID", oppositeID);
+                params.put("times", times);
+                String path = "http://139.199.38.177/huzhu/php/getChatRecords.php";
                 client.post(path, params, new AsyncHttpResponseHandler() {
                     @Override
                     public void onSuccess(int i, org.apache.http.Header[] headers, byte[] bytes) {
                         //判断状态码
-                        if (i == 200) {
+                        if(i == 200){
                             //获取结果
                             try {
-                                String result = new String(bytes, "utf-8");
-                                Message message = new Message();
-                                message.what = CANCEL_STAR;
+                                String result = new String(bytes,"utf-8");
+                                android.os.Message message = new android.os.Message();
+                                message.what = GET_CHAT_RECORDS;
                                 message.obj = result;
                                 handler.sendMessage(message);
                                 cBack.onSuccess(i);
                             } catch (UnsupportedEncodingException e) {
                                 e.printStackTrace();
                             }
-                        } else {
+                        }else{
                             cBack.onError(i);
                         }
                     }
-
                     @Override
                     public void onFailure(int i, Header[] headers, byte[] bytes, Throwable throwable) {
                         cBack.onError(i);
                     }
                 });
-            } else{
+            } else {
                 throw new Exception("参数传递错误");
             }
         } catch (Exception e) {
@@ -136,22 +135,22 @@ public class star {
 
     private Handler handler = new Handler(new Handler.Callback() {
         @Override
-        public boolean handleMessage(Message message) {
+        public boolean handleMessage(android.os.Message message) {
             String Response = message.toString();
             switch (message.what) {
-                case GET_STAR:
+                case GET_RELATED_USER_ID:
                     try {
                         JSONObject userObject = new JSONObject(Response);
-                        int code = userObject.getInt("status");
+                        int code=userObject.getInt("status");
                         callback.onSuccess(code);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
                     break;
-                case CANCEL_STAR:
+                case GET_CHAT_RECORDS:
                     try {
                         JSONObject userObject = new JSONObject(Response);
-                        int code = userObject.getInt("status");
+                        int code=userObject.getInt("status");
                         callback.onSuccess(code);
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -163,6 +162,4 @@ public class star {
             return true;
         }
     });
-
-
 }

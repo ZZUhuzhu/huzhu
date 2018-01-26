@@ -8,4 +8,10 @@
         <attr name="item_text" format="reference"/>
         <attr name="image_src" format="reference"/>
     </declare-styleable>
+    <declare-styleable name="ResourceDetailBottomButtonLayout">
+        <attr name="android:text"/>
+        <attr name="android:textSize"/>
+        <attr name="android:textColor"/>
+        <attr name="android:src"/>
+    </declare-styleable>
 </resources>

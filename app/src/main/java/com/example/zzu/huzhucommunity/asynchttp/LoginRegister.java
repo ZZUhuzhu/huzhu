@@ -1,5 +1,7 @@
 package com.example.zzu.huzhucommunity.asynchttp;
 
+import android.util.Log;
+
 import android.os.Handler;
 import android.os.Message;
 
@@ -13,47 +15,57 @@ import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 
+import static android.content.ContentValues.TAG;
+
 /**
- * Created by do_pc on 2018/1/25.
- * 
+ * Created by do_pc on 2018/1/24.
+ *
  */
 
-public class published {
-
-    private static final published ourInstance = new published();
-    private asyncHttpCallback callback;
-    private static final int GET_PUBLISHED = 11201;
-    private static final int DELETE_USER_RESOURCE = 11202;
+public class LoginRegister {
+    private static final LoginRegister ourInstance = new LoginRegister();
+    private AsyncHttpCallback callback;
+    private static final int LOGIN = 10101;
+    private static final int REGISTER = 10102;
 
     /**
      * 外部调用类方法，获得单体实例
      *
      * @return 单体实例
      */
-    public static published getOurInstance() {
+    public static LoginRegister getOurInstance() {
         return ourInstance;
     }
 
     /**
      * 私有构造方法
      */
-    private published() {
+    private LoginRegister() {
 
     }
 
-    public asyncHttpCallback getCallback() {
+    public AsyncHttpCallback getCallback() {
         return this.callback;
     }
 
-    public void getPublished(final String userID, final asyncHttpCallback cBack) {
+
+
+    /**
+     * 获取用户输入的账号和密码后登录
+     *
+     * @param account  用户输入的账号
+     * @param password 用户输入的密码
+     */
+    public void login(final String account, final String password, final AsyncHttpCallback cBack) {
         try {
-            if (userID != null && cBack != null) {
+            if (account != null && password != null && cBack != null) {
                 this.callback = cBack;
                 AsyncHttpClient client = new AsyncHttpClient();
                 client.setTimeout(3000);
                 RequestParams params = new RequestParams();
-                params.put("userID", userID);
-                String path = "http://139.199.38.177/huzhu/php/getPublished.php";
+                params.put("account", account);
+                params.put("password", password);
+                String path = "http://139.199.38.177/huzhu/php/login.php";
                 client.post(path, params, new AsyncHttpResponseHandler() {
                     @Override
                     public void onSuccess(int i, org.apache.http.Header[] headers, byte[] bytes) {
@@ -62,8 +74,8 @@ public class published {
                             //获取结果
                             try {
                                 String result = new String(bytes,"utf-8");
-                                Message message = new Message();
-                                message.what = GET_PUBLISHED;
+                                Message message = new Message();//在子线程中将Message对象发出去
+                                message.what = LOGIN;
                                 message.obj = result;
                                 handler.sendMessage(message);
                                 cBack.onSuccess(i);
@@ -80,40 +92,46 @@ public class published {
                     }
                 });
             } else {
-                throw new Exception("参数传递错误");
+                throw new Exception("context == null OR username&password == null");
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public void deleteUserResource(final String resourceID, final String userID, final asyncHttpCallback cBack) {
+    public void register(final String account, final String password,
+                         final String phoneNumber, final String gender,
+                         final String grade, final String department,
+                         final AsyncHttpCallback cBack) {
         try {
-            if (resourceID != null && userID != null && cBack != null) {
+            if (account != null && password != null && cBack != null) {
                 this.callback = cBack;
                 AsyncHttpClient client = new AsyncHttpClient();
                 client.setTimeout(3000);
                 RequestParams params = new RequestParams();
-                params.put("resourceID", resourceID);
-                params.put("userID", userID);
-                String path = "http://139.199.38.177/huzhu/php/deleteUserResource.php";
+                params.put("account", account);
+                params.put("password", password);
+                params.put("phoneNumber", phoneNumber);
+                params.put("gender", gender);
+                params.put("grade",grade);
+                params.put("department",department);
+                String path = "http://139.199.38.177/huzhu/php/register.php";
                 client.post(path, params, new AsyncHttpResponseHandler() {
                     @Override
-                    public void onSuccess(int i, org.apache.http.Header[] headers, byte[] bytes) {
+                    public void onSuccess(int i, Header[] headers, byte[] bytes) {
                         //判断状态码
                         if(i == 200){
                             //获取结果
                             try {
                                 String result = new String(bytes,"utf-8");
-                                Message message = new Message();
-                                message.what = DELETE_USER_RESOURCE;
+                                Message message = new Message();//在子线程中将Message对象发出去
+                                message.what = REGISTER;
                                 message.obj = result;
                                 handler.sendMessage(message);
-                                cBack.onSuccess(i);
                             } catch (UnsupportedEncodingException e) {
                                 e.printStackTrace();
                             }
-                        }else{
+                        }else {
                             cBack.onError(i);
                         }
                     }
@@ -123,7 +141,7 @@ public class published {
                     }
                 });
             } else {
-                throw new Exception("参数传递错误");
+                throw new Exception("context == null OR username&password == null");
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -135,23 +153,17 @@ public class published {
         public boolean handleMessage(Message message) {
             String Response = message.toString();
             switch (message.what) {
-                case GET_PUBLISHED:
+                case LOGIN:
                     try {
                         JSONObject userObject = new JSONObject(Response);
                         int code=userObject.getInt("status");
                         callback.onSuccess(code);
+                        Log.d(TAG, "handleMessage: "+code);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
                     break;
-                case DELETE_USER_RESOURCE:
-                    try {
-                        JSONObject userObject = new JSONObject(Response);
-                        int code=userObject.getInt("status");
-                        callback.onSuccess(code);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+                case REGISTER:
                     break;
                 default:
                     break;
@@ -159,6 +171,6 @@ public class published {
             return true;
         }
     });
-
-
 }
+
+

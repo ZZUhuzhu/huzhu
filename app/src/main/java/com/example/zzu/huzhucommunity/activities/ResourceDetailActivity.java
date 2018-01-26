@@ -6,16 +6,18 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.text.Layout;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
-import android.view.ViewGroup;
+import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.example.zzu.huzhucommunity.R;
 import com.example.zzu.huzhucommunity.customlayout.CommentItemLayout;
+import com.example.zzu.huzhucommunity.customlayout.ResourceDetailBottomButtonLayout;
 
 public class ResourceDetailActivity extends AppCompatActivity {
+    private static final String TAG = "ResourceDetailActivity";
+    private boolean resStarred = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,8 +29,44 @@ public class ResourceDetailActivity extends AppCompatActivity {
         if(actionBar != null){
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
-
+        addListener(R.id.ResourceDetail_star_button);
+        addListener(R.id.ResourceDetail_comment_it_button);
+        addListener(R.id.ResourceDetail_receive_it_button);
+        addListener(R.id.ResourceDetail_chat_button);
         initComment();
+    }
+
+    /**
+     * 为控件添加监听器
+     * @param res 控件ID
+     */
+    public void addListener(final int res){
+        findViewById(res).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switch (res){
+                    case R.id.ResourceDetail_star_button:
+                        ResourceDetailBottomButtonLayout temp = findViewById(R.id.ResourceDetail_star_button);
+                        if(resStarred) {
+                            Toast.makeText(ResourceDetailActivity.this, "已取消收藏", Toast.LENGTH_SHORT).show();
+                            temp.setText("收藏");
+                            temp.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.star));
+                        }
+                        else{
+                            Toast.makeText(ResourceDetailActivity.this, "已收藏", Toast.LENGTH_SHORT).show();
+                            temp.setText("已收藏");
+                            temp.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.star_yellow));
+                        }
+                        resStarred = !resStarred;
+                        break;
+                    case R.id.ResourceDetail_comment_it_button:
+                    case R.id.ResourceDetail_receive_it_button:
+                    case R.id.ResourceDetail_chat_button:
+                        Toast.makeText(ResourceDetailActivity.this, "正在全力开发中...", Toast.LENGTH_SHORT).show();
+                        break;
+                }
+            }
+        });
     }
 
     /**

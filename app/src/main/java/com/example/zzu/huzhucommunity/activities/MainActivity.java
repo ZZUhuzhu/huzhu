@@ -1,10 +1,10 @@
 package com.example.zzu.huzhucommunity.activities;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -43,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
         addListener(R.id.MainActivity_request_button);
         addListener(R.id.MainActivity_request_text_view);
         addListener(R.id.MainActivity_head_button);
+        addListener(R.id.MainActivity_publish_button);
 
         initList();
     }
@@ -56,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
             public void run() {
                 for(int i = 1; i < 22; i++){
                     String title = "生命" + i + "号";
-                    String detail = "这是一个每个人多需要的富含咖啡因，内啡肽，以及各种有助于健康的神经递质的只要998的含片";
+                    String detail = getString(R.string.virtualResourceDetail);
                     int time = i + (int) (Math.random() * 100);
                     double price = ((int) (Math.random() * 1000)) / 10;
                     Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.default_image);
@@ -75,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
         findViewById(res).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent;
+                final Intent intent;
                 switch (res){
                     case R.id.MainActivity_resource_button:
                     case R.id.MainActivity_resource_text_view:
@@ -90,6 +91,18 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.MainActivity_head_button:
                         intent = new Intent(MainActivity.this, UserProfileActivity.class);
                         startActivity(intent);
+                        break;
+                    case R.id.MainActivity_publish_button:
+                        AlertDialog.Builder dialog = new AlertDialog.Builder(MainActivity.this);
+                        dialog.setItems(R.array.publishType, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Intent intent = new Intent(MainActivity.this, PublishNewResActivity.class);
+                                intent.putExtra("publishType", which);
+                                startActivity(intent);
+                            }
+                        });
+                        dialog.show();
                         break;
                 }
             }

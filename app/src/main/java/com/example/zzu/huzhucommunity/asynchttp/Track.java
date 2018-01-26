@@ -18,10 +18,10 @@ import java.io.UnsupportedEncodingException;
  * 
  */
 
-public class track {
+public class Track {
 
-    private static final track ourInstance = new track();
-    private asyncHttpCallback callback;
+    private static final Track ourInstance = new Track();
+    private AsyncHttpCallback callback;
     private static final int GET_USER_TRACK = 11001;
     private static final int DELETE_TRACK = 11002;
     private static final int DELETE_ALL_TRACK = 11003;
@@ -31,22 +31,22 @@ public class track {
      *
      * @return 单体实例
      */
-    public static track getOurInstance() {
+    public static Track getOurInstance() {
         return ourInstance;
     }
 
     /**
      * 私有构造方法
      */
-    private track() {
+    private Track() {
     }
 
-    public asyncHttpCallback getCallback() {
+    public AsyncHttpCallback getCallback() {
         return this.callback;
     }
 
 
-    public void getUserTrack(final String userID, final String times, final asyncHttpCallback cBack) {
+    public void getUserTrack(final String userID, final String times, final AsyncHttpCallback cBack) {
         try {
             if (userID != null && times != null && cBack != null) {
                 this.callback = cBack;
@@ -89,7 +89,7 @@ public class track {
         }
     }
 
-    public void deleteTrack(final String userID, final String resourceID, final asyncHttpCallback cBack) {
+    public void deleteTrack(final String userID, final String resourceID, final AsyncHttpCallback cBack) {
         try {
             if (userID != null && resourceID!= null && cBack != null) {
                 this.callback = cBack;
@@ -132,7 +132,7 @@ public class track {
         }
     }
 
-    public void deleteAllTrack(final String userID, final asyncHttpCallback cBack) {
+    public void deleteAllTrack(final String userID, final AsyncHttpCallback cBack) {
         try {
             if (userID != null && cBack != null) {
                 this.callback = cBack;
