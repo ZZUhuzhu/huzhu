@@ -4,6 +4,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -14,6 +16,8 @@ import android.widget.ImageButton;
 
 import com.example.zzu.huzhucommunity.R;
 import com.example.zzu.huzhucommunity.adapters.NewResourceAdapter;
+import com.example.zzu.huzhucommunity.commonclass.Constants;
+import com.example.zzu.huzhucommunity.commonclass.MyApplication;
 import com.example.zzu.huzhucommunity.commonclass.NewResourceItem;
 
 import java.util.ArrayList;
@@ -21,14 +25,27 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
     private ImageButton resourceButton;
     private ImageButton requestButton;
+    private ImageButton userHeadImageButton;
     private ArrayList<NewResourceItem> list = new ArrayList<>();
     private NewResourceAdapter adapter;
+    private Handler handler = new Handler(new Handler.Callback() {
+        @Override
+        public boolean handleMessage(Message msg) {
+            switch (msg.what){
+                case Constants.UserProfileUserHeadImageGot:
+                    userHeadImageButton.setImageDrawable(MyApplication.userHeadImage);
+                    return true;
+            }
+            return false;
+        }
+    });
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_layout);
 
+        userHeadImageButton = findViewById(R.id.MainActivity_head_button);
         resourceButton = findViewById(R.id.MainActivity_resource_button);
         requestButton = findViewById(R.id.MainActivity_request_button);
         RecyclerView newResourceRecyclerView = findViewById(R.id.MainActivity_recycler_view);
@@ -46,8 +63,22 @@ public class MainActivity extends AppCompatActivity {
         addListener(R.id.MainActivity_publish_button);
 
         initList();
+        initUserHead();
     }
 
+    /**
+     * 获取用户头像信息
+     * 如果当前已经保存用户头像信息，则直接使用
+     * 否则调用MyApplication的downloadUserHeadImage方法下载
+     */
+    public void initUserHead(){
+        if(MyApplication.userId != -1){
+            if(MyApplication.userHeadImage == null)
+                MyApplication.downloadUserHeadImage(handler);
+            else
+                userHeadImageButton.setImageDrawable(MyApplication.userHeadImage);
+        }
+    }
     /**
      * 初始化列表项
      */

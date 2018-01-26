@@ -165,16 +165,19 @@ public class LoginRegister {
                         if(code == 200) {
                             SharedPreferences.Editor editor = MyApplication.getContext().getSharedPreferences(
                                     userObject.getString("User_name"), Context.MODE_PRIVATE).edit();
-                            editor.putInt("User_ID", userObject.getInt("User_id"));
-                            editor.putString("User_name", userObject.getString("User_name"));
-                            editor.putString("USer_head", userObject.getString("User_head"));
+                            int userId = userObject.getInt("User_id");
+                            String userName = userObject.getString("User_name");
+                            String userHead = userObject.getString("User_head");
+                            editor.putInt("User_ID", userId);
+                            editor.putString("User_name", userName);
+                            editor.putString("User_head", userHead);
+                            MyApplication.setUser(userId, userName, userHead);
                             editor.apply();
                             callback.onSuccess(code);
                         }
                         else {
                             callback.onError(code);
                         }
-                        //Log.d(TAG, "handleMessage: "+code);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }

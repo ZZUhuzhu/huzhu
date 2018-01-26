@@ -30,7 +30,7 @@
                         android:layout_height="30dp"
                         android:layout_margin="@dimen/common_margin_normal"
                         android:background="@null"
-                        android:scaleType="fitXY"
+                        android:scaleType="fitCenter"
                         android:src="@drawable/profile_head"/>
                     <TextView
                         android:id="@+id/MainActivity_search_text_view"

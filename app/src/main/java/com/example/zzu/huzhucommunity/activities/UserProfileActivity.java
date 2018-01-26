@@ -1,5 +1,11 @@
 package com.example.zzu.huzhucommunity.activities;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.Handler;
+import android.os.Message;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -8,12 +14,36 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.zzu.huzhucommunity.R;
+import com.example.zzu.huzhucommunity.commonclass.Constants;
+import com.example.zzu.huzhucommunity.commonclass.MyApplication;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 public class UserProfileActivity extends AppCompatActivity {
     private static final String TAG = "UserProfileActivity";
+    private TextView userNameTextView;
+    private ImageView userHeadImageView;
+    private RoundedBitmapDrawable userHeadImage;
+    private Handler handler = new Handler(new Handler.Callback() {
+        @Override
+        public boolean handleMessage(Message msg) {
+            switch (msg.what){
+                case Constants.UserProfileUserHeadImageGot:
+                    userHeadImageView.setImageDrawable(userHeadImage);
+                    return true;
+            }
+            return false;
+        }
+    });
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,26 +55,23 @@ public class UserProfileActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
+        userNameTextView = findViewById(R.id.UserProfile_me_name_text_view);
+        userHeadImageView = findViewById(R.id.UserProfile_me_image_view);
+
         addListener(R.id.UserProfile_resource_published_item);
         addListener(R.id.UserProfile_resource_received_item);
         addListener(R.id.UserProfile_setting_item);
         addListener(R.id.UserProfile_star_item);
         addListener(R.id.UserProfile_track_item);
         addListener(R.id.UserProfile_comment_item);
-    }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.setting_menu_item, menu);
-        return true;
+        initUserInfo();
     }
-
     /**
      * 为每个控件添加监听器
      * @param res 控件ID
      */
     public void addListener(final int res){
-        Log.e(TAG, "addListener: " + findViewById(res).isClickable());
         findViewById(res).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -61,6 +88,19 @@ public class UserProfileActivity extends AppCompatActivity {
             }
         });
     }
+
+    /**
+     * 初始化登录的用户的信息
+     */
+    public void initUserInfo(){
+        if(MyApplication.userId != -1){
+            userNameTextView.setText(MyApplication.userName);
+            if(MyApplication.userHeadImage == null)
+                MyApplication.downloadUserHeadImage(handler);
+            else
+                userHeadImageView.setImageDrawable(MyApplication.userHeadImage);
+        }
+    }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
@@ -72,5 +112,11 @@ public class UserProfileActivity extends AppCompatActivity {
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.setting_menu_item, menu);
+        return true;
     }
 }

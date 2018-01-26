@@ -6,5 +6,5 @@ package com.example.zzu.huzhucommunity.commonclass;
  */
 
 public class Constants {
-
+    public static final int UserProfileUserHeadImageGot = 2000001;
 }
