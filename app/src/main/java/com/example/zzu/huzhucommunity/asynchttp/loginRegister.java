@@ -10,12 +10,12 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
 import org.apache.http.Header;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 
-import static android.content.ContentValues.TAG;
 
 /**
  * Created by do_pc on 2018/1/24.
@@ -23,6 +23,7 @@ import static android.content.ContentValues.TAG;
  */
 
 public class loginRegister {
+    private static final String TAG = "loginRegister";
     private static final loginRegister ourInstance = new loginRegister();
     private asyncHttpCallback callback;
     private static final int LOGIN = 10101;
@@ -69,6 +70,7 @@ public class loginRegister {
                 client.post(path, params, new AsyncHttpResponseHandler() {
                     @Override
                     public void onSuccess(int i, org.apache.http.Header[] headers, byte[] bytes) {
+                        Log.d(TAG, ("onSuccess: 访问文件成功"));
                         //判断状态码
                         if(i == 200){
                             //获取结果
@@ -78,7 +80,6 @@ public class loginRegister {
                                 message.what = LOGIN;
                                 message.obj = result;
                                 handler.sendMessage(message);
-                                cBack.onSuccess(i);
                             } catch (UnsupportedEncodingException e) {
                                 e.printStackTrace();
                             }
@@ -88,6 +89,7 @@ public class loginRegister {
                     }
                     @Override
                     public void onFailure(int i, Header[] headers, byte[] bytes, Throwable throwable) {
+                        Log.d(TAG, "onFailure: 访问文件失败");
                         cBack.onError(i);
                     }
                 });
@@ -151,13 +153,19 @@ public class loginRegister {
     private Handler handler = new Handler(new Handler.Callback() {
         @Override
         public boolean handleMessage(Message message) {
-            String Response = message.toString();
+            String responseStr = message.obj.toString();
+            //String responseStr = "{\"status\":200,\"User_id\":0,\"User_name\":null,\"User_head\":null}";
             switch (message.what) {
                 case LOGIN:
                     try {
-                        JSONObject userObject = new JSONObject(Response);
+                        JSONObject userObject = new JSONObject(responseStr);
                         int code=userObject.getInt("status");
-                        callback.onSuccess(code);
+                        if(code == 200) {
+                            callback.onSuccess(code);
+                        }
+                        else {
+                            callback.onError(code);
+                        }
                         Log.d(TAG, "handleMessage: "+code);
                     } catch (JSONException e) {
                         e.printStackTrace();
