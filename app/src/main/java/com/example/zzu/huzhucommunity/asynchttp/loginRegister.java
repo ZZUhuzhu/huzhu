@@ -1,5 +1,8 @@
 package com.example.zzu.huzhucommunity.asynchttp;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import android.os.Handler;
@@ -28,7 +31,7 @@ public class loginRegister {
     private asyncHttpCallback callback;
     private static final int LOGIN = 10101;
     private static final int REGISTER = 10102;
-
+    private Context mContext;
     /**
      * 外部调用类方法，获得单体实例
      *
@@ -58,6 +61,7 @@ public class loginRegister {
      * @param password 用户输入的密码
      */
     public void login(final String account, final String password, final asyncHttpCallback cBack) {
+        mContext = (Context)callback;
         try {
             if (account != null && password != null && cBack != null) {
                 this.callback = cBack;
@@ -161,12 +165,18 @@ public class loginRegister {
                         JSONObject userObject = new JSONObject(responseStr);
                         int code=userObject.getInt("status");
                         if(code == 200) {
+                            SharedPreferences.Editor editor = mContext.getSharedPreferences(
+                                    userObject.getString("User_name"), Context.MODE_PRIVATE).edit();
+                            editor.putInt("User_ID", userObject.getInt("User_id"));
+                            editor.putString("User_name", userObject.getString("User_name"));
+                            editor.putString("USer_head", userObject.getString("User_head"));
+                            editor.apply();
                             callback.onSuccess(code);
                         }
                         else {
                             callback.onError(code);
                         }
-                        Log.d(TAG, "handleMessage: "+code);
+                        //Log.d(TAG, "handleMessage: "+code);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
