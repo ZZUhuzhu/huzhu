@@ -2,7 +2,6 @@ package com.example.zzu.huzhucommunity.asynchttp;
 
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -20,9 +19,9 @@ import java.io.UnsupportedEncodingException;
  *
  */
 
-public class search {
-    private static final search ourInstance = new search();
-    private asyncHttpCallback callback;
+public class Search {
+    private static final Search ourInstance = new Search();
+    private AsyncHttpCallback callback;
     private static final int GET_RESOURCE_BY_KEYWORDS = 10401;
 
 
@@ -31,21 +30,21 @@ public class search {
      *
      * @return 单体实例
      */
-    public static search getOurInstance() {
+    public static Search getOurInstance() {
         return ourInstance;
     }
 
     /**
      * 私有构造方法
      */
-    private search() {
+    private Search() {
 
     }
 
     /**
      * @return 返回全局回调函数
      */
-    public asyncHttpCallback getCallback() {
+    public AsyncHttpCallback getCallback() {
         return this.callback;
     }
 
@@ -57,7 +56,7 @@ public class search {
      * @param times 调用次数
      * @param cBack 回调
      */
-    public void getResourceByKeyWords(final String keyWords, final String resourceType, final String times, final asyncHttpCallback cBack) {
+    public void getResourceByKeyWords(final String keyWords, final String resourceType, final String times, final AsyncHttpCallback cBack) {
         try {
             if (keyWords != null && resourceType != null && cBack != null) {
                 this.callback = cBack;

@@ -18,132 +18,42 @@ import java.io.UnsupportedEncodingException;
  *
  */
 
-public class comment {
+public class Received {
 
-    private static final comment ourInstance = new comment();
-    private asyncHttpCallback callback;
-    private static final int GET_MY_COMMENT = 11501;
-    private static final int GET_MENTIONED_COMMENT = 11502;
-    private static final int DELETE_COMMENT = 11503;
+    private static final Received ourInstance = new Received();
+    private AsyncHttpCallback callback;
+    private static final int GET_RECEIVED_RESOURCE = 11301;
+    private static final int DELETE_RECEIVED_RESOURCE = 11302;
 
     /**
      * 外部调用类方法，获得单体实例
      *
      * @return 单体实例
      */
-    public static comment getOurInstance() {
+    public static Received getOurInstance() {
         return ourInstance;
     }
 
     /**
      * 私有构造方法
      */
-    private comment() {
+    private Received() {
 
     }
 
-    public asyncHttpCallback getCallback() {
+    public AsyncHttpCallback getCallback() {
         return this.callback;
     }
 
-
-    public void getMyComment(final String userID, final String times, final asyncHttpCallback cBack) {
+    public void getReceivedResource(final String userID, final AsyncHttpCallback cBack) {
         try {
-            if (userID != null && times != null && cBack != null) {
+            if (userID != null && cBack != null) {
                 this.callback = cBack;
                 AsyncHttpClient client = new AsyncHttpClient();
                 client.setTimeout(3000);
                 RequestParams params = new RequestParams();
                 params.put("userID", userID);
-                params.put("times", times);
-                String path = "http://139.199.38.177/huzhu/php/getMyComment.php";
-                client.post(path, params, new AsyncHttpResponseHandler() {
-                    @Override
-                    public void onSuccess(int i, org.apache.http.Header[] headers, byte[] bytes) {
-                        //判断状态码
-                        if (i == 200) {
-                            //获取结果
-                            try {
-                                String result = new String(bytes, "utf-8");
-                                Message message = new Message();
-                                message.what = GET_MY_COMMENT;
-                                message.obj = result;
-                                handler.sendMessage(message);
-                                cBack.onSuccess(i);
-                            } catch (UnsupportedEncodingException e) {
-                                e.printStackTrace();
-                            }
-                        } else {
-                            cBack.onError(i);
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(int i, Header[] headers, byte[] bytes, Throwable throwable) {
-                        cBack.onError(i);
-                    }
-                });
-            } else {
-                throw new Exception("参数传递错误");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void getMentionedComment(final String userID,final String times, final asyncHttpCallback cBack) {
-        try {
-            if (userID !=null && times !=null && cBack != null){
-                this.callback = cBack;
-                AsyncHttpClient client = new AsyncHttpClient();
-                client.setTimeout(3000);
-                RequestParams params = new RequestParams();
-                params.put("userID", userID);
-                params.put("times", times);
-                String path = "http://139.199.38.177/huzhu/php/getMentionedComment.php";
-                client.post(path, params, new AsyncHttpResponseHandler() {
-                    @Override
-                    public void onSuccess(int i, org.apache.http.Header[] headers, byte[] bytes) {
-                        //判断状态码
-                        if (i == 200) {
-                            //获取结果
-                            try {
-                                String result = new String(bytes, "utf-8");
-                                Message message = new Message();
-                                message.what = GET_MENTIONED_COMMENT;
-                                message.obj = result;
-                                handler.sendMessage(message);
-                                cBack.onSuccess(i);
-                            } catch (UnsupportedEncodingException e) {
-                                e.printStackTrace();
-                            }
-                        } else {
-                            cBack.onError(i);
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(int i, Header[] headers, byte[] bytes, Throwable throwable) {
-                        cBack.onError(i);
-                    }
-                });
-            } else{
-                throw new Exception("参数传递错误");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void deleteComment(final String commentID, final asyncHttpCallback cBack) {
-        try {
-            if ( commentID!= null && cBack != null) {
-                this.callback = cBack;
-                AsyncHttpClient client = new AsyncHttpClient();
-                client.setTimeout(3000);
-                RequestParams params = new RequestParams();
-                params.put("commentID", commentID);
-                String path = "http://139.199.38.177/huzhu/php/deleteComment.php";
+                String path = "http://139.199.38.177/huzhu/php/getReceivedResource.php";
                 client.post(path, params, new AsyncHttpResponseHandler() {
                     @Override
                     public void onSuccess(int i, org.apache.http.Header[] headers, byte[] bytes) {
@@ -153,7 +63,7 @@ public class comment {
                             try {
                                 String result = new String(bytes,"utf-8");
                                 Message message = new Message();
-                                message.what = DELETE_COMMENT;
+                                message.what = GET_RECEIVED_RESOURCE;
                                 message.obj = result;
                                 handler.sendMessage(message);
                                 cBack.onSuccess(i);
@@ -177,34 +87,67 @@ public class comment {
         }
     }
 
+    public void deleteReceivedResource(final String resourceID, final String userID, final AsyncHttpCallback cBack) {
+        try {
+            if (resourceID != null && userID != null && cBack != null) {
+                this.callback = cBack;
+                AsyncHttpClient client = new AsyncHttpClient();
+                client.setTimeout(3000);
+                RequestParams params = new RequestParams();
+                params.put("resourceID", resourceID);
+                params.put("userID", userID);
+                String path = "http://139.199.38.177/huzhu/php/deleteReceivedResource.php";
+                client.post(path, params, new AsyncHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(int i, org.apache.http.Header[] headers, byte[] bytes) {
+                        //判断状态码
+                        if(i == 200){
+                            //获取结果
+                            try {
+                                String result = new String(bytes,"utf-8");
+                                Message message = new Message();
+                                message.what = DELETE_RECEIVED_RESOURCE;
+                                message.obj = result;
+                                handler.sendMessage(message);
+                                cBack.onSuccess(i);
+                            } catch (UnsupportedEncodingException e) {
+                                e.printStackTrace();
+                            }
+                        }else{
+                            cBack.onError(i);
+                        }
+                    }
+                    @Override
+                    public void onFailure(int i, Header[] headers, byte[] bytes, Throwable throwable) {
+                        cBack.onError(i);
+                    }
+                });
+            } else {
+                throw new Exception("参数传递错误");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     private Handler handler = new Handler(new Handler.Callback() {
         @Override
         public boolean handleMessage(Message message) {
             String Response = message.toString();
             switch (message.what) {
-                case GET_MY_COMMENT:
+                case GET_RECEIVED_RESOURCE:
                     try {
                         JSONObject userObject = new JSONObject(Response);
-                        int code = userObject.getInt("status");
+                        int code=userObject.getInt("status");
                         callback.onSuccess(code);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
                     break;
-                case GET_MENTIONED_COMMENT:
+                case DELETE_RECEIVED_RESOURCE:
                     try {
                         JSONObject userObject = new JSONObject(Response);
-                        int code = userObject.getInt("status");
-                        callback.onSuccess(code);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    break;
-                case DELETE_COMMENT:
-                    try {
-                        JSONObject userObject = new JSONObject(Response);
-                        int code = userObject.getInt("status");
+                        int code=userObject.getInt("status");
                         callback.onSuccess(code);
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -216,4 +159,7 @@ public class comment {
             return true;
         }
     });
+
+
 }
+

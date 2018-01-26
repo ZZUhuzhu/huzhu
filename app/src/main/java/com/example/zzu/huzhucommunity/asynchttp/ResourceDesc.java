@@ -18,9 +18,9 @@ import java.io.UnsupportedEncodingException;
  *
  */
 
-public class resourceDesc {
-    private static final resourceDesc ourInstance = new resourceDesc();
-    private asyncHttpCallback callback;
+public class ResourceDesc {
+    private static final ResourceDesc ourInstance = new ResourceDesc();
+    private AsyncHttpCallback callback;
     private static final int GET_RES_PUBLISHER_INFO = 10801;
     private static final int GET_RESOURCE_DESC = 10802;
     private static final int GET_RESOURCE_COMMENT = 10803;
@@ -34,22 +34,22 @@ public class resourceDesc {
      *
      * @return 单体实例
      */
-    public static resourceDesc getOurInstance() {
+    public static ResourceDesc getOurInstance() {
         return ourInstance;
     }
 
     /**
      * 私有构造方法
      */
-    private resourceDesc() {
+    private ResourceDesc() {
 
     }
 
-    public asyncHttpCallback getCallback() {
+    public AsyncHttpCallback getCallback() {
         return this.callback;
     }
 
-    public void getResPublisherInfo(final String resourceID, final asyncHttpCallback cBack) {
+    public void getResPublisherInfo(final String resourceID, final AsyncHttpCallback cBack) {
         try {
             if (resourceID != null && cBack != null) {
                 this.callback = cBack;
@@ -91,7 +91,7 @@ public class resourceDesc {
         }
     }
 
-    public void getResourceDesc(final String resourceID,final asyncHttpCallback cBack) {
+    public void getResourceDesc(final String resourceID,final AsyncHttpCallback cBack) {
         try {
             if ( resourceID!= null && cBack != null) {
                 this.callback = cBack;
@@ -133,7 +133,7 @@ public class resourceDesc {
         }
     }
 
-    public void getResourceComment(final String resourceID ,final asyncHttpCallback cBack) {
+    public void getResourceComment(final String resourceID ,final AsyncHttpCallback cBack) {
         try {
             if (resourceID != null && cBack != null) {
                 this.callback = cBack;
@@ -175,7 +175,7 @@ public class resourceDesc {
         }
     }
 
-    public void publishComment(final String userID, final String commentFather,final String commentDetail, final asyncHttpCallback cBack) {
+    public void publishComment(final String userID, final String commentFather,final String commentDetail, final AsyncHttpCallback cBack) {
         try {
             if (userID != null && commentFather != null && commentDetail != null && cBack != null) {
                 this.callback = cBack;
@@ -219,7 +219,7 @@ public class resourceDesc {
         }
     }
 
-    public void updateStar(final String userID, final String resourceID,final String isStarred, final asyncHttpCallback cBack) {
+    public void updateStar(final String userID, final String resourceID,final String isStarred, final AsyncHttpCallback cBack) {
         try {
             if (userID != null && resourceID != null && isStarred != null && cBack != null) {
                 this.callback = cBack;
@@ -263,7 +263,7 @@ public class resourceDesc {
         }
     }
 
-    public void receiveResource(final String userID, final String resourceID, final asyncHttpCallback cBack) {
+    public void receiveResource(final String userID, final String resourceID, final AsyncHttpCallback cBack) {
         try {
             if ( userID!= null && resourceID!= null && cBack != null) {
                 this.callback = cBack;
@@ -306,7 +306,7 @@ public class resourceDesc {
         }
     }
 
-    public void addToTrack(final String userID, final String resourceID, final asyncHttpCallback cBack) {
+    public void addToTrack(final String userID, final String resourceID, final AsyncHttpCallback cBack) {
         try {
             if (userID != null && resourceID != null && cBack != null) {
                 this.callback = cBack;

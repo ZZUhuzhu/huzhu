@@ -1,36 +1,23 @@
 package com.example.zzu.huzhucommunity.activities;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.support.v4.view.ViewCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Base64;
-import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.example.zzu.huzhucommunity.R;
-import com.example.zzu.huzhucommunity.asynchttp.asyncHttpCallback;
-import com.example.zzu.huzhucommunity.asynchttp.loginRegister;
-import com.loopj.android.http.AsyncHttpClient;
-import com.loopj.android.http.AsyncHttpResponseHandler;
-import com.loopj.android.http.RequestParams;
-
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
+import com.example.zzu.huzhucommunity.asynchttp.AsyncHttpCallback;
+import com.example.zzu.huzhucommunity.asynchttp.LoginRegister;
 
 
-public class LoginActivity extends AppCompatActivity implements asyncHttpCallback {
+public class LoginActivity extends AppCompatActivity implements AsyncHttpCallback {
     private EditText accountEditText;
     private EditText passwordEditText;
 
@@ -83,7 +70,7 @@ public class LoginActivity extends AppCompatActivity implements asyncHttpCallbac
                             break;
                         }
                         //finish();
-                        loginRegister.getOurInstance().login(account, password,LoginActivity.this);
+                        LoginRegister.getOurInstance().login(account, password,LoginActivity.this);
                         break;
                     case R.id.LoginActivity_register_text_view:
                         intent = new Intent(LoginActivity.this, RegisterActivity.class);
