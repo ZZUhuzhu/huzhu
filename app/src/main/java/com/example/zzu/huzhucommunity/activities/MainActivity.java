@@ -125,7 +125,7 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case R.id.MainActivity_publish_button:
                         AlertDialog.Builder dialog = new AlertDialog.Builder(MainActivity.this);
-                        dialog.setItems(R.array.publishType, new DialogInterface.OnClickListener() {
+                        dialog.setItems(R.array.PublishType, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 Intent intent = new Intent(MainActivity.this, PublishNewResActivity.class);

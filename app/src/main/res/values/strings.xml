@@ -9,8 +9,8 @@
     <string name="register">注册</string>
     <string name="phone">手机号码</string>
     <string name="sex">性别:</string>
-    <string name="grade">年级:</string>
-    <string name="department">院系:</string>
+    <string name="grade_with_colon">年级:</string>
+    <string name="department_with_colon">院系:</string>
     <string name="male">男</string>
     <string name="female">女</string>
     <string name="search">搜索</string>
@@ -32,13 +32,32 @@
     <string name="publishNewResource">发布新资源</string>
     <string name="solider">小美</string>
     <string name="resourceDetail">资源详情</string>
+    <string name="title">标题</string>
+    <string name="content">内容</string>
+    <string name="image_with_colon">图片:</string>
+    <string name="type_with_colon">类型:</string>
+    <string name="yuan">￥</string>
+    <string name="deadline_with_colon">截止日期:</string>
+    <string name="price_with_colon">价格:</string>
     <string name="twoHoursAgo">2小时前</string>
     <string name="twoDaysLater">2天后</string>
     <string name="twoYuan">2￥</string>
     <string name="virtualResourceDetail">这是一个每个人都需要的富含咖啡因，内啡肽，以及各种有助于健康的神经递质的只要998的含片</string>
     <string name="virtualComment">这玩意儿用着还不错，比较上手</string>
-    <string name="virtualTime">2018–1–25 20:48:50</string>
+    <string name="virtualTime">2018/1/25 20:48:50</string>
 
+    <string-array name="Types">
+        <item>类型1</item>
+        <item>类型2</item>
+        <item>类型3</item>
+        <item>类型4</item>
+        <item>类型5</item>
+        <item>类型6</item>
+        <item>类型7</item>
+        <item>类型8</item>
+        <item>类型9</item>
+        <item>类型10</item>
+    </string-array>
     <string-array name="Grades">
         <item>2014</item>
         <item>2015</item>
@@ -94,7 +113,7 @@
         <item>成人教育学院</item>
         <item>城市学院</item>
     </string-array>
-    <string-array name="publishType">
+    <string-array name="PublishType">
         <item>发布我的资源</item>
         <item>寻求他人帮助</item>
     </string-array>

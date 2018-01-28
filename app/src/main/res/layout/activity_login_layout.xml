@@ -90,7 +90,7 @@
         android:clickable="true"
         android:focusable="true"
         android:textSize="@dimen/common_text_size_normal"
-        android:textColor="@drawable/text_white_pressed_gray"
+        android:textColor="@drawable/text_color_white_pressed_gray"
         android:text="@string/new_user_register"/>
     <TextView
         android:id="@+id/LoginActivity_forget_password_text_view"
@@ -102,7 +102,7 @@
         android:layout_marginBottom="@dimen/common_margin_large"
         android:clickable="true"
         android:focusable="true"
-        android:textColor="@drawable/text_white_pressed_gray"
+        android:textColor="@drawable/text_color_white_pressed_gray"
         android:textSize="@dimen/common_text_size_normal"
         android:text="@string/forget_password" />
 </RelativeLayout>

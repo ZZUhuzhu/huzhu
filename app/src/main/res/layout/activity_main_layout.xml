@@ -43,7 +43,7 @@
                         android:clickable="true"
                         android:focusable="true"
                         android:hint="@string/search"
-                        android:textColorHint="@drawable/text_white_pressed_gray"
+                        android:textColorHint="@drawable/text_color_white_pressed_gray"
                         android:layout_weight="1" />
                     <ImageButton
                         android:id="@+id/MainActivity_message_button"

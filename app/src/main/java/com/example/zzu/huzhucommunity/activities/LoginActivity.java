@@ -62,13 +62,14 @@ public class LoginActivity extends AppCompatActivity implements AsyncHttpCallbac
                 Intent intent;
                 switch (res){
                     case R.id.LoginActivity_login_button:
-                        String account = accountEditText.getText().toString();
-                        String password = passwordEditText.getText().toString();
-                        if(TextUtils.isEmpty(account) || TextUtils.isEmpty(password)){
-                            Toast.makeText(LoginActivity.this, "请输入账号和密码", Toast.LENGTH_SHORT).show();
-                            break;
-                        }
-                        LoginRegister.getOurInstance().login(account, password,LoginActivity.this);
+                        onSuccess(1);
+//                        String account = accountEditText.getText().toString();
+//                        String password = passwordEditText.getText().toString();
+//                        if(TextUtils.isEmpty(account) || TextUtils.isEmpty(password)){
+//                            Toast.makeText(LoginActivity.this, "请输入账号和密码", Toast.LENGTH_SHORT).show();
+//                            break;
+//                        }
+//                        LoginRegister.getOurInstance().login(account, password,LoginActivity.this);
                         break;
                     case R.id.LoginActivity_register_text_view:
                         intent = new Intent(LoginActivity.this, RegisterActivity.class);

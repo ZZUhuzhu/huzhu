@@ -85,7 +85,7 @@
             android:layout_centerHorizontal="false"
             android:textSize="@dimen/common_text_size_large"
             android:textColor="@color/colorWhite"
-            android:text="@string/grade"/>
+            android:text="@string/grade_with_colon"/>
         <Spinner
             android:id="@+id/RegisterActivity_grade_spinner"
             android:layout_toEndOf="@id/RegisterActivity_grade_text_view"
@@ -106,7 +106,7 @@
             android:layout_centerHorizontal="false"
             android:textSize="@dimen/common_text_size_large"
             android:textColor="@color/colorWhite"
-            android:text="@string/department"/>
+            android:text="@string/department_with_colon"/>
         <Spinner
             android:id="@+id/RegisterActivity_department_spinner"
             android:layout_toEndOf="@id/RegisterActivity_department_text_view"
@@ -120,7 +120,7 @@
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
         android:background="@drawable/round_rectangle_blue_button"
-        android:layout_marginBottom="@dimen/common_margin_large"
+        android:layout_marginBottom="@dimen/common_margin_huge"
         android:textColor="@color/colorWhite"
         android:textSize="16sp"
         android:text="@string/register"/>

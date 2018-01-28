@@ -2,6 +2,7 @@ package com.example.zzu.huzhucommunity.customlayout;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Color;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -26,10 +27,16 @@ public class RegisterEditTextLayout extends LinearLayout {
         editText = findViewById(R.id.register_input_custom_edit_text);
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.RegisterEditTextLayout);
         String temp = typedArray.getString(R.styleable.RegisterEditTextLayout_text);
-        textView.setText(String.format("%s:", temp));
+        boolean textColorBlack = typedArray.getBoolean(R.styleable.RegisterEditTextLayout_colorBlack, false);
         boolean inputPassword = typedArray.getBoolean(R.styleable.RegisterEditTextLayout_input_password, false);
-        if(inputPassword) editText.setInputType(EditorInfo.TYPE_TEXT_VARIATION_PASSWORD);
         typedArray.recycle();
+        textView.setText(String.format("%s:", temp));
+        if(inputPassword) editText.setInputType(EditorInfo.TYPE_TEXT_VARIATION_PASSWORD);
+        if(textColorBlack){
+            textView.setTextColor(Color.BLACK);
+            editText.setTextColor(Color.BLACK);
+            findViewById(R.id.register_under_line_view).setBackgroundColor(Color.GRAY);
+        }
     }
 
     /**

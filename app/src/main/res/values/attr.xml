@@ -3,6 +3,7 @@
     <declare-styleable name="RegisterEditTextLayout">
         <attr name="text" format="string"/>
         <attr name="input_password" format="boolean"/>
+        <attr name="colorBlack" format="boolean"/>
     </declare-styleable>
     <declare-styleable name="UserProfileItemLayout">
         <attr name="item_text" format="reference"/>
