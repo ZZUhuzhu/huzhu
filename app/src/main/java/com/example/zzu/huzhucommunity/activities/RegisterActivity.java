@@ -19,6 +19,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.zzu.huzhucommunity.R;
+import com.example.zzu.huzhucommunity.commonclass.MyApplication;
 import com.example.zzu.huzhucommunity.customlayout.RegisterEditTextLayout;
 
 public class RegisterActivity extends AppCompatActivity {
@@ -95,11 +96,11 @@ public class RegisterActivity extends AppCompatActivity {
                         String account = accountTextView.getText(), password = passwordTextView.getText(), confirmPassword = confirmPasswordTextView.getText();
                         String phone = phoneTextView.getText();
                         if(TextUtils.isEmpty(account) || TextUtils.isEmpty(password) || TextUtils.isEmpty(confirmPassword) || TextUtils.isEmpty(phone)) {
-                            Toast.makeText(RegisterActivity.this, "请完善信息", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MyApplication.getContext(), "请完善信息", Toast.LENGTH_SHORT).show();
                             break;
                         }
                         if(!TextUtils.equals(password, confirmPassword)){
-                            Toast.makeText(RegisterActivity.this, "请保持两次输入密码一致", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MyApplication.getContext(), "请保持两次输入密码一致", Toast.LENGTH_SHORT).show();
                             break;
                         }
                         boolean sex = MALE;

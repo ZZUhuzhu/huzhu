@@ -27,6 +27,7 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.example.zzu.huzhucommunity.R;
+import com.example.zzu.huzhucommunity.commonclass.MyApplication;
 
 import java.io.FileNotFoundException;
 import java.util.Calendar;
@@ -111,7 +112,7 @@ public class PublishNewResActivity extends AppCompatActivity {
                         scrollView.smoothScrollTo(0, 320);
                         break;
                     case R.id.PublishNewRes_publish_button:
-                        Toast.makeText(PublishNewResActivity.this, "正在全力开发中...", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MyApplication.getContext(), "正在全力开发中...", Toast.LENGTH_SHORT).show();
                         break;
                 }
             }

@@ -82,7 +82,7 @@ public class UserProfileActivity extends AppCompatActivity {
                     case R.id.UserProfile_star_item:
                     case R.id.UserProfile_track_item:
                     case R.id.UserProfile_comment_item:
-                        Toast.makeText(UserProfileActivity.this, "正在全力开发中...", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MyApplication.getContext(), "正在全力开发中...", Toast.LENGTH_SHORT).show();
                         break;
                 }
             }

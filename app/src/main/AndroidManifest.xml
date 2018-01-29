@@ -37,8 +37,12 @@
             android:name=".activities.ResourceDetailActivity"
             android:label="@string/resourceDetail"
             android:theme="@style/TranslucentTheme" />
-        <activity android:name=".activities.PublishNewResActivity"
-            android:windowSoftInputMode="adjustPan"
+        <activity
+            android:name=".activities.PublishNewResActivity"
+            android:theme="@style/TranslucentTheme"
+            android:windowSoftInputMode="adjustPan" />
+        <activity android:name=".activities.MessagesActivity"
+            android:label="@string/newMessage"
             android:theme="@style/TranslucentTheme"/>
     </application>
 

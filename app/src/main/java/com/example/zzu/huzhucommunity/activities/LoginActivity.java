@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.example.zzu.huzhucommunity.R;
 import com.example.zzu.huzhucommunity.asynchttp.AsyncHttpCallback;
 import com.example.zzu.huzhucommunity.asynchttp.LoginRegister;
+import com.example.zzu.huzhucommunity.commonclass.MyApplication;
 
 
 public class LoginActivity extends AppCompatActivity implements AsyncHttpCallback {
@@ -89,7 +90,7 @@ public class LoginActivity extends AppCompatActivity implements AsyncHttpCallbac
      */
     @Override
     public void onSuccess(int code) {
-        Toast.makeText(this, "Success login", Toast.LENGTH_SHORT).show();
+        Toast.makeText(MyApplication.getContext(), "Success login", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
         startActivity(intent);
         finish();
@@ -101,6 +102,6 @@ public class LoginActivity extends AppCompatActivity implements AsyncHttpCallbac
      */
     @Override
     public void onError(int code) {
-        Toast.makeText(this, "Error on login", Toast.LENGTH_SHORT).show();
+        Toast.makeText(MyApplication.getContext(), "Error on login", Toast.LENGTH_SHORT).show();
     }
 }

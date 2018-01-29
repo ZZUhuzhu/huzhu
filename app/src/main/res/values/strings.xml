@@ -40,6 +40,8 @@
     <string name="yuan">￥</string>
     <string name="deadline_with_colon">截止日期:</string>
     <string name="price_with_colon">价格:</string>
+    <string name="newMessage">新消息</string>
+    <string name="ninetyMore">99+</string>
     <string name="twoHoursAgo">2小时前</string>
     <string name="twoDaysLater">2天后</string>
     <string name="twoYuan">2￥</string>

@@ -17,6 +17,7 @@ import android.view.animation.AnimationUtils;
 import android.view.animation.Interpolator;
 import android.view.animation.RotateAnimation;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.example.zzu.huzhucommunity.R;
 import com.example.zzu.huzhucommunity.adapters.NewResourceAdapter;
@@ -67,6 +68,8 @@ public class MainActivity extends AppCompatActivity {
         addListener(R.id.MainActivity_request_text_view);
         addListener(R.id.MainActivity_head_button);
         addListener(R.id.MainActivity_publish_button);
+        addListener(R.id.MainActivity_message_button);
+        addListener(R.id.MainActivity_search_text_view);
 
         initList();
         initUserHead();
@@ -147,6 +150,13 @@ public class MainActivity extends AppCompatActivity {
                             }
                         });
                         dialog.show();
+                        break;
+                    case R.id.MainActivity_message_button:
+                        intent = new Intent(MainActivity.this, MessagesActivity.class);
+                        startActivity(intent);
+                        break;
+                    case  R.id.MainActivity_search_text_view:
+                        Toast.makeText(MyApplication.getContext(), "正在全力开发中...", Toast.LENGTH_SHORT).show();
                         break;
                 }
             }

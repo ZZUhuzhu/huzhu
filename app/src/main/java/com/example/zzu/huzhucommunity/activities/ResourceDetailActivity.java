@@ -12,6 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.example.zzu.huzhucommunity.R;
+import com.example.zzu.huzhucommunity.commonclass.MyApplication;
 import com.example.zzu.huzhucommunity.customlayout.CommentItemLayout;
 import com.example.zzu.huzhucommunity.customlayout.ResourceDetailBottomButtonLayout;
 
@@ -48,7 +49,7 @@ public class ResourceDetailActivity extends AppCompatActivity {
                     case R.id.ResourceDetail_star_button:
                         ResourceDetailBottomButtonLayout temp = findViewById(R.id.ResourceDetail_star_button);
                         if(resStarred) {
-                            Toast.makeText(ResourceDetailActivity.this, "已取消收藏", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MyApplication.getContext(), "已取消收藏", Toast.LENGTH_SHORT).show();
                             temp.setText("收藏");
                             temp.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.star));
                         }
