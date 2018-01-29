@@ -24,6 +24,7 @@ import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.example.zzu.huzhucommunity.R;
 
@@ -42,6 +43,11 @@ public class PublishNewResActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_publish_new_res_layout);
         Toolbar toolbar = findViewById(R.id.PublishNewRes_toolbar);
+        int which = getIntent().getIntExtra("publishType", 0);
+        if(which == MainActivity.PUBLISH_NEW_REQUEST)
+            toolbar.setTitle(R.string.publishNewRequest);
+        else if(which == MainActivity.PUBLISH_NEW_RESOURCE)
+            toolbar.setTitle(R.string.publishNewResource);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         if(actionBar != null){
@@ -56,14 +62,15 @@ public class PublishNewResActivity extends AppCompatActivity {
         timeTextView.setText(curTime);
 
         Spinner typeSpinner = findViewById(R.id.PublishNewRes_type_spinner);
-        ArrayAdapter<CharSequence> arrayAdapter = ArrayAdapter.createFromResource(this, R.array.Types, android.R.layout.simple_spinner_item);
-        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        ArrayAdapter<CharSequence> arrayAdapter = ArrayAdapter.createFromResource(this, R.array.Types, R.layout.type_spinner_item_view);
+        arrayAdapter.setDropDownViewResource(R.layout.grade_spinner_item_drop_down_view);
         typeSpinner.setAdapter(arrayAdapter);
 
         addListener(R.id.PublishNewRes_add_image_button);
         addListener(R.id.PublishNewRes_time_text_view);
         addListener(R.id.PublishNewRes_date_text_view);
         addListener(R.id.PublishNewRes_price_edit_text);
+        addListener(R.id.PublishNewRes_publish_button);
     }
     public void addListener(final int res){
         findViewById(res).setOnClickListener(new View.OnClickListener() {
@@ -102,6 +109,9 @@ public class PublishNewResActivity extends AppCompatActivity {
                     case R.id.PublishNewRes_price_edit_text:
                         ScrollView scrollView = findViewById(R.id.PublishNewRes_scroll_view);
                         scrollView.smoothScrollTo(0, 320);
+                        break;
+                    case R.id.PublishNewRes_publish_button:
+                        Toast.makeText(PublishNewResActivity.this, "正在全力开发中...", Toast.LENGTH_SHORT).show();
                         break;
                 }
             }

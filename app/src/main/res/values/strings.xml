@@ -30,6 +30,7 @@
     <string name="receive">接单</string>
     <string name="userProfile">个人信息</string>
     <string name="publishNewResource">发布新资源</string>
+    <string name="publishNewRequest">发布新请求</string>
     <string name="solider">小美</string>
     <string name="resourceDetail">资源详情</string>
     <string name="title">标题</string>

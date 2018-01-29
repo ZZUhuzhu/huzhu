@@ -36,9 +36,8 @@
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:scaleType="fitCenter"
-                android:background="@drawable/oval_bg_transparent"
                 android:layout_marginStart="@dimen/common_margin_large"
-                android:src="@drawable/default_image"/>
+                android:src="@drawable/profile_head"/>
             <TextView
                 android:id="@+id/UserProfile_me_name_text_view"
                 android:layout_toEndOf="@id/UserProfile_me_image_view"

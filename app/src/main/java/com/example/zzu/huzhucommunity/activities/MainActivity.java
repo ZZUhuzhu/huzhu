@@ -12,6 +12,10 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.Interpolator;
+import android.view.animation.RotateAnimation;
 import android.widget.ImageButton;
 
 import com.example.zzu.huzhucommunity.R;
@@ -23,6 +27,8 @@ import com.example.zzu.huzhucommunity.commonclass.NewResourceItem;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
+    public static final int PUBLISH_NEW_RESOURCE = 0;
+    public static final int PUBLISH_NEW_REQUEST = 1;
     private ImageButton resourceButton;
     private ImageButton requestButton;
     private ImageButton userHeadImageButton;
@@ -124,6 +130,13 @@ public class MainActivity extends AppCompatActivity {
                         startActivity(intent);
                         break;
                     case R.id.MainActivity_publish_button:
+                        ImageButton publishButton = findViewById(R.id.MainActivity_publish_button);
+                        float pivotX = publishButton.getWidth() / 2;
+                        float pivotY = publishButton.getHeight() / 2;
+                        Animation animation = new RotateAnimation(0.0f, 90, pivotX, pivotY);
+                        animation.setDuration(150);
+                        animation.setFillAfter(true);
+                        publishButton.startAnimation(animation);
                         AlertDialog.Builder dialog = new AlertDialog.Builder(MainActivity.this);
                         dialog.setItems(R.array.PublishType, new DialogInterface.OnClickListener() {
                             @Override
