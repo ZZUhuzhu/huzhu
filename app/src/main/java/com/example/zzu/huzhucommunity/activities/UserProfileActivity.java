@@ -1,16 +1,12 @@
 package com.example.zzu.huzhucommunity.activities;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,11 +17,6 @@ import android.widget.Toast;
 import com.example.zzu.huzhucommunity.R;
 import com.example.zzu.huzhucommunity.commonclass.Constants;
 import com.example.zzu.huzhucommunity.commonclass.MyApplication;
-
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.net.HttpURLConnection;
-import java.net.URL;
 
 public class UserProfileActivity extends AppCompatActivity {
     private static final String TAG = "UserProfileActivity";
@@ -116,7 +107,7 @@ public class UserProfileActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.setting_menu_item, menu);
+        getMenuInflater().inflate(R.menu.user_profile_setting_menu_item, menu);
         return true;
     }
 }

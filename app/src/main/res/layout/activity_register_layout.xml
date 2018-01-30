@@ -43,7 +43,7 @@
             android:layout_centerHorizontal="false"
             android:textSize="@dimen/common_text_size_large"
             android:textColor="@color/colorWhite"
-            android:text="@string/sex"/>
+            android:text="@string/sex_with_colon"/>
         <RadioGroup
             android:id="@+id/RegisterActivity_sex_custom_radio_group"
             android:layout_centerVertical="true"

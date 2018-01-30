@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorDeepSkyBlue"
+    tools:context="com.example.zzu.huzhucommunity.activities.ChatRoomActivity">
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/ChatRoomActivity_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
+    <LinearLayout
+        android:id="@+id/ChatRoomActivity_bottom_bar"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:background="@color/colorWhite"
+        android:animateLayoutChanges="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <EditText
+            android:id="@+id/ChatRoomActivity_input_edit_text"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/common_margin_normal"
+            android:inputType="textMultiLine"
+            android:background="@null"
+            android:textColor="@color/colorBlack"
+            android:textSize="@dimen/common_text_size_large" />
+        <Button
+            android:id="@+id/ChatRoomActivity_send_button"
+            android:labelFor="@id/ChatRoomActivity_input_edit_text"
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/common_margin_small"
+            android:minWidth="45dp"
+            android:minHeight="35dp"
+            android:background="@drawable/round_rectangle_blue_button"
+            android:text="@string/send"/>
+        <ImageButton
+            android:id="@+id/ChatRoomActivity_send_image_button"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:contentDescription="@string/app_name"
+            android:background="@drawable/oval_stroke_black_pressed_bg_gray"
+            android:layout_margin="@dimen/common_margin_small"
+            android:scaleType="fitCenter"
+            android:src="@drawable/plus_icon"/>
+    </LinearLayout>
+    <View
+        android:layout_above="@id/ChatRoomActivity_bottom_bar"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/colorGray"/>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/ChatRoomActivity_recycler_view"
+        android:background="@color/colorWhite"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/ChatRoomActivity_toolbar"
+        android:layout_above="@id/ChatRoomActivity_bottom_bar"/>
+
+</RelativeLayout>

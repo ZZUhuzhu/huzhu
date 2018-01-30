@@ -1,38 +1,47 @@
 <resources>
     <string name="app_name">HuzhuCommunity</string>
+
+    <string name="veryGood">非常好</string>
+
     <string name="login">登录</string>
     <string name="account">账号</string>
     <string name="password">密码</string>
+
     <string name="confirm_password">确认密码</string>
     <string name="new_user_register">新用户注册</string>
     <string name="forget_password">忘记密码</string>
     <string name="register">注册</string>
     <string name="phone">手机号码</string>
-    <string name="sex">性别:</string>
+    <string name="sex_with_colon">性别:</string>
     <string name="grade_with_colon">年级:</string>
     <string name="department_with_colon">院系:</string>
     <string name="male">男</string>
     <string name="female">女</string>
+
     <string name="search">搜索</string>
     <string name="resource">资源</string>
     <string name="request">请求</string>
+
     <string name="publish">发布</string>
+
+    <string name="userProfile">个人信息</string>
+    <string name="myStar">我的收藏</string>
+    <string name="myComment">我的评论</string>
+    <string name="myTrack">我的足迹</string>
     <string name="resourcePublished">我发布的资源</string>
     <string name="resourceReceived">我接收的资源</string>
     <string name="setting">设置</string>
+
     <string name="comment">评论</string>
-    <string name="myComment">我的评论</string>
     <string name="star">收藏</string>
-    <string name="myStar">我的收藏</string>
     <string name="track">足迹</string>
-    <string name="myTrack">我的足迹</string>
     <string name="chat">交流</string>
     <string name="receive">接单</string>
-    <string name="userProfile">个人信息</string>
-    <string name="publishNewResource">发布新资源</string>
-    <string name="publishNewRequest">发布新请求</string>
+
     <string name="solider">小美</string>
+
     <string name="resourceDetail">资源详情</string>
+
     <string name="title">标题</string>
     <string name="content">内容</string>
     <string name="image_with_colon">图片:</string>
@@ -40,8 +49,16 @@
     <string name="yuan">￥</string>
     <string name="deadline_with_colon">截止日期:</string>
     <string name="price_with_colon">价格:</string>
+
     <string name="newMessage">新消息</string>
     <string name="ninetyMore">99+</string>
+
+    <string name="publishNewResource">发布新资源</string>
+    <string name="publishNewRequest">发布新请求</string>
+    <string name="markAllRead">全部标为已读</string>
+
+    <string name="send">发送</string>
+
     <string name="twoHoursAgo">2小时前</string>
     <string name="twoDaysLater">2天后</string>
     <string name="twoYuan">2￥</string>

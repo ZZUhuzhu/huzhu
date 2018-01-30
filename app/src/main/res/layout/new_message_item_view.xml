@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:clickable="true"
@@ -9,12 +10,12 @@
     <ImageButton
         android:id="@+id/new_message_item_head_button"
         android:clickable="false"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:layout_centerVertical="true"
         android:contentDescription="@string/app_name"
         android:background="@null"
-        android:layout_margin="@dimen/common_margin_normal"
+        android:layout_margin="@dimen/common_margin_small"
         android:scaleType="fitCenter"
         android:src="@drawable/profile_head"/>
     <TextView
@@ -22,9 +23,10 @@
         android:clickable="false"
         android:layout_toEndOf="@id/new_message_item_head_button"
         android:layout_alignTop="@id/new_message_item_head_button"
+        android:layout_marginTop="@dimen/common_margin_small"
         android:layout_marginBottom="@dimen/common_margin_small"
         android:textSize="@dimen/common_text_size_large"
-        android:layout_width="200dp"
+        android:layout_width="180dp"
         android:layout_height="wrap_content"
         android:textColor="@color/colorBlack"/>
     <TextView
@@ -32,6 +34,7 @@
         android:layout_alignTop="@id/new_message_item_sender_name_text_view"
         android:layout_alignParentEnd="true"
         android:layout_marginEnd="@dimen/common_margin_normal"
+        android:layout_marginTop="@dimen/common_margin_small"
         android:gravity="end"
         android:layout_width="130dp"
         android:layout_height="wrap_content"
@@ -41,10 +44,10 @@
         android:clickable="false"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/common_margin_normal"
+        android:layout_marginTop="@dimen/common_margin_small"
+        android:layout_marginEnd="@dimen/common_margin_large"
         android:layout_toEndOf="@id/new_message_item_head_button"
         android:layout_below="@id/new_message_item_sender_name_text_view"
-        android:textSize="@dimen/common_text_size_normal"
         android:maxLines="1"
         android:ellipsize="end"/>
     <Button
@@ -52,12 +55,13 @@
         android:layout_alignTop="@id/new_message_item_first_message_text_view"
         android:layout_alignParentEnd="true"
         android:layout_marginEnd="@dimen/common_margin_small"
-        android:minWidth="20dp"
-        android:layout_height="20dp"
+        android:layout_height="19dp"
+        android:minWidth="19dp"
         android:layout_width="wrap_content"
         android:paddingEnd="@dimen/common_margin_small"
         android:paddingStart="@dimen/common_margin_small"
         android:background="@drawable/new_message_amount_red_background"
-        android:textSize="@dimen/common_text_size_small"
-        android:textColor="@color/colorWhite"/>
+        android:textSize="10sp"
+        android:textColor="@color/colorWhite"
+        tools:ignore="SmallSp" />
 </RelativeLayout>

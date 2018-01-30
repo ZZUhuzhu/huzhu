@@ -22,7 +22,8 @@
                 android:layout_height="?attr/actionBarSize"
                 android:background="@color/colorDeepSkyBlue"
                 android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-                app:layout_scrollFlags="scroll|enterAlways|snap"/>
+                app:layout_scrollFlags="scroll|enterAlways|snap"
+                app:popupTheme="@style/ToolbarPopupTheme"/>
         </android.support.design.widget.AppBarLayout>
         <android.support.v7.widget.RecyclerView
             android:id="@+id/MessagesActivity_recycler_view"

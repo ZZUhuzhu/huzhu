@@ -1,5 +1,7 @@
 package com.example.zzu.huzhucommunity.adapters;
 
+import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +11,8 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.zzu.huzhucommunity.R;
+import com.example.zzu.huzhucommunity.activities.ChatRoomActivity;
+import com.example.zzu.huzhucommunity.activities.MessagesActivity;
 import com.example.zzu.huzhucommunity.commonclass.MyApplication;
 import com.example.zzu.huzhucommunity.commonclass.NewMessagesItem;
 
@@ -21,9 +25,11 @@ import java.util.ArrayList;
 
 public class MessageItemAdapter extends RecyclerView.Adapter<MessageItemAdapter.ViewHolder> {
     private ArrayList<NewMessagesItem> messagesItems;
+    private Context context;
 
-    public MessageItemAdapter(ArrayList<NewMessagesItem> messagesItems){
+    public MessageItemAdapter(ArrayList<NewMessagesItem> messagesItems, Context context){
         this.messagesItems = messagesItems;
+        this.context = context;
     }
     @Override
     public MessageItemAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -32,11 +38,16 @@ public class MessageItemAdapter extends RecyclerView.Adapter<MessageItemAdapter.
     }
 
     @Override
-    public void onBindViewHolder(MessageItemAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(final MessageItemAdapter.ViewHolder holder, int position) {
         NewMessagesItem messagesItem = messagesItems.get(position);
         holder.sendNameTextView.setText(messagesItem.getSenderName());
         holder.firstNewMessageTextView.setText(messagesItem.getFirstNewMessage());
         holder.messageTimeTextView.setText(messagesItem.getMessageTime());
+        if(messagesItem.isRead()) {
+            holder.messageAmountButton.setVisibility(View.GONE);
+            return;
+        }
+        holder.messageAmountButton.setVisibility(View.VISIBLE);
         int amount = messagesItem.getNewMessageAmount();
         if(amount > 99){
             holder.messageAmountButton.setText(MyApplication.getContext().getString(R.string.ninetyMore));
@@ -45,6 +56,16 @@ public class MessageItemAdapter extends RecyclerView.Adapter<MessageItemAdapter.
             String text = "" + amount;
             holder.messageAmountButton.setText(text);
         }
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                NewMessagesItem messagesItem1 = messagesItems.get(holder.getAdapterPosition());
+                messagesItem1.setRead();
+                Intent intent = new Intent(context, ChatRoomActivity.class);
+                intent.putExtra(MessagesActivity.CHAT_ROOM_INTENT_EXTRA_NAME, messagesItem1);
+                context.startActivity(intent);
+            }
+        });
     }
 
     @Override
