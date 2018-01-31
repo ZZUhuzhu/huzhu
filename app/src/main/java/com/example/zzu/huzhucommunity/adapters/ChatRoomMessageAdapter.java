@@ -59,7 +59,7 @@ public class ChatRoomMessageAdapter extends RecyclerView.Adapter<ChatRoomMessage
                 holder.messageImageViewEnd.setImageBitmap(null);
                 holder.messageTextViewEnd.setText(item.getMessageText());
             }
-            holder.headImageViewEnd.setImageBitmap(userHeadBitmap);
+            holder.headImageViewEnd.setImageDrawable(MyApplication.getUserHeadImageDrawable());
             holder.holderViewStart.setVisibility(View.GONE);
             holder.holderViewEnd.setVisibility(View.VISIBLE);
         }

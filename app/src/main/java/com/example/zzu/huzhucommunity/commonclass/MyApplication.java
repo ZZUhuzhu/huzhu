@@ -2,10 +2,15 @@ package com.example.zzu.huzhucommunity.commonclass;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
+
+import com.example.zzu.huzhucommunity.R;
 
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -37,6 +42,19 @@ public class MyApplication extends Application {
         downloadUserHeadImage(null);
     }
 
+    /**
+     * 获取用户头像
+     * @return 当用户未登录时返回drawable中profile_head文件（调试时用）
+     *          否则返回
+     */
+    public static RoundedBitmapDrawable getUserHeadImageDrawable(){
+        if(userId == -1){
+            Resources resources = getContext().getResources();
+            return RoundedBitmapDrawableFactory.create(resources, BitmapFactory.decodeResource(resources, R.drawable.profile_head));
+        }
+        else
+            return userHeadImage;
+    }
     /**
      * 下载用户的头像图片
      */

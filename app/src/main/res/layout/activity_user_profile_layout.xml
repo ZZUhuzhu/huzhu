@@ -96,8 +96,16 @@
                 android:layout_height="wrap_content"
                 android:clickable="true"
                 android:focusable="true"
-                app:image_src="@drawable/comment"
+                app:image_src="@drawable/comment_gray"
                 app:item_text="@string/myComment"/>
+            <com.example.zzu.huzhucommunity.customlayout.UserProfileItemLayout
+                android:id="@+id/UserProfile_message_item"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:focusable="true"
+                app:item_text="@string/myMessage"
+                app:image_src="@drawable/message_gray"/>
             <com.example.zzu.huzhucommunity.customlayout.UserProfileItemLayout
                 android:id="@+id/UserProfile_setting_item"
                 android:layout_width="match_parent"

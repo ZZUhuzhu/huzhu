@@ -12,5 +12,5 @@
     <color name="colorTransparent">#00000000</color>
     <color name="colorBlack">#000000</color>
     <color name="colorBackground">#f3f5f9</color>
-    <color name="colorRiceWhite">#FFFFFF</color>
+    <color name="colorRiceWhite">#F5F5F5</color>
 </resources>

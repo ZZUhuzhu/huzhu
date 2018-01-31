@@ -55,6 +55,7 @@ public class UserProfileActivity extends AppCompatActivity {
         addListener(R.id.UserProfile_star_item);
         addListener(R.id.UserProfile_track_item);
         addListener(R.id.UserProfile_comment_item);
+        addListener(R.id.UserProfile_message_item);
 
         initUserInfo();
     }
@@ -73,6 +74,7 @@ public class UserProfileActivity extends AppCompatActivity {
                     case R.id.UserProfile_star_item:
                     case R.id.UserProfile_track_item:
                     case R.id.UserProfile_comment_item:
+                    case R.id.UserProfile_message_item:
                         Toast.makeText(MyApplication.getContext(), "正在全力开发中...", Toast.LENGTH_SHORT).show();
                         break;
                 }

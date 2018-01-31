@@ -58,7 +58,6 @@ public class NewMessagesItem implements Parcelable {
     };
 
     public boolean isRead() {return read;}
-    public String getSenderHead() {return senderHead;}
     public Bitmap getSenderHeadBitmap(){
         return BitmapFactory.decodeResource(MyApplication.getContext().getResources(), R.drawable.profile_head);
     }

@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/colorAccent"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".activities.MainActivity">
     <android.support.design.widget.CoordinatorLayout
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
@@ -59,13 +61,13 @@
                 </LinearLayout>
             </android.support.v7.widget.Toolbar>
         </android.support.design.widget.AppBarLayout>
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/MainActivity_recycler_view"
+        <android.support.v4.view.ViewPager
+            android:id="@+id/MainActivity_view_pager"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/colorWhite"
-            android:layout_marginBottom="52dp"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        </android.support.v4.view.ViewPager>
     </android.support.design.widget.CoordinatorLayout>
 
     <LinearLayout
@@ -90,7 +92,7 @@
             <ImageButton
                 android:id="@+id/MainActivity_resource_button"
                 android:contentDescription="@string/publish"
-                android:layout_width="20dp"
+                android:layout_width="wrap_content"
                 android:layout_height="20dp"
                 android:background="@null"
                 android:layout_gravity="center"
@@ -99,12 +101,14 @@
                 android:src="@drawable/resource_yellow"/>
             <TextView
                 android:id="@+id/MainActivity_resource_text_view"
+                android:gravity="center_horizontal"
                 android:layout_width="wrap_content"
+                android:minWidth="64dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="@string/resource"
                 android:textSize="@dimen/common_text_size_small"
-                android:layout_marginTop="@dimen/common_margin_small"/>
+                android:paddingTop="@dimen/common_margin_small"/>
         </LinearLayout>
         <LinearLayout
             android:elevation="10dp"
@@ -151,7 +155,7 @@
             <ImageButton
                 android:id="@+id/MainActivity_request_button"
                 android:contentDescription="@string/request"
-                android:layout_width="20dp"
+                android:layout_width="wrap_content"
                 android:layout_height="20dp"
                 android:background="@null"
                 android:layout_gravity="center"
@@ -162,10 +166,12 @@
                 android:id="@+id/MainActivity_request_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:minWidth="64dp"
                 android:layout_gravity="center"
+                android:gravity="center"
                 android:text="@string/request"
                 android:textSize="@dimen/common_text_size_small"
-                android:layout_marginTop="@dimen/common_margin_small"/>
+                android:paddingTop="@dimen/common_margin_small"/>
         </LinearLayout>
     </LinearLayout>
 </RelativeLayout>

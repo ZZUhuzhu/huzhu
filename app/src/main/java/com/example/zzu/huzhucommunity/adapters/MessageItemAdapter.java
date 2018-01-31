@@ -56,16 +56,6 @@ public class MessageItemAdapter extends RecyclerView.Adapter<MessageItemAdapter.
             String text = "" + amount;
             holder.messageAmountButton.setText(text);
         }
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                NewMessagesItem messagesItem1 = messagesItems.get(holder.getAdapterPosition());
-                messagesItem1.setRead();
-                Intent intent = new Intent(context, ChatRoomActivity.class);
-                intent.putExtra(MessagesActivity.CHAT_ROOM_INTENT_EXTRA_NAME, messagesItem1);
-                context.startActivity(intent);
-            }
-        });
     }
 
     @Override
@@ -73,7 +63,7 @@ public class MessageItemAdapter extends RecyclerView.Adapter<MessageItemAdapter.
         return messagesItems.size();
     }
 
-    static class ViewHolder extends RecyclerView.ViewHolder{
+    class ViewHolder extends RecyclerView.ViewHolder{
         ImageButton headButton;
         TextView sendNameTextView;
         TextView firstNewMessageTextView;
@@ -81,6 +71,16 @@ public class MessageItemAdapter extends RecyclerView.Adapter<MessageItemAdapter.
         Button messageAmountButton;
         ViewHolder(View itemView) {
             super(itemView);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    NewMessagesItem messagesItem1 = messagesItems.get(getLayoutPosition());
+                    messagesItem1.setRead();
+                    Intent intent = new Intent(context, ChatRoomActivity.class);
+                    intent.putExtra(MessagesActivity.CHAT_ROOM_INTENT_EXTRA_NAME, messagesItem1);
+                    context.startActivity(intent);
+                }
+            });
             headButton = itemView.findViewById(R.id.new_message_item_head_button);
             sendNameTextView = itemView.findViewById(R.id.new_message_item_sender_name_text_view);
             messageTimeTextView = itemView.findViewById(R.id.new_message_item_time_text_view);

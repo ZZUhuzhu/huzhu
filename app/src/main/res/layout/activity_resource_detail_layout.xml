@@ -135,12 +135,12 @@
             android:id="@+id/ResourceDetail_comment_it_button"
             style="@style/ResourceDetailBottomButtonHolder"
             android:text="@string/comment"
-            android:src="@drawable/comment"/>
+            android:src="@drawable/comment_gray"/>
         <com.example.zzu.huzhucommunity.customlayout.ResourceDetailBottomButtonLayout
             android:id="@+id/ResourceDetail_chat_button"
             style="@style/ResourceDetailBottomButtonHolder"
             android:text="@string/chat"
-            android:src="@drawable/chat"/>
+            android:src="@drawable/chat_gray"/>
         <com.example.zzu.huzhucommunity.customlayout.ResourceDetailBottomButtonLayout
             android:id="@+id/ResourceDetail_receive_it_button"
             android:text="@string/receive"

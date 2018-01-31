@@ -51,14 +51,9 @@
             android:scaleType="fitCenter"
             android:src="@drawable/plus_icon"/>
     </LinearLayout>
-    <View
-        android:layout_above="@id/ChatRoomActivity_bottom_bar"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/colorGray"/>
     <android.support.v7.widget.RecyclerView
         android:id="@+id/ChatRoomActivity_recycler_view"
-        android:background="@color/colorWhite"
+        android:background="@color/colorRiceWhite"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/ChatRoomActivity_toolbar"

@@ -6,7 +6,6 @@ import android.content.ContentResolver;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.Image;
 import android.net.Uri;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -14,10 +13,8 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
@@ -90,8 +87,11 @@ public class PublishNewResActivity extends AppCompatActivity {
                                 new TimePickerDialog.OnTimeSetListener() {
                                     @Override
                                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                                        String setTime = hourOfDay + ":" + minute;
-                                        timeTextView.setText(setTime);
+                                        String hour = "" + hourOfDay, min = "" + minute;
+                                        if(hour.length() == 1) hour = "0" + hour;
+                                        if(min.length() == 1) min = "0" + min;
+                                        String pickedTime = hour + ":" + min;
+                                        timeTextView.setText(pickedTime);
                                     }
                                 }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true);
                         timePickerDialog.show();

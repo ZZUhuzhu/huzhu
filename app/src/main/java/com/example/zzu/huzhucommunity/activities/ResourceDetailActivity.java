@@ -1,5 +1,6 @@
 package com.example.zzu.huzhucommunity.activities;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v7.app.ActionBar;
@@ -13,12 +14,14 @@ import android.widget.Toast;
 
 import com.example.zzu.huzhucommunity.R;
 import com.example.zzu.huzhucommunity.commonclass.MyApplication;
+import com.example.zzu.huzhucommunity.commonclass.NewResourceItem;
 import com.example.zzu.huzhucommunity.customlayout.CommentItemLayout;
 import com.example.zzu.huzhucommunity.customlayout.ResourceDetailBottomButtonLayout;
 
 public class ResourceDetailActivity extends AppCompatActivity {
-    private static final String TAG = "ResourceDetailActivity";
     private boolean resStarred = false;
+    private int resourceItemPosition;
+    private ResourceDetailBottomButtonLayout receiveButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +33,12 @@ public class ResourceDetailActivity extends AppCompatActivity {
         if(actionBar != null){
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
+        Intent intent = getIntent();
+        resourceItemPosition = intent.getIntExtra(MainActivity.RESOURCE_DETAIL_RESOURCE_ITEM_POSITION, -1);
+        setResult(RESULT_CANCELED);
+
+        receiveButton = findViewById(R.id.ResourceDetail_receive_it_button);
+
         addListener(R.id.ResourceDetail_star_button);
         addListener(R.id.ResourceDetail_comment_it_button);
         addListener(R.id.ResourceDetail_receive_it_button);
@@ -45,6 +54,7 @@ public class ResourceDetailActivity extends AppCompatActivity {
         findViewById(res).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent;
                 switch (res){
                     case R.id.ResourceDetail_star_button:
                         ResourceDetailBottomButtonLayout temp = findViewById(R.id.ResourceDetail_star_button);
@@ -54,16 +64,23 @@ public class ResourceDetailActivity extends AppCompatActivity {
                             temp.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.star));
                         }
                         else{
-                            Toast.makeText(ResourceDetailActivity.this, "已收藏", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MyApplication.getContext(), "已收藏", Toast.LENGTH_SHORT).show();
                             temp.setText("已收藏");
                             temp.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.star_yellow));
                         }
                         resStarred = !resStarred;
                         break;
-                    case R.id.ResourceDetail_comment_it_button:
                     case R.id.ResourceDetail_receive_it_button:
+                        receiveButton.setText(getString(R.string.received));
+                        receiveButton.setClickable(false);
+                        intent = new Intent();
+                        intent.putExtra(MainActivity.RESOURCE_DETAIL_RESOURCE_ITEM_POSITION, resourceItemPosition);
+                        setResult(RESULT_OK, intent);
+                        Toast.makeText(MyApplication.getContext(), "您已接单，请主动联系卖方", Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.ResourceDetail_comment_it_button:
                     case R.id.ResourceDetail_chat_button:
-                        Toast.makeText(ResourceDetailActivity.this, "正在全力开发中...", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MyApplication.getContext(), "正在全力开发中...", Toast.LENGTH_SHORT).show();
                         break;
                 }
             }
