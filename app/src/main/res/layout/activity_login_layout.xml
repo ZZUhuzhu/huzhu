@@ -54,6 +54,7 @@
             android:hint="@string/password"/>
         <ImageButton
             android:id="@+id/LoginActivity_password_cancel_button"
+            android:contentDescription="@string/app_name"
             android:layout_width="10dp"
             android:layout_height="10dp"
             android:background="@null"

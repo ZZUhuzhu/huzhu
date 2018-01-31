@@ -9,7 +9,7 @@
     android:background="@drawable/background_small">
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="200dp">
+        android:layout_height="180dp">
         <ImageView
             android:id="@+id/UserProfile_top_background_image_view"
             android:contentDescription="@string/app_name"
