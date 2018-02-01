@@ -3,11 +3,14 @@ package com.example.zzu.huzhucommunity.activities;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.ContentResolver;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.provider.MediaStore;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -30,8 +33,9 @@ import java.io.FileNotFoundException;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
-public class PublishNewResActivity extends AppCompatActivity {
+public class PublishNewActivity extends BaseActivity {
     private static final int PICK_IMAGE = 1;
+    private static final int CAPTURE_IMAGE = 2;
     private Calendar calendar = GregorianCalendar.getInstance();
     private TextView dateTextView;
     private TextView timeTextView;
@@ -77,13 +81,26 @@ public class PublishNewResActivity extends AppCompatActivity {
             public void onClick(View v) {
                 switch (res){
                     case R.id.PublishNewRes_add_image_button:
-                        intent = new Intent();
-                        intent.setAction(Intent.ACTION_GET_CONTENT);
-                        intent.setType("image/*");
-                        startActivityForResult(intent, PICK_IMAGE);
+                        AlertDialog.Builder dialog = new AlertDialog.Builder(PublishNewActivity.this);
+                        dialog.setItems(R.array.AddImageFrom, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                if(which == 0){
+                                    intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                                    startActivityForResult(intent, CAPTURE_IMAGE);
+                                }
+                                else{
+                                    intent = new Intent();
+                                    intent.setAction(Intent.ACTION_GET_CONTENT);
+                                    intent.setType("image/*");
+                                    startActivityForResult(intent, PICK_IMAGE);
+                                }
+                            }
+                        });
+                        dialog.show();
                         break;
                     case R.id.PublishNewRes_time_text_view:
-                        TimePickerDialog timePickerDialog = new TimePickerDialog(PublishNewResActivity.this,
+                        TimePickerDialog timePickerDialog = new TimePickerDialog(PublishNewActivity.this,
                                 new TimePickerDialog.OnTimeSetListener() {
                                     @Override
                                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
@@ -97,7 +114,7 @@ public class PublishNewResActivity extends AppCompatActivity {
                         timePickerDialog.show();
                         break;
                     case R.id.PublishNewRes_date_text_view:
-                        DatePickerDialog datePickerDialog = new DatePickerDialog(PublishNewResActivity.this,
+                        DatePickerDialog datePickerDialog = new DatePickerDialog(PublishNewActivity.this,
                                 new DatePickerDialog.OnDateSetListener() {
                                     @Override
                                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
@@ -130,23 +147,27 @@ public class PublishNewResActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode == PICK_IMAGE){
-            if(resultCode == RESULT_OK){
-                ImageView imageView = new ImageView(PublishNewResActivity.this);
-                imageView.setLayoutParams(( findViewById(R.id.PublishNewRes_add_image_button)).getLayoutParams());
-//                imageView.setBackground(null);
-                Uri uri = data.getData();
-                if(uri == null) return;
-                ContentResolver contentResolver = getContentResolver();
-                try {
-                    Bitmap bitmap = BitmapFactory.decodeStream(contentResolver.openInputStream(uri));
-                    imageView.setImageBitmap(bitmap);
-                    LinearLayout layout = findViewById(R.id.PublishNewRes_image_holder);
-                    layout.addView(imageView, 0);
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
+        switch (requestCode){
+            case PICK_IMAGE:
+                if(resultCode == RESULT_OK){
+                    ImageView imageView = new ImageView(PublishNewActivity.this);
+                    imageView.setLayoutParams(( findViewById(R.id.PublishNewRes_add_image_button)).getLayoutParams());
+                    Uri uri = data.getData();
+                    if(uri == null) return;
+                    ContentResolver contentResolver = getContentResolver();
+                    try {
+                        Bitmap bitmap = BitmapFactory.decodeStream(contentResolver.openInputStream(uri));
+                        imageView.setImageBitmap(bitmap);
+                        LinearLayout layout = findViewById(R.id.PublishNewRes_image_holder);
+                        layout.addView(imageView, 0);
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
                 }
-            }
+                break;
+            case CAPTURE_IMAGE:
+                Toast.makeText(MyApplication.getContext(), "正在全力开发中...", Toast.LENGTH_SHORT).show();
+                break;
         }
     }
 }

@@ -1,8 +1,8 @@
 package com.example.zzu.huzhucommunity.activities;
 
+import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -18,17 +18,15 @@ import com.example.zzu.huzhucommunity.R;
 import com.example.zzu.huzhucommunity.commonclass.Constants;
 import com.example.zzu.huzhucommunity.commonclass.MyApplication;
 
-public class UserProfileActivity extends AppCompatActivity {
-    private static final String TAG = "UserProfileActivity";
+public class UserProfileActivity extends BaseActivity {
     private TextView userNameTextView;
     private ImageView userHeadImageView;
-    private RoundedBitmapDrawable userHeadImage;
     private Handler handler = new Handler(new Handler.Callback() {
         @Override
         public boolean handleMessage(Message msg) {
             switch (msg.what){
                 case Constants.UserProfileUserHeadImageGot:
-                    userHeadImageView.setImageDrawable(userHeadImage);
+                    userHeadImageView.setImageDrawable(MyApplication.userHeadImage);
                     return true;
             }
             return false;
@@ -67,10 +65,14 @@ public class UserProfileActivity extends AppCompatActivity {
         findViewById(res).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent;
                 switch (res){
+                    case R.id.UserProfile_setting_item:
+                        intent = new Intent(UserProfileActivity.this, SettingActivity.class);
+                        startActivity(intent);
+                        break;
                     case R.id.UserProfile_resource_published_item:
                     case R.id.UserProfile_resource_received_item:
-                    case R.id.UserProfile_setting_item:
                     case R.id.UserProfile_star_item:
                     case R.id.UserProfile_track_item:
                     case R.id.UserProfile_comment_item:

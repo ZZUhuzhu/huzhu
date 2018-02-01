@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:layout_width="match_parent"
     android:background="@color/colorDeepSkyBlue"
-    tools:context=".activities.PublishNewResActivity">
+    tools:context=".activities.PublishNewActivity">
     <android.support.v7.widget.Toolbar
         android:id="@+id/PublishNewRes_toolbar"
         android:layout_width="match_parent"

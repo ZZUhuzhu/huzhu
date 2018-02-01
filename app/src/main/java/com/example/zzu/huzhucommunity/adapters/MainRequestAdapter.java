@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import android.widget.Toast;
 
 import com.example.zzu.huzhucommunity.R;
 import com.example.zzu.huzhucommunity.activities.MainActivity;
+import com.example.zzu.huzhucommunity.activities.RequestDetailActivity;
 import com.example.zzu.huzhucommunity.activities.ResourceDetailActivity;
 import com.example.zzu.huzhucommunity.commonclass.MyApplication;
 import com.example.zzu.huzhucommunity.commonclass.NewRequestItem;
@@ -64,7 +66,8 @@ public class MainRequestAdapter extends RecyclerView.Adapter<MainRequestAdapter.
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(MyApplication.getContext(), "正在全力开发中...", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(context, RequestDetailActivity.class);
+                    ((Activity) context).startActivityForResult(intent, MainActivity.REQUEST_DETAIL_REQUEST_CODE);
                 }
             });
             imageView = itemView.findViewById(R.id.NewResourceItem_thumbnail);

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/colorDeepSkyBlue"
+    tools:context="com.example.zzu.huzhucommunity.activities.SettingActivity">
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/SettingActivity_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        android:background="@color/colorDeepSkyBlue"
+        app:contentInsetStart="0dp"
+        app:contentInsetStartWithNavigation="0dp"/>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorWhite">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <com.example.zzu.huzhucommunity.customlayout.SettingItemLayout
+                android:id="@+id/SettingActivity_new_message_notify_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:focusable="true"
+                android:text="@string/newMessageNotify"
+                app:switch_on="true" />
+            <com.example.zzu.huzhucommunity.customlayout.SettingItemLayout
+                android:id="@+id/SettingActivity_record_track_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:focusable="true"
+                android:text="@string/recordTrack"
+                app:switch_on="true" />
+            <com.example.zzu.huzhucommunity.customlayout.SettingItemLayout
+                android:id="@+id/SettingActivity_clear_cache_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:focusable="true"
+                android:text="@string/clearCache"
+                app:switch_on="false" />
+            <com.example.zzu.huzhucommunity.customlayout.SettingItemLayout
+                android:id="@+id/SettingActivity_check_update_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:focusable="true"
+                android:text="@string/checkUpdate"
+                app:switch_on="false" />
+            <com.example.zzu.huzhucommunity.customlayout.SettingItemLayout
+                android:id="@+id/SettingActivity_about_us_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:focusable="true"
+                android:text="@string/aboutUs"
+                app:switch_on="false" />
+            <com.example.zzu.huzhucommunity.customlayout.SettingItemLayout
+                android:id="@+id/SettingActivity_help_and_feedback_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:focusable="true"
+                android:text="@string/helpAndFeedback"
+                app:switch_on="false" />
+            <com.example.zzu.huzhucommunity.customlayout.SettingItemLayout
+                android:id="@+id/SettingActivity_exit_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:focusable="true"
+                android:text="@string/exit"
+                app:switch_on="false" />
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

@@ -65,14 +65,14 @@
                 android:clickable="true"
                 android:focusable="true"
                 app:image_src="@drawable/publish_plane"
-                app:item_text="@string/resourcePublished"/>
+                app:item_text="@string/publishedByMe"/>
             <com.example.zzu.huzhucommunity.customlayout.UserProfileItemLayout
                 android:id="@+id/UserProfile_resource_received_item"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:clickable="true"
                 android:focusable="true"
-                app:item_text="@string/resourceReceived"
+                app:item_text="@string/receivedByMe"
                 app:image_src="@drawable/receive"/>
             <com.example.zzu.huzhucommunity.customlayout.UserProfileItemLayout
                 android:id="@+id/UserProfile_star_item"

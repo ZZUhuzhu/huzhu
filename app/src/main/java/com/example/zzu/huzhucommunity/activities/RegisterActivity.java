@@ -22,7 +22,7 @@ import com.example.zzu.huzhucommunity.R;
 import com.example.zzu.huzhucommunity.commonclass.MyApplication;
 import com.example.zzu.huzhucommunity.customlayout.RegisterEditTextLayout;
 
-public class RegisterActivity extends AppCompatActivity {
+public class RegisterActivity extends BaseActivity {
     private static final String TAG = "RegisterActivity";
     public static final boolean MALE = false;
     public static final boolean FEMALE = true;

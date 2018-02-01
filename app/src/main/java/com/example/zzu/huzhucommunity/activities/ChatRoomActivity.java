@@ -32,7 +32,7 @@ import com.example.zzu.huzhucommunity.commonclass.NewMessagesItem;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
-public class ChatRoomActivity extends AppCompatActivity {
+public class ChatRoomActivity extends BaseActivity {
     private static final int PICK_IMAGE = 1;
     private static final String TAG = "ChatRoomActivity";
     private ImageButton sendImageButton;

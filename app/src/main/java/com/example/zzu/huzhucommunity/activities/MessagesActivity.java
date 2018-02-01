@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
-public class MessagesActivity extends AppCompatActivity {
+public class MessagesActivity extends BaseActivity {
     public static final String CHAT_ROOM_INTENT_EXTRA_NAME = "MESSAGE";
     private ArrayList<NewMessagesItem> messagesItems = new ArrayList<>();
     private MessageItemAdapter adapter;

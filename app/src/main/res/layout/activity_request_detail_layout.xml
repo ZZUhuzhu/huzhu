@@ -6,8 +6,38 @@
     android:layout_height="match_parent"
     android:layout_width="match_parent"
     android:background="@color/colorDeepSkyBlue">
+    <LinearLayout
+        android:id="@+id/RequestDetail_bottom_button_holder"
+        android:elevation="8dp"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorWhite"
+        android:layout_alignParentBottom="true"
+        android:baselineAligned="false">
+        <com.example.zzu.huzhucommunity.customlayout.ResReqDetailBottomButtonLayout
+            android:id="@+id/RequestDetail_star_button"
+            style="@style/ResourceDetailBottomButtonHolder"
+            android:text="@string/star"
+            android:src="@drawable/star"/>
+        <com.example.zzu.huzhucommunity.customlayout.ResReqDetailBottomButtonLayout
+            android:id="@+id/RequestDetail_comment_it_button"
+            style="@style/ResourceDetailBottomButtonHolder"
+            android:text="@string/comment"
+            android:src="@drawable/comment_gray"/>
+        <com.example.zzu.huzhucommunity.customlayout.ResReqDetailBottomButtonLayout
+            android:id="@+id/RequestDetail_chat_button"
+            style="@style/ResourceDetailBottomButtonHolder"
+            android:text="@string/chat"
+            android:src="@drawable/chat_gray"/>
+        <com.example.zzu.huzhucommunity.customlayout.ResReqDetailBottomButtonLayout
+            android:id="@+id/RequestDetail_receive_it_button"
+            android:text="@string/receive"
+            android:src="@drawable/receive_now"
+            style="@style/ResourceDetailBottomButtonHolder"/>
+    </LinearLayout>
     <android.support.design.widget.CoordinatorLayout
-        android:layout_above="@id/ResourceDetail_bottom_button_holder"
+        android:layout_above="@id/RequestDetail_bottom_button_holder"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true"
@@ -17,7 +47,7 @@
             android:layout_height="wrap_content"
             app:elevation="5dp">
             <android.support.v7.widget.Toolbar
-                android:id="@+id/ResourceDetail_toolbar"
+                android:id="@+id/RequestDetail_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
@@ -32,7 +62,7 @@
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             android:background="@color/colorWhite">
             <LinearLayout
-                android:id="@+id/ResourceDetail_content_holder"
+                android:id="@+id/RequestDetail_content_holder"
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
@@ -40,7 +70,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
                     <ImageView
-                        android:id="@+id/ResourceDetail_res_user_image_view"
+                        android:id="@+id/RequestDetail_request_user_image_view"
                         android:layout_width="50dp"
                         android:layout_height="50dp"
                         android:layout_margin="@dimen/common_margin_normal"
@@ -48,17 +78,17 @@
                         android:scaleType="centerCrop"
                         android:src="@drawable/profile_head"/>
                     <TextView
-                        android:id="@+id/ResourceDetail_res_user_name_text_view"
+                        android:id="@+id/RequestDetail_request_user_name_text_view"
                         android:layout_width="280dp"
                         android:layout_height="wrap_content"
-                        android:layout_alignTop="@id/ResourceDetail_res_user_image_view"
-                        android:layout_toEndOf="@id/ResourceDetail_res_user_image_view"
+                        android:layout_alignTop="@id/RequestDetail_request_user_image_view"
+                        android:layout_toEndOf="@id/RequestDetail_request_user_image_view"
                         android:layout_marginTop="@dimen/common_margin_small"
                         android:maxLines="1"
                         android:textSize="@dimen/common_text_size_normal"
                         android:text="@string/solider"/>
                     <TextView
-                        android:id="@+id/ResourceDetail_res_price_text_view"
+                        android:id="@+id/RequestDetail_request_price_text_view"
                         android:layout_width="50dp"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
@@ -70,25 +100,25 @@
                         android:layout_centerVertical="true"
                         android:text="@string/twoYuan"/>
                     <TextView
-                        android:id="@+id/ResourceDetail_user_active_time_text_view"
+                        android:id="@+id/RequestDetail_user_active_time_text_view"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:maxLines="1"
-                        android:layout_below="@id/ResourceDetail_res_user_name_text_view"
-                        android:layout_toEndOf="@id/ResourceDetail_res_user_image_view"
+                        android:layout_below="@id/RequestDetail_request_user_name_text_view"
+                        android:layout_toEndOf="@id/RequestDetail_request_user_image_view"
                         android:layout_marginTop="@dimen/common_margin_small"
                         android:text="@string/twoHoursAgo"/>
                 </RelativeLayout>
                 <TextView
-                    android:id="@+id/ResourceDetail_res_desc_text_view"
+                    android:id="@+id/RequestDetail_request_desc_text_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/common_margin_normal"
                     android:textSize="@dimen/common_text_size_large"
                     android:textColor="@color/colorBlack"
-                    android:text="@string/virtualResourceDetail"/>
+                    android:text="@string/virtualRequestDetail"/>
                 <LinearLayout
-                    android:id="@+id/ResourceDetail_res_images_holder"
+                    android:id="@+id/RequestDetail_request_images_holder"
                     android:orientation="vertical"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -109,7 +139,7 @@
                     android:textSize="@dimen/common_text_size_normal"
                     android:text="@string/twoDaysLater"/>
                 <LinearLayout
-                    android:id="@+id/ResourceDetail_comment_holder"
+                    android:id="@+id/RequestDetail_comment_holder"
                     android:orientation="vertical"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
@@ -118,34 +148,4 @@
         </android.support.v4.widget.NestedScrollView>
     </android.support.design.widget.CoordinatorLayout>
 
-    <LinearLayout
-        android:id="@+id/ResourceDetail_bottom_button_holder"
-        android:elevation="8dp"
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorWhite"
-        android:layout_alignParentBottom="true"
-        android:baselineAligned="false">
-        <com.example.zzu.huzhucommunity.customlayout.ResReqDetailBottomButtonLayout
-            android:id="@+id/ResourceDetail_star_button"
-            style="@style/ResourceDetailBottomButtonHolder"
-            android:text="@string/star"
-            android:src="@drawable/star"/>
-        <com.example.zzu.huzhucommunity.customlayout.ResReqDetailBottomButtonLayout
-            android:id="@+id/ResourceDetail_comment_it_button"
-            style="@style/ResourceDetailBottomButtonHolder"
-            android:text="@string/comment"
-            android:src="@drawable/comment_gray"/>
-        <com.example.zzu.huzhucommunity.customlayout.ResReqDetailBottomButtonLayout
-            android:id="@+id/ResourceDetail_chat_button"
-            style="@style/ResourceDetailBottomButtonHolder"
-            android:text="@string/chat"
-            android:src="@drawable/chat_gray"/>
-        <com.example.zzu.huzhucommunity.customlayout.ResReqDetailBottomButtonLayout
-            android:id="@+id/ResourceDetail_receive_it_button"
-            android:text="@string/receive"
-            android:src="@drawable/receive_now"
-            style="@style/ResourceDetailBottomButtonHolder"/>
-    </LinearLayout>
 </RelativeLayout>

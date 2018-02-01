@@ -18,7 +18,7 @@ import com.example.zzu.huzhucommunity.asynchttp.LoginRegister;
 import com.example.zzu.huzhucommunity.commonclass.MyApplication;
 
 
-public class LoginActivity extends AppCompatActivity implements AsyncHttpCallback {
+public class LoginActivity extends BaseActivity implements AsyncHttpCallback {
     private EditText accountEditText;
     private EditText passwordEditText;
 

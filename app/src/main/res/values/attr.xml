@@ -9,10 +9,14 @@
         <attr name="item_text" format="reference"/>
         <attr name="image_src" format="reference"/>
     </declare-styleable>
-    <declare-styleable name="ResourceDetailBottomButtonLayout">
+    <declare-styleable name="ResReqDetailBottomButtonLayout">
         <attr name="android:text"/>
         <attr name="android:textSize"/>
         <attr name="android:textColor"/>
         <attr name="android:src"/>
+    </declare-styleable>
+    <declare-styleable name="SettingItemLayout">
+        <attr name="android:text"/>
+        <attr name="switch_on" format="boolean"/>
     </declare-styleable>
 </resources>

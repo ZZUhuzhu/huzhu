@@ -12,7 +12,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
@@ -29,15 +28,15 @@ import com.example.zzu.huzhucommunity.commonclass.NewRequestItem;
 import com.example.zzu.huzhucommunity.commonclass.NewResourceItem;
 
 import java.util.ArrayList;
-import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
     private static final String TAG = "MainActivity";
-    public static final String RESOURCE_DETAIL_RESOURCE_ITEM = "RESOURCE_ITEM";
+    public static final String REQUEST_DETAIL_REQUEST_ITEM_POSITION="REQUEST_POSITION";
     public static final String RESOURCE_DETAIL_RESOURCE_ITEM_POSITION = "RESOURCE_POSITION";
     public static final int PUBLISH_NEW_RESOURCE = 0;
     public static final int PUBLISH_NEW_REQUEST = 1;
     public static final int RESOURCE_DETAIL_REQUEST_CODE = 2;
+    public static final int REQUEST_DETAIL_REQUEST_CODE = 2;
     private ImageButton resourceButton;
     private ImageButton requestButton;
     private ImageButton userHeadImageButton;
@@ -198,9 +197,8 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case R.id.MainActivity_publish_button:
                         ImageButton publishButton = findViewById(R.id.MainActivity_publish_button);
-                        float pivotX = publishButton.getWidth() / 2;
-                        float pivotY = publishButton.getHeight() / 2;
-                        Animation animation = new RotateAnimation(0.0f, 90, pivotX, pivotY);
+                        Animation animation = new RotateAnimation(0.0f, 90,
+                                publishButton.getWidth() / 2, publishButton.getHeight() / 2);
                         animation.setDuration(150);
                         animation.setFillAfter(true);
                         publishButton.startAnimation(animation);
@@ -208,7 +206,7 @@ public class MainActivity extends AppCompatActivity {
                         dialog.setItems(R.array.PublishType, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                Intent intent = new Intent(MainActivity.this, PublishNewResActivity.class);
+                                Intent intent = new Intent(MainActivity.this, PublishNewActivity.class);
                                 intent.putExtra("publishType", which);
                                 startActivity(intent);
                             }

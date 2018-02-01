@@ -3,7 +3,6 @@ package com.example.zzu.huzhucommunity.customlayout;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
-import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.widget.ImageView;
@@ -17,16 +16,16 @@ import com.example.zzu.huzhucommunity.R;
  * 资源详情页面底部四个BUTTON的自定义布局
  */
 
-public class ResourceDetailBottomButtonLayout extends LinearLayout {
-    public ResourceDetailBottomButtonLayout(Context context, AttributeSet attrs) {
+public class ResReqDetailBottomButtonLayout extends LinearLayout {
+    public ResReqDetailBottomButtonLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
         LayoutInflater.from(context).inflate(R.layout.resource_detail_bottom_button_view, this);
         TextView buttonTextView = findViewById(R.id.ResourceDetailBottomButton_text_view);
         ImageView buttonImageView = findViewById(R.id.ResourceDetailBottomButton_image_view);
 
-        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.ResourceDetailBottomButtonLayout);
-        buttonTextView.setText(typedArray.getResourceId(R.styleable.ResourceDetailBottomButtonLayout_android_text, R.string.app_name));
-        buttonImageView.setImageResource(typedArray.getResourceId(R.styleable.ResourceDetailBottomButtonLayout_android_src, R.drawable.star));
+        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.ResReqDetailBottomButtonLayout);
+        buttonTextView.setText(typedArray.getResourceId(R.styleable.ResReqDetailBottomButtonLayout_android_text, R.string.app_name));
+        buttonImageView.setImageResource(typedArray.getResourceId(R.styleable.ResReqDetailBottomButtonLayout_android_src, R.drawable.star));
         typedArray.recycle();
         setClickable(true);
         setFocusable(true);
