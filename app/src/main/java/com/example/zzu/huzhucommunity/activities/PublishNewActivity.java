@@ -3,6 +3,7 @@ package com.example.zzu.huzhucommunity.activities;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -45,7 +46,7 @@ public class PublishNewActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_publish_new_res_layout);
         Toolbar toolbar = findViewById(R.id.PublishNewRes_toolbar);
-        int which = getIntent().getIntExtra("publishType", 0);
+        int which = getIntent().getIntExtra(MainActivity.PUBLISH_TYPE, MainActivity.PUBLISH_NEW_RESOURCE);
         if(which == MainActivity.PUBLISH_NEW_REQUEST)
             toolbar.setTitle(R.string.publishNewRequest);
         else if(which == MainActivity.PUBLISH_NEW_RESOURCE)
@@ -169,5 +170,11 @@ public class PublishNewActivity extends BaseActivity {
                 Toast.makeText(MyApplication.getContext(), "正在全力开发中...", Toast.LENGTH_SHORT).show();
                 break;
         }
+    }
+
+    public static void startMe(Context context, int typeExtra){
+        Intent intent = new Intent(context, PublishNewActivity.class);
+        intent.putExtra(MainActivity.PUBLISH_TYPE, typeExtra);
+        context.startActivity(intent);
     }
 }

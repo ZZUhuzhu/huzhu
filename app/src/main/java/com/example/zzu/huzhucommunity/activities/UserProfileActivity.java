@@ -1,5 +1,6 @@
 package com.example.zzu.huzhucommunity.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
@@ -19,19 +20,6 @@ import com.example.zzu.huzhucommunity.commonclass.Constants;
 import com.example.zzu.huzhucommunity.commonclass.MyApplication;
 
 public class UserProfileActivity extends BaseActivity {
-    private TextView userNameTextView;
-    private ImageView userHeadImageView;
-    private Handler handler = new Handler(new Handler.Callback() {
-        @Override
-        public boolean handleMessage(Message msg) {
-            switch (msg.what){
-                case Constants.UserProfileUserHeadImageGot:
-                    userHeadImageView.setImageDrawable(MyApplication.userHeadImage);
-                    return true;
-            }
-            return false;
-        }
-    });
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,8 +32,10 @@ public class UserProfileActivity extends BaseActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        userNameTextView = findViewById(R.id.UserProfile_me_name_text_view);
-        userHeadImageView = findViewById(R.id.UserProfile_me_image_view);
+        TextView userNameTextView = findViewById(R.id.UserProfile_me_name_text_view);
+        ImageView userHeadImageView = findViewById(R.id.UserProfile_me_image_view);
+        userNameTextView.setText(R.string.solider);
+        userHeadImageView.setImageDrawable(getDrawable(R.drawable.profile_head));
 
         addListener(R.id.UserProfile_resource_published_item);
         addListener(R.id.UserProfile_resource_received_item);
@@ -54,8 +44,6 @@ public class UserProfileActivity extends BaseActivity {
         addListener(R.id.UserProfile_track_item);
         addListener(R.id.UserProfile_comment_item);
         addListener(R.id.UserProfile_message_item);
-
-        initUserInfo();
     }
     /**
      * 为每个控件添加监听器
@@ -68,8 +56,7 @@ public class UserProfileActivity extends BaseActivity {
                 Intent intent;
                 switch (res){
                     case R.id.UserProfile_setting_item:
-                        intent = new Intent(UserProfileActivity.this, SettingActivity.class);
-                        startActivity(intent);
+                        SettingActivity.startMe(UserProfileActivity.this);
                         break;
                     case R.id.UserProfile_resource_published_item:
                     case R.id.UserProfile_resource_received_item:
@@ -82,19 +69,6 @@ public class UserProfileActivity extends BaseActivity {
                 }
             }
         });
-    }
-
-    /**
-     * 初始化登录的用户的信息
-     */
-    public void initUserInfo(){
-        if(MyApplication.userId != -1){
-            userNameTextView.setText(MyApplication.userName);
-            if(MyApplication.userHeadImage == null)
-                MyApplication.downloadUserHeadImage(handler);
-            else
-                userHeadImageView.setImageDrawable(MyApplication.userHeadImage);
-        }
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -113,5 +87,8 @@ public class UserProfileActivity extends BaseActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.user_profile_setting_menu_item, menu);
         return true;
+    }
+    public static void startMe(Context context){
+        context.startActivity(new Intent(context, UserProfileActivity.class));
     }
 }

@@ -137,7 +137,7 @@
                     android:gravity="end"
                     android:layout_marginEnd="@dimen/common_margin_normal"
                     android:textSize="@dimen/common_text_size_normal"
-                    android:text="@string/twoDaysLater"/>
+                    android:text="@string/finishedInTwoDays"/>
                 <LinearLayout
                     android:id="@+id/RequestDetail_comment_holder"
                     android:orientation="vertical"

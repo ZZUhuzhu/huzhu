@@ -1,5 +1,6 @@
 package com.example.zzu.huzhucommunity.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -19,7 +20,6 @@ import com.example.zzu.huzhucommunity.customlayout.ResReqDetailBottomButtonLayou
 
 public class ResourceDetailActivity extends BaseActivity {
     private boolean resStarred = false;
-    private int resourceItemPosition;
     private ResReqDetailBottomButtonLayout receiveButton;
 
     @Override
@@ -32,9 +32,6 @@ public class ResourceDetailActivity extends BaseActivity {
         if(actionBar != null){
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
-        Intent intent = getIntent();
-        resourceItemPosition = intent.getIntExtra(MainActivity.RESOURCE_DETAIL_RESOURCE_ITEM_POSITION, -1);
-        setResult(RESULT_CANCELED);
 
         receiveButton = findViewById(R.id.ResourceDetail_receive_it_button);
 
@@ -53,7 +50,6 @@ public class ResourceDetailActivity extends BaseActivity {
         findViewById(res).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent;
                 switch (res){
                     case R.id.ResourceDetail_star_button:
                         ResReqDetailBottomButtonLayout temp = findViewById(R.id.ResourceDetail_star_button);
@@ -72,13 +68,10 @@ public class ResourceDetailActivity extends BaseActivity {
                     case R.id.ResourceDetail_receive_it_button:
                         receiveButton.setText(getString(R.string.received));
                         receiveButton.setClickable(false);
-                        intent = new Intent();
-                        intent.putExtra(MainActivity.RESOURCE_DETAIL_RESOURCE_ITEM_POSITION, resourceItemPosition);
-                        setResult(RESULT_OK, intent);
                         Toast.makeText(MyApplication.getContext(), "您已接单，请主动联系对方", Toast.LENGTH_SHORT).show();
                         break;
-                    case R.id.ResourceDetail_comment_it_button:
                     case R.id.ResourceDetail_chat_button:
+                    case R.id.ResourceDetail_comment_it_button:
                         Toast.makeText(MyApplication.getContext(), "正在全力开发中...", Toast.LENGTH_SHORT).show();
                         break;
                 }
@@ -107,5 +100,8 @@ public class ResourceDetailActivity extends BaseActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+    public static void startMe(Context context){
+        context.startActivity(new Intent(context, ResourceDetailActivity.class));
     }
 }

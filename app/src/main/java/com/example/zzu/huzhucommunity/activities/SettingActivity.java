@@ -1,5 +1,7 @@
 package com.example.zzu.huzhucommunity.activities;
 
+import android.content.Context;
+import android.content.Intent;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -70,5 +72,8 @@ public class SettingActivity extends BaseActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+    public static void startMe(Context context){
+        context.startActivity(new Intent(context, SettingActivity.class));
     }
 }

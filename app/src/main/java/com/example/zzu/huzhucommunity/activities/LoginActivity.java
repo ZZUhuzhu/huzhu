@@ -1,8 +1,8 @@
 package com.example.zzu.huzhucommunity.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -14,14 +14,13 @@ import android.widget.Toast;
 
 import com.example.zzu.huzhucommunity.R;
 import com.example.zzu.huzhucommunity.asynchttp.AsyncHttpCallback;
-import com.example.zzu.huzhucommunity.asynchttp.LoginRegister;
 import com.example.zzu.huzhucommunity.commonclass.MyApplication;
 
-
+/**
+ * 登录界面
+ */
 public class LoginActivity extends BaseActivity implements AsyncHttpCallback {
-    private EditText accountEditText;
     private EditText passwordEditText;
-
     private ImageButton cancelButton;
     private TextWatcher textWatcher = new TextWatcher() {
         @Override
@@ -43,7 +42,6 @@ public class LoginActivity extends BaseActivity implements AsyncHttpCallback {
         if(actionBar != null) actionBar.hide();
 
         cancelButton = findViewById(R.id.LoginActivity_password_cancel_button);
-        accountEditText = findViewById(R.id.LoginActivity_account_edit_text);
         passwordEditText = findViewById(R.id.LoginActivity_password_edit_text);
         passwordEditText.addTextChangedListener(textWatcher);
 
@@ -60,7 +58,6 @@ public class LoginActivity extends BaseActivity implements AsyncHttpCallback {
         findViewById(res).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent;
                 switch (res){
                     case R.id.LoginActivity_login_button:
                         onSuccess(1);
@@ -73,8 +70,7 @@ public class LoginActivity extends BaseActivity implements AsyncHttpCallback {
 //                        LoginRegister.getOurInstance().login(account, password,LoginActivity.this);
                         break;
                     case R.id.LoginActivity_register_text_view:
-                        intent = new Intent(LoginActivity.this, RegisterActivity.class);
-                        startActivity(intent);
+                        RegisterActivity.startMe(LoginActivity.this);
                         break;
                     case R.id.LoginActivity_password_cancel_button:
                         passwordEditText.setText("");
@@ -91,8 +87,7 @@ public class LoginActivity extends BaseActivity implements AsyncHttpCallback {
     @Override
     public void onSuccess(int code) {
         Toast.makeText(MyApplication.getContext(), "Success login", Toast.LENGTH_SHORT).show();
-        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-        startActivity(intent);
+        MainActivity.startMe(this);
         finish();
     }
 
@@ -103,5 +98,8 @@ public class LoginActivity extends BaseActivity implements AsyncHttpCallback {
     @Override
     public void onError(int code) {
         Toast.makeText(MyApplication.getContext(), "Error on login", Toast.LENGTH_SHORT).show();
+    }
+    public static void startMe(Context context){
+        context.startActivity(new Intent(context, LoginActivity.class));
     }
 }

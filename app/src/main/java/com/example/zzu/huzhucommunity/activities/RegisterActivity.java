@@ -1,19 +1,15 @@
 package com.example.zzu.huzhucommunity.activities;
 
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.text.Editable;
 import android.text.TextUtils;
-import android.text.TextWatcher;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ImageButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -23,7 +19,6 @@ import com.example.zzu.huzhucommunity.commonclass.MyApplication;
 import com.example.zzu.huzhucommunity.customlayout.RegisterEditTextLayout;
 
 public class RegisterActivity extends BaseActivity {
-    private static final String TAG = "RegisterActivity";
     public static final boolean MALE = false;
     public static final boolean FEMALE = true;
     private Spinner gradeSpinner;
@@ -114,7 +109,7 @@ public class RegisterActivity extends BaseActivity {
     }
 
     /**
-     * 注册用户
+     * 注册
      * @param account 用户输入的账户
      * @param password 用户输入的密码
      * @param phone 用户输入的手机号码
@@ -123,6 +118,9 @@ public class RegisterActivity extends BaseActivity {
      * @param department 用户选择的院系
      */
     public void register(String account, String password, String phone, boolean sex, String grade, String department){
-        Log.e(TAG, "register: " + account + password + phone + sex + grade + department);
+        Toast.makeText(MyApplication.getContext(), "正在全力开发中...", Toast.LENGTH_SHORT).show();
+    }
+    public static void startMe(Context context){
+        context.startActivity(new Intent(context, RegisterActivity.class));
     }
 }

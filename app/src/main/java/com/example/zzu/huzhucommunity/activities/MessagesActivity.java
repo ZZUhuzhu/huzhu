@@ -1,5 +1,7 @@
 package com.example.zzu.huzhucommunity.activities;
 
+import android.content.Context;
+import android.content.Intent;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -20,7 +22,6 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 public class MessagesActivity extends BaseActivity {
-    public static final String CHAT_ROOM_INTENT_EXTRA_NAME = "MESSAGE";
     private ArrayList<NewMessagesItem> messagesItems = new ArrayList<>();
     private MessageItemAdapter adapter;
 
@@ -57,12 +58,6 @@ public class MessagesActivity extends BaseActivity {
     }
 
     @Override
-    protected void onRestart() {
-        super.onRestart();
-        adapter.notifyDataSetChanged();
-    }
-
-    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.message_toolbar_menu, menu);
         return true;
@@ -81,5 +76,9 @@ public class MessagesActivity extends BaseActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public static void startMe(Context context){
+        context.startActivity(new Intent(context, MessagesActivity.class));
     }
 }

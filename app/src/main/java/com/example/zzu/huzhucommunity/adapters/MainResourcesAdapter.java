@@ -1,6 +1,5 @@
 package com.example.zzu.huzhucommunity.adapters;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
@@ -11,7 +10,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.zzu.huzhucommunity.R;
-import com.example.zzu.huzhucommunity.activities.MainActivity;
 import com.example.zzu.huzhucommunity.activities.ResourceDetailActivity;
 import com.example.zzu.huzhucommunity.commonclass.NewResourceItem;
 
@@ -59,9 +57,7 @@ public class MainResourcesAdapter extends RecyclerView.Adapter<MainResourcesAdap
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(context, ResourceDetailActivity.class);
-                    intent.putExtra(MainActivity.RESOURCE_DETAIL_RESOURCE_ITEM_POSITION, getAdapterPosition());
-                    ((Activity)context).startActivityForResult(intent, MainActivity.RESOURCE_DETAIL_REQUEST_CODE);
+                    ResourceDetailActivity.startMe(context);
                 }
             });
             imageView = itemView.findViewById(R.id.NewResourceItem_thumbnail);

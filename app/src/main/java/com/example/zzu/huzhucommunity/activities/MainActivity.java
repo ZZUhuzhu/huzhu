@@ -1,5 +1,6 @@
 package com.example.zzu.huzhucommunity.activities;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -29,14 +30,14 @@ import com.example.zzu.huzhucommunity.commonclass.NewResourceItem;
 
 import java.util.ArrayList;
 
+/**
+ * 登录成功后的主界面
+ */
 public class MainActivity extends BaseActivity {
     private static final String TAG = "MainActivity";
-    public static final String REQUEST_DETAIL_REQUEST_ITEM_POSITION="REQUEST_POSITION";
-    public static final String RESOURCE_DETAIL_RESOURCE_ITEM_POSITION = "RESOURCE_POSITION";
+    public static final String PUBLISH_TYPE = "PUBLISH_TYPE";
     public static final int PUBLISH_NEW_RESOURCE = 0;
     public static final int PUBLISH_NEW_REQUEST = 1;
-    public static final int RESOURCE_DETAIL_REQUEST_CODE = 2;
-    public static final int REQUEST_DETAIL_REQUEST_CODE = 2;
     private ImageButton resourceButton;
     private ImageButton requestButton;
     private ImageButton userHeadImageButton;
@@ -111,22 +112,8 @@ public class MainActivity extends BaseActivity {
         addListener(R.id.MainActivity_search_text_view);
 
         initList();
-        initUserHead();
     }
 
-    /**
-     * 获取用户头像信息
-     * 如果当前已经保存用户头像信息，则直接使用
-     * 否则调用MyApplication的downloadUserHeadImage方法下载
-     */
-    public void initUserHead(){
-        if(MyApplication.userId != -1){
-            if(MyApplication.userHeadImage == null)
-                MyApplication.downloadUserHeadImage(handler);
-            else
-                userHeadImageButton.setImageDrawable(MyApplication.userHeadImage);
-        }
-    }
     /**
      * 初始化列表项
      */
@@ -192,8 +179,7 @@ public class MainActivity extends BaseActivity {
                         mainViewPager.setCurrentItem(1);
                         break;
                     case R.id.MainActivity_head_button:
-                        intent = new Intent(MainActivity.this, UserProfileActivity.class);
-                        startActivity(intent);
+                        UserProfileActivity.startMe(MainActivity.this);
                         break;
                     case R.id.MainActivity_publish_button:
                         ImageButton publishButton = findViewById(R.id.MainActivity_publish_button);
@@ -206,16 +192,13 @@ public class MainActivity extends BaseActivity {
                         dialog.setItems(R.array.PublishType, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                Intent intent = new Intent(MainActivity.this, PublishNewActivity.class);
-                                intent.putExtra("publishType", which);
-                                startActivity(intent);
+                                PublishNewActivity.startMe(MainActivity.this, which);
                             }
                         });
                         dialog.show();
                         break;
                     case R.id.MainActivity_message_button:
-                        intent = new Intent(MainActivity.this, MessagesActivity.class);
-                        startActivity(intent);
+                        MessagesActivity.startMe(MainActivity.this);
                         break;
                     case  R.id.MainActivity_search_text_view:
                         Toast.makeText(MyApplication.getContext(), "正在全力开发中...", Toast.LENGTH_SHORT).show();
@@ -225,17 +208,7 @@ public class MainActivity extends BaseActivity {
         });
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == RESOURCE_DETAIL_REQUEST_CODE){
-            if(resultCode == RESULT_OK){
-                int pos = data.getIntExtra(RESOURCE_DETAIL_RESOURCE_ITEM_POSITION, -1);
-                if(pos != -1) {
-                    resourceItems.remove(pos);
-                    resourceAdapter.notifyDataSetChanged();
-                }
-            }
-        }
+    public static void startMe(Context context){
+        context.startActivity(new Intent(context, MainActivity.class));
     }
 }

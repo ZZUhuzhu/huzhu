@@ -1,40 +1,39 @@
 package com.example.zzu.huzhucommunity.activities;
 
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.example.zzu.huzhucommunity.R;
 import com.example.zzu.huzhucommunity.adapters.ChatRoomMessageAdapter;
 import com.example.zzu.huzhucommunity.commonclass.ChatRoomMessageItem;
 import com.example.zzu.huzhucommunity.commonclass.MyApplication;
-import com.example.zzu.huzhucommunity.commonclass.NewMessagesItem;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
+/**
+ * 聊天界面活动
+ */
 public class ChatRoomActivity extends BaseActivity {
     private static final int PICK_IMAGE = 1;
-    private static final String TAG = "ChatRoomActivity";
     private ImageButton sendImageButton;
     private Button sendButton;
     private ChatRoomMessageAdapter adapter;
@@ -64,9 +63,7 @@ public class ChatRoomActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat_room_layout);
-        NewMessagesItem messagesItem = getIntent().getParcelableExtra(MessagesActivity.CHAT_ROOM_INTENT_EXTRA_NAME);
         Toolbar toolbar = findViewById(R.id.ChatRoomActivity_toolbar);
-        toolbar.setTitle(messagesItem.getSenderName());
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         if(actionBar != null) actionBar.setDisplayHomeAsUpEnabled(true);
@@ -80,19 +77,23 @@ public class ChatRoomActivity extends BaseActivity {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
-        adapter = new ChatRoomMessageAdapter(list, messagesItem.getSenderHeadBitmap());
+        adapter = new ChatRoomMessageAdapter(list, null);
         recyclerView.setAdapter(adapter);
 
         addListener(R.id.ChatRoomActivity_send_button);
         addListener(R.id.ChatRoomActivity_send_image_button);
     }
+
+    /**
+     * 为控件添加监听器
+     * @param res 控件ID
+     */
     public void addListener(final int res){
         findViewById(res).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 switch (res){
                     case R.id.ChatRoomActivity_send_button:
-                        Log.d(TAG, "onClick: send button pressed");
                         list.add(new ChatRoomMessageItem(false, inputEditText.getText().toString()));
                         list.add(new ChatRoomMessageItem(true, getString(R.string.veryGood)));
                         recyclerView.smoothScrollToPosition(list.size() - 1);
@@ -146,5 +147,9 @@ public class ChatRoomActivity extends BaseActivity {
                 }
             }
         }
+    }
+
+    public static void startMe(Context context){
+        context.startActivity(new Intent(context, ChatRoomActivity.class));
     }
 }
