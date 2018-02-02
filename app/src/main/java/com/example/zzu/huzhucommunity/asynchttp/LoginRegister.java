@@ -171,7 +171,7 @@ public class LoginRegister {
                             editor.putInt("User_ID", userId);
                             editor.putString("User_name", userName);
                             editor.putString("User_head", userHead);
-                            MyApplication.setUser(userId, userName, userHead);
+//                            MyApplication.setUser(userId, userName, userHead);
                             editor.apply();
                             callback.onSuccess(code);
                         }

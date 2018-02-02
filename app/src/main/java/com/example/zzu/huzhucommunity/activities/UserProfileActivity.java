@@ -44,6 +44,7 @@ public class UserProfileActivity extends BaseActivity {
         addListener(R.id.UserProfile_track_item);
         addListener(R.id.UserProfile_comment_item);
         addListener(R.id.UserProfile_message_item);
+        addListener(R.id.UserProfile_me_holder);
     }
     /**
      * 为每个控件添加监听器
@@ -53,7 +54,6 @@ public class UserProfileActivity extends BaseActivity {
         findViewById(res).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent;
                 switch (res){
                     case R.id.UserProfile_setting_item:
                         SettingActivity.startMe(UserProfileActivity.this);
@@ -65,6 +65,9 @@ public class UserProfileActivity extends BaseActivity {
                     case R.id.UserProfile_comment_item:
                     case R.id.UserProfile_message_item:
                         Toast.makeText(MyApplication.getContext(), "正在全力开发中...", Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.UserProfile_me_holder:
+                        AccountProfileActivity.startMe(UserProfileActivity.this);
                         break;
                 }
             }

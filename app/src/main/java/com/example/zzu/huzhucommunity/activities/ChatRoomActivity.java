@@ -64,6 +64,7 @@ public class ChatRoomActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat_room_layout);
         Toolbar toolbar = findViewById(R.id.ChatRoomActivity_toolbar);
+        toolbar.setTitle(R.string.solider);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         if(actionBar != null) actionBar.setDisplayHomeAsUpEnabled(true);

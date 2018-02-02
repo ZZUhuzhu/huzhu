@@ -58,7 +58,7 @@ public class MainActivity extends BaseActivity {
         public boolean handleMessage(Message msg) {
             switch (msg.what){
                 case Constants.UserProfileUserHeadImageGot:
-                    userHeadImageButton.setImageDrawable(MyApplication.userHeadImage);
+                    userHeadImageButton.setImageDrawable(getDrawable(R.drawable.profile_head));
                     return true;
             }
             return false;
@@ -168,7 +168,6 @@ public class MainActivity extends BaseActivity {
         findViewById(res).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final Intent intent;
                 switch (res){
                     case R.id.MainActivity_resource_button:
                     case R.id.MainActivity_resource_text_view:

@@ -1,15 +1,18 @@
 package com.example.zzu.huzhucommunity.activities;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -66,13 +69,53 @@ public class RequestDetailActivity extends BaseActivity {
                         requestStarred = !requestStarred;
                         break;
                     case R.id.RequestDetail_receive_it_button:
-                        receiveButton.setText(getString(R.string.received));
-                        receiveButton.setClickable(false);
-                        Toast.makeText(MyApplication.getContext(), "您已接单，请主动联系对方", Toast.LENGTH_SHORT).show();
+                        new AlertDialog.Builder(RequestDetailActivity.this)
+                                .setCancelable(true)
+                                .setTitle("确认接单?")
+                                .setMessage("本平台暂不提供线上接单功能，确认接单后请您主动联系对方")
+                                .setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        receiveButton.setText(getString(R.string.received));
+                                        receiveButton.setClickable(false);
+                                        dialog.dismiss();
+                                        Toast.makeText(MyApplication.getContext(), "正在全力开发中...", Toast.LENGTH_SHORT).show();
+                                    }
+                                })
+                                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                    }
+                                })
+                                .show();
                         break;
                     case R.id.RequestDetail_comment_it_button:
+                        EditText tmpEditText = new EditText(RequestDetailActivity.this);
+                        tmpEditText.setBackground(null);
+                        int tmpPaddingPx = (int)MyApplication.convertDpToPixel(10);
+                        tmpEditText.setPadding(tmpPaddingPx, tmpPaddingPx, tmpPaddingPx, tmpPaddingPx);
+                        new AlertDialog.Builder(RequestDetailActivity.this)
+                                .setView(tmpEditText)
+                                .setTitle("评论")
+                                .setCancelable(true)
+                                .setPositiveButton("写完了", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        Toast.makeText(MyApplication.getContext(), "正在全力开发中...", Toast.LENGTH_SHORT).show();
+                                        dialog.dismiss();
+                                    }
+                                })
+                                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                    }
+                                })
+                                .show();
+                        break;
                     case R.id.RequestDetail_chat_button:
-                        Toast.makeText(MyApplication.getContext(), "正在全力开发中...", Toast.LENGTH_SHORT).show();
+                        ChatRoomActivity.startMe(RequestDetailActivity.this);
                         break;
                 }
             }

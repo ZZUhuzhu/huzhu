@@ -36,16 +36,14 @@
     <string name="setting">设置</string>
 
     <!--ResReqDetailActivity-->
+    <string name="requestDetail">请求详情</string>
+    <string name="resourceDetail">资源详情</string>
     <string name="comment">评论</string>
     <string name="star">收藏</string>
     <string name="track">足迹</string>
     <string name="chat">交流</string>
     <string name="receive">接单</string>
     <string name="received">已接</string>
-
-    <!--activitiesLabel-->
-    <string name="resourceDetail">资源详情</string>
-    <string name="requestDetail">请求详情</string>
 
     <!--PublishNewRes/ReqActivity-->
     <string name="title">标题</string>
@@ -71,6 +69,19 @@
     <string name="aboutUs">关于我们</string>
     <string name="helpAndFeedback">帮助与反馈</string>
     <string name="exit">退出程序</string>
+
+    <!--AccountProfileActivity-->
+    <string name="accountProfile">账户信息</string>
+    <string name="headImage">头像</string>
+    <string name="userName">用户名</string>
+    <string name="sex">性别</string>
+    <string name="grade">年级</string>
+    <string name="department">院系</string>
+    <string name="registerTime">注册时间</string>
+    <string name="lastLoginTime">上次登录时间</string>
+    <string name="updatePassword">修改密码</string>
+    <string name="exitLogin">退出登录</string>
+
 
     <!--othersString-->
     <string name="veryGood">非常好</string>

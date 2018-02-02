@@ -19,4 +19,8 @@
         <attr name="android:text"/>
         <attr name="switch_on" format="boolean"/>
     </declare-styleable>
+    <declare-styleable name="AccountProfileItemLayout">
+        <attr name="item_title" format="string"/>
+        <attr name="show_icon" format="boolean"/>
+    </declare-styleable>
 </resources>

@@ -56,7 +56,10 @@
             android:name=".activities.SettingActivity"
             android:label="@string/setting"
             android:theme="@style/TranslucentTheme" />
-        <activity android:name=".activities.BaseActivity"></activity>
+        <activity android:name=".activities.BaseActivity" />
+        <activity android:name=".activities.AccountProfileActivity"
+            android:label="@string/accountProfile"
+            android:theme="@style/TranslucentTheme"/>
     </application>
 
 </manifest>
