@@ -12,7 +12,6 @@ import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
@@ -44,7 +43,7 @@ public class PublishNewActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_publish_new_res_layout);
+        setContentView(R.layout.activity_publish_new_layout);
         Toolbar toolbar = findViewById(R.id.PublishNewRes_toolbar);
         int which = getIntent().getIntExtra(MainActivity.PUBLISH_TYPE, MainActivity.PUBLISH_NEW_RESOURCE);
         if(which == MainActivity.PUBLISH_NEW_REQUEST)
@@ -148,18 +147,18 @@ public class PublishNewActivity extends BaseActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        LinearLayout layout = findViewById(R.id.PublishNewRes_image_holder);
+        ImageView imageView = new ImageView(PublishNewActivity.this);
+        imageView.setLayoutParams((findViewById(R.id.PublishNewRes_add_image_button)).getLayoutParams());
         switch (requestCode){
             case PICK_IMAGE:
                 if(resultCode == RESULT_OK){
-                    ImageView imageView = new ImageView(PublishNewActivity.this);
-                    imageView.setLayoutParams(( findViewById(R.id.PublishNewRes_add_image_button)).getLayoutParams());
                     Uri uri = data.getData();
                     if(uri == null) return;
                     ContentResolver contentResolver = getContentResolver();
                     try {
                         Bitmap bitmap = BitmapFactory.decodeStream(contentResolver.openInputStream(uri));
                         imageView.setImageBitmap(bitmap);
-                        LinearLayout layout = findViewById(R.id.PublishNewRes_image_holder);
                         layout.addView(imageView, 0);
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
@@ -167,7 +166,14 @@ public class PublishNewActivity extends BaseActivity {
                 }
                 break;
             case CAPTURE_IMAGE:
-                Toast.makeText(MyApplication.getContext(), "正在全力开发中...", Toast.LENGTH_SHORT).show();
+                if(resultCode == RESULT_OK){
+                    Bundle bundle = data.getExtras();
+                    if(bundle != null){
+                        Bitmap bitmap = (Bitmap) bundle.get("data");
+                        imageView.setImageBitmap(bitmap);
+                        layout.addView(imageView, 0);
+                    }
+                }
                 break;
         }
     }

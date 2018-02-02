@@ -8,11 +8,13 @@ import android.graphics.BitmapFactory;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
@@ -53,18 +55,6 @@ public class MainActivity extends BaseActivity {
     private ViewPager mainViewPager;
     private ArrayList<View> pagerViews = new ArrayList<>();
 
-    private Handler handler = new Handler(new Handler.Callback() {
-        @Override
-        public boolean handleMessage(Message msg) {
-            switch (msg.what){
-                case Constants.UserProfileUserHeadImageGot:
-                    userHeadImageButton.setImageDrawable(getDrawable(R.drawable.profile_head));
-                    return true;
-            }
-            return false;
-        }
-    });
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,14 +70,33 @@ public class MainActivity extends BaseActivity {
         newResourceRecyclerView.setLayoutManager(manager);
         resourceAdapter = new MainResourcesAdapter(resourceItems, this);
         newResourceRecyclerView.setAdapter(resourceAdapter);
-        pagerViews.add(newResourceRecyclerView);
+        final SwipeRefreshLayout resSwipeRefreshLayout = new SwipeRefreshLayout(this);
+        resSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                Log.e(TAG, "onRefresh: now refresh" + "resource");
+                refreshResource(resSwipeRefreshLayout, true);
+            }
+        });
+        resSwipeRefreshLayout.addView(newResourceRecyclerView);
+        pagerViews.add(resSwipeRefreshLayout);
 
         newRequestRecyclerView = new RecyclerView(this);
         manager = new LinearLayoutManager(this);
+        manager.setOrientation(LinearLayoutManager.VERTICAL);
         newRequestRecyclerView.setLayoutManager(manager);
         requestAdapter = new MainRequestAdapter(requestItems, this);
         newRequestRecyclerView.setAdapter(requestAdapter);
-        pagerViews.add(newRequestRecyclerView);
+        final SwipeRefreshLayout requestSwipeRefreshLayout = new SwipeRefreshLayout(this);
+        requestSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                Log.e(TAG, "onRefresh: now refresh" + "request");
+                refreshResource(requestSwipeRefreshLayout, false);
+            }
+        });
+        requestSwipeRefreshLayout.addView(newRequestRecyclerView);
+        pagerViews.add(requestSwipeRefreshLayout);
 
         mainViewPager = findViewById(R.id.MainActivity_view_pager);
         mainViewPager.setAdapter(new MainViewPagerAdapter(pagerViews));
@@ -114,6 +123,33 @@ public class MainActivity extends BaseActivity {
         initList();
     }
 
+    /**
+     * 下拉刷新时执行
+     * @param swipeRefreshLayout 正在刷新的SwipeRefreshLayout
+     * @param refreshResource true: 刷新发生着资源界面，否则为请求界面
+     */
+    public void refreshResource(final SwipeRefreshLayout swipeRefreshLayout, final boolean refreshResource){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    if (refreshResource)
+                        Thread.sleep(2500);
+                    else
+                        Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        swipeRefreshLayout.setRefreshing(false);
+                        Toast.makeText(MyApplication.getContext(), "刷新完成", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        }).start();
+    }
     /**
      * 初始化列表项
      */
