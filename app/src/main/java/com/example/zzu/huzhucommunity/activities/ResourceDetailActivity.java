@@ -43,6 +43,7 @@ public class ResourceDetailActivity extends BaseActivity {
         addListener(R.id.ResourceDetail_comment_it_button);
         addListener(R.id.ResourceDetail_receive_it_button);
         addListener(R.id.ResourceDetail_chat_button);
+        addListener(R.id.ResourceDetail_res_user_image_view);
         initComment();
     }
 
@@ -117,6 +118,9 @@ public class ResourceDetailActivity extends BaseActivity {
                         break;
                     case R.id.ResourceDetail_chat_button:
                         ChatRoomActivity.startMe(ResourceDetailActivity.this);
+                        break;
+                    case R.id.ResourceDetail_res_user_image_view:
+                        Toast.makeText(MyApplication.getContext(), "正在全力开发中...", Toast.LENGTH_SHORT).show();
                         break;
                 }
             }

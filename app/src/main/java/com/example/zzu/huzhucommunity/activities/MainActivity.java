@@ -236,7 +236,7 @@ public class MainActivity extends BaseActivity {
                         MessagesActivity.startMe(MainActivity.this);
                         break;
                     case  R.id.MainActivity_search_text_view:
-                        Toast.makeText(MyApplication.getContext(), "正在全力开发中...", Toast.LENGTH_SHORT).show();
+                        SearchActivity.startMe(MainActivity.this);
                         break;
                 }
             }

@@ -37,12 +37,8 @@ public class RegisterActivity extends BaseActivity {
         Toolbar toolbar = findViewById(R.id.RegisterActivity_toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
-        if(actionBar != null) {
+        if(actionBar != null)
             actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setTitle("");
-        }
-        toolbar.setTitleTextColor(Color.WHITE);
-        toolbar.setTitle("注册");
 
         accountTextView = findViewById(R.id.RegisterActivity_account_custom_holder);
         passwordTextView = findViewById(R.id.RegisterActivity_password_custom_holder);

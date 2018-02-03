@@ -32,7 +32,8 @@ public class MessagesActivity extends BaseActivity {
         Toolbar toolbar = findViewById(R.id.MessagesActivity_toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
-        if(actionBar != null) actionBar.setDisplayHomeAsUpEnabled(true);
+        if(actionBar != null)
+            actionBar.setDisplayHomeAsUpEnabled(true);
 
         final RecyclerView recyclerView = findViewById(R.id.MessagesActivity_recycler_view);
         LinearLayoutManager layoutManager = new LinearLayoutManager(MessagesActivity.this);
@@ -43,6 +44,10 @@ public class MessagesActivity extends BaseActivity {
 
         initList();
     }
+
+    /**
+     * 初始化消息列表
+     */
     public void initList(){
         for(int i = 0; i < 33; i++){
             int senderID = (int) (Math.random() * 30);
@@ -56,6 +61,9 @@ public class MessagesActivity extends BaseActivity {
         }
         adapter.notifyDataSetChanged();
     }
+
+    @Override
+    public void addListener(int res) {}
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

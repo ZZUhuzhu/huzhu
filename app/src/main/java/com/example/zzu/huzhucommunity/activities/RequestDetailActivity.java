@@ -42,6 +42,7 @@ public class RequestDetailActivity extends BaseActivity {
         addListener(R.id.RequestDetail_comment_it_button);
         addListener(R.id.RequestDetail_receive_it_button);
         addListener(R.id.RequestDetail_chat_button);
+        addListener(R.id.RequestDetail_request_user_image_view);
         initComment();
     }
 
@@ -116,6 +117,9 @@ public class RequestDetailActivity extends BaseActivity {
                         break;
                     case R.id.RequestDetail_chat_button:
                         ChatRoomActivity.startMe(RequestDetailActivity.this);
+                        break;
+                    case R.id.RequestDetail_request_user_image_view:
+                        Toast.makeText(MyApplication.getContext(), "正在全力开发中...", Toast.LENGTH_SHORT).show();
                         break;
                 }
             }

@@ -10,6 +10,7 @@
         android:layout_height="?attr/actionBarSize"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:titleMarginStart="110dp"
+        app:titleMarginEnd="110dp"
         app:contentInsetStart="0dp"
         app:contentInsetStartWithNavigation="0dp"/>
     <com.example.zzu.huzhucommunity.customlayout.RegisterEditTextLayout
