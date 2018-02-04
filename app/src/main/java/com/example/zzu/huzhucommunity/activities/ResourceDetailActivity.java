@@ -10,12 +10,15 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.InputType;
+import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.zzu.huzhucommunity.R;
@@ -24,6 +27,7 @@ import com.example.zzu.huzhucommunity.customlayout.CommentItemLayout;
 import com.example.zzu.huzhucommunity.customlayout.ResReqDetailBottomButtonLayout;
 
 public class ResourceDetailActivity extends BaseActivity {
+    private LinearLayout commentHolder;
     private boolean resStarred = false;
     private ResReqDetailBottomButtonLayout receiveButton;
 
@@ -94,9 +98,9 @@ public class ResourceDetailActivity extends BaseActivity {
                                 .show();
                         break;
                     case R.id.ResourceDetail_comment_it_button:
-                        EditText tmpEditText = new EditText(ResourceDetailActivity.this);
+                        final EditText tmpEditText = new EditText(ResourceDetailActivity.this);
                         tmpEditText.setBackground(null);
-                        tmpEditText.setImeOptions(EditorInfo.IME_ACTION_DONE);
+                        tmpEditText.setSingleLine(false);
                         int tmpPaddingPx = (int)MyApplication.convertDpToPixel(10);
                         tmpEditText.setPadding(tmpPaddingPx, tmpPaddingPx, tmpPaddingPx, tmpPaddingPx);
                         new AlertDialog.Builder(ResourceDetailActivity.this)
@@ -106,6 +110,7 @@ public class ResourceDetailActivity extends BaseActivity {
                                 .setPositiveButton("写完了", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
+                                        addComment(tmpEditText.getText().toString());
                                         Toast.makeText(MyApplication.getContext(), "正在全力开发中...", Toast.LENGTH_SHORT).show();
                                         dialog.dismiss();
                                     }
@@ -133,14 +138,30 @@ public class ResourceDetailActivity extends BaseActivity {
      * 添加一些评论
      */
     public void initComment(){
-        LinearLayout commentHolder = findViewById(R.id.ResourceDetail_comment_holder);
+        commentHolder = findViewById(R.id.ResourceDetail_comment_holder);
         Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.profile_head);
+        String time;
+        CommentItemLayout commentItemLayout;
         for(int i = 1; i < 12; i++){
-            CommentItemLayout commentItemLayout = new CommentItemLayout(this);
-            String time = "2018-" + i + "-25 21:29";
+            commentItemLayout = new CommentItemLayout(this);
+            time = "2018-" + i + "-25 21:29";
             commentItemLayout.setCommentItemDetail(bitmap, getString(R.string.solider),time , getString(R.string.virtualComment));
             commentHolder.addView(commentItemLayout);
         }
+    }
+
+    /**
+     * 添加一项评论（临时工）
+     * @param text 评论内容
+     */
+    public void addComment(String text){
+        if (TextUtils.isEmpty(text))
+            return;
+        commentHolder = findViewById(R.id.ResourceDetail_comment_holder);
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.profile_head);
+        String time = "2018-5-25 21:29";
+        CommentItemLayout commentItemLayout = new CommentItemLayout(this, bitmap, getString(R.string.solider), time, text);
+        commentHolder.addView(commentItemLayout, 0);
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

@@ -26,7 +26,13 @@ public class CommentItemLayout extends RelativeLayout {
         commentTimeTextView = findViewById(R.id.CommentItem_time_text_view);
         commentContentTextView = findViewById(R.id.CommentItem_content_text_view);
     }
-
+    public CommentItemLayout(Context context, Bitmap userHead, String userName, String commentTime, String commentContent){
+        this(context);
+        userHeadImageView.setImageBitmap(userHead);
+        userNameTextView.setText(userName);
+        commentContentTextView.setText(commentContent);
+        commentTimeTextView.setText(commentTime);
+    }
     /**
      * 设置评论的详细内容
      * 包括评论用户的头，用户名，评论时间以及评论内容

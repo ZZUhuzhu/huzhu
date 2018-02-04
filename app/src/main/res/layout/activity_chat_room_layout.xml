@@ -29,7 +29,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/common_margin_normal"
-            android:inputType="textMultiLine"
+            android:inputType="text"
             android:imeOptions="actionSend"
             android:background="@null"
             android:textColor="@color/colorBlack"
