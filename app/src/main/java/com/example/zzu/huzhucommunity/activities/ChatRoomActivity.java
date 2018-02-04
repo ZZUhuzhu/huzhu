@@ -12,13 +12,17 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.zzu.huzhucommunity.R;
@@ -40,24 +44,6 @@ public class ChatRoomActivity extends BaseActivity {
     private EditText inputEditText;
     private ArrayList<ChatRoomMessageItem> list = new ArrayList<>();
     private RecyclerView recyclerView;
-    private TextWatcher textWatcher = new TextWatcher() {
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            if(s.length() == 0){
-                sendImageButton.setVisibility(View.GONE);
-                sendButton.setVisibility(View.VISIBLE);
-            }
-        }
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {}
-        @Override
-        public void afterTextChanged(Editable s) {
-            if(s.length() == 0){
-                sendImageButton.setVisibility(View.VISIBLE);
-                sendButton.setVisibility(View.GONE);
-            }
-        }
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +58,6 @@ public class ChatRoomActivity extends BaseActivity {
         sendImageButton = findViewById(R.id.ChatRoomActivity_send_image_button);
         sendButton = findViewById(R.id.ChatRoomActivity_send_button);
         inputEditText = findViewById(R.id.ChatRoomActivity_input_edit_text);
-        inputEditText.addTextChangedListener(textWatcher);
 
         recyclerView = findViewById(R.id.ChatRoomActivity_recycler_view);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
@@ -83,6 +68,7 @@ public class ChatRoomActivity extends BaseActivity {
 
         addListener(R.id.ChatRoomActivity_send_button);
         addListener(R.id.ChatRoomActivity_send_image_button);
+        addListener(R.id.ChatRoomActivity_input_edit_text);
     }
 
     /**
@@ -90,12 +76,46 @@ public class ChatRoomActivity extends BaseActivity {
      * @param res 控件ID
      */
     public void addListener(final int res){
+        if (res == R.id.ChatRoomActivity_input_edit_text){
+            TextWatcher textWatcher = new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {}
+                @Override
+                public void afterTextChanged(Editable s) {
+                    if(s.length() == 0){
+                        sendImageButton.setVisibility(View.VISIBLE);
+                        sendButton.setVisibility(View.GONE);
+                    }
+                    else{
+                        sendImageButton.setVisibility(View.GONE);
+                        sendButton.setVisibility(View.VISIBLE);
+                    }
+                }
+            };
+            inputEditText.addTextChangedListener(textWatcher);
+            inputEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+                @Override
+                public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                    if (actionId == EditorInfo.IME_ACTION_SEND){
+                        sendButton.performClick();
+                        return true;
+                    }
+                    return false;
+                }
+            });
+            return;
+        }
         findViewById(res).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 switch (res){
                     case R.id.ChatRoomActivity_send_button:
-                        list.add(new ChatRoomMessageItem(false, inputEditText.getText().toString()));
+                        String tmpString = inputEditText.getText().toString();
+                        if (TextUtils.isEmpty(tmpString))
+                            break;
+                        list.add(new ChatRoomMessageItem(false, tmpString));
                         list.add(new ChatRoomMessageItem(true, getString(R.string.veryGood)));
                         recyclerView.smoothScrollToPosition(list.size() - 1);
                         adapter.notifyDataSetChanged();

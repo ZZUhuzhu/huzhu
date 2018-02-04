@@ -93,6 +93,7 @@
     <string name="virtualResourceDetail">这是一个每个人都需要的富含咖啡因，内啡肽，以及各种有助于健康的神经递质的只要998的含片</string>
     <string name="virtualComment">这玩意儿用着还不错，比较上手</string>
     <string name="virtualTime">2018/1/25 20:48:50</string>
+    <string name="searchResultOf">的搜索结果</string>
 
     <string-array name="Types">
         <item>类型1</item>

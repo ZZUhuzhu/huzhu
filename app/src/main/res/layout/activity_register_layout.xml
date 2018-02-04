@@ -34,6 +34,7 @@
         android:id="@+id/RegisterActivity_phone_custom_holder"
         style="@style/RegisterActivityCustomHolder"
         android:layout_below="@id/RegisterActivity_confirm_password_custom_holder"
+        app:ime_option_action_done="true"
         app:text="@string/phone"/>
     <RelativeLayout
         android:id="@+id/RegisterActivity_sex_custom_holder"

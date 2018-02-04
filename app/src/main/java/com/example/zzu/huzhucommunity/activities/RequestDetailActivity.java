@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -94,6 +95,7 @@ public class RequestDetailActivity extends BaseActivity {
                     case R.id.RequestDetail_comment_it_button:
                         EditText tmpEditText = new EditText(RequestDetailActivity.this);
                         tmpEditText.setBackground(null);
+                        tmpEditText.setImeOptions(EditorInfo.IME_ACTION_DONE);
                         int tmpPaddingPx = (int)MyApplication.convertDpToPixel(10);
                         tmpEditText.setPadding(tmpPaddingPx, tmpPaddingPx, tmpPaddingPx, tmpPaddingPx);
                         new AlertDialog.Builder(RequestDetailActivity.this)

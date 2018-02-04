@@ -36,10 +36,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <EditText
+                android:id="@+id/PublishNewRes_title_edit_text"
                 android:layout_margin="@dimen/common_margin_normal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/colorWhite"
+                android:imeOptions="actionNext"
+                android:inputType="text"
                 android:textSize="@dimen/common_text_size_large"
                 android:textColor="@color/colorBlack"
                 android:hint="@string/title"/>
@@ -48,10 +51,13 @@
                 android:layout_height="0.5dp"
                 android:background="@color/colorGray"/>
             <EditText
+                android:id="@+id/PublishNewRes_content_edit_text"
                 android:layout_margin="@dimen/common_margin_normal"
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
                 android:gravity="start"
+                android:inputType="text"
+                android:imeOptions="actionNext"
                 android:background="@color/colorWhite"
                 android:textSize="@dimen/common_text_size_large"
                 android:textColor="@color/colorBlack"
@@ -114,6 +120,7 @@
                     android:id="@+id/PublishNewRes_price_edit_text"
                     android:textSize="@dimen/common_text_size_large"
                     android:inputType="numberDecimal"
+                    android:imeOptions="actionDone"
                     android:layout_weight="1"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"

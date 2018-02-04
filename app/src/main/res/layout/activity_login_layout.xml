@@ -24,8 +24,10 @@
         android:gravity="center_horizontal"
         android:maxLines="1"
         android:background="@null"
+        android:inputType="textEmailAddress"
+        android:imeOptions="actionNext"
         android:textColor="@color/colorWhite"
-        android:textColorHint="@color/colorLightGray"
+        android:textColorHint="@color/colorRiceWhite"
         android:hint="@string/account"/>
     <View
         android:layout_width="@dimen/login_edit_text_width"
@@ -47,10 +49,11 @@
             android:minWidth="@dimen/login_edit_text_width"
             android:gravity="center_horizontal"
             android:inputType="textPassword"
-            android:maxLines="1"
+            android:singleLine="true"
             android:background="@null"
+            android:imeOptions="actionGo"
             android:textColor="@color/colorWhite"
-            android:textColorHint="@color/colorLightGray"
+            android:textColorHint="@color/colorRiceWhite"
             android:hint="@string/password"/>
         <ImageButton
             android:id="@+id/LoginActivity_password_cancel_button"

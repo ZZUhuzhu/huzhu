@@ -7,9 +7,12 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.zzu.huzhucommunity.R;
@@ -48,6 +51,8 @@ public class LoginActivity extends BaseActivity implements AsyncHttpCallback {
         addListener(R.id.LoginActivity_login_button);
         addListener(R.id.LoginActivity_register_text_view);
         addListener(R.id.LoginActivity_password_cancel_button);
+        addListener(R.id.LoginActivity_account_edit_text);
+        addListener(R.id.LoginActivity_password_edit_text);
     }
 
     /**
@@ -55,6 +60,20 @@ public class LoginActivity extends BaseActivity implements AsyncHttpCallback {
      * @param res 控件ID
      */
     public void addListener(final int res){
+        if (res == R.id.LoginActivity_password_edit_text){
+            passwordEditText.setImeActionLabel(getString(R.string.login), EditorInfo.IME_ACTION_GO);
+            passwordEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+                @Override
+                public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                    if (actionId == EditorInfo.IME_ACTION_GO){
+                        onSuccess(1);
+                        return true;
+                    }
+                    return false;
+                }
+            });
+            return;
+        }
         findViewById(res).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

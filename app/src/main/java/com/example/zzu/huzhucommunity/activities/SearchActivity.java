@@ -12,11 +12,14 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
+import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.zzu.huzhucommunity.R;
@@ -34,6 +37,7 @@ import java.util.PriorityQueue;
  * 候选项实现暂时不考虑
  */
 public class SearchActivity extends BaseActivity {
+    private static final String SEARCH_STRING_DATA = "SEARCH_STRING";
     private ArrayList<SearchHistoryItem> searchHistoryList = new ArrayList<>();
     private SearchHistoryAdapter historyAdapter;
 
@@ -48,6 +52,9 @@ public class SearchActivity extends BaseActivity {
             actionBar.setTitle("");
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
+
+        EditText inputTextView = findViewById(R.id.SearchActivity_input_edit_text);
+        inputTextView.setText(getIntent().getStringExtra(SEARCH_STRING_DATA));
 
         RecyclerView searchHistoryRecyclerView = findViewById(R.id.SearchActivity_search_history_recycler_view);
         searchHistoryRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
@@ -100,6 +107,16 @@ public class SearchActivity extends BaseActivity {
                         findViewById(R.id.SearchActivity_search_cancel_button).setVisibility(View.VISIBLE);
                 }
             });
+            editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+                @Override
+                public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                    if (actionId == EditorInfo.IME_ACTION_SEARCH){
+                        findViewById(R.id.SearchActivity_search_button).performClick();
+                        return true;
+                    }
+                    return false;
+                }
+            });
             return;
         }
         findViewById(res).setOnClickListener(new View.OnClickListener() {
@@ -121,7 +138,6 @@ public class SearchActivity extends BaseActivity {
                         }
                         SearchHistoryItem item = new SearchHistoryItem(tmpString, GregorianCalendar.getInstance().getTime());
                         searchHistoryList.add(0, item);
-                        historyAdapter.notifyDataSetChanged();
                         SearchResultActivity.startMe(SearchActivity.this, tmpString);
                         finish();
                         Toast.makeText(MyApplication.getContext(), "正在全力开发中...", Toast.LENGTH_SHORT).show();
@@ -139,5 +155,10 @@ public class SearchActivity extends BaseActivity {
     public static void startMe(Context context){
         context.startActivity(new Intent(context, SearchActivity.class));
         ((BaseActivity)context).overridePendingTransition(Animation.ABSOLUTE, Animation.ABSOLUTE);
+    }
+    public static void startMe(Context context, String data){
+        Intent intent = new Intent(context, SearchActivity.class);
+        intent.putExtra(SEARCH_STRING_DATA, data);
+        context.startActivity(intent);
     }
 }

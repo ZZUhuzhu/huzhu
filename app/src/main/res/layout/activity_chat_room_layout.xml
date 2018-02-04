@@ -30,6 +30,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/common_margin_normal"
             android:inputType="textMultiLine"
+            android:imeOptions="actionSend"
             android:background="@null"
             android:textColor="@color/colorBlack"
             android:textSize="@dimen/common_text_size_large" />

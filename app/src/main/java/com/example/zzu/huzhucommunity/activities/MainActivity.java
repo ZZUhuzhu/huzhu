@@ -5,16 +5,12 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
@@ -25,24 +21,25 @@ import com.example.zzu.huzhucommunity.R;
 import com.example.zzu.huzhucommunity.adapters.MainRequestAdapter;
 import com.example.zzu.huzhucommunity.adapters.MainResourcesAdapter;
 import com.example.zzu.huzhucommunity.adapters.MainViewPagerAdapter;
-import com.example.zzu.huzhucommunity.commonclass.Constants;
+import com.example.zzu.huzhucommunity.commonclass.ActivitiesCollector;
 import com.example.zzu.huzhucommunity.commonclass.MyApplication;
 import com.example.zzu.huzhucommunity.commonclass.NewRequestItem;
 import com.example.zzu.huzhucommunity.commonclass.NewResourceItem;
 
 import java.util.ArrayList;
+import java.util.GregorianCalendar;
 
 /**
  * 登录成功后的主界面
  */
 public class MainActivity extends BaseActivity {
-    private static final String TAG = "MainActivity";
+    private static long backLastPressedTime = 0;
+    private static long exitInterval = 2000;
     public static final String PUBLISH_TYPE = "PUBLISH_TYPE";
     public static final int PUBLISH_NEW_RESOURCE = 0;
     public static final int PUBLISH_NEW_REQUEST = 1;
     private ImageButton resourceButton;
     private ImageButton requestButton;
-    private ImageButton userHeadImageButton;
 
     private RecyclerView newResourceRecyclerView;
     private ArrayList<NewResourceItem> resourceItems = new ArrayList<>();
@@ -60,21 +57,17 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_layout);
 
-        userHeadImageButton = findViewById(R.id.MainActivity_head_button);
         resourceButton = findViewById(R.id.MainActivity_resource_button);
         requestButton = findViewById(R.id.MainActivity_request_button);
 
         newResourceRecyclerView = new RecyclerView(this);
-        LinearLayoutManager manager = new LinearLayoutManager(MainActivity.this);
-        manager.setOrientation(LinearLayoutManager.VERTICAL);
-        newResourceRecyclerView.setLayoutManager(manager);
+        newResourceRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         resourceAdapter = new MainResourcesAdapter(resourceItems, this);
         newResourceRecyclerView.setAdapter(resourceAdapter);
         final SwipeRefreshLayout resSwipeRefreshLayout = new SwipeRefreshLayout(this);
         resSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                Log.e(TAG, "onRefresh: now refresh" + "resource");
                 refreshResource(resSwipeRefreshLayout, true);
             }
         });
@@ -82,16 +75,13 @@ public class MainActivity extends BaseActivity {
         pagerViews.add(resSwipeRefreshLayout);
 
         newRequestRecyclerView = new RecyclerView(this);
-        manager = new LinearLayoutManager(this);
-        manager.setOrientation(LinearLayoutManager.VERTICAL);
-        newRequestRecyclerView.setLayoutManager(manager);
+        newRequestRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         requestAdapter = new MainRequestAdapter(requestItems, this);
         newRequestRecyclerView.setAdapter(requestAdapter);
         final SwipeRefreshLayout requestSwipeRefreshLayout = new SwipeRefreshLayout(this);
         requestSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                Log.e(TAG, "onRefresh: now refresh" + "request");
                 refreshResource(requestSwipeRefreshLayout, false);
             }
         });
@@ -241,6 +231,18 @@ public class MainActivity extends BaseActivity {
                 }
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        long curTime = GregorianCalendar.getInstance().getTimeInMillis();
+        if (curTime - backLastPressedTime <= exitInterval){
+            ActivitiesCollector.finishAll();
+        }
+        else {
+            Toast.makeText(MyApplication.getContext(), "再按一次退出程序", Toast.LENGTH_SHORT).show();
+            backLastPressedTime = GregorianCalendar.getInstance().getTimeInMillis();
+        }
     }
 
     public static void startMe(Context context){

@@ -4,6 +4,7 @@
         <attr name="text" format="string"/>
         <attr name="input_password" format="boolean"/>
         <attr name="colorBlack" format="boolean"/>
+        <attr name="ime_option_action_done" format="boolean"/>
     </declare-styleable>
     <declare-styleable name="UserProfileItemLayout">
         <attr name="item_text" format="reference"/>

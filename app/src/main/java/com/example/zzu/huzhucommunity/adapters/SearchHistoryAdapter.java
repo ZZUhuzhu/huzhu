@@ -1,5 +1,6 @@
 package com.example.zzu.huzhucommunity.adapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -79,8 +80,8 @@ public class SearchHistoryAdapter extends RecyclerView.Adapter<SearchHistoryAdap
                     }
                     searchHistoryList.remove(getAdapterPosition());
                     searchHistoryList.add(0, new SearchHistoryItem(item.getItemText(), GregorianCalendar.getInstance().getTime()));
-                    notifyDataSetChanged();
                     SearchResultActivity.startMe(context, item.getItemText());
+                    ((Activity) context).finish();
                 }
             });
         }

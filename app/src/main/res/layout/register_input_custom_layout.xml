@@ -18,6 +18,7 @@
             android:labelFor="@id/register_input_custom_edit_text"
             android:id="@+id/register_input_custom_edit_text"
             android:inputType="text"
+            android:imeOptions="actionNext"
             style="@style/RegisterActivityEditText" />
         <View
             android:id="@+id/register_under_line_view"

@@ -13,6 +13,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -95,6 +96,7 @@ public class ResourceDetailActivity extends BaseActivity {
                     case R.id.ResourceDetail_comment_it_button:
                         EditText tmpEditText = new EditText(ResourceDetailActivity.this);
                         tmpEditText.setBackground(null);
+                        tmpEditText.setImeOptions(EditorInfo.IME_ACTION_DONE);
                         int tmpPaddingPx = (int)MyApplication.convertDpToPixel(10);
                         tmpEditText.setPadding(tmpPaddingPx, tmpPaddingPx, tmpPaddingPx, tmpPaddingPx);
                         new AlertDialog.Builder(ResourceDetailActivity.this)

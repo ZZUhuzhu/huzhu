@@ -42,6 +42,7 @@
                     android:id="@+id/SearchActivity_input_edit_text"
                     android:layout_toStartOf="@id/SearchActivity_search_cancel_button"
                     android:inputType="text"
+                    android:imeOptions="actionSearch"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@null"
