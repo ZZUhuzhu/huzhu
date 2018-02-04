@@ -15,7 +15,6 @@
         <item name="android:windowTranslucentNavigation">false</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="windowActionBar">false</item>
-        <item name="android:fitsSystemWindows">true</item>
     </style>
     <style name="RegisterActivityEditText" parent="AppTheme">
         <item name="android:minWidth">100dp</item>

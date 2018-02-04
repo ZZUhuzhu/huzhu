@@ -25,17 +25,6 @@ import com.example.zzu.huzhucommunity.commonclass.MyApplication;
 public class LoginActivity extends BaseActivity implements AsyncHttpCallback {
     private EditText passwordEditText;
     private ImageButton cancelButton;
-    private TextWatcher textWatcher = new TextWatcher() {
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {}
-        @Override
-        public void afterTextChanged(Editable s) {
-            if(TextUtils.isEmpty(s)) cancelButton.setVisibility(View.GONE);
-            else cancelButton.setVisibility(View.VISIBLE);
-        }
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +35,6 @@ public class LoginActivity extends BaseActivity implements AsyncHttpCallback {
 
         cancelButton = findViewById(R.id.LoginActivity_password_cancel_button);
         passwordEditText = findViewById(R.id.LoginActivity_password_edit_text);
-        passwordEditText.addTextChangedListener(textWatcher);
 
         addListener(R.id.LoginActivity_login_button);
         addListener(R.id.LoginActivity_register_text_view);
@@ -72,6 +60,18 @@ public class LoginActivity extends BaseActivity implements AsyncHttpCallback {
                     return false;
                 }
             });
+            TextWatcher textWatcher = new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {}
+                @Override
+                public void afterTextChanged(Editable s) {
+                    if(TextUtils.isEmpty(s)) cancelButton.setVisibility(View.GONE);
+                    else cancelButton.setVisibility(View.VISIBLE);
+                }
+            };
+            passwordEditText.addTextChangedListener(textWatcher);
             return;
         }
         findViewById(res).setOnClickListener(new View.OnClickListener() {

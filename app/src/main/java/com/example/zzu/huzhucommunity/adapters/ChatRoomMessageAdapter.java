@@ -23,10 +23,12 @@ import java.util.ArrayList;
 public class ChatRoomMessageAdapter extends RecyclerView.Adapter<ChatRoomMessageAdapter.ViewHolder>{
     private ArrayList<ChatRoomMessageItem> list;
     private Bitmap userHeadBitmap;
+    private Bitmap senderHeadBitmap;
 
-    public ChatRoomMessageAdapter(ArrayList<ChatRoomMessageItem> list, Bitmap userHeadBitmap){
+    public ChatRoomMessageAdapter(ArrayList<ChatRoomMessageItem> list, Bitmap userHeadBitmap, Bitmap senderHeadBitmap){
         this.list = list;
         this.userHeadBitmap = userHeadBitmap;
+        this.senderHeadBitmap = senderHeadBitmap;
     }
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -46,7 +48,7 @@ public class ChatRoomMessageAdapter extends RecyclerView.Adapter<ChatRoomMessage
                 holder.messageImageViewStart.setImageBitmap(null);
                 holder.messageTextViewStart.setText(item.getMessageText());
             }
-            holder.headImageViewStart.setImageBitmap(userHeadBitmap);
+            holder.headImageViewStart.setImageBitmap(senderHeadBitmap);
             holder.holderViewStart.setVisibility(View.VISIBLE);
             holder.holderViewEnd.setVisibility(View.GONE);
         }
@@ -59,7 +61,7 @@ public class ChatRoomMessageAdapter extends RecyclerView.Adapter<ChatRoomMessage
                 holder.messageImageViewEnd.setImageBitmap(null);
                 holder.messageTextViewEnd.setText(item.getMessageText());
             }
-            holder.headImageViewEnd.setImageDrawable(MyApplication.getContext().getDrawable(R.drawable.profile_head));
+            holder.headImageViewEnd.setImageBitmap(userHeadBitmap);
             holder.holderViewStart.setVisibility(View.GONE);
             holder.holderViewEnd.setVisibility(View.VISIBLE);
         }

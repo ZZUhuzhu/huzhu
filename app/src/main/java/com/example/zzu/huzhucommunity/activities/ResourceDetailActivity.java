@@ -127,7 +127,7 @@ public class ResourceDetailActivity extends BaseActivity {
                         ChatRoomActivity.startMe(ResourceDetailActivity.this);
                         break;
                     case R.id.ResourceDetail_res_user_image_view:
-                        Toast.makeText(MyApplication.getContext(), "正在全力开发中...", Toast.LENGTH_SHORT).show();
+                        OthersProfileActivity.startMe(ResourceDetailActivity.this);
                         break;
                 }
             }

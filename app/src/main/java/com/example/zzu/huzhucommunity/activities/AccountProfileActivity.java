@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.support.v7.app.ActionBar;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
@@ -26,8 +28,6 @@ public class AccountProfileActivity extends BaseActivity {
         if(actionBar != null)
             actionBar.setDisplayHomeAsUpEnabled(true);
 
-        addListener(R.id.AccountProfileActivity_head_image_view);
-        addListener(R.id.AccountProfileActivity_user_name_view);
         addListener(R.id.AccountProfileActivity_sex_view);
         addListener(R.id.AccountProfileActivity_grade_view);
         addListener(R.id.AccountProfileActivity_department_view);
@@ -41,8 +41,6 @@ public class AccountProfileActivity extends BaseActivity {
     public void initImage(){
         AccountProfileItemLayout itemLayout = findViewById(R.id.AccountProfileActivity_sex_view);
         itemLayout.setImageDrawable(getDrawable(R.drawable.female_icon));
-        itemLayout = findViewById(R.id.AccountProfileActivity_head_image_view);
-        itemLayout.setImageDrawable(getDrawable(R.drawable.profile_head));
         itemLayout = findViewById(R.id.AccountProfileActivity_user_name_view);
         itemLayout.setContent(getString(R.string.solider));
         itemLayout = findViewById(R.id.AccountProfileActivity_grade_view);
@@ -53,6 +51,8 @@ public class AccountProfileActivity extends BaseActivity {
         itemLayout.setContent("2018/2/2 17:58");
         itemLayout = findViewById(R.id.AccountProfileActivity_last_login_time_view);
         itemLayout.setContent("2018/2/1 09:25");
+        itemLayout = findViewById(R.id.AccountProfileActivity_phone_view);
+        itemLayout.setContent("15766988562");
     }
     /**
      * 为控件添加监听器
@@ -67,8 +67,6 @@ public class AccountProfileActivity extends BaseActivity {
                         LoginActivity.startMe(AccountProfileActivity.this);
                         ActivitiesCollector.exitLogin();
                         break;
-                    case R.id.AccountProfileActivity_head_image_view:
-                    case R.id.AccountProfileActivity_user_name_view:
                     case R.id.AccountProfileActivity_sex_view:
                     case R.id.AccountProfileActivity_grade_view:
                     case R.id.AccountProfileActivity_department_view:
@@ -81,12 +79,22 @@ public class AccountProfileActivity extends BaseActivity {
             }
         });
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.account_profile_menu, menu);
+        return true;
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case android.R.id.home:
                 finish();
                 break;
+            case R.id.account_profile_menu_item_change_image:
+                Toast.makeText(MyApplication.getContext(), "正在全力开发中...", Toast.LENGTH_SHORT).show();
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }

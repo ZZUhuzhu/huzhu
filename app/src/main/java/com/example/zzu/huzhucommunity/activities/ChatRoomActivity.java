@@ -63,7 +63,8 @@ public class ChatRoomActivity extends BaseActivity {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
-        adapter = new ChatRoomMessageAdapter(list, null);
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.profile_head);
+        adapter = new ChatRoomMessageAdapter(list, bitmap, bitmap);
         recyclerView.setAdapter(adapter);
 
         addListener(R.id.ChatRoomActivity_send_button);

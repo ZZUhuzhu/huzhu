@@ -1,100 +1,165 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:fitsSystemWindows="true"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorAccent"
+    android:background="@color/colorDeepSkyBlue"
     tools:context="com.example.zzu.huzhucommunity.activities.AccountProfileActivity">
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/AccountProfileActivity_toolbar"
+    <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        app:contentInsetStart="0dp"
-        app:contentInsetStartWithNavigation="0dp" />
-    <ScrollView
+        android:layout_height="250dp"
+        android:fitsSystemWindows="true">
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            android:fitsSystemWindows="true"
+            app:statusBarScrim="@color/colorDeepSkyBlue"
+            app:contentScrim="@color/colorDeepSkyBlue"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            app:title="@string/solider"
+            app:expandedTitleMarginStart="@dimen/common_margin_large"
+            app:expandedTitleTextAppearance="?android:attr/textAppearanceLarge">
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:contentDescription="@string/app_name"
+                android:fitsSystemWindows="true"
+                android:scaleType="centerCrop"
+                app:layout_collapseMode="parallax"
+                android:src="@drawable/login_background"/>
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/AccountProfileActivity_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:layout_collapseMode="pin"
+                app:contentInsetStart="0dp"
+                app:contentInsetStartWithNavigation="0dp" />
+        </android.support.design.widget.CollapsingToolbarLayout>
+    </android.support.design.widget.AppBarLayout>
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorWhite">
+        android:background="@color/colorRiceWhite"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-            <com.example.zzu.huzhucommunity.customlayout.AccountProfileItemLayout
-                android:id="@+id/AccountProfileActivity_head_image_view"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:clickable="true"
-                android:focusable="true"
-                app:item_title="@string/headImage"
-                app:show_icon="true"/>
-            <com.example.zzu.huzhucommunity.customlayout.AccountProfileItemLayout
-                android:id="@+id/AccountProfileActivity_user_name_view"
+                android:orientation="vertical"
+                android:background="@color/colorWhite">
+                <com.example.zzu.huzhucommunity.customlayout.AccountProfileItemLayout
+                    android:id="@+id/AccountProfileActivity_user_name_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:focusable="true"
+                    app:item_title="@string/userName"
+                    app:show_icon="true"/>
+                <com.example.zzu.huzhucommunity.customlayout.AccountProfileItemLayout
+                    android:id="@+id/AccountProfileActivity_sex_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:focusable="true"
+                    app:item_title="@string/sex"
+                    app:show_icon="true" />
+                <com.example.zzu.huzhucommunity.customlayout.AccountProfileItemLayout
+                    android:id="@+id/AccountProfileActivity_phone_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:focusable="true"
+                    app:item_title="@string/phone"
+                    app:show_icon="false"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_marginTop="@dimen/common_margin_normal"
+                android:orientation="vertical"
+                android:background="@color/colorWhite"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:clickable="true"
-                android:focusable="true"
-                app:item_title="@string/userName"
-                app:show_icon="false"/>
-            <com.example.zzu.huzhucommunity.customlayout.AccountProfileItemLayout
-                android:id="@+id/AccountProfileActivity_sex_view"
+                android:layout_height="wrap_content">
+                <com.example.zzu.huzhucommunity.customlayout.AccountProfileItemLayout
+                    android:id="@+id/AccountProfileActivity_grade_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:focusable="true"
+                    app:item_title="@string/grade"
+                    app:show_icon="false"/>
+                <com.example.zzu.huzhucommunity.customlayout.AccountProfileItemLayout
+                    android:id="@+id/AccountProfileActivity_department_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:focusable="true"
+                    app:item_title="@string/department"
+                    app:show_icon="false"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_marginTop="@dimen/common_margin_normal"
+                android:orientation="vertical"
+                android:background="@color/colorWhite"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:clickable="true"
-                android:focusable="true"
-                app:item_title="@string/sex"
-                app:show_icon="true" />
-            <com.example.zzu.huzhucommunity.customlayout.AccountProfileItemLayout
-                android:id="@+id/AccountProfileActivity_grade_view"
+                android:layout_height="wrap_content">
+                <com.example.zzu.huzhucommunity.customlayout.AccountProfileItemLayout
+                    android:layout_marginTop="@dimen/common_margin_normal"
+                    android:id="@+id/AccountProfileActivity_register_time_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:focusable="true"
+                    app:item_title="@string/registerTime"
+                    app:show_icon="false" />
+                <com.example.zzu.huzhucommunity.customlayout.AccountProfileItemLayout
+                    android:id="@+id/AccountProfileActivity_last_login_time_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:focusable="true"
+                    app:item_title="@string/lastLoginTime"
+                    app:show_icon="false"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_marginTop="@dimen/common_margin_normal"
+                android:orientation="vertical"
+                android:background="@color/colorWhite"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:clickable="true"
-                android:focusable="true"
-                app:item_title="@string/grade"
-                app:show_icon="false"/>
-            <com.example.zzu.huzhucommunity.customlayout.AccountProfileItemLayout
-                android:id="@+id/AccountProfileActivity_department_view"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:clickable="true"
-                android:focusable="true"
-                app:item_title="@string/department"
-                app:show_icon="false"/>
-            <com.example.zzu.huzhucommunity.customlayout.AccountProfileItemLayout
-                android:id="@+id/AccountProfileActivity_register_time_view"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:clickable="true"
-                android:focusable="true"
-                app:item_title="@string/registerTime"
-                app:show_icon="false"/>
-            <com.example.zzu.huzhucommunity.customlayout.AccountProfileItemLayout
-                android:id="@+id/AccountProfileActivity_last_login_time_view"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:clickable="true"
-                android:focusable="true"
-                app:item_title="@string/lastLoginTime"
-                app:show_icon="false"/>
-            <com.example.zzu.huzhucommunity.customlayout.AccountProfileItemLayout
-                android:id="@+id/AccountProfileActivity_update_password_view"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:clickable="true"
-                android:focusable="true"
-                app:item_title="@string/updatePassword"
-                app:show_icon="false"/>
-            <com.example.zzu.huzhucommunity.customlayout.AccountProfileItemLayout
-                android:id="@+id/AccountProfileActivity_exit_login_view"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:clickable="true"
-                android:focusable="true"
-                app:item_title="@string/exitLogin"
-                app:show_icon="false"/>
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/AccountProfileActivity_update_password_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="65dp"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:paddingStart="@dimen/common_margin_large"
+                    android:paddingEnd="0dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center_vertical"
+                    android:textSize="@dimen/common_text_size_normal"
+                    android:textColor="@color/colorBlack"
+                    android:text="@string/updatePassword"/>
+                <TextView
+                    android:id="@+id/AccountProfileActivity_exit_login_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="65dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center_vertical"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:paddingStart="@dimen/common_margin_large"
+                    android:paddingEnd="0dp"
+                    android:textSize="@dimen/common_text_size_normal"
+                    android:textColor="@color/colorBlack"
+                    android:text="@string/exitLogin"/>
+            </LinearLayout>
         </LinearLayout>
-    </ScrollView>
-</LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
+</android.support.design.widget.CoordinatorLayout>

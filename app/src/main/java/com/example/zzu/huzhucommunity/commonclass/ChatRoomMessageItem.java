@@ -20,7 +20,6 @@ public class ChatRoomMessageItem {
         this.positionStart = start;
         this.messageText = messageText;
         this.typeImage = false;
-        imageBitmap = BitmapFactory.decodeResource(MyApplication.getContext().getResources(), R.drawable.profile_head);
     }
     public ChatRoomMessageItem(boolean start, Bitmap imageBitmap){
         this.positionStart = start;

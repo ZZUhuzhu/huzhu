@@ -58,7 +58,7 @@
     <!--MessagesActivity-->
     <string name="newMessage">新消息</string>
     <string name="ninetyMore">99+</string>
-    <string name="markAllRead">全部标为已读</string>
+    <string name="markAllRead">全部已读</string>
     <string name="send">发送</string>
 
     <!--SettingActivity-->
@@ -81,7 +81,10 @@
     <string name="lastLoginTime">上次登录时间</string>
     <string name="updatePassword">修改密码</string>
     <string name="exitLogin">退出登录</string>
+    <string name="changeHead">更换头像</string>
 
+    <!--OthersProfileActivity-->
+    <string name="sendMessage">发消息</string>
 
     <!--othersString-->
     <string name="veryGood">非常好</string>

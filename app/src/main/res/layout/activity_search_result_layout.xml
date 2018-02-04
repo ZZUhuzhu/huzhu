@@ -7,6 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorDeepSkyBlue"
+    android:fitsSystemWindows="true"
     tools:context="com.example.zzu.huzhucommunity.activities.SearchResultActivity">
     <android.support.v7.widget.Toolbar
         android:id="@+id/SearchResultActivity_toolbar"
