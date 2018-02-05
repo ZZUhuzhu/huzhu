@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:fitsSystemWindows="true"
+    android:background="@color/colorDeepSkyBlue"
+    tools:context="com.example.zzu.huzhucommunity.activities.ProfileUpdateActivity">
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/ProfileUpdateActivity_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?android:attr/actionBarSize"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:contentInsetStart="0dp"
+        app:contentInsetStartWithNavigation="0dp"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@color/colorWhite">
+        <EditText
+            android:id="@+id/ProfileUpdateActivity_text_view"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="55dp"
+            android:textColor="@color/colorBlack"
+            android:inputType="text"
+            android:imeOptions="actionDone"
+            android:textSize="@dimen/common_text_size_large"
+            android:padding="@dimen/common_margin_normal"
+            android:gravity="center_vertical"
+            android:background="@color/colorWhite"
+            tools:ignore="LabelFor" />
+        <ImageButton
+            android:id="@+id/ProfileUpdateActivity_cancel_button"
+            android:layout_width="15dp"
+            android:layout_height="wrap_content"
+            android:scaleType="fitCenter"
+            android:contentDescription="@string/app_name"
+            android:layout_gravity="center_vertical"
+            android:layout_marginEnd="@dimen/common_margin_normal"
+            android:background="@null"
+            android:src="@drawable/cancel_cross_gray"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorRiceWhite"/>
+</LinearLayout>

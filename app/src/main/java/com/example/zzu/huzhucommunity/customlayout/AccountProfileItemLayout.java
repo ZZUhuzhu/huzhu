@@ -41,6 +41,9 @@ public class AccountProfileItemLayout extends RelativeLayout {
         }
         typedArray.recycle();
     }
+    public String getContentText(){
+        return contentTextView.getText().toString();
+    }
     public void setContent(String text){
         contentTextView.setText(text);
         contentTextView.setVisibility(VISIBLE);

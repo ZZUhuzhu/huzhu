@@ -7,14 +7,11 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.text.InputType;
 import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -125,7 +122,7 @@ public class RequestDetailActivity extends BaseActivity {
                         ChatRoomActivity.startMe(RequestDetailActivity.this);
                         break;
                     case R.id.RequestDetail_request_user_image_view:
-                        OthersProfileActivity.startMe(RequestDetailActivity.this);
+                        OthersProfileActivity.startMe(RequestDetailActivity.this, -1);
                         break;
                 }
             }

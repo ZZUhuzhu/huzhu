@@ -30,6 +30,7 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.example.zzu.huzhucommunity.R;
+import com.example.zzu.huzhucommunity.commonclass.Constants;
 import com.example.zzu.huzhucommunity.commonclass.MyApplication;
 
 import java.io.FileNotFoundException;
@@ -84,23 +85,7 @@ public class PublishNewActivity extends BaseActivity {
             public void onClick(View v) {
                 switch (res){
                     case R.id.PublishNewRes_add_image_button:
-                        AlertDialog.Builder dialog = new AlertDialog.Builder(PublishNewActivity.this);
-                        dialog.setItems(R.array.AddImageFrom, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                if(which == 0){
-                                    intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                                    startActivityForResult(intent, CAPTURE_IMAGE);
-                                }
-                                else{
-                                    intent = new Intent();
-                                    intent.setAction(Intent.ACTION_GET_CONTENT);
-                                    intent.setType("image/*");
-                                    startActivityForResult(intent, PICK_IMAGE);
-                                }
-                            }
-                        });
-                        dialog.show();
+                        MyApplication.startPickImageDialog(PublishNewActivity.this);
                         break;
                     case R.id.PublishNewRes_time_text_view:
                         TimePickerDialog timePickerDialog = new TimePickerDialog(PublishNewActivity.this,
@@ -154,7 +139,7 @@ public class PublishNewActivity extends BaseActivity {
         ImageView imageView = new ImageView(PublishNewActivity.this);
         imageView.setLayoutParams((findViewById(R.id.PublishNewRes_add_image_button)).getLayoutParams());
         switch (requestCode){
-            case PICK_IMAGE:
+            case Constants.PICK_IMAGE_FROM_GALLERY:
                 if(resultCode == RESULT_OK){
                     Uri uri = data.getData();
                     if(uri == null) return;
@@ -168,7 +153,7 @@ public class PublishNewActivity extends BaseActivity {
                     }
                 }
                 break;
-            case CAPTURE_IMAGE:
+            case Constants.PICK_IMAGE_FROM_CAMERA:
                 if(resultCode == RESULT_OK){
                     Bundle bundle = data.getExtras();
                     if(bundle != null){

@@ -58,12 +58,14 @@ public class UserProfileActivity extends BaseActivity {
                     case R.id.UserProfile_setting_item:
                         SettingActivity.startMe(UserProfileActivity.this);
                         break;
+                    case R.id.UserProfile_message_item:
+                        MessagesActivity.startMe(UserProfileActivity.this);
+                        break;
                     case R.id.UserProfile_resource_published_item:
                     case R.id.UserProfile_resource_received_item:
                     case R.id.UserProfile_star_item:
                     case R.id.UserProfile_track_item:
                     case R.id.UserProfile_comment_item:
-                    case R.id.UserProfile_message_item:
                         Toast.makeText(MyApplication.getContext(), "正在全力开发中...", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.UserProfile_me_holder:

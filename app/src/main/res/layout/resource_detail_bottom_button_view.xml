@@ -2,25 +2,27 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="55dp"
+    android:orientation="vertical"
     android:gravity="center"
     android:background="?attr/selectableItemBackground"
-    android:padding="@dimen/common_margin_normal">
-    <TextView
+    android:padding="@dimen/common_margin_small">
+    <ImageView
+        android:id="@+id/ResourceDetailBottomButton_image_view"
         android:clickable="false"
+        android:contentDescription="@string/app_name"
+        android:layout_gravity="center"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginBottom="@dimen/common_margin_small"
+        android:scaleType="fitCenter"
+        android:src="@drawable/chat_gray"/>
+    <TextView
         android:id="@+id/ResourceDetailBottomButton_text_view"
+        android:clickable="false"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:textSize="@dimen/common_text_size_small"
         android:text="@string/receive"/>
-    <ImageView
-        android:clickable="false"
-        android:id="@+id/ResourceDetailBottomButton_image_view"
-        android:contentDescription="@string/app_name"
-        android:layout_gravity="center"
-        android:layout_marginStart="@dimen/common_margin_small"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:scaleType="fitCenter"
-        android:src="@drawable/chat_gray"/>
 </LinearLayout>

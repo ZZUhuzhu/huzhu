@@ -1,5 +1,6 @@
 package com.example.zzu.huzhucommunity.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -22,7 +23,6 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         ActivitiesCollector.addActivity(this);
     }
-
     /**
      * 销毁活动时将其从ActivityCollector中删除
      */
@@ -31,7 +31,6 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.onDestroy();
         ActivitiesCollector.removeActivity(this);
     }
-
     /**
      * 为这个活动中的每个控件添加监听器
      * @param res 控件ID

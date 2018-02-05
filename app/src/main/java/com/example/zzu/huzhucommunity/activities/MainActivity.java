@@ -34,7 +34,6 @@ import java.util.GregorianCalendar;
  */
 public class MainActivity extends BaseActivity {
     private static long backLastPressedTime = 0;
-    private static long exitInterval = 2000;
     public static final String PUBLISH_TYPE = "PUBLISH_TYPE";
     public static final int PUBLISH_NEW_RESOURCE = 0;
     public static final int PUBLISH_NEW_REQUEST = 1;
@@ -236,6 +235,7 @@ public class MainActivity extends BaseActivity {
     @Override
     public void onBackPressed() {
         long curTime = GregorianCalendar.getInstance().getTimeInMillis();
+        long exitInterval = 2000;
         if (curTime - backLastPressedTime <= exitInterval){
             ActivitiesCollector.finishAll();
         }

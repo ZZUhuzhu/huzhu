@@ -1,17 +1,24 @@
 package com.example.zzu.huzhucommunity.commonclass;
 
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.MediaStore;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
+import android.support.v7.app.AlertDialog;
 import android.util.DisplayMetrics;
 
 import com.example.zzu.huzhucommunity.R;
+import com.example.zzu.huzhucommunity.activities.PublishNewActivity;
 
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -22,6 +29,7 @@ import java.net.URL;
  */
 
 public class MyApplication extends Application {
+    @SuppressLint("StaticFieldLeak")
     private static Context context;
 
     @Override
@@ -33,6 +41,30 @@ public class MyApplication extends Application {
         return context;
     }
 
+    /**
+     * 选择相片对话框
+     * @param context1 上下文
+     */
+    public static void startPickImageDialog(final Context context1){
+        AlertDialog.Builder dialog = new AlertDialog.Builder(context1);
+        dialog.setItems(R.array.AddImageFrom, new DialogInterface.OnClickListener() {
+            Intent intent;
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if(which == 0){
+                    intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    ((Activity)context1).startActivityForResult(intent, Constants.PICK_IMAGE_FROM_CAMERA);
+                }
+                else{
+                    intent = new Intent();
+                    intent.setAction(Intent.ACTION_GET_CONTENT);
+                    intent.setType("image/*");
+                    ((Activity)context1).startActivityForResult(intent, Constants.PICK_IMAGE_FROM_GALLERY);
+                }
+            }
+        });
+        dialog.show();
+    }
     /**
      * This method converts dp unit to equivalent pixels, depending on device density.
      *

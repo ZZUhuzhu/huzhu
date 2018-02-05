@@ -14,7 +14,7 @@ import com.example.zzu.huzhucommunity.commonclass.MyApplication;
 import com.example.zzu.huzhucommunity.customlayout.AccountProfileItemLayout;
 
 public class OthersProfileActivity extends BaseActivity {
-
+    private static final String USER_ID_EXTRA = "USER_ID";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,8 +67,10 @@ public class OthersProfileActivity extends BaseActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public static void startMe(Context context){
-        context.startActivity(new Intent(context, OthersProfileActivity.class));
+    public static void startMe(Context context, int userID){
+        Intent intent = new Intent(context, OthersProfileActivity.class);
+        intent.putExtra(USER_ID_EXTRA, userID);
+        context.startActivity(intent);
     }
 
 }

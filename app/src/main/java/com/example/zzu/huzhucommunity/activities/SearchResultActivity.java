@@ -33,7 +33,6 @@ public class SearchResultActivity extends BaseActivity {
     private ArrayList<NewResourceItem> resourceItemArrayList = new ArrayList<>();
     private RecyclerView requestRecyclerView;
     private ArrayList<NewRequestItem> requestItemArrayList = new ArrayList<>();
-    private ViewPager viewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +56,7 @@ public class SearchResultActivity extends BaseActivity {
         requestRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         requestRecyclerView.setAdapter(new MainRequestAdapter(requestItemArrayList, this));
 
-        viewPager = findViewById(R.id.SearchResultActivity_view_pager);
+        ViewPager viewPager = findViewById(R.id.SearchResultActivity_view_pager);
         TabLayout tabLayout = findViewById(R.id.SearchResultActivity_tab_layout);
         ArrayList<View> pagerViews = new ArrayList<>();
         pagerViews.add(resourceRecyclerView);
@@ -69,6 +68,13 @@ public class SearchResultActivity extends BaseActivity {
             tab1.setText(getString(R.string.resource));
         if (tab2 != null)
             tab2.setText(getString(R.string.request));
+
+        resourceRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+            }
+        });
 
         addListener(R.id.SearchResultActivity_input_text_view);
 

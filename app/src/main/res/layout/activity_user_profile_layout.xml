@@ -67,7 +67,7 @@
                 android:layout_height="wrap_content"
                 android:clickable="true"
                 android:focusable="true"
-                app:image_src="@drawable/publish_plane"
+                app:image_src="@drawable/publish_plane_blue"
                 app:item_text="@string/publishedByMe"/>
             <com.example.zzu.huzhucommunity.customlayout.UserProfileItemLayout
                 android:id="@+id/UserProfile_resource_received_item"
@@ -76,14 +76,14 @@
                 android:clickable="true"
                 android:focusable="true"
                 app:item_text="@string/receivedByMe"
-                app:image_src="@drawable/receive"/>
+                app:image_src="@drawable/receive_green"/>
             <com.example.zzu.huzhucommunity.customlayout.UserProfileItemLayout
                 android:id="@+id/UserProfile_star_item"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:clickable="true"
                 android:focusable="true"
-                app:image_src="@drawable/star"
+                app:image_src="@drawable/star_yellow"
                 app:item_text="@string/myStar" />
             <com.example.zzu.huzhucommunity.customlayout.UserProfileItemLayout
                 android:id="@+id/UserProfile_track_item"
@@ -99,7 +99,7 @@
                 android:layout_height="wrap_content"
                 android:clickable="true"
                 android:focusable="true"
-                app:image_src="@drawable/comment_gray"
+                app:image_src="@drawable/comment_colorfule"
                 app:item_text="@string/myComment"/>
             <com.example.zzu.huzhucommunity.customlayout.UserProfileItemLayout
                 android:id="@+id/UserProfile_message_item"
@@ -108,14 +108,14 @@
                 android:clickable="true"
                 android:focusable="true"
                 app:item_text="@string/myMessage"
-                app:image_src="@drawable/message_gray"/>
+                app:image_src="@drawable/message_green"/>
             <com.example.zzu.huzhucommunity.customlayout.UserProfileItemLayout
                 android:id="@+id/UserProfile_setting_item"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:clickable="true"
                 android:focusable="true"
-                app:image_src="@drawable/setting_gray"
+                app:image_src="@drawable/setting_black"
                 app:item_text="@string/setting"/>
         </LinearLayout>
     </ScrollView>

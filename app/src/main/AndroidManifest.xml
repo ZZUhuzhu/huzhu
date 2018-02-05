@@ -69,7 +69,10 @@
         <activity
             android:name=".activities.SearchResultActivity"
             android:theme="@style/TranslucentTheme" />
-        <activity android:name=".activities.OthersProfileActivity"
+        <activity
+            android:name=".activities.OthersProfileActivity"
+            android:theme="@style/TranslucentTheme" />
+        <activity android:name=".activities.ProfileUpdateActivity"
             android:theme="@style/TranslucentTheme"/>
     </application>
 

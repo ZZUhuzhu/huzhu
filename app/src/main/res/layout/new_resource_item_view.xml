@@ -19,6 +19,8 @@
         android:layout_height="wrap_content"
         android:layout_alignTop="@id/NewResourceItem_thumbnail"
         android:layout_toEndOf="@id/NewResourceItem_thumbnail"
+        android:textSize="@dimen/common_text_size_normal"
+        android:textColor="@color/colorBlack"
         android:layout_marginEnd="@dimen/common_margin_small"
         android:maxLines="1"
         android:ellipsize="end"/>
@@ -38,7 +40,6 @@
         android:layout_marginEnd="@dimen/common_margin_small"
         android:layout_marginTop="@dimen/common_margin_small"
         android:layout_toEndOf="@id/NewResourceItem_thumbnail"
-        android:textSize="@dimen/common_text_size_normal"
         android:maxLines="1"
         android:ellipsize="end"/>
     <TextView

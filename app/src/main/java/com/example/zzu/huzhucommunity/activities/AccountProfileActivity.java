@@ -2,21 +2,35 @@ package com.example.zzu.huzhucommunity.activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Point;
 import android.support.v7.app.ActionBar;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
+import android.view.animation.ScaleAnimation;
 import android.widget.Toast;
 
 import com.example.zzu.huzhucommunity.R;
 import com.example.zzu.huzhucommunity.commonclass.ActivitiesCollector;
+import com.example.zzu.huzhucommunity.commonclass.Constants;
 import com.example.zzu.huzhucommunity.commonclass.MyApplication;
 import com.example.zzu.huzhucommunity.customlayout.AccountProfileItemLayout;
 
+
 public class AccountProfileActivity extends BaseActivity {
+    private static final String TAG = "AccountProfileActivity";
+    private static final int REQUEST_USER_NAME = 0;
+    private static final int REQUEST_USER_PHONE= 1;
+    private static final int REQUEST_USER_GRADE = 2;
+    private static final int REQUEST_USER_DEPARTMENT = 3;
+    private float touchX, touchY;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,11 +44,14 @@ public class AccountProfileActivity extends BaseActivity {
 
         addListener(R.id.AccountProfileActivity_sex_view);
         addListener(R.id.AccountProfileActivity_grade_view);
+        addListener(R.id.AccountProfileActivity_user_name_view);
+        addListener(R.id.AccountProfileActivity_phone_view);
         addListener(R.id.AccountProfileActivity_department_view);
-        addListener(R.id.AccountProfileActivity_register_time_view);
-        addListener(R.id.AccountProfileActivity_last_login_time_view);
         addListener(R.id.AccountProfileActivity_update_password_view);
         addListener(R.id.AccountProfileActivity_exit_login_view);
+        addListener(R.id.AccountProfileActivity_head_image_view);
+        addListener(R.id.AccountProfileActivity_expanded_holder);
+        addListener(R.id.AccountProfileActivity_expanded_image_view);
 
         initImage();
     }
@@ -59,6 +76,16 @@ public class AccountProfileActivity extends BaseActivity {
      * @param res 控件ID
      */
     public void addListener(final int res){
+        if (res == R.id.AccountProfileActivity_head_image_view){
+            findViewById(res).setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    touchX = event.getX();
+                    touchY = event.getY();
+                    return false;
+                }
+            });
+        }
         findViewById(res).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -67,17 +94,72 @@ public class AccountProfileActivity extends BaseActivity {
                         LoginActivity.startMe(AccountProfileActivity.this);
                         ActivitiesCollector.exitLogin();
                         break;
-                    case R.id.AccountProfileActivity_sex_view:
+                    case R.id.AccountProfileActivity_user_name_view:
+                        AccountProfileItemLayout itemLayout = findViewById(res);
+                        ProfileUpdateActivity.startMe(AccountProfileActivity.this,
+                                ProfileUpdateActivity.TYPE_USER_NAME, REQUEST_USER_NAME, itemLayout.getContentText());
+                        break;
+                    case R.id.AccountProfileActivity_phone_view:
+                        itemLayout = findViewById(res);
+                        ProfileUpdateActivity.startMe(AccountProfileActivity.this,
+                                ProfileUpdateActivity.TYPE_PHONE, REQUEST_USER_PHONE, itemLayout.getContentText());
+                        break;
                     case R.id.AccountProfileActivity_grade_view:
+                        itemLayout = findViewById(res);
+                        ProfileUpdateActivity.startMe(AccountProfileActivity.this,
+                                ProfileUpdateActivity.TYPE_GRADE, REQUEST_USER_GRADE, itemLayout.getContentText());
+                        break;
                     case R.id.AccountProfileActivity_department_view:
-                    case R.id.AccountProfileActivity_register_time_view:
-                    case R.id.AccountProfileActivity_last_login_time_view:
+                        itemLayout = findViewById(res);
+                        ProfileUpdateActivity.startMe(AccountProfileActivity.this,
+                                ProfileUpdateActivity.TYPE_DEPARTMENT, REQUEST_USER_DEPARTMENT, itemLayout.getContentText());
+                        break;
+                    case R.id.AccountProfileActivity_head_image_view:
+                        headImageExpandedShow();
+                        break;
+                    case R.id.AccountProfileActivity_expanded_image_view:
+                    case R.id.AccountProfileActivity_expanded_holder:
+                        headImageExpandedDisappear();
+                        break;
+                    case R.id.AccountProfileActivity_sex_view:
                     case R.id.AccountProfileActivity_update_password_view:
                         Toast.makeText(MyApplication.getContext(), "正在全力开发中...", Toast.LENGTH_SHORT).show();
                         break;
                 }
             }
         });
+    }
+
+    /**
+     * 显示头像大图
+     */
+    public void headImageExpandedShow(){
+        View view = findViewById(R.id.AccountProfileActivity_expanded_holder);
+        view.setVisibility(View.VISIBLE);
+    }
+
+    /**
+     * 隐藏头像大图
+     */
+    public void headImageExpandedDisappear(){
+        View view = findViewById(R.id.AccountProfileActivity_expanded_holder);
+        view.setVisibility(View.GONE);
+        Point size = new Point();
+        getWindowManager().getDefaultDisplay().getSize(size);
+        AnimationSet animationSet = new AnimationSet(false);
+        animationSet.addAnimation(new ScaleAnimation(1, 1.5f, 1, 1.5f, size.x / 2, size.y / 2));
+        animationSet.addAnimation(new AlphaAnimation(1, 0));
+        animationSet.setDuration(200);
+        view.startAnimation(animationSet);
+    }
+
+    @Override
+    public void onBackPressed() {
+        View view = findViewById(R.id.AccountProfileActivity_expanded_holder);
+        if (view.getVisibility() == View.VISIBLE)
+            headImageExpandedDisappear();
+        else
+            super.onBackPressed();
     }
 
     @Override
@@ -93,11 +175,26 @@ public class AccountProfileActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.account_profile_menu_item_change_image:
-                Toast.makeText(MyApplication.getContext(), "正在全力开发中...", Toast.LENGTH_SHORT).show();
+                MyApplication.startPickImageDialog(AccountProfileActivity.this);
                 return true;
         }
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode){
+            case Constants.PICK_IMAGE_FROM_CAMERA:
+            case Constants.PICK_IMAGE_FROM_GALLERY:
+            case REQUEST_USER_NAME:
+            case REQUEST_USER_PHONE:
+            case REQUEST_USER_GRADE:
+            case REQUEST_USER_DEPARTMENT:
+                Toast.makeText(MyApplication.getContext(), "正在全力开发中...", Toast.LENGTH_SHORT).show();
+                break;
+        }
+    }
+
     public static void startMe(Context context){
         context.startActivity(new Intent(context, AccountProfileActivity.class));
     }

@@ -28,6 +28,7 @@ import android.widget.Toast;
 import com.example.zzu.huzhucommunity.R;
 import com.example.zzu.huzhucommunity.adapters.ChatRoomMessageAdapter;
 import com.example.zzu.huzhucommunity.commonclass.ChatRoomMessageItem;
+import com.example.zzu.huzhucommunity.commonclass.Constants;
 import com.example.zzu.huzhucommunity.commonclass.MyApplication;
 
 import java.io.FileNotFoundException;
@@ -123,10 +124,7 @@ public class ChatRoomActivity extends BaseActivity {
                         inputEditText.setText("");
                         break;
                     case R.id.ChatRoomActivity_send_image_button:
-                        Intent intent = new Intent();
-                        intent.setAction(Intent.ACTION_GET_CONTENT);
-                        intent.setType("image/*");
-                        startActivityForResult(intent, PICK_IMAGE);
+                        MyApplication.startPickImageDialog(ChatRoomActivity.this);
                         break;
                 }
             }
@@ -153,21 +151,35 @@ public class ChatRoomActivity extends BaseActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == PICK_IMAGE){
-            if(resultCode == RESULT_OK){
-                Uri uri = data.getData();
-                if(uri == null) return;
-                ContentResolver contentResolver = getContentResolver();
-                try {
-                    Bitmap bitmap = BitmapFactory.decodeStream(contentResolver.openInputStream(uri));
-                    list.add(new ChatRoomMessageItem(false, bitmap));
-                    list.add(new ChatRoomMessageItem(true, getString(R.string.veryGood)));
-                    adapter.notifyDataSetChanged();
-                    recyclerView.smoothScrollToPosition(list.size() - 1);
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
+        switch (requestCode){
+            case Constants.PICK_IMAGE_FROM_CAMERA:
+                if(resultCode == RESULT_OK){
+                    Uri uri = data.getData();
+                    if(uri == null) return;
+                    ContentResolver contentResolver = getContentResolver();
+                    try {
+                        Bitmap bitmap = BitmapFactory.decodeStream(contentResolver.openInputStream(uri));
+                        list.add(new ChatRoomMessageItem(false, bitmap));
+                        list.add(new ChatRoomMessageItem(true, getString(R.string.veryGood)));
+                        adapter.notifyDataSetChanged();
+                        recyclerView.smoothScrollToPosition(list.size() - 1);
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
                 }
-            }
+                break;
+            case Constants.PICK_IMAGE_FROM_GALLERY:
+                if(resultCode == RESULT_OK){
+                    Bundle bundle = data.getExtras();
+                    if(bundle != null){
+                        Bitmap bitmap = (Bitmap) bundle.get("data");
+                        list.add(new ChatRoomMessageItem(false, bitmap));
+                        list.add(new ChatRoomMessageItem(true, getString(R.string.veryGood)));
+                        adapter.notifyDataSetChanged();
+                        recyclerView.smoothScrollToPosition(list.size() - 1);
+                    }
+                }
+                break;
         }
     }
 

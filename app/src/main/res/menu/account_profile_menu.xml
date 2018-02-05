@@ -6,6 +6,5 @@
     <item
         android:title="@string/changeHead"
         android:id="@+id/account_profile_menu_item_change_image"
-        android:actionLayout="@layout/account_profile_menu_text_view"
         app:showAsAction="always"/>
 </menu>

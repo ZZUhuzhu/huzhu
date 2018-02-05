@@ -2,7 +2,7 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/colorLightYellow"
+    android:background="@color/colorDeepSkyBlue"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
@@ -15,7 +15,7 @@
             android:id="@+id/MainActivity_search_bar_holder"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorLightYellow"
+            android:background="@color/colorDeepSkyBlue"
             app:elevation="0dp">
             <android.support.v7.widget.Toolbar
                 android:layout_width="match_parent"

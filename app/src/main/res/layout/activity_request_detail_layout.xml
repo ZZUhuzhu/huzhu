@@ -7,36 +7,6 @@
     android:layout_width="match_parent"
     android:fitsSystemWindows="true"
     android:background="@color/colorDeepSkyBlue">
-    <LinearLayout
-        android:id="@+id/RequestDetail_bottom_button_holder"
-        android:elevation="8dp"
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorWhite"
-        android:layout_alignParentBottom="true"
-        android:baselineAligned="false">
-        <com.example.zzu.huzhucommunity.customlayout.ResReqDetailBottomButtonLayout
-            android:id="@+id/RequestDetail_star_button"
-            style="@style/ResourceDetailBottomButtonHolder"
-            android:text="@string/star"
-            android:src="@drawable/star"/>
-        <com.example.zzu.huzhucommunity.customlayout.ResReqDetailBottomButtonLayout
-            android:id="@+id/RequestDetail_comment_it_button"
-            style="@style/ResourceDetailBottomButtonHolder"
-            android:text="@string/comment"
-            android:src="@drawable/comment_gray"/>
-        <com.example.zzu.huzhucommunity.customlayout.ResReqDetailBottomButtonLayout
-            android:id="@+id/RequestDetail_chat_button"
-            style="@style/ResourceDetailBottomButtonHolder"
-            android:text="@string/chat"
-            android:src="@drawable/chat_gray"/>
-        <com.example.zzu.huzhucommunity.customlayout.ResReqDetailBottomButtonLayout
-            android:id="@+id/RequestDetail_receive_it_button"
-            android:text="@string/receive"
-            android:src="@drawable/receive_now"
-            style="@style/ResourceDetailBottomButtonHolder"/>
-    </LinearLayout>
     <android.support.design.widget.CoordinatorLayout
         android:layout_above="@id/RequestDetail_bottom_button_holder"
         android:layout_width="match_parent"
@@ -86,7 +56,8 @@
                         android:layout_toEndOf="@id/RequestDetail_request_user_image_view"
                         android:layout_marginTop="@dimen/common_margin_small"
                         android:maxLines="1"
-                        android:textSize="@dimen/common_text_size_normal"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="@dimen/common_text_size_large"
                         android:text="@string/solider"/>
                     <TextView
                         android:id="@+id/RequestDetail_request_price_text_view"
@@ -97,8 +68,9 @@
                         android:maxLines="1"
                         android:layout_marginEnd="@dimen/common_margin_small"
                         android:layout_marginTop="@dimen/common_margin_large"
-                        android:textSize="@dimen/common_text_size_large"
                         android:layout_centerVertical="true"
+                        android:textSize="@dimen/common_text_size_large"
+                        android:textColor="@color/colorLightRed"
                         android:text="@string/twoYuan"/>
                     <TextView
                         android:id="@+id/RequestDetail_user_active_time_text_view"
@@ -138,6 +110,7 @@
                     android:gravity="end"
                     android:layout_marginEnd="@dimen/common_margin_normal"
                     android:textSize="@dimen/common_text_size_normal"
+                    android:textColor="@color/colorPrimary"
                     android:text="@string/finishedInTwoDays"/>
                 <LinearLayout
                     android:id="@+id/RequestDetail_comment_holder"
@@ -148,5 +121,44 @@
             </LinearLayout>
         </android.support.v4.widget.NestedScrollView>
     </android.support.design.widget.CoordinatorLayout>
-
+    <LinearLayout
+        android:id="@+id/RequestDetail_bottom_button_holder"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorWhite"
+        android:layout_alignParentBottom="true"
+        android:baselineAligned="false">
+        <com.example.zzu.huzhucommunity.customlayout.ResReqDetailBottomButtonLayout
+            android:id="@+id/RequestDetail_star_button"
+            style="@style/ResourceDetailBottomButtonHolder"
+            android:text="@string/star"
+            android:src="@drawable/star"/>
+        <com.example.zzu.huzhucommunity.customlayout.ResReqDetailBottomButtonLayout
+            android:id="@+id/RequestDetail_comment_it_button"
+            style="@style/ResourceDetailBottomButtonHolder"
+            android:text="@string/comment"
+            android:src="@drawable/comment_gray"/>
+        <com.example.zzu.huzhucommunity.customlayout.ResReqDetailBottomButtonLayout
+            android:id="@+id/RequestDetail_chat_button"
+            style="@style/ResourceDetailBottomButtonHolder"
+            android:text="@string/chat"
+            android:src="@drawable/chat_gray"/>
+        <LinearLayout
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:background="@color/colorLightRed">
+            <com.example.zzu.huzhucommunity.customlayout.ResReqDetailBottomButtonLayout
+                android:id="@+id/RequestDetail_receive_it_button"
+                android:text="@string/receive"
+                android:src="@drawable/receive_now_white"
+                android:textColor="@color/colorWhite"
+                style="@style/ResourceDetailBottomButtonHolder"/>
+        </LinearLayout>
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_above="@id/RequestDetail_bottom_button_holder"
+        android:background="@color/colorLightGray"/>
 </RelativeLayout>
