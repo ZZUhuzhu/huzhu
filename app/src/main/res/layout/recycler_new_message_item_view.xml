@@ -6,18 +6,19 @@
     android:layout_height="wrap_content"
     android:clickable="true"
     android:focusable="true"
-    android:background="?attr/selectableItemBackground">
+    android:background="?attr/selectableItemBackground"
+    tools:context=".activities.MessagesActivity">
     <ImageButton
         android:id="@+id/new_message_item_head_button"
         android:clickable="false"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_centerVertical="true"
         android:contentDescription="@string/app_name"
         android:background="@null"
-        android:layout_margin="@dimen/common_margin_small"
+        android:layout_margin="@dimen/common_margin_normal"
         android:scaleType="fitCenter"
-        android:src="@drawable/profile_head"/>
+        android:src="@drawable/profile_head_over_watch"/>
     <TextView
         android:id="@+id/new_message_item_sender_name_text_view"
         android:clickable="false"
@@ -26,7 +27,7 @@
         android:layout_marginTop="@dimen/common_margin_small"
         android:layout_marginBottom="@dimen/common_margin_small"
         android:textSize="@dimen/common_text_size_large"
-        android:layout_width="180dp"
+        android:layout_width="140dp"
         android:layout_height="wrap_content"
         android:textColor="@color/colorBlack"/>
     <TextView

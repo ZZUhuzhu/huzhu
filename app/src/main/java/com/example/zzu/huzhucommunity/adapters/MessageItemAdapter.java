@@ -1,7 +1,6 @@
 package com.example.zzu.huzhucommunity.adapters;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,7 +11,6 @@ import android.widget.TextView;
 
 import com.example.zzu.huzhucommunity.R;
 import com.example.zzu.huzhucommunity.activities.ChatRoomActivity;
-import com.example.zzu.huzhucommunity.activities.MessagesActivity;
 import com.example.zzu.huzhucommunity.commonclass.MyApplication;
 import com.example.zzu.huzhucommunity.commonclass.NewMessagesItem;
 
@@ -33,7 +31,7 @@ public class MessageItemAdapter extends RecyclerView.Adapter<MessageItemAdapter.
     }
     @Override
     public MessageItemAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.new_message_item_view, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_new_message_item_view, parent, false);
         return new ViewHolder(view);
     }
 

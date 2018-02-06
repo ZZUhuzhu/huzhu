@@ -2,7 +2,6 @@ package com.example.zzu.huzhucommunity.activities;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.support.v7.app.ActionBar;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -46,13 +45,13 @@ public class RegisterActivity extends BaseActivity {
         confirmPasswordTextView = findViewById(R.id.RegisterActivity_confirm_password_custom_holder);
         sexRadioGroup = findViewById(R.id.RegisterActivity_sex_custom_radio_group);
 
-        ArrayAdapter<CharSequence> arrayAdapter = ArrayAdapter.createFromResource(this, R.array.Grades, R.layout.grade_spinner_item_view);
-        arrayAdapter.setDropDownViewResource(R.layout.grade_spinner_item_drop_down_view);
+        ArrayAdapter<CharSequence> arrayAdapter = ArrayAdapter.createFromResource(this, R.array.Grades, R.layout.spinner_grade_item_view);
+        arrayAdapter.setDropDownViewResource(R.layout.spinner_grade_item_drop_down_view);
         gradeSpinner = findViewById(R.id.RegisterActivity_grade_spinner);
         gradeSpinner.setAdapter(arrayAdapter);
 
-        arrayAdapter = ArrayAdapter.createFromResource(this, R.array.Departments, R.layout.grade_spinner_item_view);
-        arrayAdapter.setDropDownViewResource(R.layout.grade_spinner_item_drop_down_view);
+        arrayAdapter = ArrayAdapter.createFromResource(this, R.array.Departments, R.layout.spinner_grade_item_view);
+        arrayAdapter.setDropDownViewResource(R.layout.spinner_grade_item_drop_down_view);
         depSpinner = findViewById(R.id.RegisterActivity_department_spinner);
         depSpinner.setAdapter(arrayAdapter);
 

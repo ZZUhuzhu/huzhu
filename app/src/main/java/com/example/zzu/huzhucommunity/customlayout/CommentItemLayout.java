@@ -2,7 +2,6 @@ package com.example.zzu.huzhucommunity.customlayout;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -20,7 +19,7 @@ public class CommentItemLayout extends RelativeLayout {
     private TextView userNameTextView, commentTimeTextView, commentContentTextView;
     public CommentItemLayout(Context context) {
         super(context);
-        LayoutInflater.from(context).inflate(R.layout.comment_item_layout, this);
+        LayoutInflater.from(context).inflate(R.layout.recycler_comment_item_layout, this);
         userHeadImageView = findViewById(R.id.CommentItem_user_head_image);
         userNameTextView = findViewById(R.id.CommentItem_user_name_text_view);
         commentTimeTextView = findViewById(R.id.CommentItem_time_text_view);

@@ -72,7 +72,10 @@
         <activity
             android:name=".activities.OthersProfileActivity"
             android:theme="@style/TranslucentTheme" />
-        <activity android:name=".activities.ProfileUpdateActivity"
+        <activity
+            android:name=".activities.ProfileUpdateActivity"
+            android:theme="@style/TranslucentTheme" />
+        <activity android:name=".activities.PubRecStarTrackActivity"
             android:theme="@style/TranslucentTheme"/>
     </application>
 

@@ -121,6 +121,7 @@ public class RequestDetailActivity extends BaseActivity {
                     case R.id.RequestDetail_chat_button:
                         ChatRoomActivity.startMe(RequestDetailActivity.this);
                         break;
+                    case R.id.RequestDetail_request_user_name_text_view:
                     case R.id.RequestDetail_request_user_image_view:
                         OthersProfileActivity.startMe(RequestDetailActivity.this, -1);
                         break;
@@ -134,7 +135,7 @@ public class RequestDetailActivity extends BaseActivity {
      */
     public void initComment(){
         commentHolder = findViewById(R.id.RequestDetail_comment_holder);
-        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.profile_head);
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.profile_head_over_watch);
         for(int i = 1; i < 12; i++){
             CommentItemLayout commentItemLayout = new CommentItemLayout(this);
             String time = "2018-" + i + "-25 21:29";
@@ -150,7 +151,7 @@ public class RequestDetailActivity extends BaseActivity {
         if (TextUtils.isEmpty(text))
             return;
         commentHolder = findViewById(R.id.RequestDetail_comment_holder);
-        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.profile_head);
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.profile_head_over_watch);
         String time = "2018-5-25 21:29";
         CommentItemLayout commentItemLayout = new CommentItemLayout(this, bitmap, getString(R.string.solider), time, text);
         commentHolder.addView(commentItemLayout, 0);

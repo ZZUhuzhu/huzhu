@@ -1,7 +1,6 @@
 package com.example.zzu.huzhucommunity.adapters;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,31 +9,33 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.zzu.huzhucommunity.R;
-import com.example.zzu.huzhucommunity.activities.ResourceDetailActivity;
-import com.example.zzu.huzhucommunity.commonclass.NewResourceItem;
+import com.example.zzu.huzhucommunity.activities.RequestDetailActivity;
+import com.example.zzu.huzhucommunity.commonclass.NewRequestItem;
 
 import java.util.ArrayList;
 
 /**
- * Created by FEI on 2018/1/24.
- * 新资源列表适配器
+ * Created by FEI on 2018/1/31.
+ * 主界面新请求的RecyclerView的适配器
  */
 
-public class MainResourcesAdapter extends RecyclerView.Adapter<MainResourcesAdapter.ViewHolder> {
-    private ArrayList<NewResourceItem> list;
+public class CommonRequestAdapter extends RecyclerView.Adapter<CommonRequestAdapter.ViewHolder> {
+    private ArrayList<NewRequestItem> list;
     private Context context;
-    @Override
-    public MainResourcesAdapter.ViewHolder onCreateViewHolder(final ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.new_resource_item_view, parent, false);
-        return new ViewHolder(view);
-    }
-    public MainResourcesAdapter(ArrayList<NewResourceItem> list, Context context){
+    public CommonRequestAdapter(ArrayList<NewRequestItem> list, Context context) {
         this.list = list;
         this.context = context;
     }
+
     @Override
-    public void onBindViewHolder(MainResourcesAdapter.ViewHolder holder, int position) {
-        NewResourceItem item = list.get(position);
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(context).inflate(R.layout.recycler_new_resource_item_view, parent, false);
+        return new ViewHolder(view);
+    }
+
+    @Override
+    public void onBindViewHolder(ViewHolder holder, int position) {
+        NewRequestItem item = list.get(position);
         holder.imageView.setImageBitmap(item.getItemThumbnail());
         holder.titleTextView.setText(item.getItemTitle());
         holder.detailTextView.setText(item.getItemDetail());
@@ -49,7 +50,7 @@ public class MainResourcesAdapter extends RecyclerView.Adapter<MainResourcesAdap
         return list.size();
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder{
+    class ViewHolder extends RecyclerView.ViewHolder {
         ImageView imageView;
         TextView titleTextView, detailTextView, timeTextView, priceTextView;
         ViewHolder(View itemView) {
@@ -57,7 +58,7 @@ public class MainResourcesAdapter extends RecyclerView.Adapter<MainResourcesAdap
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ResourceDetailActivity.startMe(context);
+                    RequestDetailActivity.startMe(context);
                 }
             });
             imageView = itemView.findViewById(R.id.NewResourceItem_thumbnail);

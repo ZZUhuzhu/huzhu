@@ -12,10 +12,10 @@ import java.util.ArrayList;
  * 主界面的ViewPager的适配器
  */
 
-public class MainViewPagerAdapter extends PagerAdapter {
+public class CommonViewPagerAdapter extends PagerAdapter {
     private ArrayList<View> viewArrayList;
 
-    public MainViewPagerAdapter(ArrayList<View> viewArrayList){
+    public CommonViewPagerAdapter(ArrayList<View> viewArrayList){
         this.viewArrayList = viewArrayList;
     }
 

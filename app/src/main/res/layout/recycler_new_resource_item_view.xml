@@ -49,5 +49,6 @@
         android:layout_marginEnd="@dimen/common_margin_small"
         android:layout_alignTop="@id/NewResourceItem_detail"
         android:layout_toEndOf="@id/NewResourceItem_detail"
+        android:textColor="@color/colorLightRed"
         android:gravity="center"/>
 </RelativeLayout>

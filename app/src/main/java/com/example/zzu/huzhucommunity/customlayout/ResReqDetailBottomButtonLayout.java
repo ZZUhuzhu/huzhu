@@ -20,7 +20,7 @@ import com.example.zzu.huzhucommunity.R;
 public class ResReqDetailBottomButtonLayout extends LinearLayout {
     public ResReqDetailBottomButtonLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
-        LayoutInflater.from(context).inflate(R.layout.resource_detail_bottom_button_view, this);
+        LayoutInflater.from(context).inflate(R.layout.custom_res_detail_bottom_button_view, this);
         TextView buttonTextView = findViewById(R.id.ResourceDetailBottomButton_text_view);
         ImageView buttonImageView = findViewById(R.id.ResourceDetailBottomButton_image_view);
 

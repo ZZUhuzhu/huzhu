@@ -40,7 +40,7 @@
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:scaleType="fitCenter"
-                android:src="@drawable/profile_head"/>
+                android:src="@drawable/profile_head_over_watch"/>
             <TextView
                 android:id="@+id/UserProfile_me_name_text_view"
                 android:layout_toEndOf="@id/UserProfile_me_image_view"

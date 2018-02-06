@@ -47,7 +47,7 @@
                         android:layout_margin="@dimen/common_margin_normal"
                         android:contentDescription="@string/app_name"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/profile_head"/>
+                        android:src="@drawable/profile_head_over_watch"/>
                     <TextView
                         android:id="@+id/RequestDetail_request_user_name_text_view"
                         android:layout_width="280dp"

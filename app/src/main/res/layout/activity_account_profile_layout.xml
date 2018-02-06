@@ -13,6 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="250dp"
         android:fitsSystemWindows="true"
+        android:background="@color/colorBlack"
         app:elevation="0dp">
         <android.support.design.widget.CollapsingToolbarLayout
             android:layout_width="match_parent"
@@ -23,17 +24,19 @@
             app:contentScrim="@color/colorDeepSkyBlue"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
             app:title="@string/solider"
+            app:expandedTitleMarginBottom="@dimen/common_margin_normal"
             app:expandedTitleMarginStart="@dimen/common_margin_large"
             app:expandedTitleTextAppearance="?android:attr/textAppearanceLarge">
             <ImageView
                 android:id="@+id/AccountProfileActivity_head_image_view"
+                android:layout_marginStart="60dp"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:contentDescription="@string/app_name"
                 android:fitsSystemWindows="true"
                 android:scaleType="centerCrop"
                 app:layout_collapseMode="parallax"
-                android:src="@drawable/background_small"/>
+                android:src="@drawable/profile_head_over_watch"/>
             <android.support.v7.widget.Toolbar
                 android:id="@+id/AccountProfileActivity_toolbar"
                 android:layout_width="match_parent"
@@ -178,6 +181,6 @@
             android:layout_centerInParent="true"
             android:contentDescription="@string/app_name"
             android:scaleType="fitCenter"
-            android:src="@drawable/background_small"/>
+            android:src="@drawable/profile_head_over_watch"/>
     </RelativeLayout>
 </android.support.design.widget.CoordinatorLayout>

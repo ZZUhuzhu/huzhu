@@ -97,6 +97,10 @@
     <string name="virtualComment">这玩意儿用着还不错，比较上手</string>
     <string name="searchResultOf">的搜索结果</string>
 
+    <string-array name="sexChoice">
+        <item>男</item>
+        <item>女</item>
+    </string-array>
     <string-array name="Types">
         <item>类型1</item>
         <item>类型2</item>

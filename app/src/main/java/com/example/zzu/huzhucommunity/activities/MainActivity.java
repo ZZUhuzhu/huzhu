@@ -18,9 +18,9 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.example.zzu.huzhucommunity.R;
-import com.example.zzu.huzhucommunity.adapters.MainRequestAdapter;
-import com.example.zzu.huzhucommunity.adapters.MainResourcesAdapter;
-import com.example.zzu.huzhucommunity.adapters.MainViewPagerAdapter;
+import com.example.zzu.huzhucommunity.adapters.CommonRequestAdapter;
+import com.example.zzu.huzhucommunity.adapters.CommonResourcesAdapter;
+import com.example.zzu.huzhucommunity.adapters.CommonViewPagerAdapter;
 import com.example.zzu.huzhucommunity.commonclass.ActivitiesCollector;
 import com.example.zzu.huzhucommunity.commonclass.MyApplication;
 import com.example.zzu.huzhucommunity.commonclass.NewRequestItem;
@@ -35,18 +35,16 @@ import java.util.GregorianCalendar;
 public class MainActivity extends BaseActivity {
     private static long backLastPressedTime = 0;
     public static final String PUBLISH_TYPE = "PUBLISH_TYPE";
-    public static final int PUBLISH_NEW_RESOURCE = 0;
-    public static final int PUBLISH_NEW_REQUEST = 1;
     private ImageButton resourceButton;
     private ImageButton requestButton;
 
     private RecyclerView newResourceRecyclerView;
     private ArrayList<NewResourceItem> resourceItems = new ArrayList<>();
-    private MainResourcesAdapter resourceAdapter;
+    private CommonResourcesAdapter resourceAdapter;
 
     private RecyclerView newRequestRecyclerView;
     private ArrayList<NewRequestItem> requestItems = new ArrayList<>();
-    private MainRequestAdapter requestAdapter;
+    private CommonRequestAdapter requestAdapter;
 
     private ViewPager mainViewPager;
     private ArrayList<View> pagerViews = new ArrayList<>();
@@ -61,7 +59,7 @@ public class MainActivity extends BaseActivity {
 
         newResourceRecyclerView = new RecyclerView(this);
         newResourceRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        resourceAdapter = new MainResourcesAdapter(resourceItems, this);
+        resourceAdapter = new CommonResourcesAdapter(resourceItems, this);
         newResourceRecyclerView.setAdapter(resourceAdapter);
         final SwipeRefreshLayout resSwipeRefreshLayout = new SwipeRefreshLayout(this);
         resSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -75,7 +73,7 @@ public class MainActivity extends BaseActivity {
 
         newRequestRecyclerView = new RecyclerView(this);
         newRequestRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        requestAdapter = new MainRequestAdapter(requestItems, this);
+        requestAdapter = new CommonRequestAdapter(requestItems, this);
         newRequestRecyclerView.setAdapter(requestAdapter);
         final SwipeRefreshLayout requestSwipeRefreshLayout = new SwipeRefreshLayout(this);
         requestSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -88,7 +86,7 @@ public class MainActivity extends BaseActivity {
         pagerViews.add(requestSwipeRefreshLayout);
 
         mainViewPager = findViewById(R.id.MainActivity_view_pager);
-        mainViewPager.setAdapter(new MainViewPagerAdapter(pagerViews));
+        mainViewPager.setAdapter(new CommonViewPagerAdapter(pagerViews));
         mainViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
@@ -216,7 +214,10 @@ public class MainActivity extends BaseActivity {
                         dialog.setItems(R.array.PublishType, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                PublishNewActivity.startMe(MainActivity.this, which);
+                                if (which == 0)
+                                    PublishNewActivity.startMe(MainActivity.this, PublishNewActivity.PUBLISH_NEW_RESOURCE);
+                                else if (which == 1)
+                                    PublishNewActivity.startMe(MainActivity.this, PublishNewActivity.PUBLISH_NEW_REQUEST);
                             }
                         });
                         dialog.show();

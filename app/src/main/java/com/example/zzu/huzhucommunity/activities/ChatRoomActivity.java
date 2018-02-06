@@ -38,7 +38,6 @@ import java.util.ArrayList;
  * 聊天界面活动
  */
 public class ChatRoomActivity extends BaseActivity {
-    private static final int PICK_IMAGE = 1;
     private ImageButton sendImageButton;
     private Button sendButton;
     private ChatRoomMessageAdapter adapter;
@@ -64,7 +63,7 @@ public class ChatRoomActivity extends BaseActivity {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
-        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.profile_head);
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.profile_head_over_watch);
         adapter = new ChatRoomMessageAdapter(list, bitmap, bitmap);
         recyclerView.setAdapter(adapter);
 

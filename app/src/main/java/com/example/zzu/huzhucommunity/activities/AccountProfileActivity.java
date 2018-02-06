@@ -1,20 +1,20 @@
 package com.example.zzu.huzhucommunity.activities;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Point;
 import android.support.v7.app.ActionBar;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
-import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.ScaleAnimation;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.zzu.huzhucommunity.R;
@@ -25,12 +25,10 @@ import com.example.zzu.huzhucommunity.customlayout.AccountProfileItemLayout;
 
 
 public class AccountProfileActivity extends BaseActivity {
-    private static final String TAG = "AccountProfileActivity";
     private static final int REQUEST_USER_NAME = 0;
     private static final int REQUEST_USER_PHONE= 1;
     private static final int REQUEST_USER_GRADE = 2;
     private static final int REQUEST_USER_DEPARTMENT = 3;
-    private float touchX, touchY;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,26 +74,17 @@ public class AccountProfileActivity extends BaseActivity {
      * @param res 控件ID
      */
     public void addListener(final int res){
-        if (res == R.id.AccountProfileActivity_head_image_view){
-            findViewById(res).setOnTouchListener(new View.OnTouchListener() {
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-                    touchX = event.getX();
-                    touchY = event.getY();
-                    return false;
-                }
-            });
-        }
         findViewById(res).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                final AccountProfileItemLayout itemLayout;
                 switch (res){
                     case R.id.AccountProfileActivity_exit_login_view:
                         LoginActivity.startMe(AccountProfileActivity.this);
                         ActivitiesCollector.exitLogin();
                         break;
                     case R.id.AccountProfileActivity_user_name_view:
-                        AccountProfileItemLayout itemLayout = findViewById(res);
+                        itemLayout = findViewById(res);
                         ProfileUpdateActivity.startMe(AccountProfileActivity.this,
                                 ProfileUpdateActivity.TYPE_USER_NAME, REQUEST_USER_NAME, itemLayout.getContentText());
                         break;
@@ -122,6 +111,26 @@ public class AccountProfileActivity extends BaseActivity {
                         headImageExpandedDisappear();
                         break;
                     case R.id.AccountProfileActivity_sex_view:
+                        new AlertDialog.Builder(AccountProfileActivity.this)
+                                .setCancelable(true)
+                                .setItems(R.array.sexChoice, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        AccountProfileItemLayout itemLayout1 = findViewById(res);
+                                        if (which == 0){
+                                            itemLayout1.setImageDrawable(getDrawable(R.drawable.male_icon));
+                                            updateProfile();
+                                            dialog.dismiss();
+                                        }
+                                        else if (which == 1){
+                                            itemLayout1.setImageDrawable(getDrawable(R.drawable.female_icon));
+                                            updateProfile();
+                                            dialog.dismiss();
+                                        }
+                                    }
+                                })
+                                .setTitle(R.string.sex)
+                                .show();
                     case R.id.AccountProfileActivity_update_password_view:
                         Toast.makeText(MyApplication.getContext(), "正在全力开发中...", Toast.LENGTH_SHORT).show();
                         break;
@@ -130,6 +139,9 @@ public class AccountProfileActivity extends BaseActivity {
         });
     }
 
+    public void updateProfile(){
+        Toast.makeText(MyApplication.getContext(), "正在全力开发中...", Toast.LENGTH_SHORT).show();
+    }
     /**
      * 显示头像大图
      */
@@ -190,7 +202,7 @@ public class AccountProfileActivity extends BaseActivity {
             case REQUEST_USER_PHONE:
             case REQUEST_USER_GRADE:
             case REQUEST_USER_DEPARTMENT:
-                Toast.makeText(MyApplication.getContext(), "正在全力开发中...", Toast.LENGTH_SHORT).show();
+                updateProfile();
                 break;
         }
     }

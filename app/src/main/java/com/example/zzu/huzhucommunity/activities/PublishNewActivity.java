@@ -4,23 +4,17 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.ContentResolver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.provider.MediaStore;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AlertDialog;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
@@ -38,8 +32,8 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 public class PublishNewActivity extends BaseActivity {
-    private static final int PICK_IMAGE = 1;
-    private static final int CAPTURE_IMAGE = 2;
+    public static final int PUBLISH_NEW_RESOURCE = 0;
+    public static final int PUBLISH_NEW_REQUEST = 1;
     private Calendar calendar = GregorianCalendar.getInstance();
     private TextView dateTextView;
     private TextView timeTextView;
@@ -49,10 +43,10 @@ public class PublishNewActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_publish_new_layout);
         Toolbar toolbar = findViewById(R.id.PublishNewRes_toolbar);
-        int which = getIntent().getIntExtra(MainActivity.PUBLISH_TYPE, MainActivity.PUBLISH_NEW_RESOURCE);
-        if(which == MainActivity.PUBLISH_NEW_REQUEST)
+        int which = getIntent().getIntExtra(MainActivity.PUBLISH_TYPE, PUBLISH_NEW_RESOURCE);
+        if(which == PUBLISH_NEW_REQUEST)
             toolbar.setTitle(R.string.publishNewRequest);
-        else if(which == MainActivity.PUBLISH_NEW_RESOURCE)
+        else if(which == PUBLISH_NEW_RESOURCE)
             toolbar.setTitle(R.string.publishNewResource);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
@@ -68,8 +62,8 @@ public class PublishNewActivity extends BaseActivity {
         timeTextView.setText(curTime);
 
         Spinner typeSpinner = findViewById(R.id.PublishNewRes_type_spinner);
-        ArrayAdapter<CharSequence> arrayAdapter = ArrayAdapter.createFromResource(this, R.array.Types, R.layout.type_spinner_item_view);
-        arrayAdapter.setDropDownViewResource(R.layout.grade_spinner_item_drop_down_view);
+        ArrayAdapter<CharSequence> arrayAdapter = ArrayAdapter.createFromResource(this, R.array.Types, R.layout.spinner_type_item_view);
+        arrayAdapter.setDropDownViewResource(R.layout.spinner_grade_item_drop_down_view);
         typeSpinner.setAdapter(arrayAdapter);
 
         addListener(R.id.PublishNewRes_add_image_button);

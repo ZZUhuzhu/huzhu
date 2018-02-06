@@ -43,7 +43,7 @@
             android:layout_gravity="center_vertical"
             android:layout_marginEnd="@dimen/common_margin_normal"
             android:background="@null"
-            android:src="@drawable/cancel_cross_gray"/>
+            android:src="@drawable/cancel_oval_light_gray_pressed_gray"/>
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"

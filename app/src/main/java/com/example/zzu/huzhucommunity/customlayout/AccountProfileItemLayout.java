@@ -22,7 +22,7 @@ public class AccountProfileItemLayout extends RelativeLayout {
 
     public AccountProfileItemLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
-        LayoutInflater.from(context).inflate(R.layout.account_profile_item_view, this);
+        LayoutInflater.from(context).inflate(R.layout.custom_account_profile_item_view, this);
 
         TextView titleTextView = findViewById(R.id.account_profile_item_title_text_view);
         contentTextView = findViewById(R.id.account_profile_item_content_text_view);

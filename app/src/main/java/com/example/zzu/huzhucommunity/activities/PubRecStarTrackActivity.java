@@ -5,11 +5,11 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.TextView;
 
 import com.example.zzu.huzhucommunity.R;
 import com.example.zzu.huzhucommunity.commonclass.NewRequestItem;
@@ -18,40 +18,49 @@ import com.example.zzu.huzhucommunity.customlayout.ResReqViewPagerLayout;
 
 import java.util.ArrayList;
 
-public class SearchResultActivity extends BaseActivity {
-    private static final String TAG = "SearchResultActivity";
-    private static final String INTENT_DATA_NAME = "SEARCH_DATA";
-    private String title;
-    private ArrayList<NewResourceItem> resourceItemArrayList = new ArrayList<>();
-    private ArrayList<NewRequestItem> requestItemArrayList = new ArrayList<>();
+public class PubRecStarTrackActivity extends AppCompatActivity {
+    public static final int TYPE_PUBLISH = 0;
+    public static final int TYPE_RECEIVE = 1;
+    public static final int TYPE_STAR = 2;
+    public static final int TYPE_TRACK = 3;
+    private static final String TYPE_EXTRA = "TYPE_EXTRA";
     private ResReqViewPagerLayout pagerLayout;
+    private ArrayList<NewRequestItem> requestItems = new ArrayList<>();
+    private ArrayList<NewResourceItem> resourceItems = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_search_result_layout);
-        Toolbar toolbar = findViewById(R.id.SearchResultActivity_toolbar);
+        setContentView(R.layout.activity_pub_rec_star_track_layout);
+        Toolbar toolbar = findViewById(R.id.PubRecStarTrack_toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null)
+        if (actionBar != null){
+            String title = getString(R.string.publishedByMe);
+            switch (getIntent().getIntExtra(TYPE_EXTRA, TYPE_PUBLISH)){
+                case TYPE_TRACK:
+                    title = getString(R.string.myTrack);
+                    break;
+                case TYPE_STAR:
+                    title = getString(R.string.myStar);
+                    break;
+                case TYPE_RECEIVE:
+                    title = getString(R.string.receivedByMe);
+                    break;
+                case TYPE_PUBLISH:
+                    title = getString(R.string.publishedByMe);
+                    break;
+            }
+            actionBar.setTitle(title);
             actionBar.setDisplayHomeAsUpEnabled(true);
+        }
 
-        TextView inputTextView = findViewById(R.id.SearchResultActivity_input_text_view);
-        title = getIntent().getStringExtra(INTENT_DATA_NAME) + getString(R.string.searchResultOf);
-        inputTextView.setText(title);
+        pagerLayout = findViewById(R.id.PubRecStarTrack_pager_view);
+        pagerLayout.setView(resourceItems, requestItems);
 
-        pagerLayout = findViewById(R.id.SearchResultActivity_pager_view);
-        pagerLayout.setView(resourceItemArrayList, requestItemArrayList);
-
-        addListener(R.id.SearchResultActivity_input_text_view);
-
-        loadSearchResult();
+        initList();
     }
-
-    /**
-     * 加载搜索结果
-     */
-    public void loadSearchResult(){
+    public void initList(){
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -63,34 +72,18 @@ public class SearchResultActivity extends BaseActivity {
                     ArrayList<Bitmap> bitmaps = new ArrayList<>();
                     bitmaps.add(BitmapFactory.decodeResource(getResources(), R.drawable.default_image));
                     NewResourceItem item = new NewResourceItem(title, detail, time, price, bitmaps);
-                    resourceItemArrayList.add(item);
+                    resourceItems.add(item);
 
                     title = "给我个" + title;
                     detail = getString(R.string.virtualRequestDetail);
                     NewRequestItem requestItem = new NewRequestItem(title, detail, time, price, bitmaps);
-                    requestItemArrayList.add(requestItem);
+                    requestItems.add(requestItem);
                 }
                 pagerLayout.resNotifyDataSetChanged();
                 pagerLayout.reqNotifyDataSetChanged();
             }
         }).start();
     }
-    @Override
-    public void addListener(final int res) {
-        findViewById(res).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                switch (res){
-                    case R.id.SearchResultActivity_input_text_view:
-                        SearchActivity.startMe(SearchResultActivity.this, title);
-                        finish();
-                        break;
-                }
-            }
-        });
-
-    }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
@@ -100,11 +93,9 @@ public class SearchResultActivity extends BaseActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-
-    public static void startMe(Context context, String data){
-        Intent intent = new Intent(context, SearchResultActivity.class);
-        intent.putExtra(INTENT_DATA_NAME, data);
+    public static void startMe(Context context, int type){
+        Intent intent = new Intent(context, PubRecStarTrackActivity.class);
+        intent.putExtra(TYPE_EXTRA, type);
         context.startActivity(intent);
     }
-
 }

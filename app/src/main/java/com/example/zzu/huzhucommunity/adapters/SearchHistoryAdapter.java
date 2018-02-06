@@ -3,13 +3,11 @@ package com.example.zzu.huzhucommunity.adapters;
 import android.app.Activity;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,7 +18,6 @@ import com.example.zzu.huzhucommunity.commonclass.SearchHistoryItem;
 
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
-import java.util.PriorityQueue;
 
 /**
  * Created by FEI on 2018/2/3.
@@ -37,7 +34,7 @@ public class SearchHistoryAdapter extends RecyclerView.Adapter<SearchHistoryAdap
     }
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.search_history_item_view, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.recycler_search_history_item_view, parent, false);
         return new ViewHolder(view);
     }
 

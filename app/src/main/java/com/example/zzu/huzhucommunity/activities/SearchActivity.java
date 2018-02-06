@@ -53,8 +53,11 @@ public class SearchActivity extends BaseActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        EditText inputTextView = findViewById(R.id.SearchActivity_input_edit_text);
-        inputTextView.setText(getIntent().getStringExtra(SEARCH_STRING_DATA));
+        EditText inputEditText = findViewById(R.id.SearchActivity_input_edit_text);
+        String tmpString = getIntent().getStringExtra(SEARCH_STRING_DATA);
+        inputEditText.setText(tmpString);
+        if (!TextUtils.isEmpty(tmpString))
+            inputEditText.setSelection(tmpString.length());
 
         RecyclerView searchHistoryRecyclerView = findViewById(R.id.SearchActivity_search_history_recycler_view);
         searchHistoryRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));

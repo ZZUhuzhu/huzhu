@@ -32,7 +32,7 @@ public class ChatRoomMessageAdapter extends RecyclerView.Adapter<ChatRoomMessage
     }
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(MyApplication.getContext()).inflate(R.layout.chat_room_message_item_view, parent, false);
+        View view = LayoutInflater.from(MyApplication.getContext()).inflate(R.layout.recycler_chat_room_message_item_view, parent, false);
         return new ViewHolder(view);
     }
 

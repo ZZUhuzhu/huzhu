@@ -22,7 +22,7 @@ public class RegisterEditTextLayout extends LinearLayout {
     private EditText editText;
     public RegisterEditTextLayout(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-        LayoutInflater.from(context).inflate(R.layout.register_input_custom_layout, this);
+        LayoutInflater.from(context).inflate(R.layout.custom_register_input_view, this);
         TextView textView = findViewById(R.id.register_input_custom_text_view);
         editText = findViewById(R.id.register_input_custom_edit_text);
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.RegisterEditTextLayout);

@@ -2,11 +2,8 @@ package com.example.zzu.huzhucommunity.activities;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,8 +13,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.zzu.huzhucommunity.R;
-import com.example.zzu.huzhucommunity.commonclass.Constants;
 import com.example.zzu.huzhucommunity.commonclass.MyApplication;
+import com.example.zzu.huzhucommunity.customlayout.UserProfileItemLayout;
 
 public class UserProfileActivity extends BaseActivity {
 
@@ -35,7 +32,7 @@ public class UserProfileActivity extends BaseActivity {
         TextView userNameTextView = findViewById(R.id.UserProfile_me_name_text_view);
         ImageView userHeadImageView = findViewById(R.id.UserProfile_me_image_view);
         userNameTextView.setText(R.string.solider);
-        userHeadImageView.setImageDrawable(getDrawable(R.drawable.profile_head));
+        userHeadImageView.setImageDrawable(getDrawable(R.drawable.profile_head_over_watch));
 
         addListener(R.id.UserProfile_resource_published_item);
         addListener(R.id.UserProfile_resource_received_item);
@@ -45,6 +42,8 @@ public class UserProfileActivity extends BaseActivity {
         addListener(R.id.UserProfile_comment_item);
         addListener(R.id.UserProfile_message_item);
         addListener(R.id.UserProfile_me_holder);
+
+        initNumber();
     }
     /**
      * 为每个控件添加监听器
@@ -62,9 +61,17 @@ public class UserProfileActivity extends BaseActivity {
                         MessagesActivity.startMe(UserProfileActivity.this);
                         break;
                     case R.id.UserProfile_resource_published_item:
+                        PubRecStarTrackActivity.startMe(UserProfileActivity.this, PubRecStarTrackActivity.TYPE_PUBLISH);
+                        break;
                     case R.id.UserProfile_resource_received_item:
+                        PubRecStarTrackActivity.startMe(UserProfileActivity.this, PubRecStarTrackActivity.TYPE_RECEIVE);
+                        break;
                     case R.id.UserProfile_star_item:
+                        PubRecStarTrackActivity.startMe(UserProfileActivity.this, PubRecStarTrackActivity.TYPE_STAR);
+                        break;
                     case R.id.UserProfile_track_item:
+                        PubRecStarTrackActivity.startMe(UserProfileActivity.this, PubRecStarTrackActivity.TYPE_TRACK);
+                        break;
                     case R.id.UserProfile_comment_item:
                         Toast.makeText(MyApplication.getContext(), "正在全力开发中...", Toast.LENGTH_SHORT).show();
                         break;
@@ -74,6 +81,20 @@ public class UserProfileActivity extends BaseActivity {
                 }
             }
         });
+    }
+    public void initNumber(){
+        UserProfileItemLayout itemLayout = findViewById(R.id.UserProfile_resource_published_item);
+        itemLayout.setAmount(0);
+        itemLayout = findViewById(R.id.UserProfile_resource_received_item);
+        itemLayout.setAmount(1);
+        itemLayout = findViewById(R.id.UserProfile_star_item);
+        itemLayout.setAmount(2);
+        itemLayout = findViewById(R.id.UserProfile_track_item);
+        itemLayout.setAmount(3);
+        itemLayout = findViewById(R.id.UserProfile_comment_item);
+        itemLayout.setAmount(4);
+        itemLayout = findViewById(R.id.UserProfile_message_item);
+        itemLayout.setAmount(5);
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
