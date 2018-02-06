@@ -87,6 +87,9 @@
     <string name="finished">完成</string>
 
     <!--othersString-->
+    <string name="unreceived">未接</string>
+    <string name="status_with_colon">状态:</string>
+    <string name="delete">删除</string>
     <string name="veryGood">非常好</string>
     <string name="solider">小美</string>
     <string name="twoHoursAgo">2小时前</string>

@@ -56,7 +56,7 @@ public class PubRecStarTrackActivity extends AppCompatActivity {
         }
 
         pagerLayout = findViewById(R.id.PubRecStarTrack_pager_view);
-        pagerLayout.setView(resourceItems, requestItems);
+        pagerLayout.setView(resourceItems, requestItems, true);
 
         initList();
     }

@@ -41,7 +41,7 @@ public class SearchResultActivity extends BaseActivity {
         inputTextView.setText(title);
 
         pagerLayout = findViewById(R.id.SearchResultActivity_pager_view);
-        pagerLayout.setView(resourceItemArrayList, requestItemArrayList);
+        pagerLayout.setView(resourceItemArrayList, requestItemArrayList, false);
 
         addListener(R.id.SearchResultActivity_input_text_view);
 

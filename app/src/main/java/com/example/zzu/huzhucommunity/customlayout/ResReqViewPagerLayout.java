@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
@@ -37,7 +38,7 @@ public class ResReqViewPagerLayout extends LinearLayout {
         LayoutInflater.from(context).inflate(R.layout.custom_res_req_pager_view, this, true);
     }
 
-    public void setView(ArrayList<NewResourceItem> resourceItems, ArrayList<NewRequestItem> requestItems){
+    public void setView(ArrayList<NewResourceItem> resourceItems, ArrayList<NewRequestItem> requestItems, boolean showStatus){
         TabLayout tabLayout = findViewById(R.id.res_req_pager_view_tab_layout);
         ViewPager viewPager = findViewById(R.id.res_req_pager_view_view_pager);
         ArrayList<View> views = new ArrayList<>();
@@ -45,13 +46,15 @@ public class ResReqViewPagerLayout extends LinearLayout {
         tabLayout.setupWithViewPager(viewPager);
 
         resRecyclerView = new RecyclerView(context);
+        resRecyclerView.setItemAnimator(new DefaultItemAnimator());
         resRecyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
-        resRecyclerView.setAdapter(new CommonResourcesAdapter(resourceItems, context));
+        resRecyclerView.setAdapter(new CommonResourcesAdapter(resourceItems, context, showStatus));
         views.add(resRecyclerView);
 
         reqRecyclerView = new RecyclerView(context);
+        reqRecyclerView.setItemAnimator(new DefaultItemAnimator());
         reqRecyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
-        reqRecyclerView.setAdapter(new CommonRequestAdapter(requestItems, context));
+        reqRecyclerView.setAdapter(new CommonRequestAdapter(requestItems, context, showStatus));
         views.add(reqRecyclerView);
 
         viewPager.getAdapter().notifyDataSetChanged();

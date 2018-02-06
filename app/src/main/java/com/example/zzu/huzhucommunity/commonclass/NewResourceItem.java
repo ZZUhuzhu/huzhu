@@ -22,7 +22,7 @@ public class NewResourceItem implements Parcelable {
     private boolean received;
 
     public NewResourceItem(String itemTitle, String itemDetail, int itemPublishTime, double itemPrice, ArrayList<Bitmap> itemThumbnails){
-        this.received = false;
+        this.received = Math.random() * 100 > 50;
         this.itemTitle = itemTitle;
         this.itemDetail = itemDetail;
         this.itemPrice = itemPrice;

@@ -27,11 +27,11 @@
     <TextView
         android:id="@+id/NewResourceItem_publish_time"
         android:layout_alignTop="@id/NewResourceItem_title"
-        android:layout_marginEnd="@dimen/common_margin_small"
+        android:layout_marginEnd="@dimen/common_margin_normal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_toEndOf="@id/NewResourceItem_title"
-        android:gravity="center"/>
+        android:gravity="end"/>
     <TextView
         android:id="@+id/NewResourceItem_detail"
         android:layout_width="220dp"
@@ -46,9 +46,42 @@
         android:id="@+id/NewResourceItem_price"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/common_margin_small"
+        android:layout_marginEnd="@dimen/common_margin_normal"
         android:layout_alignTop="@id/NewResourceItem_detail"
         android:layout_toEndOf="@id/NewResourceItem_detail"
         android:textColor="@color/colorLightRed"
-        android:gravity="center"/>
+        android:gravity="end"/>
+    <LinearLayout
+        android:id="@+id/NewResourceItem_status_holder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="@dimen/common_margin_small"
+        android:layout_marginBottom="@dimen/common_margin_small"
+        android:layout_below="@id/NewResourceItem_detail"
+        android:layout_alignStart="@id/NewResourceItem_detail">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/common_text_size_small"
+            android:text="@string/status_with_colon"/>
+        <TextView
+            android:id="@+id/NewResourceItem_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/common_text_size_small"
+            android:textColor="@color/colorDodgerBlue"/>
+    </LinearLayout>
+    <TextView
+        android:id="@+id/NewResourceItem_delete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@id/NewResourceItem_price"
+        android:layout_marginTop="@dimen/common_margin_small"
+        android:layout_marginBottom="@dimen/common_margin_small"
+        android:layout_marginEnd="@dimen/common_margin_normal"
+        android:textColor="@color/colorLightRed"
+        android:textSize="@dimen/common_text_size_small"
+        android:text="@string/delete"/>
 </RelativeLayout>
