@@ -5,6 +5,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
@@ -33,8 +35,23 @@ import java.util.GregorianCalendar;
  * 登录成功后的主界面
  */
 public class MainActivity extends BaseActivity {
-    private static long backLastPressedTime = 0;
     public static final String PUBLISH_TYPE = "PUBLISH_TYPE";
+    private static long backLastPressedTime = 0;
+    private static final int TASK_OVER = 1;
+
+    private Handler handler = new Handler(new Handler.Callback() {
+        @Override
+        public boolean handleMessage(Message msg) {
+            switch (msg.what){
+                case TASK_OVER:
+                    findViewById(R.id.MainActivity_progress_bar).setVisibility(View.GONE);
+                    resourceAdapter.notifyDataSetChanged();
+                    requestAdapter.notifyDataSetChanged();
+                    return true;
+            }
+            return false;
+        }
+    });
     private ImageButton resourceButton;
     private ImageButton requestButton;
 
@@ -53,6 +70,8 @@ public class MainActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_layout);
+
+        setSwipeToFinishOff();
 
         resourceButton = findViewById(R.id.MainActivity_resource_button);
         requestButton = findViewById(R.id.MainActivity_request_button);
@@ -144,6 +163,11 @@ public class MainActivity extends BaseActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 for(int i = 1; i < 22; i++){
                     String title = "生命" + i + "号";
                     String detail = getString(R.string.virtualResourceDetail);
@@ -159,8 +183,9 @@ public class MainActivity extends BaseActivity {
                     NewRequestItem requestItem = new NewRequestItem(title, detail, time, price, bitmaps);
                     requestItems.add(requestItem);
                 }
-                resourceAdapter.notifyDataSetChanged();
-                requestAdapter.notifyDataSetChanged();
+                Message message = new Message();
+                message.what = TASK_OVER;
+                handler.sendMessage(message);
             }
         }).start();
     }

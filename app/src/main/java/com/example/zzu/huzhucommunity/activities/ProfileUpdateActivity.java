@@ -4,26 +4,20 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.view.menu.MenuBuilder;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.example.zzu.huzhucommunity.R;
-import com.example.zzu.huzhucommunity.commonclass.MyApplication;
 
 public class ProfileUpdateActivity extends BaseActivity {
-    private static final String TAG = "ProfileUpdateActivity";
     public static final String RETURN_INFO = "RETURN_INFO";
     private static final String STRING_EXTRA = "STRING_EXTRA";
     private static final String TYPE_EXTRA = "TYPE";

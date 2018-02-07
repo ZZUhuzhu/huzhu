@@ -4,12 +4,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.example.zzu.huzhucommunity.R;
 import com.example.zzu.huzhucommunity.commonclass.NewRequestItem;
@@ -18,12 +21,27 @@ import com.example.zzu.huzhucommunity.customlayout.ResReqViewPagerLayout;
 
 import java.util.ArrayList;
 
-public class PubRecStarTrackActivity extends AppCompatActivity {
+public class PubRecStarTrackActivity extends BaseActivity {
     public static final int TYPE_PUBLISH = 0;
     public static final int TYPE_RECEIVE = 1;
     public static final int TYPE_STAR = 2;
     public static final int TYPE_TRACK = 3;
     private static final String TYPE_EXTRA = "TYPE_EXTRA";
+
+    private static final int TASK_OVER = 4;
+    private Handler handler = new Handler(new Handler.Callback() {
+        @Override
+        public boolean handleMessage(Message msg) {
+            switch (msg.what){
+                case TASK_OVER:
+                    findViewById(R.id.PubRecStarTrack_progress_bar).setVisibility(View.GONE);
+                    pagerLayout.resNotifyDataSetChanged();
+                    pagerLayout.reqNotifyDataSetChanged();
+                    return true;
+            }
+            return false;
+        }
+    });
     private ResReqViewPagerLayout pagerLayout;
     private ArrayList<NewRequestItem> requestItems = new ArrayList<>();
     private ArrayList<NewResourceItem> resourceItems = new ArrayList<>();
@@ -55,15 +73,28 @@ public class PubRecStarTrackActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
+        setSwipeToFinishOff();
+
         pagerLayout = findViewById(R.id.PubRecStarTrack_pager_view);
         pagerLayout.setView(resourceItems, requestItems, true);
 
         initList();
     }
+
+    @Override
+    public void addListener(int res) {
+
+    }
+
     public void initList(){
         new Thread(new Runnable() {
             @Override
             public void run() {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 for(int i = 1; i < 22; i++){
                     String title = "生命" + i + "号";
                     String detail = getString(R.string.virtualResourceDetail);
@@ -79,8 +110,9 @@ public class PubRecStarTrackActivity extends AppCompatActivity {
                     NewRequestItem requestItem = new NewRequestItem(title, detail, time, price, bitmaps);
                     requestItems.add(requestItem);
                 }
-                pagerLayout.resNotifyDataSetChanged();
-                pagerLayout.reqNotifyDataSetChanged();
+                Message msg = new Message();
+                msg.what = TASK_OVER;
+                handler.sendMessage(msg);
             }
         }).start();
     }

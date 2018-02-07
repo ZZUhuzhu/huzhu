@@ -90,6 +90,9 @@
     <string name="unreceived">未接</string>
     <string name="status_with_colon">状态:</string>
     <string name="delete">删除</string>
+    <string name="markRead">标为已读</string>
+    <string name="markUnread">标为未读</string>
+    <string name="deleteThisMessage">删除该消息</string>
     <string name="veryGood">非常好</string>
     <string name="solider">小美</string>
     <string name="twoHoursAgo">2小时前</string>

@@ -9,6 +9,7 @@
     <declare-styleable name="UserProfileItemLayout">
         <attr name="item_text" format="reference"/>
         <attr name="image_src" format="reference"/>
+        <attr name="amount_visibility" format="boolean"/>
     </declare-styleable>
     <declare-styleable name="ResReqDetailBottomButtonLayout">
         <attr name="android:text"/>

@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.ActionBar;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -21,6 +23,21 @@ import java.util.ArrayList;
 public class SearchResultActivity extends BaseActivity {
     private static final String TAG = "SearchResultActivity";
     private static final String INTENT_DATA_NAME = "SEARCH_DATA";
+
+    private static final int TASK_OVER = 0;
+    private Handler handler = new Handler(new Handler.Callback() {
+        @Override
+        public boolean handleMessage(Message msg) {
+            switch (msg.what){
+                case TASK_OVER:
+                    findViewById(R.id.SearchResultActivity_progress_bar).setVisibility(View.GONE);
+                    pagerLayout.resNotifyDataSetChanged();
+                    pagerLayout.reqNotifyDataSetChanged();
+                    return true;
+            }
+            return false;
+        }
+    });
     private String title;
     private ArrayList<NewResourceItem> resourceItemArrayList = new ArrayList<>();
     private ArrayList<NewRequestItem> requestItemArrayList = new ArrayList<>();
@@ -35,6 +52,8 @@ public class SearchResultActivity extends BaseActivity {
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null)
             actionBar.setDisplayHomeAsUpEnabled(true);
+
+        setSwipeToFinishOff();
 
         TextView inputTextView = findViewById(R.id.SearchResultActivity_input_text_view);
         title = getIntent().getStringExtra(INTENT_DATA_NAME) + getString(R.string.searchResultOf);
@@ -55,6 +74,11 @@ public class SearchResultActivity extends BaseActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 for(int i = 1; i < 22; i++){
                     String title = "生命" + i + "号";
                     String detail = getString(R.string.virtualResourceDetail);
@@ -70,8 +94,9 @@ public class SearchResultActivity extends BaseActivity {
                     NewRequestItem requestItem = new NewRequestItem(title, detail, time, price, bitmaps);
                     requestItemArrayList.add(requestItem);
                 }
-                pagerLayout.resNotifyDataSetChanged();
-                pagerLayout.reqNotifyDataSetChanged();
+                Message message = new Message();
+                message.what = TASK_OVER;
+                handler.sendMessage(message);
             }
         }).start();
     }

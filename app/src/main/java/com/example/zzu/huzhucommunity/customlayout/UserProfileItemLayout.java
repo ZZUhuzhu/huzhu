@@ -28,6 +28,10 @@ public class UserProfileItemLayout extends LinearLayout {
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.UserProfileItemLayout);
         settingIconImageView.setImageResource(typedArray.getResourceId(R.styleable.UserProfileItemLayout_image_src, R.drawable.default_image));
         settingTextView.setText(typedArray.getResourceId(R.styleable.UserProfileItemLayout_item_text, R.string.app_name));
+        if (typedArray.getBoolean(R.styleable.UserProfileItemLayout_amount_visibility, true))
+            settingAmountTextView.setVisibility(VISIBLE);
+        else
+            settingAmountTextView.setVisibility(GONE);
         typedArray.recycle();
     }
 

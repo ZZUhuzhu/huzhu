@@ -9,11 +9,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.zzu.huzhucommunity.R;
 import com.example.zzu.huzhucommunity.activities.SearchResultActivity;
-import com.example.zzu.huzhucommunity.commonclass.MyApplication;
 import com.example.zzu.huzhucommunity.commonclass.SearchHistoryItem;
 
 import java.util.ArrayList;
@@ -67,17 +65,17 @@ public class SearchHistoryAdapter extends RecyclerView.Adapter<SearchHistoryAdap
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(MyApplication.getContext(), "正在全力开发中...", Toast.LENGTH_SHORT).show();
                     int pos = getAdapterPosition();
-                    SearchHistoryItem item = (SearchHistoryItem) searchHistoryList.get(pos).clone();
+                    SearchHistoryItem item = searchHistoryList.get(pos);
                     if(item.isClearHistoryItem()){
                         searchHistoryList.clear();
                         notifyDataSetChanged();
                         return;
                     }
-                    searchHistoryList.remove(getAdapterPosition());
-                    searchHistoryList.add(0, new SearchHistoryItem(item.getItemText(), GregorianCalendar.getInstance().getTime()));
-                    SearchResultActivity.startMe(context, item.getItemText());
+                    String text = item.getItemText();
+                    searchHistoryList.remove(pos);
+                    searchHistoryList.add(0, new SearchHistoryItem(text, GregorianCalendar.getInstance().getTime()));
+                    SearchResultActivity.startMe(context, text);
                     ((Activity) context).finish();
                 }
             });

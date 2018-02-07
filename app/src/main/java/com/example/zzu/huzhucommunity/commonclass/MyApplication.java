@@ -42,7 +42,7 @@ public class MyApplication extends Application {
     }
 
     /**
-     * 选择相片对话框
+     * 选择照片对话框
      * @param context1 上下文
      */
     public static void startPickImageDialog(final Context context1){

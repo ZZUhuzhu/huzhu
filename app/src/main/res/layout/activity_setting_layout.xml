@@ -3,6 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/test_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -18,8 +19,10 @@
         app:contentInsetStart="0dp"
         app:contentInsetStartWithNavigation="0dp"/>
     <ScrollView
+        android:id="@+id/SettingActivity_scroll_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:longClickable="true"
         android:background="@color/colorRiceWhite">
         <LinearLayout
             android:orientation="vertical"
@@ -37,6 +40,7 @@
                     android:layout_height="wrap_content"
                     android:clickable="true"
                     android:focusable="true"
+                    android:longClickable="false"
                     android:text="@string/newMessageNotify"
                     app:switch_on="true" />
                 <com.example.zzu.huzhucommunity.customlayout.SettingItemLayout

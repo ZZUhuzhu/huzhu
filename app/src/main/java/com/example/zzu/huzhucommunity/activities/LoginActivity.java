@@ -35,6 +35,8 @@ public class LoginActivity extends BaseActivity implements AsyncHttpCallback {
         ActionBar actionBar = getSupportActionBar();
         if(actionBar != null) actionBar.hide();
 
+        setSwipeToFinishOff();
+
         passwordCancelButton = findViewById(R.id.LoginActivity_password_cancel_button);
         passwordEditText = findViewById(R.id.LoginActivity_password_edit_text);
         accountCancelButton = findViewById(R.id.LoginActivity_account_cancel_button);

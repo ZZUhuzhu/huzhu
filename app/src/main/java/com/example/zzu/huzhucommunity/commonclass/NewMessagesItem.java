@@ -74,7 +74,9 @@ public class NewMessagesItem implements Parcelable {
     public String getMessageTime() {
         return messageTime;
     }
-    public void setRead() {this.read = true;}
+    public void setRead(boolean read) {
+        this.read = read;
+    }
 
     @Override
     public int describeContents() {

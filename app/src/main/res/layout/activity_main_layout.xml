@@ -17,50 +17,45 @@
             android:layout_height="wrap_content"
             android:background="@color/colorDeepSkyBlue"
             app:elevation="0dp">
-            <android.support.v7.widget.Toolbar
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:contentInsetStart="0dp"
                 app:layout_scrollFlags="scroll|enterAlways|snap">
-                <LinearLayout
-                    android:orientation="horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <ImageButton
-                        android:contentDescription="@string/app_name"
-                        android:id="@+id/MainActivity_head_button"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:layout_margin="@dimen/common_margin_normal"
-                        android:background="@null"
-                        android:scaleType="fitCenter"
-                        android:src="@drawable/profile_head_over_watch"/>
-                    <TextView
-                        android:id="@+id/MainActivity_search_text_view"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:padding="@dimen/common_margin_small"
-                        android:layout_marginEnd="@dimen/common_margin_small"
-                        android:background="@drawable/text_view_border"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:hint="@string/search"
-                        android:textColorHint="@drawable/text_color_white_pressed_gray"
-                        android:layout_weight="1" />
-                    <ImageButton
-                        android:id="@+id/MainActivity_message_button"
-                        android:contentDescription="@string/app_name"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:layout_gravity="center_vertical"
-                        android:scaleType="fitCenter"
-                        android:padding="@dimen/common_margin_small"
-                        android:layout_margin="@dimen/common_margin_small"
-                        android:background="@null"
-                        android:src="@drawable/message_white_pressed_gray"/>
-                </LinearLayout>
-            </android.support.v7.widget.Toolbar>
+                <ImageButton
+                    android:contentDescription="@string/app_name"
+                    android:id="@+id/MainActivity_head_button"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_margin="@dimen/common_margin_normal"
+                    android:background="@null"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/profile_head_over_watch"/>
+                <TextView
+                    android:id="@+id/MainActivity_search_text_view"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:padding="@dimen/common_margin_small"
+                    android:layout_marginEnd="@dimen/common_margin_small"
+                    android:background="@drawable/text_view_border"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:hint="@string/search"
+                    android:textColorHint="@drawable/text_color_white_pressed_gray"
+                    android:layout_weight="1" />
+                <ImageButton
+                    android:id="@+id/MainActivity_message_button"
+                    android:contentDescription="@string/app_name"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center_vertical"
+                    android:scaleType="fitCenter"
+                    android:padding="@dimen/common_margin_small"
+                    android:layout_margin="@dimen/common_margin_small"
+                    android:background="@null"
+                    android:src="@drawable/message_white_pressed_gray"/>
+            </LinearLayout>
         </android.support.design.widget.AppBarLayout>
         <android.support.v4.view.ViewPager
             android:id="@+id/MainActivity_view_pager"
@@ -69,7 +64,6 @@
             android:background="@color/colorWhite"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
     </android.support.design.widget.CoordinatorLayout>
-
     <LinearLayout
         android:id="@+id/MainActivity_bottom_bar_holder"
         android:layout_width="match_parent"
@@ -174,4 +168,9 @@
                 android:paddingTop="@dimen/common_margin_small"/>
         </LinearLayout>
     </LinearLayout>
+    <ProgressBar
+        android:id="@+id/MainActivity_progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"/>
 </RelativeLayout>

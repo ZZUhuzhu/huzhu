@@ -3,10 +3,12 @@ package com.example.zzu.huzhucommunity.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.GestureDetector;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
 
@@ -42,7 +44,6 @@ public class SettingActivity extends BaseActivity {
                 SettingItemLayout itemLayout;
                 switch (res){
                     case R.id.SettingActivity_exit_button:
-                        finish();
                         ActivitiesCollector.finishAll();
                         break;
                     case R.id.SettingActivity_new_message_notify_button:

@@ -25,8 +25,7 @@
                 android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
                 app:contentInsetStart="0dp"
                 app:contentInsetStartWithNavigation="0dp"
-                app:layout_scrollFlags="scroll|enterAlways|snap"
-                app:popupTheme="@style/ToolbarPopupTheme"/>
+                app:layout_scrollFlags="scroll|enterAlways|snap"/>
         </android.support.design.widget.AppBarLayout>
         <android.support.v7.widget.RecyclerView
             android:id="@+id/MessagesActivity_recycler_view"
