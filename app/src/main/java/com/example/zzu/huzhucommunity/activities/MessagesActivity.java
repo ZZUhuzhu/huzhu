@@ -9,13 +9,17 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 
 import com.example.zzu.huzhucommunity.R;
 import com.example.zzu.huzhucommunity.adapters.MessageItemAdapter;
+import com.example.zzu.huzhucommunity.commonclass.Constants;
 import com.example.zzu.huzhucommunity.commonclass.NewMessagesItem;
 
 import java.util.ArrayList;
@@ -25,6 +29,7 @@ import java.util.GregorianCalendar;
 public class MessagesActivity extends BaseActivity {
     private ArrayList<NewMessagesItem> messagesItems = new ArrayList<>();
     private MessageItemAdapter adapter;
+    private static final String TAG = "MessagesActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +38,7 @@ public class MessagesActivity extends BaseActivity {
         Toolbar toolbar = findViewById(R.id.MessagesActivity_toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
-        if(actionBar != null)
+        if (actionBar != null)
             actionBar.setDisplayHomeAsUpEnabled(true);
 
         setSwipeToFinishOff();
@@ -52,8 +57,8 @@ public class MessagesActivity extends BaseActivity {
     /**
      * 初始化消息列表
      */
-    public void initList(){
-        for(int i = 0; i < 33; i++){
+    public void initList() {
+        for (int i = 0; i < 33; i++) {
             int senderID = (int) (Math.random() * 30);
             String sendName = getString(R.string.solider);
             String firstNewMessage = getString(R.string.virtualResourceDetail);
@@ -66,7 +71,8 @@ public class MessagesActivity extends BaseActivity {
     }
 
     @Override
-    public void addListener(int res) {}
+    public void addListener(int res) {
+    }
 
     @Override
     protected void onResume() {
@@ -82,12 +88,12 @@ public class MessagesActivity extends BaseActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case android.R.id.home:
                 finish();
                 return true;
             case R.id.message_mark_all_read_menu_item:
-                for(NewMessagesItem messagesItem: messagesItems)
+                for (NewMessagesItem messagesItem : messagesItems)
                     messagesItem.setRead(true);
                 adapter.notifyDataSetChanged();
                 return true;
@@ -95,7 +101,7 @@ public class MessagesActivity extends BaseActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public static void startMe(Context context){
+    public static void startMe(Context context) {
         context.startActivity(new Intent(context, MessagesActivity.class));
     }
 }

@@ -3,6 +3,7 @@ package com.example.zzu.huzhucommunity.activities;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.support.v7.app.ActionBar;
 import android.os.Bundle;
@@ -14,6 +15,7 @@ import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.AnimationSet;
 import android.view.animation.ScaleAnimation;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -200,6 +202,12 @@ public class AccountProfileActivity extends BaseActivity {
         switch (requestCode){
             case Constants.PICK_IMAGE_FROM_CAMERA:
             case Constants.PICK_IMAGE_FROM_GALLERY:
+                Bitmap bitmap = MyApplication.getImageFromDialog(requestCode, resultCode, data);
+                if (bitmap != null){
+                    ((ImageView) findViewById(R.id.AccountProfileActivity_head_image_view)).setImageBitmap(bitmap);
+                    ((ImageView) findViewById(R.id.AccountProfileActivity_expanded_image_view)).setImageBitmap(bitmap);
+                }
+                break;
             case REQUEST_USER_NAME:
             case REQUEST_USER_PHONE:
             case REQUEST_USER_GRADE:

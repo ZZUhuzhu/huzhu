@@ -134,27 +134,11 @@ public class PublishNewActivity extends BaseActivity {
         imageView.setLayoutParams((findViewById(R.id.PublishNewRes_add_image_button)).getLayoutParams());
         switch (requestCode){
             case Constants.PICK_IMAGE_FROM_GALLERY:
-                if(resultCode == RESULT_OK){
-                    Uri uri = data.getData();
-                    if(uri == null) return;
-                    ContentResolver contentResolver = getContentResolver();
-                    try {
-                        Bitmap bitmap = BitmapFactory.decodeStream(contentResolver.openInputStream(uri));
-                        imageView.setImageBitmap(bitmap);
-                        layout.addView(imageView, 0);
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    }
-                }
-                break;
             case Constants.PICK_IMAGE_FROM_CAMERA:
-                if(resultCode == RESULT_OK){
-                    Bundle bundle = data.getExtras();
-                    if(bundle != null){
-                        Bitmap bitmap = (Bitmap) bundle.get("data");
-                        imageView.setImageBitmap(bitmap);
-                        layout.addView(imageView, 0);
-                    }
+                Bitmap bitmap = MyApplication.getImageFromDialog(requestCode, resultCode, data);
+                if (bitmap != null){
+                    imageView.setImageBitmap(bitmap);
+                    layout.addView(imageView, 0);
                 }
                 break;
         }

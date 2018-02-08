@@ -51,6 +51,12 @@
                     android:focusable="true"
                     android:text="@string/recordTrack"
                     app:switch_on="true" />
+                <com.example.zzu.huzhucommunity.customlayout.SettingItemLayout
+                    android:id="@+id/SettingActivity_swipe_to_finish_on"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/swipeToFinish"
+                    app:switch_on="true"/>
             </LinearLayout>
             <LinearLayout
                 android:layout_marginTop="@dimen/common_margin_normal"

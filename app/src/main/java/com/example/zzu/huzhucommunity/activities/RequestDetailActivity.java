@@ -12,6 +12,8 @@ import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -101,7 +103,7 @@ public class RequestDetailActivity extends BaseActivity {
                         tmpEditText.setSingleLine(false);
                         int tmpPaddingPx = (int)MyApplication.convertDpToPixel(10);
                         tmpEditText.setPadding(tmpPaddingPx, tmpPaddingPx, tmpPaddingPx, tmpPaddingPx);
-                        new AlertDialog.Builder(RequestDetailActivity.this)
+                        AlertDialog dialog = new AlertDialog.Builder(RequestDetailActivity.this)
                                 .setView(tmpEditText)
                                 .setTitle("评论")
                                 .setCancelable(true)
@@ -119,7 +121,11 @@ public class RequestDetailActivity extends BaseActivity {
                                         dialog.dismiss();
                                     }
                                 })
-                                .show();
+                                .create();
+                        Window window = dialog.getWindow();
+                        if (window != null)
+                            window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE | WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+                        dialog.show();
                         break;
                     case R.id.RequestDetail_chat_button:
                         ChatRoomActivity.startMe(RequestDetailActivity.this);

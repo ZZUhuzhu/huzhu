@@ -46,8 +46,9 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
-        if (swipeToFinish){
-            return detector.onTouchEvent(ev) || super.dispatchTouchEvent(ev);
+        if (swipeToFinish && detector != null){
+            if (detector.onTouchEvent(ev))
+                return true;
         }
         return super.dispatchTouchEvent(ev);
     }

@@ -57,7 +57,7 @@
     <string name="publish">发布</string>
 
     <!--MessagesActivity-->
-    <string name="newMessage">新消息</string>
+    <string name="message">消息</string>
     <string name="ninetyMore">99+</string>
     <string name="markAllRead">全部已读</string>
     <string name="send">发送</string>
@@ -65,6 +65,7 @@
     <!--SettingActivity-->
     <string name="newMessageNotify">新消息提醒</string>
     <string name="recordTrack">记录足迹</string>
+    <string name="swipeToFinish">右滑返回 (适用于部分页面)</string>
     <string name="clearCache">清除缓存</string>
     <string name="checkUpdate">检查更新</string>
     <string name="aboutUs">关于我们</string>

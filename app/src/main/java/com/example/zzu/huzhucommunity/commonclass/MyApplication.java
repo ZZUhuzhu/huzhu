@@ -3,12 +3,15 @@ package com.example.zzu.huzhucommunity.commonclass;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Application;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
@@ -20,6 +23,7 @@ import android.util.DisplayMetrics;
 import com.example.zzu.huzhucommunity.R;
 import com.example.zzu.huzhucommunity.activities.PublishNewActivity;
 
+import java.io.FileNotFoundException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Calendar;
@@ -66,6 +70,30 @@ public class MyApplication extends Application {
             }
         });
         dialog.show();
+    }
+    public static Bitmap getImageFromDialog(int requestCode, int resultCode, Intent data){
+        if (resultCode == Activity.RESULT_OK){
+            switch (requestCode) {
+                case Constants.PICK_IMAGE_FROM_CAMERA:
+                    Bundle bundle = data.getExtras();
+                    if (bundle != null) {
+                        return (Bitmap) bundle.get("data");
+                    }
+                    return null;
+                case Constants.PICK_IMAGE_FROM_GALLERY:
+                    Uri uri = data.getData();
+                    if (uri == null)
+                        return null;
+                    ContentResolver contentResolver = getContext().getContentResolver();
+                    try {
+                        return BitmapFactory.decodeStream(contentResolver.openInputStream(uri));
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                        return null;
+                    }
+            }
+        }
+        return null;
     }
     /**
      * This method converts dp unit to equivalent pixels, depending on device density.

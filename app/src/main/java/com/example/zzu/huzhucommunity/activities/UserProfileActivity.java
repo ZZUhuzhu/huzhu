@@ -3,6 +3,7 @@ package com.example.zzu.huzhucommunity.activities;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.app.ActionBar;
@@ -128,15 +129,13 @@ public class UserProfileActivity extends BaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode){
             case Constants.PICK_IMAGE_FROM_CAMERA:
-                if (resultCode == RESULT_OK)
-                    Toast.makeText(MyApplication.getContext(), "正在全力开发中...", Toast.LENGTH_SHORT).show();
-                break;
             case Constants.PICK_IMAGE_FROM_GALLERY:
-                if (resultCode == RESULT_OK)
-                    Toast.makeText(MyApplication.getContext(), "正在全力开发中...", Toast.LENGTH_SHORT).show();
+                Bitmap bitmap = MyApplication.getImageFromDialog(requestCode, resultCode, data);
+                if (bitmap != null){
+                    ((ImageView) findViewById(R.id.UserProfile_top_background_image_view)).setImageBitmap(bitmap);
+                }
                 break;
         }
-        super.onActivityResult(requestCode, resultCode, data);
     }
 
     public static void startMe(Context context){

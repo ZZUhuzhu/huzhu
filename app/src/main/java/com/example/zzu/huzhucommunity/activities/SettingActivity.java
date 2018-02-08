@@ -36,6 +36,7 @@ public class SettingActivity extends BaseActivity {
         addListener(R.id.SettingActivity_about_us_button);
         addListener(R.id.SettingActivity_help_and_feedback_button);
         addListener(R.id.SettingActivity_exit_button);
+        addListener(R.id.SettingActivity_swipe_to_finish_on);
     }
     public void addListener(final int res){
         findViewById(res).setOnClickListener(new View.OnClickListener() {
@@ -47,11 +48,15 @@ public class SettingActivity extends BaseActivity {
                         ActivitiesCollector.finishAll();
                         break;
                     case R.id.SettingActivity_new_message_notify_button:
-                        itemLayout = findViewById(R.id.SettingActivity_new_message_notify_button);
+                        itemLayout = findViewById(res);
                         itemLayout.changeCheckStatus();
                         break;
                     case R.id.SettingActivity_record_track_button:
-                        itemLayout = findViewById(R.id.SettingActivity_record_track_button);
+                        itemLayout = findViewById(res);
+                        itemLayout.changeCheckStatus();
+                        break;
+                    case R.id.SettingActivity_swipe_to_finish_on:
+                        itemLayout = findViewById(res);
                         itemLayout.changeCheckStatus();
                         break;
                     case R.id.SettingActivity_clear_cache_button:
