@@ -4,20 +4,18 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="@dimen/common_margin_normal"
-    android:background="@color/colorWhite">
+    android:background="?android:attr/selectableItemBackground">
     <ImageView
         android:id="@+id/CommentItem_user_head_image"
         android:contentDescription="@string/app_name"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:layout_centerVertical="true"
         android:src="@drawable/profile_head_over_watch"/>
     <TextView
         android:id="@+id/CommentItem_user_name_text_view"
         android:maxLines="1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/common_margin_small"
         android:layout_marginStart="@dimen/common_margin_normal"
         android:layout_alignTop="@id/CommentItem_user_head_image"
         android:layout_toEndOf="@id/CommentItem_user_head_image"
@@ -39,5 +37,15 @@
         android:layout_below="@id/CommentItem_user_name_text_view"
         android:layout_toEndOf="@id/CommentItem_user_head_image"
         android:textColor="@color/colorBlack"
-        android:textSize="@dimen/common_text_size_large"/>
+        android:textSize="@dimen/common_text_size_normal"/>
+    <TextView
+        android:id="@+id/CommentItem_delete_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/CommentItem_content_text_view"
+        android:layout_alignParentEnd="true"
+        android:gravity="end"
+        android:layout_marginTop="@dimen/common_margin_small"
+        android:textColor="@color/colorRed"
+        android:text="@string/delete"/>
 </RelativeLayout>

@@ -136,7 +136,7 @@ public class ChatRoomActivity extends BaseActivity {
                 finish();
                 return true;
             case R.id.ChatRoom_sender_profile_menu_item:
-                Toast.makeText(MyApplication.getContext(), "正在全力开发中...", Toast.LENGTH_SHORT).show();
+                OthersProfileActivity.startMe(ChatRoomActivity.this, 0);
                 return true;
         }
         return super.onOptionsItemSelected(item);

@@ -86,7 +86,7 @@ public class SearchActivity extends BaseActivity {
     public void loadHistory(){
         int ed = (int)(Math.random() * 12);
         for (int i = 0; i < ed; i++){
-            searchHistoryList.add(new SearchHistoryItem("ss" + i, GregorianCalendar.getInstance().getTime()));
+            searchHistoryList.add(new SearchHistoryItem("ss" + i, GregorianCalendar.getInstance().getTimeInMillis()));
         }
         if(searchHistoryList.size() > 0){
             searchHistoryList.add(new SearchHistoryItem());
@@ -139,7 +139,7 @@ public class SearchActivity extends BaseActivity {
                                 break;
                             }
                         }
-                        SearchHistoryItem item = new SearchHistoryItem(tmpString, GregorianCalendar.getInstance().getTime());
+                        SearchHistoryItem item = new SearchHistoryItem(tmpString, GregorianCalendar.getInstance().getTimeInMillis());
                         searchHistoryList.add(0, item);
                         SearchResultActivity.startMe(SearchActivity.this, tmpString);
                         finish();

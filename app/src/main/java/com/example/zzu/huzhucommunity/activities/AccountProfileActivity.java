@@ -23,6 +23,8 @@ import com.example.zzu.huzhucommunity.commonclass.Constants;
 import com.example.zzu.huzhucommunity.commonclass.MyApplication;
 import com.example.zzu.huzhucommunity.customlayout.AccountProfileItemLayout;
 
+import java.util.GregorianCalendar;
+
 
 public class AccountProfileActivity extends BaseActivity {
     private static final int REQUEST_USER_NAME = 0;
@@ -63,9 +65,9 @@ public class AccountProfileActivity extends BaseActivity {
         itemLayout = findViewById(R.id.AccountProfileActivity_department_view);
         itemLayout.setContent("信息工程学院");
         itemLayout = findViewById(R.id.AccountProfileActivity_register_time_view);
-        itemLayout.setContent("2018/2/2 17:58");
+        itemLayout.setContent(MyApplication.convertTimeInMillToString(GregorianCalendar.getInstance().getTimeInMillis()));
         itemLayout = findViewById(R.id.AccountProfileActivity_last_login_time_view);
-        itemLayout.setContent("2018/2/1 09:25");
+        itemLayout.setContent(MyApplication.convertTimeInMillToString(GregorianCalendar.getInstance().getTimeInMillis()));
         itemLayout = findViewById(R.id.AccountProfileActivity_phone_view);
         itemLayout.setContent("15766988562");
     }

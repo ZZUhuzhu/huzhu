@@ -22,6 +22,8 @@ import com.example.zzu.huzhucommunity.activities.PublishNewActivity;
 
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 /**
  * Created by FEI on 2018/1/26.
@@ -87,5 +89,15 @@ public class MyApplication extends Application {
         Resources resources = context.getResources();
         DisplayMetrics metrics = resources.getDisplayMetrics();
         return px / ((float)metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT);
+    }
+    public static String convertTimeInMillToString(long timeInMills){
+        Calendar calendar = new GregorianCalendar();
+        calendar.setTimeInMillis(timeInMills);
+        return calendar.get(Calendar.YEAR) + "-"
+                + calendar.get(Calendar.MONTH) + "-"
+                + calendar.get(Calendar.DAY_OF_MONTH) + " "
+                + calendar.get(Calendar.HOUR_OF_DAY) + ":"
+                + calendar.get(Calendar.MINUTE) + ":"
+                + calendar.get(Calendar.SECOND);
     }
 }

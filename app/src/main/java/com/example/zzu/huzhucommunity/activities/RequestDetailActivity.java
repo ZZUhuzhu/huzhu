@@ -17,9 +17,12 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.example.zzu.huzhucommunity.R;
+import com.example.zzu.huzhucommunity.commonclass.CommentItem;
 import com.example.zzu.huzhucommunity.commonclass.MyApplication;
 import com.example.zzu.huzhucommunity.customlayout.CommentItemLayout;
 import com.example.zzu.huzhucommunity.customlayout.ResReqDetailBottomButtonLayout;
+
+import java.util.GregorianCalendar;
 
 public class RequestDetailActivity extends BaseActivity {
     private boolean requestStarred = false;
@@ -137,7 +140,7 @@ public class RequestDetailActivity extends BaseActivity {
         commentHolder = findViewById(R.id.RequestDetail_comment_holder);
         Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.profile_head_over_watch);
         for(int i = 1; i < 12; i++){
-            CommentItemLayout commentItemLayout = new CommentItemLayout(this);
+            CommentItemLayout commentItemLayout = new CommentItemLayout(this, View.GONE);
             String time = "2018-" + i + "-25 21:29";
             commentItemLayout.setCommentItemDetail(bitmap, getString(R.string.solider),time , getString(R.string.virtualComment));
             commentHolder.addView(commentItemLayout);
@@ -152,8 +155,8 @@ public class RequestDetailActivity extends BaseActivity {
             return;
         commentHolder = findViewById(R.id.RequestDetail_comment_holder);
         Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.profile_head_over_watch);
-        String time = "2018-5-25 21:29";
-        CommentItemLayout commentItemLayout = new CommentItemLayout(this, bitmap, getString(R.string.solider), time, text);
+        long time = GregorianCalendar.getInstance().getTimeInMillis();
+        CommentItemLayout commentItemLayout = new CommentItemLayout(this, View.GONE, new CommentItem(1, getString(R.string.solider), text, time, bitmap));
         commentHolder.addView(commentItemLayout, 0);
     }
     @Override

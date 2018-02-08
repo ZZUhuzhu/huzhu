@@ -75,8 +75,12 @@
         <activity
             android:name=".activities.ProfileUpdateActivity"
             android:theme="@style/TranslucentTheme" />
-        <activity android:name=".activities.PubRecStarTrackActivity"
-            android:theme="@style/TranslucentTheme"/>
+        <activity
+            android:name=".activities.PubRecStarTrackActivity"
+            android:theme="@style/TranslucentTheme" />
+        <activity android:name=".activities.MyCommentActivity"
+            android:theme="@style/TranslucentTheme"
+            android:label="@string/myComment"/>
     </application>
 
 </manifest>

@@ -10,8 +10,11 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.example.zzu.huzhucommunity.R;
+import com.example.zzu.huzhucommunity.commonclass.ActivitiesCollector;
 import com.example.zzu.huzhucommunity.commonclass.MyApplication;
 import com.example.zzu.huzhucommunity.customlayout.AccountProfileItemLayout;
+
+import java.util.GregorianCalendar;
 
 public class OthersProfileActivity extends BaseActivity {
     private static final String USER_ID_EXTRA = "USER_ID";
@@ -41,7 +44,7 @@ public class OthersProfileActivity extends BaseActivity {
         itemLayout = findViewById(R.id.OthersProfileActivity_department_view);
         itemLayout.setContent("建筑学院");
         itemLayout = findViewById(R.id.OthersProfileActivity_register_time_view);
-        itemLayout.setContent("2016/5/29");
+        itemLayout.setContent(MyApplication.convertTimeInMillToString(GregorianCalendar.getInstance().getTimeInMillis()));
     }
     @Override
     public void addListener(final int res) {
@@ -50,7 +53,17 @@ public class OthersProfileActivity extends BaseActivity {
             public void onClick(View v) {
                 switch (res){
                     case R.id.OthersProfileActivity_send_message_button:
-                        Toast.makeText(MyApplication.getContext(), "正在全力开发中...", Toast.LENGTH_SHORT).show();
+                        int sz = ActivitiesCollector.activities.size();
+                        if (sz >= 2) {
+                            BaseActivity activity = ActivitiesCollector.activities.get(sz - 2);
+                            if (activity != null && activity instanceof ChatRoomActivity){
+                                finish();
+                            }
+                            else {
+                                ChatRoomActivity.startMe(OthersProfileActivity.this);
+                                finish();
+                            }
+                        }
                         break;
                 }
             }

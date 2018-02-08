@@ -1,11 +1,8 @@
 package com.example.zzu.huzhucommunity.commonclass;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.example.zzu.huzhucommunity.R;
 
 /**
  * Created by FEI on 2018/1/29.
@@ -21,16 +18,16 @@ public class NewMessagesItem implements Parcelable {
     private int senderID;
     private String senderName;
     private String firstNewMessage;
-    private String messageTime;
+    private long messageTimeInMills;
     private String senderHead;
     private int newMessageAmount;
 
-    public NewMessagesItem(int senderID, String senderName, String firstNewMessage, int newMessageAmount, String messageTime, String senderHead){
+    public NewMessagesItem(int senderID, String senderName, String firstNewMessage, int newMessageAmount, long messageTimeInMills, String senderHead){
         this.senderID = senderID;
         this.senderName = senderName;
         this.firstNewMessage = firstNewMessage;
         this.newMessageAmount = newMessageAmount;
-        this.messageTime = messageTime;
+        this.messageTimeInMills = messageTimeInMills;
         this.senderHead = senderHead;
         this.read = false;
     }
@@ -40,7 +37,7 @@ public class NewMessagesItem implements Parcelable {
         senderID = in.readInt();
         senderName = in.readString();
         firstNewMessage = in.readString();
-        messageTime = in.readString();
+        messageTimeInMills = in.readLong();
         senderHead = in.readString();
         newMessageAmount = in.readInt();
     }
@@ -58,12 +55,6 @@ public class NewMessagesItem implements Parcelable {
     };
 
     public boolean isRead() {return read;}
-    public Bitmap getSenderHeadBitmap(){
-        return BitmapFactory.decodeResource(MyApplication.getContext().getResources(), R.drawable.profile_head);
-    }
-    public int getSenderID() {
-        return senderID;
-    }
     public String getSenderName() {
         return senderName;
     }
@@ -71,8 +62,8 @@ public class NewMessagesItem implements Parcelable {
         return firstNewMessage;
     }
     public int getNewMessageAmount() {return newMessageAmount;}
-    public String getMessageTime() {
-        return messageTime;
+    public String getMessageTimeString(){
+        return MyApplication.convertTimeInMillToString(messageTimeInMills);
     }
     public void setRead(boolean read) {
         this.read = read;
@@ -89,7 +80,7 @@ public class NewMessagesItem implements Parcelable {
         dest.writeInt(senderID);
         dest.writeString(senderName);
         dest.writeString(firstNewMessage);
-        dest.writeString(messageTime);
+        dest.writeLong(messageTimeInMills);
         dest.writeString(senderHead);
         dest.writeInt(newMessageAmount);
     }

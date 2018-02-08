@@ -34,6 +34,9 @@
     <string name="publishedByMe">我发布的</string>
     <string name="receivedByMe">我接收的</string>
     <string name="setting">设置</string>
+    <string-array name="changeBackgroundImage">
+        <item>更改背景图片</item>
+    </string-array>
 
     <!--ResReqDetailActivity-->
     <string name="requestDetail">请求详情</string>
@@ -82,6 +85,10 @@
 
     <!--OthersProfileActivity-->
     <string name="sendMessage">发消息</string>
+
+    <!--MyCommentActivity-->
+    <string name="commentByMe">我评论的</string>
+    <string name="meMentioned">提到我的</string>
 
     <!--ProfileUpdateActivity-->
     <string name="finished">完成</string>

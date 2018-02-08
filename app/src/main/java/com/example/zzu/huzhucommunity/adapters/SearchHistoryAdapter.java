@@ -74,7 +74,7 @@ public class SearchHistoryAdapter extends RecyclerView.Adapter<SearchHistoryAdap
                     }
                     String text = item.getItemText();
                     searchHistoryList.remove(pos);
-                    searchHistoryList.add(0, new SearchHistoryItem(text, GregorianCalendar.getInstance().getTime()));
+                    searchHistoryList.add(0, new SearchHistoryItem(text, GregorianCalendar.getInstance().getTimeInMillis()));
                     SearchResultActivity.startMe(context, text);
                     ((Activity) context).finish();
                 }

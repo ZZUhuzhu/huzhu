@@ -2,7 +2,9 @@ package com.example.zzu.huzhucommunity.commonclass;
 
 import android.support.annotation.NonNull;
 
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 /**
  * Created by FEI on 2018/2/3.
@@ -12,13 +14,13 @@ import java.util.Date;
 
 public class SearchHistoryItem implements Comparable<SearchHistoryItem>, Cloneable{
     private String itemText;
-    private Date itemSearchDate;
+    private long itemSearchTime;
     private boolean clearHistoryItem;
 
-    public SearchHistoryItem(String itemText, Date itemSearchDate){
+    public SearchHistoryItem(String itemText, long itemSearchTime){
         this.clearHistoryItem = false;
         this.itemText = itemText;
-        this.itemSearchDate = itemSearchDate;
+        this.itemSearchTime = itemSearchTime;
     }
     public SearchHistoryItem(){
         this.clearHistoryItem = true;
@@ -35,22 +37,20 @@ public class SearchHistoryItem implements Comparable<SearchHistoryItem>, Cloneab
 
     @Override
     public boolean equals(Object obj) {
-        return obj instanceof SearchHistoryItem && itemSearchDate.equals(((SearchHistoryItem) obj).itemSearchDate)
+        return obj instanceof SearchHistoryItem && itemSearchTime == ((SearchHistoryItem) obj).itemSearchTime
                 && itemText.equals(((SearchHistoryItem) obj).itemText);
-    }
-
-    private Date getItemSearchDate() {
-        return itemSearchDate;
     }
 
     @Override
     public String toString() {
-        return itemText + "," + itemSearchDate.toString();
+        Calendar calendar = new GregorianCalendar();
+        calendar.setTimeInMillis(itemSearchTime);
+        return itemText + "," + calendar.toString();
     }
 
     @Override
     public int compareTo(@NonNull SearchHistoryItem o) {
-        return itemSearchDate.compareTo(o.getItemSearchDate());
+        return itemSearchTime < o.itemSearchTime ? -1 : itemSearchTime == o.itemSearchTime ? 0 : 1;
     }
 
     @Override
@@ -60,6 +60,6 @@ public class SearchHistoryItem implements Comparable<SearchHistoryItem>, Cloneab
         } catch (CloneNotSupportedException e) {
             e.printStackTrace();
         }
-        return clearHistoryItem? new SearchHistoryItem(): new SearchHistoryItem(itemText, itemSearchDate);
+        return clearHistoryItem ? new SearchHistoryItem(): new SearchHistoryItem(itemText, itemSearchTime);
     }
 }

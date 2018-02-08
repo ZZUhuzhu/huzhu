@@ -20,7 +20,7 @@
                 app:tabSelectedTextColor="@color/colorWhite"
                 app:tabIndicatorColor="@color/colorDodgerBlue"
                 app:tabTextAppearance="?android:attr/textAppearanceMedium"
-                app:tabTextColor="@color/colorLightGray"
+                app:tabTextColor="@color/colorRiceWhite"
                 app:layout_scrollFlags="enterAlways|snap|scroll"/>
         </android.support.design.widget.AppBarLayout>
         <android.support.v4.view.ViewPager

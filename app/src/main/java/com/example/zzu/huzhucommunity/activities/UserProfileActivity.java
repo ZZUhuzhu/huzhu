@@ -1,7 +1,9 @@
 package com.example.zzu.huzhucommunity.activities;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.app.ActionBar;
 import android.os.Bundle;
@@ -13,6 +15,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.zzu.huzhucommunity.R;
+import com.example.zzu.huzhucommunity.adapters.MyCommentAdapter;
+import com.example.zzu.huzhucommunity.asynchttp.UserProfile;
+import com.example.zzu.huzhucommunity.commonclass.Constants;
 import com.example.zzu.huzhucommunity.commonclass.MyApplication;
 import com.example.zzu.huzhucommunity.customlayout.UserProfileItemLayout;
 
@@ -42,6 +47,7 @@ public class UserProfileActivity extends BaseActivity {
         addListener(R.id.UserProfile_comment_item);
         addListener(R.id.UserProfile_message_item);
         addListener(R.id.UserProfile_me_holder);
+        addListener(R.id.UserProfile_top_background_image_view);
 
         initNumber();
     }
@@ -73,10 +79,13 @@ public class UserProfileActivity extends BaseActivity {
                         PubRecStarTrackActivity.startMe(UserProfileActivity.this, PubRecStarTrackActivity.TYPE_TRACK);
                         break;
                     case R.id.UserProfile_comment_item:
-                        Toast.makeText(MyApplication.getContext(), "正在全力开发中...", Toast.LENGTH_SHORT).show();
+                        MyCommentActivity.startMe(UserProfileActivity.this);
                         break;
                     case R.id.UserProfile_me_holder:
                         AccountProfileActivity.startMe(UserProfileActivity.this);
+                        break;
+                    case R.id.UserProfile_top_background_image_view:
+                        MyApplication.startPickImageDialog(UserProfileActivity.this);
                         break;
                 }
             }
@@ -114,6 +123,22 @@ public class UserProfileActivity extends BaseActivity {
         getMenuInflater().inflate(R.menu.user_profile_setting_menu_item, menu);
         return true;
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode){
+            case Constants.PICK_IMAGE_FROM_CAMERA:
+                if (resultCode == RESULT_OK)
+                    Toast.makeText(MyApplication.getContext(), "正在全力开发中...", Toast.LENGTH_SHORT).show();
+                break;
+            case Constants.PICK_IMAGE_FROM_GALLERY:
+                if (resultCode == RESULT_OK)
+                    Toast.makeText(MyApplication.getContext(), "正在全力开发中...", Toast.LENGTH_SHORT).show();
+                break;
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
     public static void startMe(Context context){
         context.startActivity(new Intent(context, UserProfileActivity.class));
     }

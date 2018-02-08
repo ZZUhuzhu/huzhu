@@ -58,9 +58,8 @@ public class MessagesActivity extends BaseActivity {
             String sendName = getString(R.string.solider);
             String firstNewMessage = getString(R.string.virtualResourceDetail);
             Calendar calendar = GregorianCalendar.getInstance();
-            String curTime = calendar.get(Calendar.YEAR) + "/" + (calendar.get(Calendar.MONTH) + 1) + "/" + calendar.get(Calendar.DAY_OF_MONTH) +
-                    " " + calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE);
-            NewMessagesItem messagesItem = new NewMessagesItem(senderID, sendName, firstNewMessage, (int) (Math.random() * 120),curTime, null);
+            NewMessagesItem messagesItem =
+                    new NewMessagesItem(senderID, sendName, firstNewMessage, (int) (Math.random() * 120), calendar.getTimeInMillis(), null);
             messagesItems.add(messagesItem);
         }
         adapter.notifyDataSetChanged();

@@ -45,7 +45,7 @@ public class MessageItemAdapter extends RecyclerView.Adapter<MessageItemAdapter.
         NewMessagesItem messagesItem = messagesItems.get(position);
         holder.sendNameTextView.setText(messagesItem.getSenderName());
         holder.firstNewMessageTextView.setText(messagesItem.getFirstNewMessage());
-        holder.messageTimeTextView.setText(messagesItem.getMessageTime());
+        holder.messageTimeTextView.setText(messagesItem.getMessageTimeString());
         if(messagesItem.isRead()) {
             holder.messageAmountButton.setVisibility(View.GONE);
             holder.markReadTextView.setText(R.string.markUnread);
