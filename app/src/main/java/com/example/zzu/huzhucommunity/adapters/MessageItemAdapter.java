@@ -37,8 +37,6 @@ public class MessageItemAdapter extends RecyclerView.Adapter<MessageItemAdapter.
     @Override
     public MessageItemAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_new_message_item_view, parent, false);
-        view.setHorizontalScrollBarEnabled(false);
-        view.setVerticalScrollBarEnabled(false);
         return new ViewHolder(view);
     }
 
@@ -63,6 +61,10 @@ public class MessageItemAdapter extends RecyclerView.Adapter<MessageItemAdapter.
             String text = "" + amount;
             holder.messageAmountButton.setText(text);
         }
+        if (messagesItem.isScrolled())
+            holder.scrollView.smoothScrollTo(holder.markReadTextView.getWidth() + holder.deleteTextView.getWidth(), 0);
+        else
+            holder.scrollView.smoothScrollTo(0, 0);
     }
 
     @Override
@@ -76,7 +78,9 @@ public class MessageItemAdapter extends RecyclerView.Adapter<MessageItemAdapter.
         TextView firstNewMessageTextView;
         TextView messageTimeTextView;
         TextView markReadTextView;
+        TextView deleteTextView;
         Button messageAmountButton;
+        HorizontalScrollView scrollView;
         @SuppressLint("ClickableViewAccessibility")
         ViewHolder(View itemView) {
             super(itemView);
@@ -86,10 +90,35 @@ public class MessageItemAdapter extends RecyclerView.Adapter<MessageItemAdapter.
             firstNewMessageTextView = itemView.findViewById(R.id.new_message_item_first_message_text_view);
             messageAmountButton = itemView.findViewById(R.id.new_message_item_message_amount_button);
             markReadTextView = itemView.findViewById(R.id.new_message_item_mark_read_text_view);
+            scrollView = itemView.findViewById(R.id.new_message_item_scroll_view);
+            deleteTextView = itemView.findViewById(R.id.new_message_item_delete_text_view);
             RelativeLayout messageHolder =itemView.findViewById(R.id.new_message_item_message_holder);
+
+            itemView.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    int scrollLimitX = markReadTextView.getWidth() + deleteTextView.getWidth();
+                    int adapterPos = getAdapterPosition();
+                    if (event.getAction() == MotionEvent.ACTION_UP){
+                        if (scrollView.getScrollX() >= scrollLimitX / 2){
+                            scrollView.smoothScrollTo(scrollLimitX, 0);
+                            messagesItems.get(adapterPos).setScrolled(true);
+                            return true;
+                        }
+                        else {
+                            scrollView.smoothScrollTo(0, 0);
+                            messagesItems.get(adapterPos).setScrolled(false);
+                            return true;
+                        }
+                    }
+
+                    return false;
+                }
+            });
             messageHolder.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+
                             ChatRoomActivity.startMe(context);
                             messagesItems.get(getAdapterPosition()).setRead(true);
                         }
@@ -100,11 +129,12 @@ public class MessageItemAdapter extends RecyclerView.Adapter<MessageItemAdapter.
                             int pos = getAdapterPosition();
                             NewMessagesItem item = messagesItems.get(pos);
                             item.setRead(!item.isRead());
+                            item.setScrolled(false);
+                            scrollView.smoothScrollTo(0, 0);
                             notifyItemChanged(pos);
                         }
                     });
-            itemView.findViewById(R.id.new_message_item_delete_text_view)
-                    .setOnClickListener(new View.OnClickListener() {
+            deleteTextView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             int pos = getAdapterPosition();

@@ -14,6 +14,7 @@ import android.os.Parcelable;
  */
 
 public class NewMessagesItem implements Parcelable {
+    private boolean scrolled;
     private boolean read;
     private int senderID;
     private String senderName;
@@ -33,6 +34,7 @@ public class NewMessagesItem implements Parcelable {
     }
 
     private NewMessagesItem(Parcel in) {
+        scrolled = in.readByte() != 0;
         read = in.readByte() != 0;
         senderID = in.readInt();
         senderName = in.readString();
@@ -53,6 +55,14 @@ public class NewMessagesItem implements Parcelable {
             return new NewMessagesItem[size];
         }
     };
+
+    public void setScrolled(boolean scrolled) {
+        this.scrolled = scrolled;
+    }
+
+    public boolean isScrolled() {
+        return scrolled;
+    }
 
     public boolean isRead() {return read;}
     public String getSenderName() {
@@ -76,6 +86,7 @@ public class NewMessagesItem implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeByte((byte) (scrolled ? 1 : 0));
         dest.writeByte((byte) (read ? 1 : 0));
         dest.writeInt(senderID);
         dest.writeString(senderName);
@@ -84,5 +95,4 @@ public class NewMessagesItem implements Parcelable {
         dest.writeString(senderHead);
         dest.writeInt(newMessageAmount);
     }
-
 }

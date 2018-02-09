@@ -5,7 +5,8 @@
     android:id="@+id/new_message_item_scroll_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:scrollbarSize="0dp"
+    android:scrollbars="none"
+    android:overScrollMode="never"
     tools:context=".activities.MessagesActivity">
     <LinearLayout
         android:layout_width="wrap_content"
