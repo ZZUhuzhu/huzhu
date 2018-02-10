@@ -38,7 +38,7 @@
                     android:layout_gravity="center_vertical"
                     android:padding="@dimen/common_margin_small"
                     android:layout_marginEnd="@dimen/common_margin_small"
-                    android:background="@drawable/text_view_border"
+                    android:background="@drawable/text_view_border_white"
                     android:clickable="true"
                     android:focusable="true"
                     android:hint="@string/search"

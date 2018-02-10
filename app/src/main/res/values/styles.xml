@@ -17,6 +17,9 @@
         <item name="windowActionBar">false</item>
         <item name="android:windowAnimationStyle">@style/ActivityAnimationStyle</item>
     </style>
+    <style name="SplashTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowFullscreen">true</item>
+    </style>
     <style name="RegisterActivityEditText" parent="AppTheme">
         <item name="android:minWidth">100dp</item>
         <item name="android:layout_height">wrap_content</item>

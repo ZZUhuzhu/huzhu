@@ -95,6 +95,7 @@
     <string name="finished">完成</string>
 
     <!--othersString-->
+    <string name="jump">跳过</string>
     <string name="unreceived">未接</string>
     <string name="status_with_colon">状态:</string>
     <string name="delete">删除</string>

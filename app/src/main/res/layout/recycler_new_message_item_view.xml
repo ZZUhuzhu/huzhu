@@ -91,7 +91,7 @@
             android:id="@+id/new_message_item_mark_read_text_view"
             android:layout_width="85dp"
             android:layout_height="70dp"
-            android:background="@color/colorLightYellow"
+            android:background="@android:color/holo_orange_light"
             android:gravity="center"
             android:padding="@dimen/common_margin_small"
             android:text="@string/markRead"

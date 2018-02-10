@@ -18,13 +18,7 @@
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
         <activity
             android:name=".activities.LoginActivity"
-            android:theme="@style/TranslucentTheme">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:theme="@style/TranslucentTheme"/>
         <activity
             android:name=".activities.RegisterActivity"
             android:label="@string/register"
@@ -78,9 +72,18 @@
         <activity
             android:name=".activities.PubRecStarTrackActivity"
             android:theme="@style/TranslucentTheme" />
-        <activity android:name=".activities.MyCommentActivity"
-            android:theme="@style/TranslucentTheme"
-            android:label="@string/myComment"/>
+        <activity
+            android:name=".activities.MyCommentActivity"
+            android:label="@string/myComment"
+            android:theme="@style/TranslucentTheme" />
+        <activity android:name=".activities.SplashActivity"
+            android:theme="@style/SplashTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>
