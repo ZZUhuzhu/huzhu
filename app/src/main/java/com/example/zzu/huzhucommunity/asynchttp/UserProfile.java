@@ -47,14 +47,14 @@ public class UserProfile {
     }
 
 
-    public void getUserAllKindsNumber(final String userId, final AsyncHttpCallback cBack) {
+    public void getUserAllKindsNumber(final String userID, final AsyncHttpCallback cBack) {
         try {
-            if (userId != null && cBack != null) {
+            if (userID != null && cBack != null) {
                 this.callback = cBack;
                 AsyncHttpClient client = new AsyncHttpClient();
                 client.setTimeout(3000);
                 RequestParams params = new RequestParams();
-                params.put("userId",userId);
+                params.put("userID",userID);
                 String path = "http://139.199.38.177/huzhu/php/getUserAllKindsNumber.php";
                 client.post(path, params, new AsyncHttpResponseHandler() {
                     @Override
