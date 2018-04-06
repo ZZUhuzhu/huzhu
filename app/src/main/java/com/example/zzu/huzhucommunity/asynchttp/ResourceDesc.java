@@ -175,7 +175,7 @@ public class ResourceDesc {
         }
     }
 
-    public void publishComment(final String userID, final String commentFather,final String commentDetail, final AsyncHttpCallback cBack) {
+    public void publishComment(final String userID, final String commentFather,final String commentDetail,final String commentType,final String commentResource,final AsyncHttpCallback cBack) {
         try {
             if (userID != null && commentFather != null && commentDetail != null && cBack != null) {
                 this.callback = cBack;
@@ -185,6 +185,8 @@ public class ResourceDesc {
                 params.put("userID", userID);
                 params.put("commentFather", commentFather);
                 params.put("commentDetail", commentDetail);
+                params.put("commentType", commentType);
+                params.put("commentResource", commentResource;
                 String path = "http://139.199.38.177/huzhu/php/publishComment.php";
                 client.post(path, params, new AsyncHttpResponseHandler() {
                     @Override
