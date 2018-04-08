@@ -12,6 +12,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
 
 /**
  * Created by do_pc on 2018/1/25.
@@ -70,7 +71,7 @@ public class ResourceDesc {
                                 message.what = GET_RES_PUBLISHER_INFO;
                                 message.obj = result;
                                 handler.sendMessage(message);
-                                cBack.onSuccess(i);
+                                cBack.onSuccess(i, null);
                             } catch (UnsupportedEncodingException e) {
                                 e.printStackTrace();
                             }
@@ -112,7 +113,7 @@ public class ResourceDesc {
                                 message.what = GET_RESOURCE_DESC;
                                 message.obj = result;
                                 handler.sendMessage(message);
-                                cBack.onSuccess(i);
+                                cBack.onSuccess(i, null);
                             } catch (UnsupportedEncodingException e) {
                                 e.printStackTrace();
                             }
@@ -154,7 +155,7 @@ public class ResourceDesc {
                                 message.what = GET_RESOURCE_COMMENT;
                                 message.obj = result;
                                 handler.sendMessage(message);
-                                cBack.onSuccess(i);
+                                cBack.onSuccess(i, null);
                             } catch (UnsupportedEncodingException e) {
                                 e.printStackTrace();
                             }
@@ -198,7 +199,7 @@ public class ResourceDesc {
                                 message.what = PUBLISH_COMMENT;
                                 message.obj = result;
                                 handler.sendMessage(message);
-                                cBack.onSuccess(i);
+                                cBack.onSuccess(i, null);
                             } catch (UnsupportedEncodingException e) {
                                 e.printStackTrace();
                             }
@@ -242,7 +243,7 @@ public class ResourceDesc {
                                 message.what = UPDATE_STAR;
                                 message.obj = result;
                                 handler.sendMessage(message);
-                                cBack.onSuccess(i);
+                                cBack.onSuccess(i, null);
                             } catch (UnsupportedEncodingException e) {
                                 e.printStackTrace();
                             }
@@ -285,7 +286,7 @@ public class ResourceDesc {
                                 message.what = RECEIVE_RESOURCE;
                                 message.obj = result;
                                 handler.sendMessage(message);
-                                cBack.onSuccess(i);
+                                cBack.onSuccess(i, null);
                             } catch (UnsupportedEncodingException e) {
                                 e.printStackTrace();
                             }
@@ -328,7 +329,7 @@ public class ResourceDesc {
                                 message.what = ADD_TO_TRACK;
                                 message.obj = result;
                                 handler.sendMessage(message);
-                                cBack.onSuccess(i);
+                                cBack.onSuccess(i, null);
                             } catch (UnsupportedEncodingException e) {
                                 e.printStackTrace();
                             }
@@ -358,8 +359,13 @@ public class ResourceDesc {
                 case GET_RES_PUBLISHER_INFO:
                     try {
                         JSONObject userObject = new JSONObject(Response);
-                        int code=userObject.getInt("status");
-                        callback.onSuccess(code);
+                        HashMap<String, String> mp = new HashMap<>();
+                        int code= userObject.getInt("status");
+                        mp.put("status", code + "");
+                        mp.put("User_head", userObject.getString("User_head"));
+                        mp.put("User_name", userObject.getString("User_name"));
+                        mp.put("userLastLogin", userObject.getString("userLastLogin"));
+                        callback.onSuccess(code, mp);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -368,7 +374,16 @@ public class ResourceDesc {
                     try {
                         JSONObject userObject = new JSONObject(Response);
                         int code=userObject.getInt("status");
-                        callback.onSuccess(code);
+                        callback.onSuccess(code, null);
+                        HashMap<String, String> mp = new HashMap<>();
+                        mp.put("status", code + "");
+                        mp.put("resourceTitle", userObject.getString("Res_title"));
+                        mp.put("RresourceDetail", userObject.getString("Res_detail"));
+                        mp.put("price", userObject.getString("price"));
+                        mp.put("publishDate", userObject.getString("publishDate"));
+                        mp.put("deadline", userObject.getString("deadline"));
+                        mp.put("imageNumbers", userObject.getString("imageNumbers"));
+                        mp.put("resourceStatus", userObject.getString("resourceStatus"));
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -377,7 +392,7 @@ public class ResourceDesc {
                     try {
                         JSONObject userObject = new JSONObject(Response);
                         int code=userObject.getInt("status");
-                        callback.onSuccess(code);
+                        callback.onSuccess(code, null);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -386,7 +401,7 @@ public class ResourceDesc {
                     try {
                         JSONObject userObject = new JSONObject(Response);
                         int code=userObject.getInt("status");
-                        callback.onSuccess(code);
+                        callback.onSuccess(code, null);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -395,7 +410,7 @@ public class ResourceDesc {
                     try {
                         JSONObject userObject = new JSONObject(Response);
                         int code=userObject.getInt("status");
-                        callback.onSuccess(code);
+                        callback.onSuccess(code, null);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -404,7 +419,7 @@ public class ResourceDesc {
                     try {
                         JSONObject userObject = new JSONObject(Response);
                         int code=userObject.getInt("status");
-                        callback.onSuccess(code);
+                        callback.onSuccess(code, null);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -413,7 +428,7 @@ public class ResourceDesc {
                     try {
                         JSONObject userObject = new JSONObject(Response);
                         int code=userObject.getInt("status");
-                        callback.onSuccess(code);
+                        callback.onSuccess(code, null);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }

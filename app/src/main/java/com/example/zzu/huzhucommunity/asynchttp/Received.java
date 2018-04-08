@@ -66,7 +66,7 @@ public class Received {
                                 message.what = GET_RECEIVED_RESOURCE;
                                 message.obj = result;
                                 handler.sendMessage(message);
-                                cBack.onSuccess(i);
+                                cBack.onSuccess(i, null);
                             } catch (UnsupportedEncodingException e) {
                                 e.printStackTrace();
                             }
@@ -109,7 +109,7 @@ public class Received {
                                 message.what = DELETE_RECEIVED_RESOURCE;
                                 message.obj = result;
                                 handler.sendMessage(message);
-                                cBack.onSuccess(i);
+                                cBack.onSuccess(i, null);
                             } catch (UnsupportedEncodingException e) {
                                 e.printStackTrace();
                             }
@@ -139,7 +139,7 @@ public class Received {
                     try {
                         JSONObject userObject = new JSONObject(Response);
                         int code=userObject.getInt("status");
-                        callback.onSuccess(code);
+                        callback.onSuccess(code, null);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -148,7 +148,7 @@ public class Received {
                     try {
                         JSONObject userObject = new JSONObject(Response);
                         int code=userObject.getInt("status");
-                        callback.onSuccess(code);
+                        callback.onSuccess(code, null);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }

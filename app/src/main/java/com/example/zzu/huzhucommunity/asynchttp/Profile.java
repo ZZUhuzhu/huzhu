@@ -69,7 +69,7 @@ public class Profile {
                                 message.what =UPDATE;
                                 message.obj = result;
                                 handler.sendMessage(message);
-                                cBack.onSuccess(i);
+                                cBack.onSuccess(i, null);
                             } catch (UnsupportedEncodingException e) {
                                 e.printStackTrace();
                             }
@@ -111,7 +111,7 @@ public class Profile {
                                 message.what = GET_ACCOUNT_PROFILE;
                                 message.obj = result;
                                 handler.sendMessage(message);
-                                cBack.onSuccess(i);
+                                cBack.onSuccess(i, null);
                             } catch (UnsupportedEncodingException e) {
                                 e.printStackTrace();
                             }
@@ -154,7 +154,7 @@ public class Profile {
                                 message.what = UPDATE_PASSWORD;
                                 message.obj = result;
                                 handler.sendMessage(message);
-                                cBack.onSuccess(i);
+                                cBack.onSuccess(i, null);
                             } catch (UnsupportedEncodingException e) {
                                 e.printStackTrace();
                             }
@@ -186,7 +186,7 @@ public class Profile {
                 try {
                     JSONObject userObject = new JSONObject(Response);
                     int code=userObject.getInt("status");
-                    callback.onSuccess(code);
+                    callback.onSuccess(code, null);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

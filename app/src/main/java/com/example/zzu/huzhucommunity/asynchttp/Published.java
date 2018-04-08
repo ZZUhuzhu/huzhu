@@ -66,7 +66,7 @@ public class Published {
                                 message.what = GET_PUBLISHED;
                                 message.obj = result;
                                 handler.sendMessage(message);
-                                cBack.onSuccess(i);
+                                cBack.onSuccess(i, null);
                             } catch (UnsupportedEncodingException e) {
                                 e.printStackTrace();
                             }
@@ -109,7 +109,7 @@ public class Published {
                                 message.what = DELETE_USER_RESOURCE;
                                 message.obj = result;
                                 handler.sendMessage(message);
-                                cBack.onSuccess(i);
+                                cBack.onSuccess(i, null);
                             } catch (UnsupportedEncodingException e) {
                                 e.printStackTrace();
                             }
@@ -139,7 +139,7 @@ public class Published {
                     try {
                         JSONObject userObject = new JSONObject(Response);
                         int code=userObject.getInt("status");
-                        callback.onSuccess(code);
+                        callback.onSuccess(code, null);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -148,7 +148,7 @@ public class Published {
                     try {
                         JSONObject userObject = new JSONObject(Response);
                         int code=userObject.getInt("status");
-                        callback.onSuccess(code);
+                        callback.onSuccess(code, null);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }

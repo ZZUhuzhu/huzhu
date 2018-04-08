@@ -17,6 +17,8 @@ import com.example.zzu.huzhucommunity.asynchttp.AsyncHttpCallback;
 import com.example.zzu.huzhucommunity.asynchttp.LoginRegister;
 import com.example.zzu.huzhucommunity.commonclass.MyApplication;
 
+import java.util.HashMap;
+
 
 public class LoginActivity extends BaseActivity implements AsyncHttpCallback {
     private EditText accountEditText;
@@ -63,14 +65,14 @@ public class LoginActivity extends BaseActivity implements AsyncHttpCallback {
                 Intent intent;
                 switch (res){
                     case R.id.LoginActivity_login_button:
-                        onSuccess(1);
-//                        String account = accountEditText.getText().toString();
-//                        String password = passwordEditText.getText().toString();
-//                        if(TextUtils.isEmpty(account) || TextUtils.isEmpty(password)){
-//                            Toast.makeText(LoginActivity.this, "请输入账号和密码", Toast.LENGTH_SHORT).show();
-//                            break;
-//                        }
-//                        LoginRegister.getOurInstance().login(account, password,LoginActivity.this);
+                        //onSuccess(1);
+                        String account = accountEditText.getText().toString();
+                        String password = passwordEditText.getText().toString();
+                        if(TextUtils.isEmpty(account) || TextUtils.isEmpty(password)){
+                            Toast.makeText(LoginActivity.this, "请输入账号和密码", Toast.LENGTH_SHORT).show();
+                            break;
+                        }
+                        LoginRegister.getOurInstance().login(account, password,LoginActivity.this);
                         break;
                     case R.id.LoginActivity_register_text_view:
                         intent = new Intent(LoginActivity.this, RegisterActivity.class);
@@ -89,7 +91,7 @@ public class LoginActivity extends BaseActivity implements AsyncHttpCallback {
      * @param code 返回状态
      */
     @Override
-    public void onSuccess(int code) {
+    public void onSuccess(int code, HashMap<String, String> mp) {
         Toast.makeText(MyApplication.getContext(), "Success login", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
         startActivity(intent);

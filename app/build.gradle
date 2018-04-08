@@ -5,7 +5,7 @@ android {
         huzhu {
             keyAlias 'huzhu'
             keyPassword 'huzhu20152480#'
-            storeFile file('E:/APKKeyStore/huzhu.jks')
+            storeFile file('D:/DISK_E/APKKeyStore/huzhu.jks')
             storePassword 'huzhu20152480#'
         }
     }

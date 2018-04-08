@@ -173,7 +173,7 @@ public class LoginRegister {
                             editor.putString("User_head", userHead);
                             MyApplication.setUser(userId, userName, userHead);
                             editor.apply();
-                            callback.onSuccess(code);
+                            callback.onSuccess(code, null);
                         }
                         else {
                             callback.onError(code);
