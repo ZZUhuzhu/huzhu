@@ -12,6 +12,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
 
 /**
  * Created by do_pc on 2018/1/25.
@@ -141,7 +142,13 @@ public class Setting {
                 try {
                     JSONObject userObject = new JSONObject(Response);
                     int code = userObject.getInt("status");
-                    callback.onSuccess(code, null);
+                    String URL = userObject.getString("URL");
+
+                    HashMap<String, String> mp = new HashMap<>();
+                    mp.put("code", code + "");
+                    mp.put("URL", URL);
+
+                    callback.onSuccess(code, mp);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

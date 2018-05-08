@@ -12,6 +12,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
 
 
 /**
@@ -152,7 +153,11 @@ public class Star {
                     try {
                         JSONObject userObject = new JSONObject(Response);
                         int code = userObject.getInt("status");
-                        callback.onSuccess(code, null);
+                        String detail = userObject.getString("detail");
+                        HashMap<String, String> mp = new HashMap<>();
+                        mp.put("code", code + "");
+                        mp.put("detail", detail);
+                        callback.onSuccess(code, mp);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
