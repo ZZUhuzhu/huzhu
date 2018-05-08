@@ -1,15 +1,18 @@
 package com.example.zzu.huzhucommunity.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.zzu.huzhucommunity.R;
@@ -20,22 +23,14 @@ import com.example.zzu.huzhucommunity.commonclass.MyApplication;
 import java.util.HashMap;
 
 
+/**
+ * 登录界面
+ */
 public class LoginActivity extends BaseActivity implements AsyncHttpCallback {
-    private EditText accountEditText;
     private EditText passwordEditText;
-
-    private ImageButton cancelButton;
-    private TextWatcher textWatcher = new TextWatcher() {
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {}
-        @Override
-        public void afterTextChanged(Editable s) {
-            if(TextUtils.isEmpty(s)) cancelButton.setVisibility(View.GONE);
-            else cancelButton.setVisibility(View.VISIBLE);
-        }
-    };
+    private EditText accountEditText;
+    private ImageButton passwordCancelButton;
+    private ImageButton accountCancelButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,14 +39,19 @@ public class LoginActivity extends BaseActivity implements AsyncHttpCallback {
         ActionBar actionBar = getSupportActionBar();
         if(actionBar != null) actionBar.hide();
 
-        cancelButton = findViewById(R.id.LoginActivity_password_cancel_button);
-        accountEditText = findViewById(R.id.LoginActivity_account_edit_text);
+        setSwipeToFinishOff();
+
+        passwordCancelButton = findViewById(R.id.LoginActivity_password_cancel_button);
         passwordEditText = findViewById(R.id.LoginActivity_password_edit_text);
-        passwordEditText.addTextChangedListener(textWatcher);
+        accountCancelButton = findViewById(R.id.LoginActivity_account_cancel_button);
+        accountEditText = findViewById(R.id.LoginActivity_account_edit_text);
 
         addListener(R.id.LoginActivity_login_button);
         addListener(R.id.LoginActivity_register_text_view);
         addListener(R.id.LoginActivity_password_cancel_button);
+        addListener(R.id.LoginActivity_account_edit_text);
+        addListener(R.id.LoginActivity_password_edit_text);
+        addListener(R.id.LoginActivity_account_cancel_button);
     }
 
     /**
@@ -59,10 +59,48 @@ public class LoginActivity extends BaseActivity implements AsyncHttpCallback {
      * @param res 控件ID
      */
     public void addListener(final int res){
+        if (res == R.id.LoginActivity_password_edit_text){
+            passwordEditText.setImeActionLabel(getString(R.string.login), EditorInfo.IME_ACTION_GO);
+            passwordEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+                @Override
+                public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                    if (actionId == EditorInfo.IME_ACTION_GO){
+                        onSuccess(1, null);
+                        return true;
+                    }
+                    return false;
+                }
+            });
+            passwordEditText.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {}
+                @Override
+                public void afterTextChanged(Editable s) {
+                    if(TextUtils.isEmpty(s)) passwordCancelButton.setVisibility(View.GONE);
+                    else passwordCancelButton.setVisibility(View.VISIBLE);
+                }
+            });
+            return;
+        }
+        if (res == R.id.LoginActivity_account_edit_text){
+            accountEditText.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {}
+                @Override
+                public void afterTextChanged(Editable s) {
+                    if (TextUtils.isEmpty(s)) accountCancelButton.setVisibility(View.GONE);
+                    else accountCancelButton.setVisibility(View.VISIBLE);
+                }
+            });
+            return;
+        }
         findViewById(res).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent;
                 switch (res){
                     case R.id.LoginActivity_login_button:
                         //onSuccess(1);
@@ -75,12 +113,13 @@ public class LoginActivity extends BaseActivity implements AsyncHttpCallback {
                         LoginRegister.getOurInstance().login(account, password,LoginActivity.this);
                         break;
                     case R.id.LoginActivity_register_text_view:
-                        intent = new Intent(LoginActivity.this, RegisterActivity.class);
-                        startActivity(intent);
+                        RegisterActivity.startMe(LoginActivity.this);
                         break;
                     case R.id.LoginActivity_password_cancel_button:
                         passwordEditText.setText("");
                         break;
+                    case R.id.LoginActivity_account_cancel_button:
+                        accountEditText.setText("");
                 }
             }
         });
@@ -93,8 +132,7 @@ public class LoginActivity extends BaseActivity implements AsyncHttpCallback {
     @Override
     public void onSuccess(int code, HashMap<String, String> mp) {
         Toast.makeText(MyApplication.getContext(), "Success login", Toast.LENGTH_SHORT).show();
-        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-        startActivity(intent);
+        MainActivity.startMe(this);
         finish();
     }
 
@@ -105,5 +143,8 @@ public class LoginActivity extends BaseActivity implements AsyncHttpCallback {
     @Override
     public void onError(int code) {
         Toast.makeText(MyApplication.getContext(), "Error on login", Toast.LENGTH_SHORT).show();
+    }
+    public static void startMe(Context context){
+        context.startActivity(new Intent(context, LoginActivity.class));
     }
 }

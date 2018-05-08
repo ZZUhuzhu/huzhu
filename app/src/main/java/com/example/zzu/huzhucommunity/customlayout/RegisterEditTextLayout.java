@@ -22,13 +22,14 @@ public class RegisterEditTextLayout extends LinearLayout {
     private EditText editText;
     public RegisterEditTextLayout(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-        LayoutInflater.from(context).inflate(R.layout.register_input_custom_layout, this);
+        LayoutInflater.from(context).inflate(R.layout.custom_register_input_view, this);
         TextView textView = findViewById(R.id.register_input_custom_text_view);
         editText = findViewById(R.id.register_input_custom_edit_text);
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.RegisterEditTextLayout);
         String temp = typedArray.getString(R.styleable.RegisterEditTextLayout_text);
         boolean textColorBlack = typedArray.getBoolean(R.styleable.RegisterEditTextLayout_colorBlack, false);
         boolean inputPassword = typedArray.getBoolean(R.styleable.RegisterEditTextLayout_input_password, false);
+        boolean imeOptionDone = typedArray.getBoolean(R.styleable.RegisterEditTextLayout_ime_option_action_done, false);
         typedArray.recycle();
         textView.setText(String.format("%s:", temp));
         if(inputPassword) editText.setInputType(EditorInfo.TYPE_TEXT_VARIATION_PASSWORD);
@@ -37,6 +38,8 @@ public class RegisterEditTextLayout extends LinearLayout {
             editText.setTextColor(Color.BLACK);
             findViewById(R.id.register_under_line_view).setBackgroundColor(Color.GRAY);
         }
+        if (imeOptionDone)
+            editText.setImeOptions(EditorInfo.IME_ACTION_DONE);
     }
 
     /**

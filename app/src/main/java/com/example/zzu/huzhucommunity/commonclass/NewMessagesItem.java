@@ -1,11 +1,8 @@
 package com.example.zzu.huzhucommunity.commonclass;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.example.zzu.huzhucommunity.R;
 
 /**
  * Created by FEI on 2018/1/29.
@@ -17,30 +14,32 @@ import com.example.zzu.huzhucommunity.R;
  */
 
 public class NewMessagesItem implements Parcelable {
+    private boolean scrolled;
     private boolean read;
     private int senderID;
     private String senderName;
     private String firstNewMessage;
-    private String messageTime;
+    private long messageTimeInMills;
     private String senderHead;
     private int newMessageAmount;
 
-    public NewMessagesItem(int senderID, String senderName, String firstNewMessage, int newMessageAmount, String messageTime, String senderHead){
+    public NewMessagesItem(int senderID, String senderName, String firstNewMessage, int newMessageAmount, long messageTimeInMills, String senderHead){
         this.senderID = senderID;
         this.senderName = senderName;
         this.firstNewMessage = firstNewMessage;
         this.newMessageAmount = newMessageAmount;
-        this.messageTime = messageTime;
+        this.messageTimeInMills = messageTimeInMills;
         this.senderHead = senderHead;
         this.read = false;
     }
 
     private NewMessagesItem(Parcel in) {
+        scrolled = in.readByte() != 0;
         read = in.readByte() != 0;
         senderID = in.readInt();
         senderName = in.readString();
         firstNewMessage = in.readString();
-        messageTime = in.readString();
+        messageTimeInMills = in.readLong();
         senderHead = in.readString();
         newMessageAmount = in.readInt();
     }
@@ -57,13 +56,15 @@ public class NewMessagesItem implements Parcelable {
         }
     };
 
+    public void setScrolled(boolean scrolled) {
+        this.scrolled = scrolled;
+    }
+
+    public boolean isScrolled() {
+        return scrolled;
+    }
+
     public boolean isRead() {return read;}
-    public Bitmap getSenderHeadBitmap(){
-        return BitmapFactory.decodeResource(MyApplication.getContext().getResources(), R.drawable.profile_head);
-    }
-    public int getSenderID() {
-        return senderID;
-    }
     public String getSenderName() {
         return senderName;
     }
@@ -71,10 +72,12 @@ public class NewMessagesItem implements Parcelable {
         return firstNewMessage;
     }
     public int getNewMessageAmount() {return newMessageAmount;}
-    public String getMessageTime() {
-        return messageTime;
+    public String getMessageTimeString(){
+        return MyApplication.convertTimeInMillToString(messageTimeInMills);
     }
-    public void setRead() {this.read = true;}
+    public void setRead(boolean read) {
+        this.read = read;
+    }
 
     @Override
     public int describeContents() {
@@ -83,13 +86,13 @@ public class NewMessagesItem implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeByte((byte) (scrolled ? 1 : 0));
         dest.writeByte((byte) (read ? 1 : 0));
         dest.writeInt(senderID);
         dest.writeString(senderName);
         dest.writeString(firstNewMessage);
-        dest.writeString(messageTime);
+        dest.writeLong(messageTimeInMills);
         dest.writeString(senderHead);
         dest.writeInt(newMessageAmount);
     }
-
 }

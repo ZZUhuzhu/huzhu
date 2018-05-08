@@ -5,6 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
+    android:fitsSystemWindows="true"
     android:background="@color/colorDeepSkyBlue">
     <android.support.design.widget.CoordinatorLayout
         android:layout_above="@id/ResourceDetail_bottom_button_holder"
@@ -46,7 +47,7 @@
                         android:layout_margin="@dimen/common_margin_normal"
                         android:contentDescription="@string/app_name"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/profile_head"/>
+                        android:src="@drawable/profile_head_over_watch"/>
                     <TextView
                         android:id="@+id/ResourceDetail_res_user_name_text_view"
                         android:layout_width="280dp"
@@ -55,7 +56,8 @@
                         android:layout_toEndOf="@id/ResourceDetail_res_user_image_view"
                         android:layout_marginTop="@dimen/common_margin_small"
                         android:maxLines="1"
-                        android:textSize="@dimen/common_text_size_normal"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="@dimen/common_text_size_large"
                         android:text="@string/solider"/>
                     <TextView
                         android:id="@+id/ResourceDetail_res_price_text_view"
@@ -64,10 +66,11 @@
                         android:layout_alignParentEnd="true"
                         android:gravity="center"
                         android:maxLines="1"
+                        android:layout_centerVertical="true"
                         android:layout_marginEnd="@dimen/common_margin_small"
                         android:layout_marginTop="@dimen/common_margin_large"
                         android:textSize="@dimen/common_text_size_large"
-                        android:layout_centerVertical="true"
+                        android:textColor="@color/colorLightRed"
                         android:text="@string/twoYuan"/>
                     <TextView
                         android:id="@+id/ResourceDetail_user_active_time_text_view"
@@ -107,7 +110,8 @@
                     android:gravity="end"
                     android:layout_marginEnd="@dimen/common_margin_normal"
                     android:textSize="@dimen/common_text_size_normal"
-                    android:text="@string/twoDaysLater"/>
+                    android:textColor="@color/colorPrimary"
+                    android:text="@string/finishedInTwoDays"/>
                 <LinearLayout
                     android:id="@+id/ResourceDetail_comment_holder"
                     android:orientation="vertical"
@@ -120,7 +124,6 @@
 
     <LinearLayout
         android:id="@+id/ResourceDetail_bottom_button_holder"
-        android:elevation="8dp"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -142,10 +145,23 @@
             style="@style/ResourceDetailBottomButtonHolder"
             android:text="@string/chat"
             android:src="@drawable/chat_gray"/>
-        <com.example.zzu.huzhucommunity.customlayout.ResReqDetailBottomButtonLayout
-            android:id="@+id/ResourceDetail_receive_it_button"
-            android:text="@string/receive"
-            android:src="@drawable/receive_now"
-            style="@style/ResourceDetailBottomButtonHolder"/>
+        <LinearLayout
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:background="@color/colorLightRed">
+            <com.example.zzu.huzhucommunity.customlayout.ResReqDetailBottomButtonLayout
+                android:layout_height="wrap_content"
+                android:layout_width="120dp"
+                android:background="?android:attr/selectableItemBackground"
+                android:id="@+id/ResourceDetail_receive_it_button"
+                android:text="@string/receive"
+                android:textColor="@color/colorWhite"
+                android:src="@drawable/receive_now_white" />
+        </LinearLayout>
     </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_above="@id/ResourceDetail_bottom_button_holder"
+        android:background="@color/colorLightGray"/>
 </RelativeLayout>

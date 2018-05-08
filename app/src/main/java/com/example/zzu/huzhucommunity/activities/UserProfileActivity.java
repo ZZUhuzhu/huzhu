@@ -1,11 +1,12 @@
 package com.example.zzu.huzhucommunity.activities;
 
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Handler;
-import android.os.Message;
+import android.graphics.Bitmap;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,23 +16,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.zzu.huzhucommunity.R;
+import com.example.zzu.huzhucommunity.adapters.MyCommentAdapter;
+import com.example.zzu.huzhucommunity.asynchttp.UserProfile;
 import com.example.zzu.huzhucommunity.commonclass.Constants;
 import com.example.zzu.huzhucommunity.commonclass.MyApplication;
+import com.example.zzu.huzhucommunity.customlayout.UserProfileItemLayout;
 
 public class UserProfileActivity extends BaseActivity {
-    private TextView userNameTextView;
-    private ImageView userHeadImageView;
-    private Handler handler = new Handler(new Handler.Callback() {
-        @Override
-        public boolean handleMessage(Message msg) {
-            switch (msg.what){
-                case Constants.UserProfileUserHeadImageGot:
-                    userHeadImageView.setImageDrawable(MyApplication.userHeadImage);
-                    return true;
-            }
-            return false;
-        }
-    });
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,8 +35,10 @@ public class UserProfileActivity extends BaseActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        userNameTextView = findViewById(R.id.UserProfile_me_name_text_view);
-        userHeadImageView = findViewById(R.id.UserProfile_me_image_view);
+        TextView userNameTextView = findViewById(R.id.UserProfile_me_name_text_view);
+        ImageView userHeadImageView = findViewById(R.id.UserProfile_me_image_view);
+        userNameTextView.setText(R.string.solider);
+        userHeadImageView.setImageDrawable(getDrawable(R.drawable.profile_head_over_watch));
 
         addListener(R.id.UserProfile_resource_published_item);
         addListener(R.id.UserProfile_resource_received_item);
@@ -54,8 +47,10 @@ public class UserProfileActivity extends BaseActivity {
         addListener(R.id.UserProfile_track_item);
         addListener(R.id.UserProfile_comment_item);
         addListener(R.id.UserProfile_message_item);
+        addListener(R.id.UserProfile_me_holder);
+        addListener(R.id.UserProfile_top_background_image_view);
 
-        initUserInfo();
+        initNumber();
     }
     /**
      * 为每个控件添加监听器
@@ -65,36 +60,51 @@ public class UserProfileActivity extends BaseActivity {
         findViewById(res).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent;
                 switch (res){
                     case R.id.UserProfile_setting_item:
-                        intent = new Intent(UserProfileActivity.this, SettingActivity.class);
-                        startActivity(intent);
+                        SettingActivity.startMe(UserProfileActivity.this);
+                        break;
+                    case R.id.UserProfile_message_item:
+                        MessagesActivity.startMe(UserProfileActivity.this);
                         break;
                     case R.id.UserProfile_resource_published_item:
+                        PubRecStarTrackActivity.startMe(UserProfileActivity.this, PubRecStarTrackActivity.TYPE_PUBLISH);
+                        break;
                     case R.id.UserProfile_resource_received_item:
+                        PubRecStarTrackActivity.startMe(UserProfileActivity.this, PubRecStarTrackActivity.TYPE_RECEIVE);
+                        break;
                     case R.id.UserProfile_star_item:
+                        PubRecStarTrackActivity.startMe(UserProfileActivity.this, PubRecStarTrackActivity.TYPE_STAR);
+                        break;
                     case R.id.UserProfile_track_item:
+                        PubRecStarTrackActivity.startMe(UserProfileActivity.this, PubRecStarTrackActivity.TYPE_TRACK);
+                        break;
                     case R.id.UserProfile_comment_item:
-                    case R.id.UserProfile_message_item:
-                        Toast.makeText(MyApplication.getContext(), "正在全力开发中...", Toast.LENGTH_SHORT).show();
+                        MyCommentActivity.startMe(UserProfileActivity.this);
+                        break;
+                    case R.id.UserProfile_me_holder:
+                        AccountProfileActivity.startMe(UserProfileActivity.this);
+                        break;
+                    case R.id.UserProfile_top_background_image_view:
+                        MyApplication.startPickImageDialog(UserProfileActivity.this);
                         break;
                 }
             }
         });
     }
-
-    /**
-     * 初始化登录的用户的信息
-     */
-    public void initUserInfo(){
-        if(MyApplication.userId != -1){
-            userNameTextView.setText(MyApplication.userName);
-            if(MyApplication.userHeadImage == null)
-                MyApplication.downloadUserHeadImage(handler);
-            else
-                userHeadImageView.setImageDrawable(MyApplication.userHeadImage);
-        }
+    public void initNumber(){
+        UserProfileItemLayout itemLayout = findViewById(R.id.UserProfile_resource_published_item);
+        itemLayout.setAmount(0);
+        itemLayout = findViewById(R.id.UserProfile_resource_received_item);
+        itemLayout.setAmount(1);
+        itemLayout = findViewById(R.id.UserProfile_star_item);
+        itemLayout.setAmount(2);
+        itemLayout = findViewById(R.id.UserProfile_track_item);
+        itemLayout.setAmount(3);
+        itemLayout = findViewById(R.id.UserProfile_comment_item);
+        itemLayout.setAmount(4);
+        itemLayout = findViewById(R.id.UserProfile_message_item);
+        itemLayout.setAmount(5);
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -113,5 +123,22 @@ public class UserProfileActivity extends BaseActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.user_profile_setting_menu_item, menu);
         return true;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode){
+            case Constants.PICK_IMAGE_FROM_CAMERA:
+            case Constants.PICK_IMAGE_FROM_GALLERY:
+                Bitmap bitmap = MyApplication.getImageFromDialog(requestCode, resultCode, data);
+                if (bitmap != null){
+                    ((ImageView) findViewById(R.id.UserProfile_top_background_image_view)).setImageBitmap(bitmap);
+                }
+                break;
+        }
+    }
+
+    public static void startMe(Context context){
+        context.startActivity(new Intent(context, UserProfileActivity.class));
     }
 }

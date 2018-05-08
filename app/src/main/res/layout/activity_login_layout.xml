@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/login_background">
+    android:fitsSystemWindows="true"
+    android:background="@drawable/login_background"
+    tools:context=".activities.LoginActivity">
     <ImageView
         android:id="@+id/LoginActivity_profile_image_view"
         android:layout_width="@dimen/login_profile_image_size"
@@ -13,29 +16,49 @@
         android:layout_marginTop="@dimen/login_margin_large"
         android:src="@drawable/profile_head"
         android:contentDescription="@string/app_name"/>
-    <EditText
-        android:id="@+id/LoginActivity_account_edit_text"
-        android:layout_below="@id/LoginActivity_profile_image_view"
+    <RelativeLayout
+        android:id="@+id/LoginActivity_account_edit_text_holder"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:minWidth="@dimen/login_edit_text_width"
-        android:layout_marginTop="@dimen/login_margin_large"
         android:layout_centerHorizontal="true"
-        android:gravity="center_horizontal"
-        android:maxLines="1"
-        android:background="@null"
-        android:textColor="@color/colorWhite"
-        android:textColorHint="@color/colorLightGray"
-        android:hint="@string/account"/>
+        android:layout_marginTop="@dimen/login_margin_large"
+        android:layout_below="@id/LoginActivity_profile_image_view">
+        <EditText
+            android:id="@+id/LoginActivity_account_edit_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minWidth="@dimen/login_edit_text_width"
+            android:gravity="center_horizontal"
+            android:maxLines="1"
+            android:background="@null"
+            android:inputType="textEmailAddress"
+            android:imeOptions="actionNext"
+            android:textColor="@color/colorWhite"
+            android:textColorHint="@color/colorLightGray"
+            android:hint="@string/account"
+            tools:ignore="RelativeOverlap" />
+        <ImageButton
+            android:id="@+id/LoginActivity_account_cancel_button"
+            android:visibility="gone"
+            android:contentDescription="@string/app_name"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:background="@null"
+            android:scaleType="fitCenter"
+            android:layout_centerVertical="true"
+            android:layout_margin="5dp"
+            android:layout_alignEnd="@id/LoginActivity_account_edit_text"
+            android:src="@drawable/cancel_oval_light_gray_pressed_gray"/>
+    </RelativeLayout>
     <View
         android:layout_width="@dimen/login_edit_text_width"
-        android:layout_below="@id/LoginActivity_account_edit_text"
+        android:layout_below="@id/LoginActivity_account_edit_text_holder"
         android:layout_height="0.5dp"
         android:layout_centerHorizontal="true"
         android:background="@color/colorLightGray"/>
     <RelativeLayout
         android:id="@+id/LoginActivity_password_holder"
-        android:layout_below="@id/LoginActivity_account_edit_text"
+        android:layout_below="@id/LoginActivity_account_edit_text_holder"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/login_margin_small"
@@ -47,22 +70,24 @@
             android:minWidth="@dimen/login_edit_text_width"
             android:gravity="center_horizontal"
             android:inputType="textPassword"
-            android:maxLines="1"
+            android:singleLine="true"
             android:background="@null"
+            android:imeOptions="actionGo"
             android:textColor="@color/colorWhite"
             android:textColorHint="@color/colorLightGray"
             android:hint="@string/password"/>
         <ImageButton
             android:id="@+id/LoginActivity_password_cancel_button"
+            android:visibility="gone"
             android:contentDescription="@string/app_name"
-            android:layout_width="10dp"
-            android:layout_height="10dp"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
             android:background="@null"
+            android:scaleType="fitCenter"
             android:layout_centerVertical="true"
             android:layout_margin="5dp"
-            android:visibility="gone"
             android:layout_alignEnd="@id/LoginActivity_password_edit_text"
-            android:src="@drawable/cancel_white_pressed_gray"/>
+            android:src="@drawable/cancel_oval_light_gray_pressed_gray"/>
     </RelativeLayout>
     <View
         android:layout_width="@dimen/login_edit_text_width"

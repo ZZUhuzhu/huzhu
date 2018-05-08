@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="65dp"
+    android:background="?android:attr/selectableItemBackground">
+    <TextView
+        android:id="@+id/account_profile_item_title_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/common_margin_large"
+        android:layout_marginTop="@dimen/common_margin_normal"
+        android:layout_marginBottom="@dimen/common_margin_normal"
+        android:textSize="@dimen/common_text_size_small"
+        tools:ignore="RelativeOverlap" />
+    <TextView
+        android:id="@+id/account_profile_item_content_text_view"
+        android:layout_below="@id/account_profile_item_title_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/common_margin_large"
+        android:textSize="@dimen/common_text_size_normal"
+        android:textColor="@color/colorBlack"
+        android:layout_centerVertical="true"
+        tools:ignore="RelativeOverlap"/>
+    <ImageView
+        android:id="@+id/account_profile_item_content_image_view"
+        android:layout_below="@id/account_profile_item_title_text_view"
+        android:layout_width="25dp"
+        android:layout_height="30dp"
+        android:scaleType="fitCenter"
+        android:contentDescription="@string/app_name"
+        android:layout_marginStart="@dimen/common_margin_large"/>
+</RelativeLayout>

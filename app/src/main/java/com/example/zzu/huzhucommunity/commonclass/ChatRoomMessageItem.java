@@ -1,7 +1,10 @@
 package com.example.zzu.huzhucommunity.commonclass;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
+
+import com.example.zzu.huzhucommunity.R;
 
 /**
  * Created by FEI on 2018/1/30.
@@ -17,7 +20,6 @@ public class ChatRoomMessageItem {
         this.positionStart = start;
         this.messageText = messageText;
         this.typeImage = false;
-        imageBitmap = null;
     }
     public ChatRoomMessageItem(boolean start, Bitmap imageBitmap){
         this.positionStart = start;

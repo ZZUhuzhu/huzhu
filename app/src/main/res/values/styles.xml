@@ -15,7 +15,10 @@
         <item name="android:windowTranslucentNavigation">false</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="windowActionBar">false</item>
-        <item name="android:fitsSystemWindows">true</item>
+        <item name="android:windowAnimationStyle">@style/ActivityAnimationStyle</item>
+    </style>
+    <style name="SplashTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowFullscreen">true</item>
     </style>
     <style name="RegisterActivityEditText" parent="AppTheme">
         <item name="android:minWidth">100dp</item>
@@ -34,23 +37,20 @@
     <style name="ResourceDetailBottomButtonHolder" parent="AppTheme">
         <item name="android:layout_weight">1</item>
         <item name="android:layout_width">0dp</item>
-        <item name="android:layout_height">40dp</item>
+        <item name="android:layout_height">wrap_content</item>
         <item name="android:clickable">true</item>
         <item name="android:focusable">true</item>
         <item name="android:background">?attr/selectableItemBackground</item>
     </style>
-    <!-- toolbar弹出菜单样式 -->
-    <style name="ToolbarPopupTheme" parent="@style/ThemeOverlay.AppCompat">
-        <item name="android:colorBackground">@color/colorDeepSkyBlue</item>
-        <item name="android:textColor">@color/colorWhite</item>
-        <item name="android:itemBackground">?attr/selectableItemBackground</item>
-        <item name="overlapAnchor">false</item>
-        <item name="android:dropDownVerticalOffset">0dp</item>
-        <item name="android:dropDownHorizontalOffset">0dp</item>
-    </style>
-    <style name="SwitchButtonStyle">
+    <style name="SwitchButtonAndDialogStyle">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorDeepSkyBlue</item>
+    </style>
+    <style name="ActivityAnimationStyle" parent="@android:style/Animation.Activity">
+        <item name="android:activityOpenEnterAnimation">@anim/activity_right_slide_in_anim</item>
+        <item name="android:activityOpenExitAnimation">@anim/activity_left_slide_out_anim</item>
+        <item name="android:activityCloseEnterAnimation">@anim/activity_left_slide_in_anim</item>
+        <item name="android:activityCloseExitAnimation">@anim/activity_right_slide_out_anim</item>
     </style>
 </resources>

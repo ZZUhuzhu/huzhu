@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     android:background="@drawable/login_background">
     <android.support.v7.widget.Toolbar
         android:id="@+id/RegisterActivity_toolbar"
@@ -10,6 +11,7 @@
         android:layout_height="?attr/actionBarSize"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:titleMarginStart="110dp"
+        app:titleMarginEnd="110dp"
         app:contentInsetStart="0dp"
         app:contentInsetStartWithNavigation="0dp"/>
     <com.example.zzu.huzhucommunity.customlayout.RegisterEditTextLayout
@@ -33,6 +35,7 @@
         android:id="@+id/RegisterActivity_phone_custom_holder"
         style="@style/RegisterActivityCustomHolder"
         android:layout_below="@id/RegisterActivity_confirm_password_custom_holder"
+        app:ime_option_action_done="true"
         app:text="@string/phone"/>
     <RelativeLayout
         android:id="@+id/RegisterActivity_sex_custom_holder"

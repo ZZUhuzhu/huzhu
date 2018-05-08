@@ -34,23 +34,22 @@
     <string name="publishedByMe">我发布的</string>
     <string name="receivedByMe">我接收的</string>
     <string name="setting">设置</string>
+    <string-array name="changeBackgroundImage">
+        <item>更改背景图片</item>
+    </string-array>
 
     <!--ResReqDetailActivity-->
+    <string name="requestDetail">请求详情</string>
+    <string name="resourceDetail">资源详情</string>
     <string name="comment">评论</string>
     <string name="star">收藏</string>
-    <string name="track">足迹</string>
     <string name="chat">交流</string>
     <string name="receive">接单</string>
     <string name="received">已接</string>
 
-    <!--activitiesLabel-->
-    <string name="resourceDetail">资源详情</string>
-    <string name="requestDetail">请求详情</string>
-
     <!--PublishNewRes/ReqActivity-->
     <string name="title">标题</string>
     <string name="content">内容</string>
-    <string name="image_with_colon">图片:</string>
     <string name="type_with_colon">类型:</string>
     <string name="yuan">￥</string>
     <string name="deadline_with_colon">截止日期:</string>
@@ -58,31 +57,65 @@
     <string name="publish">发布</string>
 
     <!--MessagesActivity-->
-    <string name="newMessage">新消息</string>
+    <string name="message">消息</string>
     <string name="ninetyMore">99+</string>
-    <string name="markAllRead">全部标为已读</string>
+    <string name="markAllRead">全部已读</string>
     <string name="send">发送</string>
 
     <!--SettingActivity-->
     <string name="newMessageNotify">新消息提醒</string>
     <string name="recordTrack">记录足迹</string>
+    <string name="swipeToFinish">右滑返回 (适用于部分页面)</string>
     <string name="clearCache">清除缓存</string>
     <string name="checkUpdate">检查更新</string>
     <string name="aboutUs">关于我们</string>
     <string name="helpAndFeedback">帮助与反馈</string>
     <string name="exit">退出程序</string>
 
+    <!--AccountProfileActivity-->
+    <string name="accountProfile">账户信息</string>
+    <string name="userName">用户名</string>
+    <string name="sex">性别</string>
+    <string name="grade">年级</string>
+    <string name="department">院系</string>
+    <string name="registerTime">注册时间</string>
+    <string name="lastLoginTime">上次登录时间</string>
+    <string name="updatePassword">修改密码</string>
+    <string name="exitLogin">退出登录</string>
+    <string name="changeHead">更换头像</string>
+
+    <!--OthersProfileActivity-->
+    <string name="sendMessage">发消息</string>
+
+    <!--MyCommentActivity-->
+    <string name="commentByMe">我评论的</string>
+    <string name="meMentioned">提到我的</string>
+
+    <!--ProfileUpdateActivity-->
+    <string name="finished">完成</string>
+
     <!--othersString-->
+    <string name="jump">跳过</string>
+    <string name="unreceived">未接</string>
+    <string name="status_with_colon">状态:</string>
+    <string name="delete">删除</string>
+    <string name="markRead">标为已读</string>
+    <string name="markUnread">标为未读</string>
+    <string name="deleteThisMessage">删除该消息</string>
     <string name="veryGood">非常好</string>
     <string name="solider">小美</string>
     <string name="twoHoursAgo">2小时前</string>
-    <string name="twoDaysLater">2天后</string>
+    <string name="finishedInTwoDays">2天后截止</string>
     <string name="twoYuan">2￥</string>
     <string name="virtualRequestDetail">能不能给我一包生命一号，那种富含咖啡因，内啡肽，以及各种有助于健康的神经递质的只要998的含片</string>
     <string name="virtualResourceDetail">这是一个每个人都需要的富含咖啡因，内啡肽，以及各种有助于健康的神经递质的只要998的含片</string>
     <string name="virtualComment">这玩意儿用着还不错，比较上手</string>
-    <string name="virtualTime">2018/1/25 20:48:50</string>
+    <string name="searchResultOf">的搜索结果</string>
 
+    <string-array name="sexChoice">
+        <item>男</item>
+        <item>女</item>
+    </string-array>
     <string-array name="Types">
         <item>类型1</item>
         <item>类型2</item>

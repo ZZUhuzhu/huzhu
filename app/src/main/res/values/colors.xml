@@ -2,8 +2,10 @@
 <resources>
     <color name="colorPrimary">#314ef1</color>
     <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#ded167</color>
+    <color name="colorAccent">#00BFFF</color>
+    <color name="colorLightYellow">#ded167</color>
     <color name="colorLightRed">#f73e3e</color>
+    <color name="colorRed">#FF0000</color>
     <color name="colorDodgerBlue">#1E90FF</color>
     <color name="colorDeepSkyBlue">#00BFFF</color>
     <color name="colorWhite">#FFFFFF</color>
@@ -11,6 +13,5 @@
     <color name="colorGray">#BEBEBE</color>
     <color name="colorTransparent">#00000000</color>
     <color name="colorBlack">#000000</color>
-    <color name="colorBackground">#f3f5f9</color>
     <color name="colorRiceWhite">#F5F5F5</color>
 </resources>

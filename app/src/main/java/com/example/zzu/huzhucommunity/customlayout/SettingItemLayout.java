@@ -21,7 +21,7 @@ public class SettingItemLayout extends LinearLayout {
     private Switch tmpSwitch;
     public SettingItemLayout(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-        LayoutInflater.from(context).inflate(R.layout.setting_item_view, this);
+        LayoutInflater.from(context).inflate(R.layout.custom_setting_item_view, this);
         TextView textView = findViewById(R.id.setting_item_text_view);
         tmpSwitch = findViewById(R.id.setting_item_switch);
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.SettingItemLayout);

@@ -1,5 +1,6 @@
 package com.example.zzu.huzhucommunity.activities;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -7,8 +8,8 @@ import android.graphics.BitmapFactory;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -19,77 +20,92 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.example.zzu.huzhucommunity.R;
-import com.example.zzu.huzhucommunity.adapters.MainRequestAdapter;
-import com.example.zzu.huzhucommunity.adapters.MainResourcesAdapter;
-import com.example.zzu.huzhucommunity.adapters.MainViewPagerAdapter;
-import com.example.zzu.huzhucommunity.commonclass.Constants;
+import com.example.zzu.huzhucommunity.adapters.CommonRequestAdapter;
+import com.example.zzu.huzhucommunity.adapters.CommonResourcesAdapter;
+import com.example.zzu.huzhucommunity.adapters.CommonViewPagerAdapter;
+import com.example.zzu.huzhucommunity.commonclass.ActivitiesCollector;
 import com.example.zzu.huzhucommunity.commonclass.MyApplication;
 import com.example.zzu.huzhucommunity.commonclass.NewRequestItem;
 import com.example.zzu.huzhucommunity.commonclass.NewResourceItem;
 
 import java.util.ArrayList;
+import java.util.GregorianCalendar;
 
+/**
+ * 登录成功后的主界面
+ */
 public class MainActivity extends BaseActivity {
-    private static final String TAG = "MainActivity";
-    public static final String REQUEST_DETAIL_REQUEST_ITEM_POSITION="REQUEST_POSITION";
-    public static final String RESOURCE_DETAIL_RESOURCE_ITEM_POSITION = "RESOURCE_POSITION";
-    public static final int PUBLISH_NEW_RESOURCE = 0;
-    public static final int PUBLISH_NEW_REQUEST = 1;
-    public static final int RESOURCE_DETAIL_REQUEST_CODE = 2;
-    public static final int REQUEST_DETAIL_REQUEST_CODE = 2;
-    private ImageButton resourceButton;
-    private ImageButton requestButton;
-    private ImageButton userHeadImageButton;
-
-    private RecyclerView newResourceRecyclerView;
-    private ArrayList<NewResourceItem> resourceItems = new ArrayList<>();
-    private MainResourcesAdapter resourceAdapter;
-
-    private RecyclerView newRequestRecyclerView;
-    private ArrayList<NewRequestItem> requestItems = new ArrayList<>();
-    private MainRequestAdapter requestAdapter;
-
-    private ViewPager mainViewPager;
-    private ArrayList<View> pagerViews = new ArrayList<>();
+    public static final String PUBLISH_TYPE = "PUBLISH_TYPE";
+    private static long backLastPressedTime = 0;
+    private static final int TASK_OVER = 1;
 
     private Handler handler = new Handler(new Handler.Callback() {
         @Override
         public boolean handleMessage(Message msg) {
             switch (msg.what){
-                case Constants.UserProfileUserHeadImageGot:
-                    userHeadImageButton.setImageDrawable(MyApplication.userHeadImage);
+                case TASK_OVER:
+                    findViewById(R.id.MainActivity_progress_bar).setVisibility(View.GONE);
+                    resourceAdapter.notifyDataSetChanged();
+                    requestAdapter.notifyDataSetChanged();
                     return true;
             }
             return false;
         }
     });
+    private ImageButton resourceButton;
+    private ImageButton requestButton;
+
+    private RecyclerView newResourceRecyclerView;
+    private ArrayList<NewResourceItem> resourceItems = new ArrayList<>();
+    private CommonResourcesAdapter resourceAdapter;
+
+    private RecyclerView newRequestRecyclerView;
+    private ArrayList<NewRequestItem> requestItems = new ArrayList<>();
+    private CommonRequestAdapter requestAdapter;
+
+    private ViewPager mainViewPager;
+    private ArrayList<View> pagerViews = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_layout);
 
-        userHeadImageButton = findViewById(R.id.MainActivity_head_button);
+        setSwipeToFinishOff();
+
         resourceButton = findViewById(R.id.MainActivity_resource_button);
         requestButton = findViewById(R.id.MainActivity_request_button);
 
         newResourceRecyclerView = new RecyclerView(this);
-        LinearLayoutManager manager = new LinearLayoutManager(MainActivity.this);
-        manager.setOrientation(LinearLayoutManager.VERTICAL);
-        newResourceRecyclerView.setLayoutManager(manager);
-        resourceAdapter = new MainResourcesAdapter(resourceItems, this);
+        newResourceRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        resourceAdapter = new CommonResourcesAdapter(resourceItems, this);
         newResourceRecyclerView.setAdapter(resourceAdapter);
-        pagerViews.add(newResourceRecyclerView);
+        final SwipeRefreshLayout resSwipeRefreshLayout = new SwipeRefreshLayout(this);
+        resSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                refreshResource(resSwipeRefreshLayout, true);
+            }
+        });
+        resSwipeRefreshLayout.addView(newResourceRecyclerView);
+        pagerViews.add(resSwipeRefreshLayout);
 
         newRequestRecyclerView = new RecyclerView(this);
-        manager = new LinearLayoutManager(this);
-        newRequestRecyclerView.setLayoutManager(manager);
-        requestAdapter = new MainRequestAdapter(requestItems, this);
+        newRequestRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        requestAdapter = new CommonRequestAdapter(requestItems, this);
         newRequestRecyclerView.setAdapter(requestAdapter);
-        pagerViews.add(newRequestRecyclerView);
+        final SwipeRefreshLayout requestSwipeRefreshLayout = new SwipeRefreshLayout(this);
+        requestSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                refreshResource(requestSwipeRefreshLayout, false);
+            }
+        });
+        requestSwipeRefreshLayout.addView(newRequestRecyclerView);
+        pagerViews.add(requestSwipeRefreshLayout);
 
         mainViewPager = findViewById(R.id.MainActivity_view_pager);
-        mainViewPager.setAdapter(new MainViewPagerAdapter(pagerViews));
+        mainViewPager.setAdapter(new CommonViewPagerAdapter(pagerViews));
         mainViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
@@ -111,21 +127,34 @@ public class MainActivity extends BaseActivity {
         addListener(R.id.MainActivity_search_text_view);
 
         initList();
-        initUserHead();
     }
 
     /**
-     * 获取用户头像信息
-     * 如果当前已经保存用户头像信息，则直接使用
-     * 否则调用MyApplication的downloadUserHeadImage方法下载
+     * 下拉刷新时执行
+     * @param swipeRefreshLayout 正在刷新的SwipeRefreshLayout
+     * @param refreshResource true: 刷新发生着资源界面，否则为请求界面
      */
-    public void initUserHead(){
-        if(MyApplication.userId != -1){
-            if(MyApplication.userHeadImage == null)
-                MyApplication.downloadUserHeadImage(handler);
-            else
-                userHeadImageButton.setImageDrawable(MyApplication.userHeadImage);
-        }
+    public void refreshResource(final SwipeRefreshLayout swipeRefreshLayout, final boolean refreshResource){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    if (refreshResource)
+                        Thread.sleep(2500);
+                    else
+                        Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        swipeRefreshLayout.setRefreshing(false);
+                        Toast.makeText(MyApplication.getContext(), "刷新完成", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        }).start();
     }
     /**
      * 初始化列表项
@@ -134,6 +163,11 @@ public class MainActivity extends BaseActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 for(int i = 1; i < 22; i++){
                     String title = "生命" + i + "号";
                     String detail = getString(R.string.virtualResourceDetail);
@@ -149,8 +183,9 @@ public class MainActivity extends BaseActivity {
                     NewRequestItem requestItem = new NewRequestItem(title, detail, time, price, bitmaps);
                     requestItems.add(requestItem);
                 }
-                resourceAdapter.notifyDataSetChanged();
-                requestAdapter.notifyDataSetChanged();
+                Message message = new Message();
+                message.what = TASK_OVER;
+                handler.sendMessage(message);
             }
         }).start();
     }
@@ -181,7 +216,6 @@ public class MainActivity extends BaseActivity {
         findViewById(res).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final Intent intent;
                 switch (res){
                     case R.id.MainActivity_resource_button:
                     case R.id.MainActivity_resource_text_view:
@@ -192,8 +226,7 @@ public class MainActivity extends BaseActivity {
                         mainViewPager.setCurrentItem(1);
                         break;
                     case R.id.MainActivity_head_button:
-                        intent = new Intent(MainActivity.this, UserProfileActivity.class);
-                        startActivity(intent);
+                        UserProfileActivity.startMe(MainActivity.this);
                         break;
                     case R.id.MainActivity_publish_button:
                         ImageButton publishButton = findViewById(R.id.MainActivity_publish_button);
@@ -206,19 +239,19 @@ public class MainActivity extends BaseActivity {
                         dialog.setItems(R.array.PublishType, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                Intent intent = new Intent(MainActivity.this, PublishNewActivity.class);
-                                intent.putExtra("publishType", which);
-                                startActivity(intent);
+                                if (which == 0)
+                                    PublishNewActivity.startMe(MainActivity.this, PublishNewActivity.PUBLISH_NEW_RESOURCE);
+                                else if (which == 1)
+                                    PublishNewActivity.startMe(MainActivity.this, PublishNewActivity.PUBLISH_NEW_REQUEST);
                             }
                         });
                         dialog.show();
                         break;
                     case R.id.MainActivity_message_button:
-                        intent = new Intent(MainActivity.this, MessagesActivity.class);
-                        startActivity(intent);
+                        MessagesActivity.startMe(MainActivity.this);
                         break;
                     case  R.id.MainActivity_search_text_view:
-                        Toast.makeText(MyApplication.getContext(), "正在全力开发中...", Toast.LENGTH_SHORT).show();
+                        SearchActivity.startMe(MainActivity.this);
                         break;
                 }
             }
@@ -226,16 +259,19 @@ public class MainActivity extends BaseActivity {
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == RESOURCE_DETAIL_REQUEST_CODE){
-            if(resultCode == RESULT_OK){
-                int pos = data.getIntExtra(RESOURCE_DETAIL_RESOURCE_ITEM_POSITION, -1);
-                if(pos != -1) {
-                    resourceItems.remove(pos);
-                    resourceAdapter.notifyDataSetChanged();
-                }
-            }
+    public void onBackPressed() {
+        long curTime = GregorianCalendar.getInstance().getTimeInMillis();
+        long exitInterval = 2000;
+        if (curTime - backLastPressedTime <= exitInterval){
+            ActivitiesCollector.finishAll();
         }
+        else {
+            Toast.makeText(MyApplication.getContext(), "再按一次退出程序", Toast.LENGTH_SHORT).show();
+            backLastPressedTime = GregorianCalendar.getInstance().getTimeInMillis();
+        }
+    }
+
+    public static void startMe(Context context){
+        context.startActivity(new Intent(context, MainActivity.class));
     }
 }

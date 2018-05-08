@@ -4,10 +4,12 @@
         <attr name="text" format="string"/>
         <attr name="input_password" format="boolean"/>
         <attr name="colorBlack" format="boolean"/>
+        <attr name="ime_option_action_done" format="boolean"/>
     </declare-styleable>
     <declare-styleable name="UserProfileItemLayout">
         <attr name="item_text" format="reference"/>
         <attr name="image_src" format="reference"/>
+        <attr name="amount_visibility" format="boolean"/>
     </declare-styleable>
     <declare-styleable name="ResReqDetailBottomButtonLayout">
         <attr name="android:text"/>
@@ -18,5 +20,9 @@
     <declare-styleable name="SettingItemLayout">
         <attr name="android:text"/>
         <attr name="switch_on" format="boolean"/>
+    </declare-styleable>
+    <declare-styleable name="AccountProfileItemLayout">
+        <attr name="item_title" format="string"/>
+        <attr name="show_icon" format="boolean"/>
     </declare-styleable>
 </resources>

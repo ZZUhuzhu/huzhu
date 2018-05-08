@@ -1,10 +1,14 @@
 package com.example.zzu.huzhucommunity.activities;
 
+import android.content.Context;
+import android.content.Intent;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.GestureDetector;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
 
@@ -32,6 +36,7 @@ public class SettingActivity extends BaseActivity {
         addListener(R.id.SettingActivity_about_us_button);
         addListener(R.id.SettingActivity_help_and_feedback_button);
         addListener(R.id.SettingActivity_exit_button);
+        addListener(R.id.SettingActivity_swipe_to_finish_on);
     }
     public void addListener(final int res){
         findViewById(res).setOnClickListener(new View.OnClickListener() {
@@ -40,15 +45,18 @@ public class SettingActivity extends BaseActivity {
                 SettingItemLayout itemLayout;
                 switch (res){
                     case R.id.SettingActivity_exit_button:
-                        finish();
                         ActivitiesCollector.finishAll();
                         break;
                     case R.id.SettingActivity_new_message_notify_button:
-                        itemLayout = findViewById(R.id.SettingActivity_new_message_notify_button);
+                        itemLayout = findViewById(res);
                         itemLayout.changeCheckStatus();
                         break;
                     case R.id.SettingActivity_record_track_button:
-                        itemLayout = findViewById(R.id.SettingActivity_record_track_button);
+                        itemLayout = findViewById(res);
+                        itemLayout.changeCheckStatus();
+                        break;
+                    case R.id.SettingActivity_swipe_to_finish_on:
+                        itemLayout = findViewById(res);
                         itemLayout.changeCheckStatus();
                         break;
                     case R.id.SettingActivity_clear_cache_button:
@@ -70,5 +78,8 @@ public class SettingActivity extends BaseActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+    public static void startMe(Context context){
+        context.startActivity(new Intent(context, SettingActivity.class));
     }
 }

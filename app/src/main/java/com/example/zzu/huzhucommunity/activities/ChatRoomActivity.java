@@ -1,72 +1,56 @@
 package com.example.zzu.huzhucommunity.activities;
 
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.zzu.huzhucommunity.R;
 import com.example.zzu.huzhucommunity.adapters.ChatRoomMessageAdapter;
 import com.example.zzu.huzhucommunity.commonclass.ChatRoomMessageItem;
+import com.example.zzu.huzhucommunity.commonclass.Constants;
 import com.example.zzu.huzhucommunity.commonclass.MyApplication;
-import com.example.zzu.huzhucommunity.commonclass.NewMessagesItem;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
+/**
+ * 聊天界面活动
+ */
 public class ChatRoomActivity extends BaseActivity {
-    private static final int PICK_IMAGE = 1;
-    private static final String TAG = "ChatRoomActivity";
     private ImageButton sendImageButton;
     private Button sendButton;
     private ChatRoomMessageAdapter adapter;
     private EditText inputEditText;
     private ArrayList<ChatRoomMessageItem> list = new ArrayList<>();
     private RecyclerView recyclerView;
-    private TextWatcher textWatcher = new TextWatcher() {
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            if(s.length() == 0){
-                sendImageButton.setVisibility(View.GONE);
-                sendButton.setVisibility(View.VISIBLE);
-            }
-        }
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {}
-        @Override
-        public void afterTextChanged(Editable s) {
-            if(s.length() == 0){
-                sendImageButton.setVisibility(View.VISIBLE);
-                sendButton.setVisibility(View.GONE);
-            }
-        }
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat_room_layout);
-        NewMessagesItem messagesItem = getIntent().getParcelableExtra(MessagesActivity.CHAT_ROOM_INTENT_EXTRA_NAME);
         Toolbar toolbar = findViewById(R.id.ChatRoomActivity_toolbar);
-        toolbar.setTitle(messagesItem.getSenderName());
+        toolbar.setTitle(R.string.solider);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         if(actionBar != null) actionBar.setDisplayHomeAsUpEnabled(true);
@@ -74,36 +58,72 @@ public class ChatRoomActivity extends BaseActivity {
         sendImageButton = findViewById(R.id.ChatRoomActivity_send_image_button);
         sendButton = findViewById(R.id.ChatRoomActivity_send_button);
         inputEditText = findViewById(R.id.ChatRoomActivity_input_edit_text);
-        inputEditText.addTextChangedListener(textWatcher);
 
         recyclerView = findViewById(R.id.ChatRoomActivity_recycler_view);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
-        adapter = new ChatRoomMessageAdapter(list, messagesItem.getSenderHeadBitmap());
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.profile_head_over_watch);
+        adapter = new ChatRoomMessageAdapter(list, bitmap, bitmap);
         recyclerView.setAdapter(adapter);
 
         addListener(R.id.ChatRoomActivity_send_button);
         addListener(R.id.ChatRoomActivity_send_image_button);
+        addListener(R.id.ChatRoomActivity_input_edit_text);
     }
+
+    /**
+     * 为控件添加监听器
+     * @param res 控件ID
+     */
     public void addListener(final int res){
+        if (res == R.id.ChatRoomActivity_input_edit_text){
+            TextWatcher textWatcher = new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {}
+                @Override
+                public void afterTextChanged(Editable s) {
+                    if(s.length() == 0){
+                        sendImageButton.setVisibility(View.VISIBLE);
+                        sendButton.setVisibility(View.GONE);
+                    }
+                    else{
+                        sendImageButton.setVisibility(View.GONE);
+                        sendButton.setVisibility(View.VISIBLE);
+                    }
+                }
+            };
+            inputEditText.addTextChangedListener(textWatcher);
+            inputEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+                @Override
+                public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                    if (actionId == EditorInfo.IME_ACTION_SEND){
+                        sendButton.performClick();
+                        return true;
+                    }
+                    return false;
+                }
+            });
+            return;
+        }
         findViewById(res).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 switch (res){
                     case R.id.ChatRoomActivity_send_button:
-                        Log.d(TAG, "onClick: send button pressed");
-                        list.add(new ChatRoomMessageItem(false, inputEditText.getText().toString()));
+                        String tmpString = inputEditText.getText().toString();
+                        if (TextUtils.isEmpty(tmpString))
+                            break;
+                        list.add(new ChatRoomMessageItem(false, tmpString));
                         list.add(new ChatRoomMessageItem(true, getString(R.string.veryGood)));
                         recyclerView.smoothScrollToPosition(list.size() - 1);
                         adapter.notifyDataSetChanged();
                         inputEditText.setText("");
                         break;
                     case R.id.ChatRoomActivity_send_image_button:
-                        Intent intent = new Intent();
-                        intent.setAction(Intent.ACTION_GET_CONTENT);
-                        intent.setType("image/*");
-                        startActivityForResult(intent, PICK_IMAGE);
+                        MyApplication.startPickImageDialog(ChatRoomActivity.this);
                         break;
                 }
             }
@@ -116,7 +136,7 @@ public class ChatRoomActivity extends BaseActivity {
                 finish();
                 return true;
             case R.id.ChatRoom_sender_profile_menu_item:
-                Toast.makeText(MyApplication.getContext(), "正在全力开发中...", Toast.LENGTH_SHORT).show();
+                OthersProfileActivity.startMe(ChatRoomActivity.this, 0);
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -130,21 +150,39 @@ public class ChatRoomActivity extends BaseActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == PICK_IMAGE){
-            if(resultCode == RESULT_OK){
-                Uri uri = data.getData();
-                if(uri == null) return;
-                ContentResolver contentResolver = getContentResolver();
-                try {
-                    Bitmap bitmap = BitmapFactory.decodeStream(contentResolver.openInputStream(uri));
-                    list.add(new ChatRoomMessageItem(false, bitmap));
-                    list.add(new ChatRoomMessageItem(true, getString(R.string.veryGood)));
-                    adapter.notifyDataSetChanged();
-                    recyclerView.smoothScrollToPosition(list.size() - 1);
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
+        switch (requestCode){
+            case Constants.PICK_IMAGE_FROM_CAMERA:
+                if(resultCode == RESULT_OK){
+                    Uri uri = data.getData();
+                    if(uri == null) return;
+                    ContentResolver contentResolver = getContentResolver();
+                    try {
+                        Bitmap bitmap = BitmapFactory.decodeStream(contentResolver.openInputStream(uri));
+                        list.add(new ChatRoomMessageItem(false, bitmap));
+                        list.add(new ChatRoomMessageItem(true, getString(R.string.veryGood)));
+                        adapter.notifyDataSetChanged();
+                        recyclerView.smoothScrollToPosition(list.size() - 1);
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
                 }
-            }
+                break;
+            case Constants.PICK_IMAGE_FROM_GALLERY:
+                if(resultCode == RESULT_OK){
+                    Bundle bundle = data.getExtras();
+                    if(bundle != null){
+                        Bitmap bitmap = (Bitmap) bundle.get("data");
+                        list.add(new ChatRoomMessageItem(false, bitmap));
+                        list.add(new ChatRoomMessageItem(true, getString(R.string.veryGood)));
+                        adapter.notifyDataSetChanged();
+                        recyclerView.smoothScrollToPosition(list.size() - 1);
+                    }
+                }
+                break;
         }
+    }
+
+    public static void startMe(Context context){
+        context.startActivity(new Intent(context, ChatRoomActivity.class));
     }
 }

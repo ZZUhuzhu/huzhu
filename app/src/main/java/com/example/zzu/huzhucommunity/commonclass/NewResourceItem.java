@@ -15,14 +15,14 @@ import java.util.ArrayList;
 public class NewResourceItem implements Parcelable {
     private String itemDetail;
     private String itemTitle;
-    private int itemPublishTime;
+    private long itemPublishTime;
     private double itemPrice;
     private int itemThumbnailAmount;
     private ArrayList<Bitmap> itemThumbnails;
     private boolean received;
 
-    public NewResourceItem(String itemTitle, String itemDetail, int itemPublishTime, double itemPrice, ArrayList<Bitmap> itemThumbnails){
-        this.received = false;
+    public NewResourceItem(String itemTitle, String itemDetail, long itemPublishTime, double itemPrice, ArrayList<Bitmap> itemThumbnails){
+        this.received = Math.random() * 100 > 50;
         this.itemTitle = itemTitle;
         this.itemDetail = itemDetail;
         this.itemPrice = itemPrice;
@@ -37,7 +37,7 @@ public class NewResourceItem implements Parcelable {
     private NewResourceItem(Parcel in) {
         itemDetail = in.readString();
         itemTitle = in.readString();
-        itemPublishTime = in.readInt();
+        itemPublishTime = in.readLong();
         itemPrice = in.readDouble();
         itemThumbnailAmount = in.readInt();
         itemThumbnails = in.createTypedArrayList(Bitmap.CREATOR);
@@ -69,7 +69,7 @@ public class NewResourceItem implements Parcelable {
         return itemPrice;
     }
 
-    public int getItemPublishTime() {
+    public long getItemPublishTime() {
         return itemPublishTime;
     }
 
@@ -98,7 +98,7 @@ public class NewResourceItem implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(itemDetail);
         dest.writeString(itemTitle);
-        dest.writeInt(itemPublishTime);
+        dest.writeLong(itemPublishTime);
         dest.writeDouble(itemPrice);
         dest.writeInt(itemThumbnailAmount);
         dest.writeTypedList(itemThumbnails);

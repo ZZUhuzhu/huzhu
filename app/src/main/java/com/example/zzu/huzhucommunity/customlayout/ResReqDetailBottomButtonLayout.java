@@ -3,6 +3,7 @@ package com.example.zzu.huzhucommunity.customlayout;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.widget.ImageView;
@@ -19,12 +20,13 @@ import com.example.zzu.huzhucommunity.R;
 public class ResReqDetailBottomButtonLayout extends LinearLayout {
     public ResReqDetailBottomButtonLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
-        LayoutInflater.from(context).inflate(R.layout.resource_detail_bottom_button_view, this);
+        LayoutInflater.from(context).inflate(R.layout.custom_res_detail_bottom_button_view, this);
         TextView buttonTextView = findViewById(R.id.ResourceDetailBottomButton_text_view);
         ImageView buttonImageView = findViewById(R.id.ResourceDetailBottomButton_image_view);
 
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.ResReqDetailBottomButtonLayout);
         buttonTextView.setText(typedArray.getResourceId(R.styleable.ResReqDetailBottomButtonLayout_android_text, R.string.app_name));
+        buttonTextView.setTextColor(typedArray.getColor(R.styleable.ResReqDetailBottomButtonLayout_android_textColor, Color.GRAY));
         buttonImageView.setImageResource(typedArray.getResourceId(R.styleable.ResReqDetailBottomButtonLayout_android_src, R.drawable.star));
         typedArray.recycle();
         setClickable(true);
