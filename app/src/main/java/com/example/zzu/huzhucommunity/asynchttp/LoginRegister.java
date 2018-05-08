@@ -8,6 +8,7 @@ import android.os.Handler;
 import android.os.Message;
 
 import com.example.zzu.huzhucommunity.commonclass.MyApplication;
+import com.example.zzu.huzhucommunity.commonclass.Utilities;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -30,6 +31,12 @@ public class LoginRegister {
     private AsyncHttpCallback callback;
     private static final int LOGIN = 10101;
     private static final int REGISTER = 10102;
+    /**
+     * 登录时 JsonObject 返回键值信息
+     */
+    private static final String USER_ID_KEY = "User_id";
+    private static final String USER_NAME_KEY = "User_name";
+    private static final String USER_HEAD_KEY = "User_head";
     /**
      * 外部调用类方法，获得单体实例
      *
@@ -152,6 +159,10 @@ public class LoginRegister {
         }
     }
 
+    /**
+     * 用来同步登录和注册的handler
+     * 登录成功后用户名存放在名为 Profile 的 SharedPreference 中
+     */
     private Handler handler = new Handler(new Handler.Callback() {
         @Override
         public boolean handleMessage(Message message) {
@@ -163,16 +174,8 @@ public class LoginRegister {
                         JSONObject userObject = new JSONObject(responseStr);
                         int code=userObject.getInt("status");
                         if(code == 200) {
-                            SharedPreferences.Editor editor = MyApplication.getContext().getSharedPreferences(
-                                    userObject.getString("User_name"), Context.MODE_PRIVATE).edit();
-                            int userID = userObject.getInt("User_id");
-                            String userName = userObject.getString("User_name");
-                            String userHead = userObject.getString("User_head");
-                            editor.putInt("User_ID", userID);
-                            editor.putString("User_name", userName);
-                            editor.putString("User_head", userHead);
-//                            MyApplication.setUser(userID, userName, userHead);
-                            editor.apply();
+                            Utilities.SaveLoginUserProfile(userObject.getInt(USER_ID_KEY), userObject.getString(USER_NAME_KEY),
+                                    userObject.getString(USER_HEAD_KEY));
                             callback.onSuccess(code, null);
                         }
                         else {

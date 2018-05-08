@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.example.zzu.huzhucommunity.R;
 import com.example.zzu.huzhucommunity.commonclass.CommentItem;
 import com.example.zzu.huzhucommunity.commonclass.MyApplication;
+import com.example.zzu.huzhucommunity.commonclass.Utilities;
 import com.example.zzu.huzhucommunity.customlayout.CommentItemLayout;
 import com.example.zzu.huzhucommunity.customlayout.ResReqDetailBottomButtonLayout;
 
@@ -99,7 +100,7 @@ public class ResourceDetailActivity extends BaseActivity {
                         final EditText tmpEditText = new EditText(ResourceDetailActivity.this);
                         tmpEditText.setBackground(null);
                         tmpEditText.setSingleLine(false);
-                        int tmpPaddingPx = (int)MyApplication.convertDpToPixel(10);
+                        int tmpPaddingPx = (int) Utilities.convertDpToPixel(10);
                         tmpEditText.setPadding(tmpPaddingPx, tmpPaddingPx, tmpPaddingPx, tmpPaddingPx);
                         new AlertDialog.Builder(ResourceDetailActivity.this)
                                 .setView(tmpEditText)

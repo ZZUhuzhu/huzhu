@@ -21,6 +21,7 @@ import android.widget.Toast;
 import com.example.zzu.huzhucommunity.R;
 import com.example.zzu.huzhucommunity.commonclass.CommentItem;
 import com.example.zzu.huzhucommunity.commonclass.MyApplication;
+import com.example.zzu.huzhucommunity.commonclass.Utilities;
 import com.example.zzu.huzhucommunity.customlayout.CommentItemLayout;
 import com.example.zzu.huzhucommunity.customlayout.ResReqDetailBottomButtonLayout;
 
@@ -101,7 +102,7 @@ public class RequestDetailActivity extends BaseActivity {
                         final EditText tmpEditText = new EditText(RequestDetailActivity.this);
                         tmpEditText.setBackground(null);
                         tmpEditText.setSingleLine(false);
-                        int tmpPaddingPx = (int)MyApplication.convertDpToPixel(10);
+                        int tmpPaddingPx = (int) Utilities.convertDpToPixel(10);
                         tmpEditText.setPadding(tmpPaddingPx, tmpPaddingPx, tmpPaddingPx, tmpPaddingPx);
                         AlertDialog dialog = new AlertDialog.Builder(RequestDetailActivity.this)
                                 .setView(tmpEditText)

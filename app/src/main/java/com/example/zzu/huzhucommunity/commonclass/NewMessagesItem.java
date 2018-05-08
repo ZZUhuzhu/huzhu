@@ -73,7 +73,7 @@ public class NewMessagesItem implements Parcelable {
     }
     public int getNewMessageAmount() {return newMessageAmount;}
     public String getMessageTimeString(){
-        return MyApplication.convertTimeInMillToString(messageTimeInMills);
+        return Utilities.convertTimeInMillToString(messageTimeInMills);
     }
     public void setRead(boolean read) {
         this.read = read;

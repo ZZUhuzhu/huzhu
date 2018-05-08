@@ -20,6 +20,7 @@ import com.example.zzu.huzhucommunity.adapters.MyCommentAdapter;
 import com.example.zzu.huzhucommunity.asynchttp.UserProfile;
 import com.example.zzu.huzhucommunity.commonclass.Constants;
 import com.example.zzu.huzhucommunity.commonclass.MyApplication;
+import com.example.zzu.huzhucommunity.commonclass.Utilities;
 import com.example.zzu.huzhucommunity.customlayout.UserProfileItemLayout;
 
 public class UserProfileActivity extends BaseActivity {
@@ -86,7 +87,7 @@ public class UserProfileActivity extends BaseActivity {
                         AccountProfileActivity.startMe(UserProfileActivity.this);
                         break;
                     case R.id.UserProfile_top_background_image_view:
-                        MyApplication.startPickImageDialog(UserProfileActivity.this);
+                        Utilities.startPickImageDialog(UserProfileActivity.this);
                         break;
                 }
             }
@@ -130,7 +131,7 @@ public class UserProfileActivity extends BaseActivity {
         switch (requestCode){
             case Constants.PICK_IMAGE_FROM_CAMERA:
             case Constants.PICK_IMAGE_FROM_GALLERY:
-                Bitmap bitmap = MyApplication.getImageFromDialog(requestCode, resultCode, data);
+                Bitmap bitmap = Utilities.getImageFromDialog(requestCode, resultCode, data);
                 if (bitmap != null){
                     ((ImageView) findViewById(R.id.UserProfile_top_background_image_view)).setImageBitmap(bitmap);
                 }

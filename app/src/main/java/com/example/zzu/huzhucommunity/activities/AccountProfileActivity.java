@@ -20,15 +20,19 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.zzu.huzhucommunity.R;
+import com.example.zzu.huzhucommunity.asynchttp.AsyncHttpCallback;
+import com.example.zzu.huzhucommunity.asynchttp.UserProfile;
 import com.example.zzu.huzhucommunity.commonclass.ActivitiesCollector;
 import com.example.zzu.huzhucommunity.commonclass.Constants;
 import com.example.zzu.huzhucommunity.commonclass.MyApplication;
+import com.example.zzu.huzhucommunity.commonclass.Utilities;
 import com.example.zzu.huzhucommunity.customlayout.AccountProfileItemLayout;
 
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 
 
-public class AccountProfileActivity extends BaseActivity {
+public class AccountProfileActivity extends BaseActivity implements AsyncHttpCallback {
     private static final int REQUEST_USER_NAME = 0;
     private static final int REQUEST_USER_PHONE= 1;
     private static final int REQUEST_USER_GRADE = 2;
@@ -57,8 +61,19 @@ public class AccountProfileActivity extends BaseActivity {
 
         initImage();
     }
+
+    /**
+     * 从服务器获取用户账户信息
+     */
     public void initImage(){
         AccountProfileItemLayout itemLayout = findViewById(R.id.AccountProfileActivity_sex_view);
+        //todo 用户账户信息
+        int userID = Utilities.GetLoginUserId();
+        if (userID == Utilities.USER_NOT_FOUND){
+            Toast.makeText(MyApplication.getContext(), "出问题了，请重新登录", Toast.LENGTH_SHORT).show();
+            ActivitiesCollector.exitLogin(this);
+        }
+        UserProfile.getOurInstance().getUserProfile("" + userID, this);
         itemLayout.setImageDrawable(getDrawable(R.drawable.female_icon));
         itemLayout = findViewById(R.id.AccountProfileActivity_user_name_view);
         itemLayout.setContent(getString(R.string.solider));
@@ -67,9 +82,9 @@ public class AccountProfileActivity extends BaseActivity {
         itemLayout = findViewById(R.id.AccountProfileActivity_department_view);
         itemLayout.setContent("信息工程学院");
         itemLayout = findViewById(R.id.AccountProfileActivity_register_time_view);
-        itemLayout.setContent(MyApplication.convertTimeInMillToString(GregorianCalendar.getInstance().getTimeInMillis()));
+        itemLayout.setContent(Utilities.convertTimeInMillToString(GregorianCalendar.getInstance().getTimeInMillis()));
         itemLayout = findViewById(R.id.AccountProfileActivity_last_login_time_view);
-        itemLayout.setContent(MyApplication.convertTimeInMillToString(GregorianCalendar.getInstance().getTimeInMillis()));
+        itemLayout.setContent(Utilities.convertTimeInMillToString(GregorianCalendar.getInstance().getTimeInMillis()));
         itemLayout = findViewById(R.id.AccountProfileActivity_phone_view);
         itemLayout.setContent("15766988562");
     }
@@ -84,8 +99,7 @@ public class AccountProfileActivity extends BaseActivity {
                 final AccountProfileItemLayout itemLayout;
                 switch (res){
                     case R.id.AccountProfileActivity_exit_login_view:
-                        LoginActivity.startMe(AccountProfileActivity.this);
-                        ActivitiesCollector.exitLogin();
+                        ActivitiesCollector.exitLogin(AccountProfileActivity.this);
                         break;
                     case R.id.AccountProfileActivity_user_name_view:
                         itemLayout = findViewById(res);
@@ -191,7 +205,7 @@ public class AccountProfileActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.account_profile_menu_item_change_image:
-                MyApplication.startPickImageDialog(AccountProfileActivity.this);
+                Utilities.startPickImageDialog(AccountProfileActivity.this);
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -202,7 +216,7 @@ public class AccountProfileActivity extends BaseActivity {
         switch (requestCode){
             case Constants.PICK_IMAGE_FROM_CAMERA:
             case Constants.PICK_IMAGE_FROM_GALLERY:
-                Bitmap bitmap = MyApplication.getImageFromDialog(requestCode, resultCode, data);
+                Bitmap bitmap = Utilities.getImageFromDialog(requestCode, resultCode, data);
                 if (bitmap != null){
                     ((ImageView) findViewById(R.id.AccountProfileActivity_head_image_view)).setImageBitmap(bitmap);
                     ((ImageView) findViewById(R.id.AccountProfileActivity_expanded_image_view)).setImageBitmap(bitmap);
@@ -219,5 +233,14 @@ public class AccountProfileActivity extends BaseActivity {
 
     public static void startMe(Context context){
         context.startActivity(new Intent(context, AccountProfileActivity.class));
+    }
+
+    @Override
+    public void onSuccess(int code, HashMap<String, String> mp) {
+        //todo 成功
+    }
+
+    @Override
+    public void onError(int code) {
     }
 }

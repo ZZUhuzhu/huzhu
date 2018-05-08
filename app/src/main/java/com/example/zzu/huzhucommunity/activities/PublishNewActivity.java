@@ -26,6 +26,7 @@ import android.widget.Toast;
 import com.example.zzu.huzhucommunity.R;
 import com.example.zzu.huzhucommunity.commonclass.Constants;
 import com.example.zzu.huzhucommunity.commonclass.MyApplication;
+import com.example.zzu.huzhucommunity.commonclass.Utilities;
 
 import java.io.FileNotFoundException;
 import java.util.Calendar;
@@ -79,7 +80,7 @@ public class PublishNewActivity extends BaseActivity {
             public void onClick(View v) {
                 switch (res){
                     case R.id.PublishNewRes_add_image_button:
-                        MyApplication.startPickImageDialog(PublishNewActivity.this);
+                        Utilities.startPickImageDialog(PublishNewActivity.this);
                         break;
                     case R.id.PublishNewRes_time_text_view:
                         TimePickerDialog timePickerDialog = new TimePickerDialog(PublishNewActivity.this,
@@ -135,7 +136,7 @@ public class PublishNewActivity extends BaseActivity {
         switch (requestCode){
             case Constants.PICK_IMAGE_FROM_GALLERY:
             case Constants.PICK_IMAGE_FROM_CAMERA:
-                Bitmap bitmap = MyApplication.getImageFromDialog(requestCode, resultCode, data);
+                Bitmap bitmap = Utilities.getImageFromDialog(requestCode, resultCode, data);
                 if (bitmap != null){
                     imageView.setImageBitmap(bitmap);
                     layout.addView(imageView, 0);

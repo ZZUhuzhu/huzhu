@@ -2,6 +2,7 @@ package com.example.zzu.huzhucommunity.asynchttp;
 
 /**
  * Created by wjsay on 2018/1/24.
+ * ???
  */
 
 public class HTTPConstant {

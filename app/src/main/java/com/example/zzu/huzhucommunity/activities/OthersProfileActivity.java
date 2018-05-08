@@ -12,6 +12,7 @@ import android.widget.Toast;
 import com.example.zzu.huzhucommunity.R;
 import com.example.zzu.huzhucommunity.commonclass.ActivitiesCollector;
 import com.example.zzu.huzhucommunity.commonclass.MyApplication;
+import com.example.zzu.huzhucommunity.commonclass.Utilities;
 import com.example.zzu.huzhucommunity.customlayout.AccountProfileItemLayout;
 
 import java.util.GregorianCalendar;
@@ -44,7 +45,7 @@ public class OthersProfileActivity extends BaseActivity {
         itemLayout = findViewById(R.id.OthersProfileActivity_department_view);
         itemLayout.setContent("建筑学院");
         itemLayout = findViewById(R.id.OthersProfileActivity_register_time_view);
-        itemLayout.setContent(MyApplication.convertTimeInMillToString(GregorianCalendar.getInstance().getTimeInMillis()));
+        itemLayout.setContent(Utilities.convertTimeInMillToString(GregorianCalendar.getInstance().getTimeInMillis()));
     }
     @Override
     public void addListener(final int res) {

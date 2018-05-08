@@ -30,6 +30,7 @@ import com.example.zzu.huzhucommunity.adapters.ChatRoomMessageAdapter;
 import com.example.zzu.huzhucommunity.commonclass.ChatRoomMessageItem;
 import com.example.zzu.huzhucommunity.commonclass.Constants;
 import com.example.zzu.huzhucommunity.commonclass.MyApplication;
+import com.example.zzu.huzhucommunity.commonclass.Utilities;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -123,7 +124,7 @@ public class ChatRoomActivity extends BaseActivity {
                         inputEditText.setText("");
                         break;
                     case R.id.ChatRoomActivity_send_image_button:
-                        MyApplication.startPickImageDialog(ChatRoomActivity.this);
+                        Utilities.startPickImageDialog(ChatRoomActivity.this);
                         break;
                 }
             }

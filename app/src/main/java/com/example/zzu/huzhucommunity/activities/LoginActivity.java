@@ -59,18 +59,20 @@ public class LoginActivity extends BaseActivity implements AsyncHttpCallback {
      * @param res 控件ID
      */
     public void addListener(final int res){
+        //设置软键盘右下角登录按钮
         if (res == R.id.LoginActivity_password_edit_text){
             passwordEditText.setImeActionLabel(getString(R.string.login), EditorInfo.IME_ACTION_GO);
             passwordEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
                 @Override
                 public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                     if (actionId == EditorInfo.IME_ACTION_GO){
-                        onSuccess(1, null);
+                        findViewById(R.id.LoginActivity_login_button).performClick();
                         return true;
                     }
                     return false;
                 }
             });
+            //设置密码框监听器
             passwordEditText.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
@@ -131,7 +133,7 @@ public class LoginActivity extends BaseActivity implements AsyncHttpCallback {
      */
     @Override
     public void onSuccess(int code, HashMap<String, String> mp) {
-        Toast.makeText(MyApplication.getContext(), "Success login", Toast.LENGTH_SHORT).show();
+        Toast.makeText(MyApplication.getContext(), "登录成功", Toast.LENGTH_SHORT).show();
         MainActivity.startMe(this);
         finish();
     }
@@ -142,7 +144,7 @@ public class LoginActivity extends BaseActivity implements AsyncHttpCallback {
      */
     @Override
     public void onError(int code) {
-        Toast.makeText(MyApplication.getContext(), "Error on login", Toast.LENGTH_SHORT).show();
+        Toast.makeText(MyApplication.getContext(), "登录失败", Toast.LENGTH_SHORT).show();
     }
     public static void startMe(Context context){
         context.startActivity(new Intent(context, LoginActivity.class));

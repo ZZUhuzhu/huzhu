@@ -25,6 +25,17 @@ public class UserProfile {
     private AsyncHttpCallback callback;
     private static final int GET_USER_ALL_KINDS_NUMBER = 10601;
     private static final int GET_USER_PROFILE = 10901;
+    /**
+     * 获取用户账户信息时的 JSON 键
+     * 以及放入map里面时的键
+     */
+    private static final String USER_STATUS_JSON_KEY = "status";
+    private static final String USER_HEAD_JSON_KEY = "userHead";
+    private static final String USER_NAME_JSON_KEY = "userName";
+    private static final String USER_SEX_JSON_key = "userSex";
+    private static final String USER_GRADE_JSON_KEY = "userGrade";
+    private static final String USER_DEPARTMENT_JSON_KEY = "userDepartment";
+    private static final String USER_PHONE_JSON_KEY = "userPhone";
 
 
     /**
@@ -91,6 +102,11 @@ public class UserProfile {
         }
     }
 
+    /**
+     * 获取用户信息，通过handler回调使用map返回数据
+     * @param userID 用户ID
+     * @param cBack 回调接口
+     */
     public void getUserProfile(final String userID, final AsyncHttpCallback cBack) {
         try {
             if (userID != null && cBack != null) {
@@ -143,7 +159,7 @@ public class UserProfile {
                 case GET_USER_ALL_KINDS_NUMBER:
                     try {
                         JSONObject userObject = new JSONObject(Response);
-                        int code=userObject.getInt("status");
+                        int code=userObject.getInt(USER_STATUS_JSON_KEY);
                         callback.onSuccess(code, null);
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -152,21 +168,22 @@ public class UserProfile {
                 case GET_USER_PROFILE:
                     try {
                         JSONObject userObject = new JSONObject(Response);
-                        int code=userObject.getInt("status");
-                        String userHead = userObject.getString("userHead");
-                        String userName = userObject.getString("userName");
-                        String userSex = userObject.getString("userSex");
-                        String userGrade = userObject.getString("userGrade");
-                        String userDepartment = userObject.getString("userDepartment");
-                        String userPhone = userObject.getString("userPhone");
+                        // code 200 表示成功，map中的无用
+                        int code = userObject.getInt(USER_STATUS_JSON_KEY);
+                        String userHead = userObject.getString(USER_HEAD_JSON_KEY);
+                        String userName = userObject.getString(USER_NAME_JSON_KEY);
+                        String userSex = userObject.getString(USER_SEX_JSON_key);
+                        String userGrade = userObject.getString(USER_GRADE_JSON_KEY);
+                        String userDepartment = userObject.getString(USER_DEPARTMENT_JSON_KEY);
+                        String userPhone = userObject.getString(USER_PHONE_JSON_KEY);
                         HashMap<String, String> mp = new HashMap<>();
-                        mp.put("userHead", userHead);
-                        mp.put("userSex", userSex);
-                        mp.put("userName", userName);
-                        mp.put("userGrade", userGrade);
-                        mp.put("userDepartment", userDepartment);
-                        mp.put("userPhone", userPhone);
-                        mp.put("code", "" + code);
+                        mp.put(USER_HEAD_JSON_KEY, userHead);
+                        mp.put(USER_SEX_JSON_key, userSex);
+                        mp.put(USER_NAME_JSON_KEY, userName);
+                        mp.put(USER_GRADE_JSON_KEY, userGrade);
+                        mp.put(USER_DEPARTMENT_JSON_KEY, userDepartment);
+                        mp.put(USER_PHONE_JSON_KEY, userPhone);
+                        mp.put(USER_STATUS_JSON_KEY, "" + code);
                         callback.onSuccess(code, mp);
                     } catch (JSONException e) {
                         e.printStackTrace();

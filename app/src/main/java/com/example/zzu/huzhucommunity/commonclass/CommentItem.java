@@ -45,7 +45,7 @@ public class CommentItem {
     }
 
     public String getTimeString(){
-        return MyApplication.convertTimeInMillToString(timeInMills);
+        return Utilities.convertTimeInMillToString(timeInMills);
     }
 
     public int getUserID() {
