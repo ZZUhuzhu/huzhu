@@ -154,6 +154,7 @@ public class Setting {
                 }
                 break;
                 case CHECK_FOR_UPDATE:
+
                 break;
                 default:
                     break;

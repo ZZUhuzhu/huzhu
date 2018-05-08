@@ -23,6 +23,8 @@ import com.example.zzu.huzhucommunity.R;
 import com.example.zzu.huzhucommunity.adapters.CommonRequestAdapter;
 import com.example.zzu.huzhucommunity.adapters.CommonResourcesAdapter;
 import com.example.zzu.huzhucommunity.adapters.CommonViewPagerAdapter;
+import com.example.zzu.huzhucommunity.asynchttp.AsyncHttpCallback;
+import com.example.zzu.huzhucommunity.asynchttp.Comment;
 import com.example.zzu.huzhucommunity.commonclass.ActivitiesCollector;
 import com.example.zzu.huzhucommunity.commonclass.MyApplication;
 import com.example.zzu.huzhucommunity.commonclass.NewRequestItem;
@@ -273,5 +275,11 @@ public class MainActivity extends BaseActivity {
 
     public static void startMe(Context context){
         context.startActivity(new Intent(context, MainActivity.class));
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Comment.getOurInstance().getMyComment("1", "1", null);
     }
 }
