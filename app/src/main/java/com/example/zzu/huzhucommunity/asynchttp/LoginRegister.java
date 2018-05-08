@@ -183,6 +183,7 @@ public class LoginRegister {
                     }
                     break;
                 case REGISTER:
+
                     break;
                 default:
                     break;

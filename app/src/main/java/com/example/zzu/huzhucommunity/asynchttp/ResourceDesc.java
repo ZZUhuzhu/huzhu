@@ -395,9 +395,13 @@ public class ResourceDesc {
                         JSONObject userObject = new JSONObject(Response);
                         int code=userObject.getInt("status");
                         HashMap<String, String> mp = new HashMap<>();
-                        String number = userObject.getString("number");
+                        String number =userObject.getString("number");
+                        int n = Integer.parseInt(number);
 
                         mp.put("number", number);
+                        for (int i = 0; i < n; ++i) {
+                            mp.put("" + i, userObject.getString("" + i));
+                        }
 
                         callback.onSuccess(code, null);
                     } catch (JSONException e) {
@@ -408,6 +412,14 @@ public class ResourceDesc {
                     try {
                         JSONObject userObject = new JSONObject(Response);
                         int code=userObject.getInt("status");
+                        String publishState = userObject.getString("publishState");
+                        String resourceID = userObject.getString("resourceID");
+                        String _1 = userObject.getString("1");
+                        HashMap<String, String> mp = new HashMap<>();
+                        mp.put("1", _1);
+                        mp.put("resourceID", resourceID);
+                        mp.put("publishState", publishState);
+
                         callback.onSuccess(code, null);
                     } catch (JSONException e) {
                         e.printStackTrace();

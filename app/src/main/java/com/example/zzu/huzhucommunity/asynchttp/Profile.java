@@ -12,6 +12,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
 
 /**
  * Created by do_pc on 2018/1/25.
@@ -183,15 +184,48 @@ public class Profile {
             String Response = message.toString();
             switch (message.what) {
                 case UPDATE:
-                try {
-                    JSONObject userObject = new JSONObject(Response);
-                    int code=userObject.getInt("status");
-                    callback.onSuccess(code, null);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                    try {
+                        JSONObject userObject = new JSONObject(Response);
+                        int code=userObject.getInt("status");
+
+                        HashMap<String, String> mp = new HashMap<>();
+                        mp.put("code", code + "");
+
+                        callback.onSuccess(code, null);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 break;
                 case GET_ACCOUNT_PROFILE:
+                    try {
+                        JSONObject userObject = new JSONObject(Response);
+                        int code=userObject.getInt("status");
+                        String userHead = userObject.getString("userHead");
+                        String userName = userObject.getString("userName");
+                        String userAccount = userObject.getString("userAccount");
+                        String userSex = userObject.getString("userSex");
+                        String userPhone = userObject.getString("userPhone");
+                        String userGrade = userObject.getString("userGrade");
+                        String userDept = userObject.getString("userDept");
+                        String userRegisterTime = userObject.getString("userRegisterTime");
+                        String userLoginTime = userObject.getString("userLoginTime");
+
+                        HashMap<String, String> mp = new HashMap<>();
+                        mp.put("code", code + "");
+                        mp.put("userHead", userHead);
+                        mp.put("userName", userName);
+                        mp.put("userAccount", userAccount);
+                        mp.put("userSex", userSex);
+                        mp.put("userPhone", userPhone);
+                        mp.put("userGrade", userGrade);
+                        mp.put("userDept", userDept);
+                        mp.put("userRegisterTime", userRegisterTime);
+                        mp.put("userLoginTime", userLoginTime);
+
+                        callback.onSuccess(code, mp);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 break;
                 case UPDATE_PASSWORD:
                 break;

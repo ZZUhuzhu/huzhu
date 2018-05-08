@@ -12,6 +12,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
 
 /**
  * Created by do_pc on 2018/1/25.
@@ -187,7 +188,17 @@ public class Comment {
                     try {
                         JSONObject userObject = new JSONObject(Response);
                         int code = userObject.getInt("status");
-                        callback.onSuccess(code, null);
+                        String number =userObject.getString("number");
+                        int n = Integer.parseInt(number);
+
+                        HashMap<String, String> mp = new HashMap<>();
+                        mp.put("number", number);
+                        mp.put("code", code + "");
+                        for (int i = 0; i < n; ++i) {
+                            mp.put("" + i, userObject.getString("" + i));
+                        }
+
+                        callback.onSuccess(code, mp);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -205,7 +216,12 @@ public class Comment {
                     try {
                         JSONObject userObject = new JSONObject(Response);
                         int code = userObject.getInt("status");
-                        callback.onSuccess(code, null);
+
+                        HashMap<String, String> mp = new HashMap<>();
+                        mp.put("code", "" + code);
+
+
+                        callback.onSuccess(code, mp);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
