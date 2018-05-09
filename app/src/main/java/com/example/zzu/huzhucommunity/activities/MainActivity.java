@@ -277,9 +277,4 @@ public class MainActivity extends BaseActivity {
         context.startActivity(new Intent(context, MainActivity.class));
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        Comment.getOurInstance().getMyComment("1", "1", null);
-    }
 }

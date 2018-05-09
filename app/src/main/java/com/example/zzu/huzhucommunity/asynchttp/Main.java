@@ -3,6 +3,9 @@ package com.example.zzu.huzhucommunity.asynchttp;
 import android.os.Handler;
 import android.os.Message;
 
+import com.example.zzu.huzhucommunity.dataclass.Request;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -12,6 +15,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by do_pc on 2018/1/25.
@@ -24,6 +29,9 @@ public class Main {
     private static final int GET_NEW_RESOURCE = 10301;
     private static final int GET_REQUEST = 10302;
     private static final int GET_RESOURCE_BY_TYPE = 10303;
+
+    public static final String REQUEST_NUMBER_JSON_KEY = "number";
+    public static final String REQUEST_CODE_JSON_KEY = "code";
 
     /**
      * 外部调用类方法，获得单体实例
@@ -195,7 +203,25 @@ public class Main {
                     try {
                         JSONObject userObject = new JSONObject(Response);
                         int code = userObject.getInt("status");
-                        callback.onSuccess(code, null);
+                        String number = userObject.getString("number");
+                        int n = Integer.parseInt(number);
+                        HashMap<String, String> mp = new HashMap<>();
+                        mp.put(REQUEST_CODE_JSON_KEY, code + "");
+                        mp.put(REQUEST_NUMBER_JSON_KEY, number);
+                        for (int i = 0; i < n; ++i) {
+                            mp.put("" + i, userObject.getString("" + i));
+                        }
+//                        String json = "[";
+//                        if (n > 0) json += userObject.getString("0");
+//                        for (int i = 1; i < n; ++i) {
+//                            json += "," + userObject.getString("" + i);
+//                        }
+//                        json += "]";
+//                        Gson gson = new Gson();
+//                        List<Request> list = gson.fromJson(json,
+//                                new TypeToken<List<Request>>() {}.getType());
+
+                        callback.onSuccess(code, mp);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }

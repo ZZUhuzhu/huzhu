@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.example.zzu.huzhucommunity.R;
+import com.example.zzu.huzhucommunity.asynchttp.AshncHttpCallbackImplemnet;
+import com.example.zzu.huzhucommunity.asynchttp.Main;
 
 public class SplashActivity extends BaseActivity {
 
@@ -16,6 +18,13 @@ public class SplashActivity extends BaseActivity {
         int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                 | View.SYSTEM_UI_FLAG_FULLSCREEN;
         decorView.setSystemUiVisibility(uiOptions);
+        //wjsay modify
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                Main.getOurInstance().getRequest("1", new AshncHttpCallbackImplemnet());
+//            }
+//        }).start();
 
         CountDownTimer countDownTimer = new CountDownTimer(2000, 1000) {
             @Override
@@ -44,4 +53,5 @@ public class SplashActivity extends BaseActivity {
 
     @Override
     public void addListener(final int res) {}
+
 }
