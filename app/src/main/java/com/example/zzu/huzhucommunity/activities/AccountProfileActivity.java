@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Point;
-import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.ActionBar;
@@ -32,8 +31,6 @@ import com.example.zzu.huzhucommunity.commonclass.Utilities;
 import com.example.zzu.huzhucommunity.customlayout.AccountProfileItemLayout;
 
 import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 
@@ -67,8 +64,13 @@ public class AccountProfileActivity extends BaseActivity implements AsyncHttpCal
                 case MESSAGE_GET_USER_HEAD:
                     if (msg.obj == null)
                         Toast.makeText(MyApplication.getContext(), Utilities.TOAST_NET_WORK_ERROR, Toast.LENGTH_SHORT).show();
-                    ((ImageView) findViewById(R.id.AccountProfileActivity_head_image_view)).setImageBitmap((Bitmap)msg.obj);
-                    ((ImageView) findViewById(R.id.AccountProfileActivity_expanded_image_view)).setImageBitmap((Bitmap)msg.obj);
+                    else{
+                        Bitmap bitmap = (Bitmap) msg.obj;
+                        Utilities.SaveLoginUserHeadBitmap(bitmap);
+                        ((ImageView) findViewById(R.id.AccountProfileActivity_head_image_view)).setImageBitmap(bitmap);
+                        ((ImageView) findViewById(R.id.AccountProfileActivity_expanded_image_view)).setImageBitmap(bitmap);
+
+                    }
                     break;
             }
             return false;
@@ -96,21 +98,53 @@ public class AccountProfileActivity extends BaseActivity implements AsyncHttpCal
         addListener(R.id.AccountProfileActivity_expanded_holder);
         addListener(R.id.AccountProfileActivity_expanded_image_view);
 
-        initImage();
+        initUserAccountProfile();
     }
 
     /**
      * 从服务器获取用户账户信息
      */
-    public void initImage(){
+    public void initUserAccountProfile(){
         int userID = Utilities.GetLoginUserId();
-        if (userID == Utilities.USER_NOT_FOUND){
+        if (userID == Integer.parseInt(Utilities.USER_NOT_FOUND)){
             Toast.makeText(MyApplication.getContext(), "出问题了，请重新登录", Toast.LENGTH_SHORT).show();
             ActivitiesCollector.exitLogin(this);
         }
-        Profile.getOurInstance().getAccountProfile("" + userID, this);
-        //todo on success 更新
+        if (Utilities.IsUserAccountProfileStored()){
+            Log.e(TAG, "initUserAccountProfile: here");
+            HashMap<String, String> mp = Utilities.GetLoginUserAccountProfile();
+            AccountProfileItemLayout itemLayout = findViewById(R.id.AccountProfileActivity_sex_view);
+            if (mp.get(Profile.GET_ACCOUNT_PROFILE_USER_SEX_KEY).equals(Utilities.FEMALE))
+                itemLayout.setImageDrawable(getDrawable(R.drawable.female_icon));
+            else
+                itemLayout.setImageDrawable(getDrawable(R.drawable.male_icon));
+            itemLayout = findViewById(R.id.AccountProfileActivity_user_name_view);
+            itemLayout.setContent(mp.get(Profile.GET_ACCOUNT_PROFILE_USER_NAME_KEY));
+            itemLayout = findViewById(R.id.AccountProfileActivity_grade_view);
+            itemLayout.setContent(mp.get(Profile.GET_ACCOUNT_PROFILE_USER_GRADE_KEY));
+            itemLayout = findViewById(R.id.AccountProfileActivity_department_view);
+            itemLayout.setContent(mp.get(Profile.GET_ACCOUNT_PROFILE_USER_DEPT_KEY));
+            itemLayout = findViewById(R.id.AccountProfileActivity_register_time_view);
+            itemLayout.setContent(mp.get(Profile.GET_ACCOUNT_PROFILE_USER_REG_TIME_KEY));
+            itemLayout = findViewById(R.id.AccountProfileActivity_last_login_time_view);
+            itemLayout.setContent(mp.get(Profile.GET_ACCOUNT_PROFILE_LOGIN_TIME_KEY));
+            itemLayout = findViewById(R.id.AccountProfileActivity_phone_view);
+            itemLayout.setContent(mp.get(Profile.GET_ACCOUNT_PROFILE_USER_PHONE_KEY));
 
+            Bitmap bitmap = Utilities.GetUserHeadBitmap();
+            if (bitmap != null) {
+                ImageView view = findViewById(R.id.AccountProfileActivity_head_image_view);
+                view.setImageBitmap(bitmap);
+                view = findViewById(R.id.AccountProfileActivity_expanded_image_view);
+                view.setImageBitmap(bitmap);
+            }
+            else{
+                getAndSetUserHead(mp.get(Profile.GET_ACCOUNT_PROFILE_USER_HEAD_KEY));
+            }
+        }
+        else{
+            Profile.getOurInstance().getAccountProfile("" + userID, this);
+        }
     }
     /**
      * 为控件添加监听器
@@ -279,32 +313,18 @@ public class AccountProfileActivity extends BaseActivity implements AsyncHttpCal
                     onError(statusCode);
                     break;
                 }
+                Bitmap bitmap = Utilities.GetUserHeadBitmap();
+                if (bitmap != null){
+                    ((ImageView) findViewById(R.id.AccountProfileActivity_head_image_view)).setImageBitmap(bitmap);
+                    ((ImageView) findViewById(R.id.AccountProfileActivity_expanded_image_view)).setImageBitmap(bitmap);
+                }
+                else {
+                    getAndSetUserHead(mp.get(Profile.GET_ACCOUNT_PROFILE_USER_HEAD_KEY));
+                }
+
+                Utilities.SaveLoginUserProfile(mp);
+
                 AccountProfileItemLayout itemLayout = findViewById(R.id.AccountProfileActivity_sex_view);
-
-                //通过网络获取用户头像
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            String userHeadUrl = mp.get(Profile.GET_ACCOUNT_PROFILE_USER_HEAD_KEY);
-                            URL url = new URL(userHeadUrl);
-                            InputStream in = url.openConnection().getInputStream();
-                            Bitmap bitmap = BitmapFactory.decodeStream(in);
-                            in.close();
-                            Message message = new Message();
-                            message.what = MESSAGE_GET_USER_HEAD;
-                            message.obj = bitmap;
-                            handler.sendMessage(message);
-                        } catch (Exception e) {
-                            Message message = new Message();
-                            message.what = MESSAGE_GET_USER_HEAD;
-                            message.obj = null;
-                            handler.sendMessage(message);
-                            e.printStackTrace();
-                        }
-                    }
-                }).start();
-
                 if (mp.get(Profile.GET_ACCOUNT_PROFILE_USER_SEX_KEY).equals(Utilities.FEMALE))
                     itemLayout.setImageDrawable(getDrawable(R.drawable.female_icon));
                 else
@@ -327,6 +347,31 @@ public class AccountProfileActivity extends BaseActivity implements AsyncHttpCal
         }
     }
 
+    /**
+     * 获取用户头像并设置
+     * @param userHeadUrl 用户头像 URL
+     */
+    public void getAndSetUserHead(final String userHeadUrl){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Message message = new Message();
+                message.what = MESSAGE_GET_USER_HEAD;
+                try {
+                    URL url = new URL(userHeadUrl);
+                    InputStream in = url.openConnection().getInputStream();
+                    Bitmap bitmap = BitmapFactory.decodeStream(in);
+                    in.close();
+                    message.obj = bitmap;
+                    handler.sendMessage(message);
+                } catch (Exception e) {
+                    message.obj = null;
+                    handler.sendMessage(message);
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
     @Override
     public void onError(int statusCode) {
         Toast.makeText(MyApplication.getContext(), Utilities.TOAST_NET_WORK_ERROR, Toast.LENGTH_SHORT).show();

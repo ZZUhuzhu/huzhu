@@ -33,6 +33,9 @@ public class OthersProfileActivity extends BaseActivity {
         initUserInfo();
     }
 
+    /**
+     * 初始化用户信息
+     */
     public void initUserInfo(){
         AccountProfileItemLayout itemLayout = findViewById(R.id.OthersProfileActivity_user_name_view);
         itemLayout.setContent(getString(R.string.solider));

@@ -13,13 +13,29 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.AlertDialog;
+import android.util.Base64;
 import android.util.DisplayMetrics;
 
 import com.example.zzu.huzhucommunity.R;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.Map;
+
+import static com.example.zzu.huzhucommunity.asynchttp.Profile.GET_ACCOUNT_PROFILE_LOGIN_TIME_KEY;
+import static com.example.zzu.huzhucommunity.asynchttp.Profile.GET_ACCOUNT_PROFILE_STATUS_CODE_KEY;
+import static com.example.zzu.huzhucommunity.asynchttp.Profile.GET_ACCOUNT_PROFILE_USER_ACCOUNT_KEY;
+import static com.example.zzu.huzhucommunity.asynchttp.Profile.GET_ACCOUNT_PROFILE_USER_DEPT_KEY;
+import static com.example.zzu.huzhucommunity.asynchttp.Profile.GET_ACCOUNT_PROFILE_USER_GRADE_KEY;
+import static com.example.zzu.huzhucommunity.asynchttp.Profile.GET_ACCOUNT_PROFILE_USER_HEAD_KEY;
+import static com.example.zzu.huzhucommunity.asynchttp.Profile.GET_ACCOUNT_PROFILE_USER_NAME_KEY;
+import static com.example.zzu.huzhucommunity.asynchttp.Profile.GET_ACCOUNT_PROFILE_USER_PHONE_KEY;
+import static com.example.zzu.huzhucommunity.asynchttp.Profile.GET_ACCOUNT_PROFILE_USER_REG_TIME_KEY;
+import static com.example.zzu.huzhucommunity.asynchttp.Profile.GET_ACCOUNT_PROFILE_USER_SEX_KEY;
 
 /**
  * Created by FEI on 2018/5/8.
@@ -45,13 +61,16 @@ public class Utilities {
     /**
      * 存放到sharedPreference时的键
      */
-    private static final String USER_ID_KEY_SHARED_PREFERENCE = "User_ID";
-    private static final String USER_NAME_KEY_SHARED_PREFERENCE = "User_name";
-    private static final String USER_HEAD_KEY_SHARED_PREFERENCE = "User_head";
+    private static final String USER_ID_KEY_SHARED_PREFERENCE = "userAccount";
+    private static final String USER_NAME_KEY_SHARED_PREFERENCE = "userName";
+    private static final String USER_HEAD_KEY_SHARED_PREFERENCE = "userHead";
+    private static final String USER_HEAD_IMAGE_SHARED_PREFERENCE = "userHeadImage";
+    private static final String ACCOUNT_PROFILE_INSIDE_SHARED_PREFERENCE = "hasAccountProfile";
+    private static final String DEF_STRING_VALUE_SHARED_PREFERENCE = "";
     /**
      * 未找到用户
      */
-    public static final int USER_NOT_FOUND = -1;
+    public static final String USER_NOT_FOUND = "-1";
 
     /**
      * 抓取图片对话框相关常量
@@ -75,11 +94,91 @@ public class Utilities {
     public static void SaveLoginUserProfile(int userID, String userName, String userHead){
         SharedPreferences.Editor editor = MyApplication.getContext().getSharedPreferences(
                 USER_PROFILE_FILE_NAME, Context.MODE_PRIVATE).edit();
-        editor.putInt(USER_ID_KEY_SHARED_PREFERENCE, userID);
+        editor.putString(USER_ID_KEY_SHARED_PREFERENCE, userID + "");
         editor.putString(USER_NAME_KEY_SHARED_PREFERENCE, userName);
         editor.putString(USER_HEAD_KEY_SHARED_PREFERENCE, userHead);
         editor.apply();
     }
+
+    /**
+     * 将 map 中的数据保存到 sharedPreference 中
+     * 同时写入 {@link #ACCOUNT_PROFILE_INSIDE_SHARED_PREFERENCE} 值为 true
+     * @param mp 待保存的数据集
+     */
+    public static void SaveLoginUserProfile(HashMap<String, String> mp){
+        SharedPreferences.Editor editor = MyApplication.getContext().
+                getSharedPreferences(USER_PROFILE_FILE_NAME, Context.MODE_PRIVATE).edit();
+        for (Object o : mp.entrySet()) {
+            Map.Entry entry = (Map.Entry) o;
+            String key = (String) entry.getKey();
+            String value = (String) entry.getValue();
+            editor.putString(key, value);
+        }
+        editor.putBoolean(ACCOUNT_PROFILE_INSIDE_SHARED_PREFERENCE, true);
+        editor.apply();
+    }
+
+    /**
+     * 获取 sharedPreference 中的用户账户信息
+     * @return 返回存放信息的 map
+     */
+    public static HashMap<String, String> GetLoginUserAccountProfile(){
+        SharedPreferences sp = MyApplication.getContext().getSharedPreferences(USER_PROFILE_FILE_NAME, Context.MODE_PRIVATE);
+        HashMap<String, String> mp = new HashMap<>();
+        mp.put(GET_ACCOUNT_PROFILE_STATUS_CODE_KEY, sp.getString(GET_ACCOUNT_PROFILE_STATUS_CODE_KEY, DEF_STRING_VALUE_SHARED_PREFERENCE));
+        mp.put(GET_ACCOUNT_PROFILE_USER_HEAD_KEY, sp.getString(GET_ACCOUNT_PROFILE_USER_HEAD_KEY, DEF_STRING_VALUE_SHARED_PREFERENCE));
+        mp.put(GET_ACCOUNT_PROFILE_USER_NAME_KEY, sp.getString(GET_ACCOUNT_PROFILE_USER_NAME_KEY, DEF_STRING_VALUE_SHARED_PREFERENCE));
+        mp.put(GET_ACCOUNT_PROFILE_USER_ACCOUNT_KEY, sp.getString(GET_ACCOUNT_PROFILE_USER_ACCOUNT_KEY, DEF_STRING_VALUE_SHARED_PREFERENCE));
+        mp.put(GET_ACCOUNT_PROFILE_USER_SEX_KEY, sp.getString(GET_ACCOUNT_PROFILE_USER_SEX_KEY, DEF_STRING_VALUE_SHARED_PREFERENCE));
+        mp.put(GET_ACCOUNT_PROFILE_USER_PHONE_KEY, sp.getString(GET_ACCOUNT_PROFILE_USER_PHONE_KEY, DEF_STRING_VALUE_SHARED_PREFERENCE));
+        mp.put(GET_ACCOUNT_PROFILE_USER_GRADE_KEY, sp.getString(GET_ACCOUNT_PROFILE_USER_GRADE_KEY, DEF_STRING_VALUE_SHARED_PREFERENCE));
+        mp.put(GET_ACCOUNT_PROFILE_USER_DEPT_KEY, sp.getString(GET_ACCOUNT_PROFILE_USER_DEPT_KEY, DEF_STRING_VALUE_SHARED_PREFERENCE));
+        mp.put(GET_ACCOUNT_PROFILE_USER_REG_TIME_KEY, sp.getString(GET_ACCOUNT_PROFILE_USER_REG_TIME_KEY, DEF_STRING_VALUE_SHARED_PREFERENCE));
+        mp.put(GET_ACCOUNT_PROFILE_LOGIN_TIME_KEY, sp.getString(GET_ACCOUNT_PROFILE_LOGIN_TIME_KEY, DEF_STRING_VALUE_SHARED_PREFERENCE));
+        return mp;
+    }
+
+    /**
+     * 将用户的头像 bitmap 压缩之后保存到 sharedPreference 中
+     * @param bitmap 待保存的 bitmap
+     */
+    public static void SaveLoginUserHeadBitmap(Bitmap bitmap){
+        SharedPreferences.Editor editor = MyApplication.getContext().
+                getSharedPreferences(USER_PROFILE_FILE_NAME, Context.MODE_PRIVATE).edit();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 50, baos);
+        String imageBase64 = Base64.encodeToString(baos.toByteArray(), Base64.DEFAULT);
+        editor.putString(USER_HEAD_IMAGE_SHARED_PREFERENCE, imageBase64);
+        editor.apply();
+    }
+
+    /**
+     * 判断是否已经将用户的账户信息存放到 sharedPreference 里面
+     * @return true：如果已经存储
+     *          false：未存储
+     */
+    public static boolean IsUserAccountProfileStored(){
+        SharedPreferences sharedPreferences = MyApplication.getContext().
+                getSharedPreferences(USER_PROFILE_FILE_NAME, Context.MODE_PRIVATE);
+        return sharedPreferences.contains(ACCOUNT_PROFILE_INSIDE_SHARED_PREFERENCE) &&
+                sharedPreferences.getBoolean(ACCOUNT_PROFILE_INSIDE_SHARED_PREFERENCE, false);
+    }
+
+    /**
+     * 获取 sharedPreference 中存储的用户头像 bitmap
+     * @return 如果有，返回用户头像
+     *          否则返回 null
+     */
+    public static Bitmap GetUserHeadBitmap(){
+        SharedPreferences sharedPreferences = MyApplication.getContext().
+                getSharedPreferences(USER_PROFILE_FILE_NAME, Context.MODE_PRIVATE);
+        if (!sharedPreferences.contains(USER_HEAD_IMAGE_SHARED_PREFERENCE))
+            return null;
+        String temp = sharedPreferences.getString(USER_HEAD_IMAGE_SHARED_PREFERENCE, "");
+        ByteArrayInputStream bais = new ByteArrayInputStream(Base64.decode(temp.getBytes(), Base64.DEFAULT));
+        return BitmapFactory.decodeStream(bais);
+    }
+
 
     /**
      * 获取已经登录的用户ID
@@ -89,7 +188,7 @@ public class Utilities {
     public static int GetLoginUserId(){
         SharedPreferences sharedPreferences = MyApplication.getContext().getSharedPreferences
                 (USER_PROFILE_FILE_NAME, Context.MODE_PRIVATE);
-        return sharedPreferences.getInt(USER_ID_KEY_SHARED_PREFERENCE, USER_NOT_FOUND);
+        return Integer.parseInt(sharedPreferences.getString(USER_ID_KEY_SHARED_PREFERENCE, USER_NOT_FOUND));
     }
     /**
      * 选择照片对话框
