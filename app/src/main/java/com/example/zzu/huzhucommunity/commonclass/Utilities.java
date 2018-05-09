@@ -30,6 +30,10 @@ import java.util.GregorianCalendar;
 
 public class Utilities {
     /**
+     * Toast 中的字符串常量
+     */
+    public static final String TOAST_NET_WORK_ERROR = "网络异常";
+    /**
      * 性别
      */
     public static final String MALE = "male";

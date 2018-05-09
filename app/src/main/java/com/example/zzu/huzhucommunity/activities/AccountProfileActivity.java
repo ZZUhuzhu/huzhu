@@ -7,6 +7,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Point;
 import android.net.Uri;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.ActionBar;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -30,6 +32,7 @@ import com.example.zzu.huzhucommunity.commonclass.Utilities;
 import com.example.zzu.huzhucommunity.customlayout.AccountProfileItemLayout;
 
 import java.io.InputStream;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
@@ -52,6 +55,25 @@ public class AccountProfileActivity extends BaseActivity implements AsyncHttpCal
      */
     public static final int REQUEST_CODE_GET_ACCOUNT_PROFILE = 11;
     public static final int REQUEST_CODE_UPDATE_ACCOUNT_PROFILE = 12;
+
+    /**
+     * 用于通过网络获取用户头像的 handler 以及 msg.what 值
+     */
+    private static final int MESSAGE_GET_USER_HEAD = 21;
+    private Handler handler = new Handler(new Handler.Callback() {
+        @Override
+        public boolean handleMessage(Message msg) {
+            switch (msg.what){
+                case MESSAGE_GET_USER_HEAD:
+                    if (msg.obj == null)
+                        Toast.makeText(MyApplication.getContext(), Utilities.TOAST_NET_WORK_ERROR, Toast.LENGTH_SHORT).show();
+                    ((ImageView) findViewById(R.id.AccountProfileActivity_head_image_view)).setImageBitmap((Bitmap)msg.obj);
+                    ((ImageView) findViewById(R.id.AccountProfileActivity_expanded_image_view)).setImageBitmap((Bitmap)msg.obj);
+                    break;
+            }
+            return false;
+        }
+    });
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -250,7 +272,7 @@ public class AccountProfileActivity extends BaseActivity implements AsyncHttpCal
      *                    {@link #REQUEST_CODE_UPDATE_ACCOUNT_PROFILE}: 更新用户信息
      */
     @Override
-    public void onSuccess(int statusCode, HashMap<String, String> mp, int requestCode) {
+    public void onSuccess(int statusCode, final HashMap<String, String> mp, int requestCode) {
         switch (requestCode){
             case REQUEST_CODE_GET_ACCOUNT_PROFILE:
                 if (statusCode != 200){
@@ -259,12 +281,30 @@ public class AccountProfileActivity extends BaseActivity implements AsyncHttpCal
                 }
                 AccountProfileItemLayout itemLayout = findViewById(R.id.AccountProfileActivity_sex_view);
 
-                String userHeadUri = mp.get(Profile.GET_ACCOUNT_PROFILE_USER_HEAD_KEY);
-                //todo 设置头像
-                Log.e(TAG, "onSuccess: " + Uri.parse(userHeadUri));
-                ((ImageView) findViewById(R.id.AccountProfileActivity_head_image_view)).setImageURI();
-                ((ImageView) findViewById(R.id.AccountProfileActivity_expanded_image_view)).
-                        setImageURI(Uri.parse(userHeadUri));
+                //通过网络获取用户头像
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            String userHeadUrl = mp.get(Profile.GET_ACCOUNT_PROFILE_USER_HEAD_KEY);
+                            URL url = new URL(userHeadUrl);
+                            InputStream in = url.openConnection().getInputStream();
+                            Bitmap bitmap = BitmapFactory.decodeStream(in);
+                            in.close();
+                            Message message = new Message();
+                            message.what = MESSAGE_GET_USER_HEAD;
+                            message.obj = bitmap;
+                            handler.sendMessage(message);
+                        } catch (Exception e) {
+                            Message message = new Message();
+                            message.what = MESSAGE_GET_USER_HEAD;
+                            message.obj = null;
+                            handler.sendMessage(message);
+                            e.printStackTrace();
+                        }
+                    }
+                }).start();
+
                 if (mp.get(Profile.GET_ACCOUNT_PROFILE_USER_SEX_KEY).equals(Utilities.FEMALE))
                     itemLayout.setImageDrawable(getDrawable(R.drawable.female_icon));
                 else
@@ -289,7 +329,7 @@ public class AccountProfileActivity extends BaseActivity implements AsyncHttpCal
 
     @Override
     public void onError(int statusCode) {
-        Toast.makeText(MyApplication.getContext(), "获取信息失败，请检查网络连接", Toast.LENGTH_SHORT).show();
+        Toast.makeText(MyApplication.getContext(), Utilities.TOAST_NET_WORK_ERROR, Toast.LENGTH_SHORT).show();
     }
 
 
