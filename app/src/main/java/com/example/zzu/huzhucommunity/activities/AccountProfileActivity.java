@@ -4,11 +4,14 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Point;
+import android.net.Uri;
 import android.support.v7.app.ActionBar;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,27 +19,39 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.AnimationSet;
 import android.view.animation.ScaleAnimation;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.zzu.huzhucommunity.R;
 import com.example.zzu.huzhucommunity.asynchttp.AsyncHttpCallback;
-import com.example.zzu.huzhucommunity.asynchttp.UserProfile;
+import com.example.zzu.huzhucommunity.asynchttp.Profile;
 import com.example.zzu.huzhucommunity.commonclass.ActivitiesCollector;
-import com.example.zzu.huzhucommunity.commonclass.Constants;
 import com.example.zzu.huzhucommunity.commonclass.MyApplication;
 import com.example.zzu.huzhucommunity.commonclass.Utilities;
 import com.example.zzu.huzhucommunity.customlayout.AccountProfileItemLayout;
 
-import java.util.GregorianCalendar;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.HashMap;
 
 
 public class AccountProfileActivity extends BaseActivity implements AsyncHttpCallback {
+    private static final String TAG = "AccountProfileActivity";
+    /**
+     * 标识不同更新活动的请求码
+     * 开启新活动更新个人信息时用
+     */
     private static final int REQUEST_USER_NAME = 0;
     private static final int REQUEST_USER_PHONE= 1;
     private static final int REQUEST_USER_GRADE = 2;
     private static final int REQUEST_USER_DEPARTMENT = 3;
+
+    /**
+     * 标识不同网络请求的请求码
+     * 与相关网络连接类 {@link Profile}配合使用
+     */
+    public static final int REQUEST_CODE_GET_ACCOUNT_PROFILE = 11;
+    public static final int REQUEST_CODE_UPDATE_ACCOUNT_PROFILE = 12;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,27 +81,14 @@ public class AccountProfileActivity extends BaseActivity implements AsyncHttpCal
      * 从服务器获取用户账户信息
      */
     public void initImage(){
-        AccountProfileItemLayout itemLayout = findViewById(R.id.AccountProfileActivity_sex_view);
-        //todo 用户账户信息
         int userID = Utilities.GetLoginUserId();
         if (userID == Utilities.USER_NOT_FOUND){
             Toast.makeText(MyApplication.getContext(), "出问题了，请重新登录", Toast.LENGTH_SHORT).show();
             ActivitiesCollector.exitLogin(this);
         }
-        UserProfile.getOurInstance().getUserProfile("" + userID, this);
-        itemLayout.setImageDrawable(getDrawable(R.drawable.female_icon));
-        itemLayout = findViewById(R.id.AccountProfileActivity_user_name_view);
-        itemLayout.setContent(getString(R.string.solider));
-        itemLayout = findViewById(R.id.AccountProfileActivity_grade_view);
-        itemLayout.setContent("2015");
-        itemLayout = findViewById(R.id.AccountProfileActivity_department_view);
-        itemLayout.setContent("信息工程学院");
-        itemLayout = findViewById(R.id.AccountProfileActivity_register_time_view);
-        itemLayout.setContent(Utilities.convertTimeInMillToString(GregorianCalendar.getInstance().getTimeInMillis()));
-        itemLayout = findViewById(R.id.AccountProfileActivity_last_login_time_view);
-        itemLayout.setContent(Utilities.convertTimeInMillToString(GregorianCalendar.getInstance().getTimeInMillis()));
-        itemLayout = findViewById(R.id.AccountProfileActivity_phone_view);
-        itemLayout.setContent("15766988562");
+        Profile.getOurInstance().getAccountProfile("" + userID, this);
+        //todo on success 更新
+
     }
     /**
      * 为控件添加监听器
@@ -157,6 +159,7 @@ public class AccountProfileActivity extends BaseActivity implements AsyncHttpCal
         });
     }
 
+    //todo 更新信息
     public void updateProfile(){
         Toast.makeText(MyApplication.getContext(), "正在全力开发中...", Toast.LENGTH_SHORT).show();
     }
@@ -211,11 +214,18 @@ public class AccountProfileActivity extends BaseActivity implements AsyncHttpCal
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * 用户更新账户信息时返回本活动调用
+     *
+     * @param requestCode 请求码，标识不同的更新目标
+     * @param resultCode 结果，判断用户是否进行了更新
+     * @param data 返回的数据
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode){
-            case Constants.PICK_IMAGE_FROM_CAMERA:
-            case Constants.PICK_IMAGE_FROM_GALLERY:
+            case Utilities.PICK_IMAGE_FROM_CAMERA:
+            case Utilities.PICK_IMAGE_FROM_GALLERY:
                 Bitmap bitmap = Utilities.getImageFromDialog(requestCode, resultCode, data);
                 if (bitmap != null){
                     ((ImageView) findViewById(R.id.AccountProfileActivity_head_image_view)).setImageBitmap(bitmap);
@@ -231,16 +241,59 @@ public class AccountProfileActivity extends BaseActivity implements AsyncHttpCal
         }
     }
 
+    /**
+     * 获取用户账户信息，更新用户账户信息时网络请求的回调函数
+     * @param statusCode 返回状态
+     * @param mp 存储需要传递数据的哈希表，若无数据则 mp 为 null
+     * @param requestCode 请求码，标识同一个activity的不同网络请求
+     *                    {@link #REQUEST_CODE_GET_ACCOUNT_PROFILE}: 从服务器拉取用户账户信息
+     *                    {@link #REQUEST_CODE_UPDATE_ACCOUNT_PROFILE}: 更新用户信息
+     */
+    @Override
+    public void onSuccess(int statusCode, HashMap<String, String> mp, int requestCode) {
+        switch (requestCode){
+            case REQUEST_CODE_GET_ACCOUNT_PROFILE:
+                if (statusCode != 200){
+                    onError(statusCode);
+                    break;
+                }
+                AccountProfileItemLayout itemLayout = findViewById(R.id.AccountProfileActivity_sex_view);
+
+                String userHeadUri = mp.get(Profile.GET_ACCOUNT_PROFILE_USER_HEAD_KEY);
+                //todo 设置头像
+                Log.e(TAG, "onSuccess: " + Uri.parse(userHeadUri));
+                ((ImageView) findViewById(R.id.AccountProfileActivity_head_image_view)).setImageURI();
+                ((ImageView) findViewById(R.id.AccountProfileActivity_expanded_image_view)).
+                        setImageURI(Uri.parse(userHeadUri));
+                if (mp.get(Profile.GET_ACCOUNT_PROFILE_USER_SEX_KEY).equals(Utilities.FEMALE))
+                    itemLayout.setImageDrawable(getDrawable(R.drawable.female_icon));
+                else
+                    itemLayout.setImageDrawable(getDrawable(R.drawable.male_icon));
+                itemLayout = findViewById(R.id.AccountProfileActivity_user_name_view);
+                itemLayout.setContent(mp.get(Profile.GET_ACCOUNT_PROFILE_USER_NAME_KEY));
+                itemLayout = findViewById(R.id.AccountProfileActivity_grade_view);
+                itemLayout.setContent(mp.get(Profile.GET_ACCOUNT_PROFILE_USER_GRADE_KEY));
+                itemLayout = findViewById(R.id.AccountProfileActivity_department_view);
+                itemLayout.setContent(mp.get(Profile.GET_ACCOUNT_PROFILE_USER_DEPT_KEY));
+                itemLayout = findViewById(R.id.AccountProfileActivity_register_time_view);
+                itemLayout.setContent(mp.get(Profile.GET_ACCOUNT_PROFILE_USER_REG_TIME_KEY));
+                itemLayout = findViewById(R.id.AccountProfileActivity_last_login_time_view);
+                itemLayout.setContent(mp.get(Profile.GET_ACCOUNT_PROFILE_LOGIN_TIME_KEY));
+                itemLayout = findViewById(R.id.AccountProfileActivity_phone_view);
+                itemLayout.setContent(mp.get(Profile.GET_ACCOUNT_PROFILE_USER_PHONE_KEY));
+                break;
+            case REQUEST_CODE_UPDATE_ACCOUNT_PROFILE:
+                break;
+        }
+    }
+
+    @Override
+    public void onError(int statusCode) {
+        Toast.makeText(MyApplication.getContext(), "获取信息失败，请检查网络连接", Toast.LENGTH_SHORT).show();
+    }
+
+
     public static void startMe(Context context){
         context.startActivity(new Intent(context, AccountProfileActivity.class));
-    }
-
-    @Override
-    public void onSuccess(int code, HashMap<String, String> mp) {
-        //todo 成功
-    }
-
-    @Override
-    public void onError(int code) {
     }
 }

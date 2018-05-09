@@ -23,13 +23,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.zzu.huzhucommunity.R;
 import com.example.zzu.huzhucommunity.adapters.ChatRoomMessageAdapter;
 import com.example.zzu.huzhucommunity.commonclass.ChatRoomMessageItem;
-import com.example.zzu.huzhucommunity.commonclass.Constants;
-import com.example.zzu.huzhucommunity.commonclass.MyApplication;
 import com.example.zzu.huzhucommunity.commonclass.Utilities;
 
 import java.io.FileNotFoundException;
@@ -152,7 +149,7 @@ public class ChatRoomActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode){
-            case Constants.PICK_IMAGE_FROM_CAMERA:
+            case Utilities.PICK_IMAGE_FROM_CAMERA:
                 if(resultCode == RESULT_OK){
                     Uri uri = data.getData();
                     if(uri == null) return;
@@ -168,7 +165,7 @@ public class ChatRoomActivity extends BaseActivity {
                     }
                 }
                 break;
-            case Constants.PICK_IMAGE_FROM_GALLERY:
+            case Utilities.PICK_IMAGE_FROM_GALLERY:
                 if(resultCode == RESULT_OK){
                     Bundle bundle = data.getExtras();
                     if(bundle != null){

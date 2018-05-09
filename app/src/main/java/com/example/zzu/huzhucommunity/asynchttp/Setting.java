@@ -67,7 +67,7 @@ public class Setting {
                                 message.what = RECORD_USER_FEEDBACK;
                                 message.obj = result;
                                 handler.sendMessage(message);
-                                cBack.onSuccess(i, null);
+                                cBack.onSuccess(i, null, 0);
                             } catch (UnsupportedEncodingException e) {
                                 e.printStackTrace();
                             }
@@ -111,7 +111,7 @@ public class Setting {
                                 message.what = CHECK_FOR_UPDATE;
                                 message.obj = result;
                                 handler.sendMessage(message);
-                                cBack.onSuccess(i, null);
+                                cBack.onSuccess(i, null, 0);
                             } catch (UnsupportedEncodingException e) {
                                 e.printStackTrace();
                             }
@@ -148,7 +148,7 @@ public class Setting {
                     mp.put("code", code + "");
                     mp.put("URL", URL);
 
-                    callback.onSuccess(code, mp);
+                    callback.onSuccess(code, mp, 0);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

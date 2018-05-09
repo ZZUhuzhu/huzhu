@@ -3,6 +3,7 @@ package com.example.zzu.huzhucommunity.asynchttp;
 import android.os.Handler;
 import android.os.Message;
 
+import com.example.zzu.huzhucommunity.activities.AccountProfileActivity;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -26,6 +27,20 @@ public class Profile {
     private static final int UPDATE = 11401;
     private static final int GET_ACCOUNT_PROFILE = 11406;
     private static final int UPDATE_PASSWORD = 11407;
+
+    /**
+     * 获取账户信息时 JSON 数据里面的键以及回调时 map 里面的键
+     */
+    private static final String GET_ACCOUNT_PROFILE_STATUS_CODE_KEY = "status";
+    public static final String GET_ACCOUNT_PROFILE_USER_HEAD_KEY = "userHead";
+    public static final String GET_ACCOUNT_PROFILE_USER_NAME_KEY = "userName";
+    private static final String GET_ACCOUNT_PROFILE_USER_ACCOUNT_KEY = "userAccount";
+    public static final String GET_ACCOUNT_PROFILE_USER_SEX_KEY = "userSex";
+    public static final String GET_ACCOUNT_PROFILE_USER_PHONE_KEY = "userPhone";
+    public static final String GET_ACCOUNT_PROFILE_USER_GRADE_KEY = "userGrade";
+    public static final String GET_ACCOUNT_PROFILE_USER_DEPT_KEY = "userDept";
+    public static final String GET_ACCOUNT_PROFILE_USER_REG_TIME_KEY = "userRegisterTime";
+    public static final String GET_ACCOUNT_PROFILE_LOGIN_TIME_KEY = "userLoginTime";
 
     /**
      * 外部调用类方法，获得单体实例
@@ -70,7 +85,7 @@ public class Profile {
                                 message.what =UPDATE;
                                 message.obj = result;
                                 handler.sendMessage(message);
-                                cBack.onSuccess(i, null);
+                                cBack.onSuccess(i, null, 0);
                             } catch (UnsupportedEncodingException e) {
                                 e.printStackTrace();
                             }
@@ -112,7 +127,6 @@ public class Profile {
                                 message.what = GET_ACCOUNT_PROFILE;
                                 message.obj = result;
                                 handler.sendMessage(message);
-                                cBack.onSuccess(i, null);
                             } catch (UnsupportedEncodingException e) {
                                 e.printStackTrace();
                             }
@@ -133,6 +147,12 @@ public class Profile {
         }
     }
 
+    /**
+     * 更新密码
+     * @param userID 用户ID
+     * @param newPassword 新密码
+     * @param cBack 回调对象
+     */
     public void updatePassword(final String userID, final String newPassword, final AsyncHttpCallback cBack) {
         try {
             if (userID != null && newPassword != null && cBack != null) {
@@ -155,7 +175,7 @@ public class Profile {
                                 message.what = UPDATE_PASSWORD;
                                 message.obj = result;
                                 handler.sendMessage(message);
-                                cBack.onSuccess(i, null);
+                                cBack.onSuccess(i, null, 0);
                             } catch (UnsupportedEncodingException e) {
                                 e.printStackTrace();
                             }
@@ -191,44 +211,44 @@ public class Profile {
                         HashMap<String, String> mp = new HashMap<>();
                         mp.put("code", code + "");
 
-                        callback.onSuccess(code, null);
+                        callback.onSuccess(code, null, 0);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                break;
+                    break;
                 case GET_ACCOUNT_PROFILE:
                     try {
-                        JSONObject userObject = new JSONObject(Response);
-                        int code=userObject.getInt("status");
-                        String userHead = userObject.getString("userHead");
-                        String userName = userObject.getString("userName");
-                        String userAccount = userObject.getString("userAccount");
-                        String userSex = userObject.getString("userSex");
-                        String userPhone = userObject.getString("userPhone");
-                        String userGrade = userObject.getString("userGrade");
-                        String userDept = userObject.getString("userDept");
-                        String userRegisterTime = userObject.getString("userRegisterTime");
-                        String userLoginTime = userObject.getString("userLoginTime");
+                        JSONObject userObject = new JSONObject(message.obj.toString());
+                        int code=userObject.getInt(GET_ACCOUNT_PROFILE_STATUS_CODE_KEY);
+                        String userHead = userObject.getString(GET_ACCOUNT_PROFILE_USER_HEAD_KEY);
+                        String userName = userObject.getString(GET_ACCOUNT_PROFILE_USER_NAME_KEY);
+                        String userAccount = userObject.getString(GET_ACCOUNT_PROFILE_USER_ACCOUNT_KEY);
+                        String userSex = userObject.getString(GET_ACCOUNT_PROFILE_USER_SEX_KEY);
+                        String userPhone = userObject.getString(GET_ACCOUNT_PROFILE_USER_PHONE_KEY);
+                        String userGrade = userObject.getString(GET_ACCOUNT_PROFILE_USER_GRADE_KEY);
+                        String userDept = userObject.getString(GET_ACCOUNT_PROFILE_USER_DEPT_KEY);
+                        String userRegisterTime = userObject.getString(GET_ACCOUNT_PROFILE_USER_REG_TIME_KEY);
+                        String userLoginTime = userObject.getString(GET_ACCOUNT_PROFILE_LOGIN_TIME_KEY);
 
                         HashMap<String, String> mp = new HashMap<>();
-                        mp.put("code", code + "");
-                        mp.put("userHead", userHead);
-                        mp.put("userName", userName);
-                        mp.put("userAccount", userAccount);
-                        mp.put("userSex", userSex);
-                        mp.put("userPhone", userPhone);
-                        mp.put("userGrade", userGrade);
-                        mp.put("userDept", userDept);
-                        mp.put("userRegisterTime", userRegisterTime);
-                        mp.put("userLoginTime", userLoginTime);
+                        mp.put(GET_ACCOUNT_PROFILE_STATUS_CODE_KEY, code + "");
+                        mp.put(GET_ACCOUNT_PROFILE_USER_HEAD_KEY, userHead);
+                        mp.put(GET_ACCOUNT_PROFILE_USER_NAME_KEY, userName);
+                        mp.put(GET_ACCOUNT_PROFILE_USER_ACCOUNT_KEY, userAccount);
+                        mp.put(GET_ACCOUNT_PROFILE_USER_SEX_KEY, userSex);
+                        mp.put(GET_ACCOUNT_PROFILE_USER_PHONE_KEY, userPhone);
+                        mp.put(GET_ACCOUNT_PROFILE_USER_GRADE_KEY, userGrade);
+                        mp.put(GET_ACCOUNT_PROFILE_USER_DEPT_KEY, userDept);
+                        mp.put(GET_ACCOUNT_PROFILE_USER_REG_TIME_KEY, userRegisterTime);
+                        mp.put(GET_ACCOUNT_PROFILE_LOGIN_TIME_KEY, userLoginTime);
 
-                        callback.onSuccess(code, mp);
+                        callback.onSuccess(code, mp, AccountProfileActivity.REQUEST_CODE_GET_ACCOUNT_PROFILE);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                break;
+                    break;
                 case UPDATE_PASSWORD:
-                break;
+                    break;
                 default:
                     break;
             }

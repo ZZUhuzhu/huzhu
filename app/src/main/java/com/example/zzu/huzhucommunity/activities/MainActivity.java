@@ -132,33 +132,6 @@ public class MainActivity extends BaseActivity {
     }
 
     /**
-     * 下拉刷新时执行
-     * @param swipeRefreshLayout 正在刷新的SwipeRefreshLayout
-     * @param refreshResource true: 刷新发生着资源界面，否则为请求界面
-     */
-    public void refreshResource(final SwipeRefreshLayout swipeRefreshLayout, final boolean refreshResource){
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    if (refreshResource)
-                        Thread.sleep(2500);
-                    else
-                        Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        swipeRefreshLayout.setRefreshing(false);
-                        Toast.makeText(MyApplication.getContext(), "刷新完成", Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }
-        }).start();
-    }
-    /**
      * 初始化列表项
      */
     public void initList(){
@@ -193,6 +166,41 @@ public class MainActivity extends BaseActivity {
     }
 
     /**
+     * 获取用户头像个人信息
+     */
+    public void initUserProfile(){
+        //todo 主活动获取信息
+    }
+
+    /**
+     * 下拉刷新时执行
+     * @param swipeRefreshLayout 正在刷新的SwipeRefreshLayout
+     * @param refreshResource true: 刷新发生着资源界面，否则为请求界面
+     */
+    public void refreshResource(final SwipeRefreshLayout swipeRefreshLayout, final boolean refreshResource){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    if (refreshResource)
+                        Thread.sleep(2500);
+                    else
+                        Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        swipeRefreshLayout.setRefreshing(false);
+                        Toast.makeText(MyApplication.getContext(), "刷新完成", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        }).start();
+    }
+
+    /**
      * ViewPager切换即MainActivity中页面改变时调用
      * @param position 切换到的页面对应的下标
      */
@@ -210,6 +218,7 @@ public class MainActivity extends BaseActivity {
             newRequestRecyclerView.setVisibility(View.VISIBLE);
         }
     }
+
     /**
      * 为每个控件添加监听器
      * @param res 控件ID
@@ -277,9 +286,4 @@ public class MainActivity extends BaseActivity {
         context.startActivity(new Intent(context, MainActivity.class));
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        Comment.getOurInstance().getMyComment("1", "1", null);
-    }
 }

@@ -12,6 +12,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:contentDescription="@string/app_name"
-        android:src="@drawable/splash_over_watch"
+        android:src="@drawable/splash_school_badge"
         android:scaleType="centerCrop"/>
 </RelativeLayout>

@@ -71,7 +71,7 @@ public class ResourceDesc {
                                 message.what = GET_RES_PUBLISHER_INFO;
                                 message.obj = result;
                                 handler.sendMessage(message);
-                                cBack.onSuccess(i, null);
+                                cBack.onSuccess(i, null, 0);
                             } catch (UnsupportedEncodingException e) {
                                 e.printStackTrace();
                             }
@@ -113,7 +113,7 @@ public class ResourceDesc {
                                 message.what = GET_RESOURCE_DESC;
                                 message.obj = result;
                                 handler.sendMessage(message);
-                                cBack.onSuccess(i, null);
+                                cBack.onSuccess(i, null, 0);
                             } catch (UnsupportedEncodingException e) {
                                 e.printStackTrace();
                             }
@@ -155,7 +155,7 @@ public class ResourceDesc {
                                 message.what = GET_RESOURCE_COMMENT;
                                 message.obj = result;
                                 handler.sendMessage(message);
-                                cBack.onSuccess(i, null);
+                                cBack.onSuccess(i, null, 0);
                             } catch (UnsupportedEncodingException e) {
                                 e.printStackTrace();
                             }
@@ -201,7 +201,7 @@ public class ResourceDesc {
                                 message.what = PUBLISH_COMMENT;
                                 message.obj = result;
                                 handler.sendMessage(message);
-                                cBack.onSuccess(i, null);
+                                cBack.onSuccess(i, null, 0);
                             } catch (UnsupportedEncodingException e) {
                                 e.printStackTrace();
                             }
@@ -245,7 +245,7 @@ public class ResourceDesc {
                                 message.what = UPDATE_STAR;
                                 message.obj = result;
                                 handler.sendMessage(message);
-                                cBack.onSuccess(i, null);
+                                cBack.onSuccess(i, null, 0);
                             } catch (UnsupportedEncodingException e) {
                                 e.printStackTrace();
                             }
@@ -288,7 +288,7 @@ public class ResourceDesc {
                                 message.what = RECEIVE_RESOURCE;
                                 message.obj = result;
                                 handler.sendMessage(message);
-                                cBack.onSuccess(i, null);
+                                cBack.onSuccess(i, null, 0);
                             } catch (UnsupportedEncodingException e) {
                                 e.printStackTrace();
                             }
@@ -331,7 +331,7 @@ public class ResourceDesc {
                                 message.what = ADD_TO_TRACK;
                                 message.obj = result;
                                 handler.sendMessage(message);
-                                cBack.onSuccess(i, null);
+                                cBack.onSuccess(i, null, 0);
                             } catch (UnsupportedEncodingException e) {
                                 e.printStackTrace();
                             }
@@ -367,7 +367,7 @@ public class ResourceDesc {
                         mp.put("User_head", userObject.getString("User_head"));
                         mp.put("User_name", userObject.getString("User_name"));
                         mp.put("userLastLogin", userObject.getString("userLastLogin"));
-                        callback.onSuccess(code, mp);
+                        callback.onSuccess(code, mp, 0);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -376,7 +376,7 @@ public class ResourceDesc {
                     try {
                         JSONObject userObject = new JSONObject(Response);
                         int code=userObject.getInt("status");
-                        callback.onSuccess(code, null);
+                        callback.onSuccess(code, null, 0);
                         HashMap<String, String> mp = new HashMap<>();
                         mp.put("status", code + "");
                         mp.put("resourceTitle", userObject.getString("Res_title"));
@@ -403,7 +403,7 @@ public class ResourceDesc {
                             mp.put("" + i, userObject.getString("" + i));
                         }
 
-                        callback.onSuccess(code, null);
+                        callback.onSuccess(code, null, 0);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -420,7 +420,7 @@ public class ResourceDesc {
                         mp.put("resourceID", resourceID);
                         mp.put("publishState", publishState);
 
-                        callback.onSuccess(code, null);
+                        callback.onSuccess(code, null, 0);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -429,7 +429,7 @@ public class ResourceDesc {
                     try {
                         JSONObject userObject = new JSONObject(Response);
                         int code=userObject.getInt("status");
-                        callback.onSuccess(code, null);
+                        callback.onSuccess(code, null, 0);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -438,7 +438,7 @@ public class ResourceDesc {
                     try {
                         JSONObject userObject = new JSONObject(Response);
                         int code=userObject.getInt("status");
-                        callback.onSuccess(code, null);
+                        callback.onSuccess(code, null, 0);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -447,7 +447,7 @@ public class ResourceDesc {
                     try {
                         JSONObject userObject = new JSONObject(Response);
                         int code=userObject.getInt("status");
-                        callback.onSuccess(code, null);
+                        callback.onSuccess(code, null, 0);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }

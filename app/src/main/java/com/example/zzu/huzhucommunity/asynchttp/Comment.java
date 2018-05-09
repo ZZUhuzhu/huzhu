@@ -70,7 +70,7 @@ public class Comment {
                                 message.what = GET_MY_COMMENT;
                                 message.obj = result;
                                 handler.sendMessage(message);
-                                cBack.onSuccess(i, null);
+                                cBack.onSuccess(i, null, 0);
                             } catch (UnsupportedEncodingException e) {
                                 e.printStackTrace();
                             }
@@ -114,7 +114,7 @@ public class Comment {
                                 message.what = GET_MENTIONED_COMMENT;
                                 message.obj = result;
                                 handler.sendMessage(message);
-                                cBack.onSuccess(i, null);
+                                cBack.onSuccess(i, null, 0);
                             } catch (UnsupportedEncodingException e) {
                                 e.printStackTrace();
                             }
@@ -157,7 +157,7 @@ public class Comment {
                                 message.what = DELETE_COMMENT;
                                 message.obj = result;
                                 handler.sendMessage(message);
-                                cBack.onSuccess(i, null);
+                                cBack.onSuccess(i, null, 0);
                             } catch (UnsupportedEncodingException e) {
                                 e.printStackTrace();
                             }
@@ -198,7 +198,7 @@ public class Comment {
                             mp.put("" + i, userObject.getString("" + i));
                         }
 
-                        callback.onSuccess(code, mp);
+                        callback.onSuccess(code, mp, 0);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -207,7 +207,7 @@ public class Comment {
                     try {
                         JSONObject userObject = new JSONObject(Response);
                         int code = userObject.getInt("status");
-                        callback.onSuccess(code, null);
+                        callback.onSuccess(code, null, 0);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -221,7 +221,7 @@ public class Comment {
                         mp.put("code", "" + code);
 
 
-                        callback.onSuccess(code, mp);
+                        callback.onSuccess(code, mp, 0);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }

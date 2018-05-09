@@ -2,12 +2,9 @@ package com.example.zzu.huzhucommunity.activities;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.support.v7.app.ActionBar;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -24,11 +21,9 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.example.zzu.huzhucommunity.R;
-import com.example.zzu.huzhucommunity.commonclass.Constants;
 import com.example.zzu.huzhucommunity.commonclass.MyApplication;
 import com.example.zzu.huzhucommunity.commonclass.Utilities;
 
-import java.io.FileNotFoundException;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
@@ -134,8 +129,8 @@ public class PublishNewActivity extends BaseActivity {
         ImageView imageView = new ImageView(PublishNewActivity.this);
         imageView.setLayoutParams((findViewById(R.id.PublishNewRes_add_image_button)).getLayoutParams());
         switch (requestCode){
-            case Constants.PICK_IMAGE_FROM_GALLERY:
-            case Constants.PICK_IMAGE_FROM_CAMERA:
+            case Utilities.PICK_IMAGE_FROM_GALLERY:
+            case Utilities.PICK_IMAGE_FROM_CAMERA:
                 Bitmap bitmap = Utilities.getImageFromDialog(requestCode, resultCode, data);
                 if (bitmap != null){
                     imageView.setImageBitmap(bitmap);

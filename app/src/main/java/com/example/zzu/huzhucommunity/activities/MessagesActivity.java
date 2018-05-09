@@ -3,23 +3,16 @@ package com.example.zzu.huzhucommunity.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.GestureDetector;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
-import android.view.View;
 
 import com.example.zzu.huzhucommunity.R;
 import com.example.zzu.huzhucommunity.adapters.MessageItemAdapter;
-import com.example.zzu.huzhucommunity.commonclass.Constants;
 import com.example.zzu.huzhucommunity.commonclass.NewMessagesItem;
 
 import java.util.ArrayList;

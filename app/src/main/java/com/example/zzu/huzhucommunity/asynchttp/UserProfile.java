@@ -80,7 +80,7 @@ public class UserProfile {
                                 message.what = GET_USER_ALL_KINDS_NUMBER;
                                 message.obj = result;
                                 handler.sendMessage(message);
-                                cBack.onSuccess(i, null);
+                                cBack.onSuccess(i, null, 0);
                             } catch (UnsupportedEncodingException e) {
                                 e.printStackTrace();
                             }
@@ -128,7 +128,7 @@ public class UserProfile {
                                 message.what = GET_USER_PROFILE;
                                 message.obj = result;
                                 handler.sendMessage(message);
-                                cBack.onSuccess(i, null);
+                                cBack.onSuccess(i, null, 0);
                             } catch (UnsupportedEncodingException e) {
                                 e.printStackTrace();
                             }
@@ -160,7 +160,7 @@ public class UserProfile {
                     try {
                         JSONObject userObject = new JSONObject(Response);
                         int code=userObject.getInt(USER_STATUS_JSON_KEY);
-                        callback.onSuccess(code, null);
+                        callback.onSuccess(code, null, 0);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -184,7 +184,7 @@ public class UserProfile {
                         mp.put(USER_DEPARTMENT_JSON_KEY, userDepartment);
                         mp.put(USER_PHONE_JSON_KEY, userPhone);
                         mp.put(USER_STATUS_JSON_KEY, "" + code);
-                        callback.onSuccess(code, mp);
+                        callback.onSuccess(code, mp, 0);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }

@@ -23,12 +23,20 @@ import java.util.GregorianCalendar;
 
 /**
  * Created by FEI on 2018/5/8.
- * 工具类，包含功能：
+ * 工具类，包含与活动无关的功能及常量：
  *      存放已登录用户个人信息
  *      获取已登录用户ID
  */
 
 public class Utilities {
+    /**
+     * 性别
+     */
+    public static final String MALE = "male";
+    public static final String FEMALE = "female";
+    /**
+     * 存放用户个人信息的sharedPreference的名字
+     */
     private static final String USER_PROFILE_FILE_NAME = "Profile";
     /**
      * 存放到sharedPreference时的键
@@ -40,6 +48,18 @@ public class Utilities {
      * 未找到用户
      */
     public static final int USER_NOT_FOUND = -1;
+
+    /**
+     * 抓取图片对话框相关常量
+     */
+    public static final int PICK_IMAGE_FROM_CAMERA = 20002;
+    public static final int PICK_IMAGE_FROM_GALLERY = 20003;
+    /**
+     * 右滑返回相关常量
+     */
+    public static final int SWIPE_MIN_DISTANCE = 120;
+    public static final int SWIPE_MAX_Y_DISTANCE = 120;
+    public static final int SWIPE_THRESHOLD_VELOCITY = 200;
 
 
     /**
@@ -79,13 +99,13 @@ public class Utilities {
             public void onClick(DialogInterface dialog, int which) {
                 if(which == 0){
                     intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                    ((Activity)context).startActivityForResult(intent, Constants.PICK_IMAGE_FROM_CAMERA);
+                    ((Activity)context).startActivityForResult(intent, Utilities.PICK_IMAGE_FROM_CAMERA);
                 }
                 else{
                     intent = new Intent();
                     intent.setAction(Intent.ACTION_GET_CONTENT);
                     intent.setType("image/*");
-                    ((Activity)context).startActivityForResult(intent, Constants.PICK_IMAGE_FROM_GALLERY);
+                    ((Activity)context).startActivityForResult(intent, Utilities.PICK_IMAGE_FROM_GALLERY);
                 }
             }
         });
@@ -102,13 +122,13 @@ public class Utilities {
     public static Bitmap getImageFromDialog(int requestCode, int resultCode, Intent data){
         if (resultCode == Activity.RESULT_OK){
             switch (requestCode) {
-                case Constants.PICK_IMAGE_FROM_CAMERA:
+                case PICK_IMAGE_FROM_CAMERA:
                     Bundle bundle = data.getExtras();
                     if (bundle != null) {
                         return (Bitmap) bundle.get("data");
                     }
                     return null;
-                case Constants.PICK_IMAGE_FROM_GALLERY:
+                case PICK_IMAGE_FROM_GALLERY:
                     Uri uri = data.getData();
                     if (uri == null)
                         return null;
