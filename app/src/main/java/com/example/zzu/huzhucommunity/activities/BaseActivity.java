@@ -1,7 +1,5 @@
 package com.example.zzu.huzhucommunity.activities;
 
-import android.content.Context;
-import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,7 +7,7 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 
 import com.example.zzu.huzhucommunity.commonclass.ActivitiesCollector;
-import com.example.zzu.huzhucommunity.commonclass.Constants;
+import com.example.zzu.huzhucommunity.commonclass.Utilities;
 
 /**
  * 基础Activity类
@@ -32,9 +30,9 @@ public abstract class BaseActivity extends AppCompatActivity {
             @Override
             public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
                 // left to right swipe
-                if (e2.getX() - e1.getX() > Constants.SWIPE_MIN_DISTANCE
-                        && Math.abs(velocityX) > Constants.SWIPE_THRESHOLD_VELOCITY
-                        && Math.abs(e2.getY() - e1.getY()) < Constants.SWIPE_MAX_Y_DISTANCE) {
+                if (e2.getX() - e1.getX() > Utilities.SWIPE_MIN_DISTANCE
+                        && Math.abs(velocityX) > Utilities.SWIPE_THRESHOLD_VELOCITY
+                        && Math.abs(e2.getY() - e1.getY()) < Utilities.SWIPE_MAX_Y_DISTANCE) {
                     finish();
                     return true;
                 }

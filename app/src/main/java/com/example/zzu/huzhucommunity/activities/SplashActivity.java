@@ -18,37 +18,19 @@ public class SplashActivity extends BaseActivity {
         int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                 | View.SYSTEM_UI_FLAG_FULLSCREEN;
         decorView.setSystemUiVisibility(uiOptions);
-        //wjsay modify
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                Main.getOurInstance().getRequest("1", new AshncHttpCallbackImplemnet());
-//            }
-//        }).start();
 
-        CountDownTimer countDownTimer = new CountDownTimer(2000, 1000) {
+        CountDownTimer countDownTimer = new CountDownTimer(1000, 500) {
             @Override
             public void onTick(long millisUntilFinished) {
             }
 
             @Override
             public void onFinish() {
-                jumpToNextActivity();
+                LoginActivity.startMe(SplashActivity.this);
+                finish();
             }
         };
         countDownTimer.start();
-    }
-
-    /**
-     * 登录或者启动主活动（如果已经保存登录信息）
-     */
-    private void jumpToNextActivity(){
-        int tmp = ((int) (Math.random() * 100));
-        if (tmp > 50)
-            LoginActivity.startMe(this);
-        else
-            MainActivity.startMe(this);
-        finish();
     }
 
     @Override

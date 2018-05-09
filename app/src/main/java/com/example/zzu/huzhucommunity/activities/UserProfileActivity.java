@@ -1,10 +1,8 @@
 package com.example.zzu.huzhucommunity.activities;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.app.ActionBar;
 import android.os.Bundle;
@@ -13,13 +11,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.zzu.huzhucommunity.R;
-import com.example.zzu.huzhucommunity.adapters.MyCommentAdapter;
-import com.example.zzu.huzhucommunity.asynchttp.UserProfile;
-import com.example.zzu.huzhucommunity.commonclass.Constants;
-import com.example.zzu.huzhucommunity.commonclass.MyApplication;
 import com.example.zzu.huzhucommunity.commonclass.Utilities;
 import com.example.zzu.huzhucommunity.customlayout.UserProfileItemLayout;
 
@@ -129,8 +122,8 @@ public class UserProfileActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode){
-            case Constants.PICK_IMAGE_FROM_CAMERA:
-            case Constants.PICK_IMAGE_FROM_GALLERY:
+            case Utilities.PICK_IMAGE_FROM_CAMERA:
+            case Utilities.PICK_IMAGE_FROM_GALLERY:
                 Bitmap bitmap = Utilities.getImageFromDialog(requestCode, resultCode, data);
                 if (bitmap != null){
                     ((ImageView) findViewById(R.id.UserProfile_top_background_image_view)).setImageBitmap(bitmap);

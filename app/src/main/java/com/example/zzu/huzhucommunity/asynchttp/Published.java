@@ -67,7 +67,7 @@ public class Published {
                                 message.what = GET_PUBLISHED;
                                 message.obj = result;
                                 handler.sendMessage(message);
-                                cBack.onSuccess(i, null);
+                                cBack.onSuccess(i, null, 0);
                             } catch (UnsupportedEncodingException e) {
                                 e.printStackTrace();
                             }
@@ -110,7 +110,7 @@ public class Published {
                                 message.what = DELETE_USER_RESOURCE;
                                 message.obj = result;
                                 handler.sendMessage(message);
-                                cBack.onSuccess(i, null);
+                                cBack.onSuccess(i, null, 0);
                             } catch (UnsupportedEncodingException e) {
                                 e.printStackTrace();
                             }
@@ -145,7 +145,7 @@ public class Published {
                         HashMap<String, String> mp = new HashMap<>();
                         mp.put("number", number);
 
-                        callback.onSuccess(code, mp);
+                        callback.onSuccess(code, mp, 0);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -159,7 +159,7 @@ public class Published {
                         HashMap<String, String> mp = new HashMap<>();
                         mp.put("detail", detail);
 
-                        callback.onSuccess(code, mp);
+                        callback.onSuccess(code, mp, 0);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }

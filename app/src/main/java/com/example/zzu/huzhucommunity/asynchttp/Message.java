@@ -67,7 +67,7 @@ public class Message {
                                 message.what = GET_RELATED_USER_ID;
                                 message.obj = result;
                                 handler.sendMessage(message);
-                                cBack.onSuccess(i, null);
+                                cBack.onSuccess(i, null, 0);
                             } catch (UnsupportedEncodingException e) {
                                 e.printStackTrace();
                             }
@@ -112,7 +112,7 @@ public class Message {
                                 message.what = GET_CHAT_RECORDS;
                                 message.obj = result;
                                 handler.sendMessage(message);
-                                cBack.onSuccess(i, null);
+                                cBack.onSuccess(i, null, 0);
                             } catch (UnsupportedEncodingException e) {
                                 e.printStackTrace();
                             }
@@ -143,7 +143,7 @@ public class Message {
                     try {
                         JSONObject userObject = new JSONObject(Response);
                         int code=userObject.getInt("status");
-                        callback.onSuccess(code, null);
+                        callback.onSuccess(code, null, 0);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -157,7 +157,7 @@ public class Message {
                         HashMap<String, String> mp = new HashMap<>();
                         mp.put("code", code + "");
 
-                        callback.onSuccess(code, mp);
+                        callback.onSuccess(code, mp, 0);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }

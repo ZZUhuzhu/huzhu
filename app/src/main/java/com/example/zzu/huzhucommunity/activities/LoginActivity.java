@@ -129,10 +129,11 @@ public class LoginActivity extends BaseActivity implements AsyncHttpCallback {
 
     /**
      * 回调处理HTTP请求成功
-     * @param code 返回状态
+     * @param statusCode 返回状态
+     * @param requestCode 标识同一个activity的不同网络请求
      */
     @Override
-    public void onSuccess(int code, HashMap<String, String> mp) {
+    public void onSuccess(int statusCode, HashMap<String, String> mp, int requestCode) {
         Toast.makeText(MyApplication.getContext(), "登录成功", Toast.LENGTH_SHORT).show();
         MainActivity.startMe(this);
         finish();
@@ -140,10 +141,10 @@ public class LoginActivity extends BaseActivity implements AsyncHttpCallback {
 
     /**
      * 回调处理HTTP请求异常
-     * @param code 返回状态
+     * @param statusCode 返回状态
      */
     @Override
-    public void onError(int code) {
+    public void onError(int statusCode) {
         Toast.makeText(MyApplication.getContext(), "登录失败", Toast.LENGTH_SHORT).show();
     }
     public static void startMe(Context context){

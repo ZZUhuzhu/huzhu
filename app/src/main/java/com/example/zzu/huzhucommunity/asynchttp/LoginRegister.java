@@ -1,13 +1,10 @@
 package com.example.zzu.huzhucommunity.asynchttp;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.util.Log;
 
 import android.os.Handler;
 import android.os.Message;
 
-import com.example.zzu.huzhucommunity.commonclass.MyApplication;
 import com.example.zzu.huzhucommunity.commonclass.Utilities;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -176,7 +173,7 @@ public class LoginRegister {
                         if(code == 200) {
                             Utilities.SaveLoginUserProfile(userObject.getInt(USER_ID_KEY), userObject.getString(USER_NAME_KEY),
                                     userObject.getString(USER_HEAD_KEY));
-                            callback.onSuccess(code, null);
+                            callback.onSuccess(code, null, 0);
                         }
                         else {
                             callback.onError(code);

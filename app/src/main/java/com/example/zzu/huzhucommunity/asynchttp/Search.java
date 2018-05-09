@@ -79,7 +79,7 @@ public class Search {
                                 message.what = GET_RESOURCE_BY_KEYWORDS;
                                 message.obj = result;
                                 handler.sendMessage(message);
-                                cBack.onSuccess(i, null);
+                                cBack.onSuccess(i, null, 0);
                             } catch (UnsupportedEncodingException e) {
                                 e.printStackTrace();
                             }
@@ -111,7 +111,7 @@ public class Search {
                 try {
                     JSONObject userObject = new JSONObject(Response);
                     int code=userObject.getInt("status");
-                    callback.onSuccess(code, null);
+                    callback.onSuccess(code, null, 0);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

@@ -2,6 +2,7 @@ package com.example.zzu.huzhucommunity.asynchttp;
 
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 
 import com.example.zzu.huzhucommunity.dataclass.Request;
 import com.google.gson.Gson;
@@ -24,6 +25,7 @@ import java.util.List;
  */
 
 public class Main {
+    private static final String TAG = "Main";
     private static final Main ourInstance = new Main();
     private AsyncHttpCallback callback;
     private static final int GET_NEW_RESOURCE = 10301;
@@ -74,7 +76,7 @@ public class Main {
                                 message.what = GET_NEW_RESOURCE;
                                 message.obj = result;
                                 handler.sendMessage(message);
-                                cBack.onSuccess(i, null);
+                                cBack.onSuccess(i, null, 0);
                             } catch (UnsupportedEncodingException e) {
                                 e.printStackTrace();
                             }
@@ -118,12 +120,12 @@ public class Main {
                                 message.what = GET_REQUEST;
                                 message.obj = result;
                                 handler.sendMessage(message);
-                                cBack.onSuccess(i, null);
+                                //cBack.onSuccess(i, null, 0);
                             } catch (UnsupportedEncodingException e) {
                                 e.printStackTrace();
                             }
                         } else {
-                            cBack.onError(i);
+                            //cBack.onError(i);
                         }
                     }
 
@@ -162,7 +164,7 @@ public class Main {
                                 message.what = GET_RESOURCE_BY_TYPE;
                                 message.obj = result;
                                 handler.sendMessage(message);
-                                cBack.onSuccess(i, null);
+                                cBack.onSuccess(i, null, 0);
                             } catch (UnsupportedEncodingException e) {
                                 e.printStackTrace();
                             }
@@ -187,14 +189,14 @@ public class Main {
     private Handler handler = new Handler(new Handler.Callback() {
         @Override
         public boolean handleMessage(Message message) {
-            String Response = message.toString();
+            String Response = message.obj.toString();
             switch (message.what) {
                 case GET_NEW_RESOURCE:
                     try {
                         JSONObject userObject = new JSONObject(Response);
                         int code = userObject.getInt("status");
                         //TODO 判断返回状态码&将返回数据写进本地数据库
-                        callback.onSuccess(code, null);
+                        callback.onSuccess(code, null, 0);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -209,6 +211,7 @@ public class Main {
                         mp.put(REQUEST_CODE_JSON_KEY, code + "");
                         mp.put(REQUEST_NUMBER_JSON_KEY, number);
                         for (int i = 0; i < n; ++i) {
+                            //Log.e(TAG, "handleMessage: " + userObject.getString("" + i));
                             mp.put("" + i, userObject.getString("" + i));
                         }
 //                        String json = "[";
@@ -221,7 +224,8 @@ public class Main {
 //                        List<Request> list = gson.fromJson(json,
 //                                new TypeToken<List<Request>>() {}.getType());
 
-                        callback.onSuccess(code, mp);
+
+                        callback.onSuccess(code, mp, 0);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -230,7 +234,7 @@ public class Main {
                     try {
                         JSONObject userObject = new JSONObject(Response);
                         int code = userObject.getInt("status");
-                        callback.onSuccess(code, null);
+                        callback.onSuccess(code, null, 0);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }

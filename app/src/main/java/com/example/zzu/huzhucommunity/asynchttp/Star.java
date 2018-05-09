@@ -68,7 +68,7 @@ public class Star {
                                 message.what = GET_STAR;
                                 message.obj = result;
                                 handler.sendMessage(message);
-                                cBack.onSuccess(i, null);
+                                cBack.onSuccess(i, null, 0);
                             } catch (UnsupportedEncodingException e) {
                                 e.printStackTrace();
                             }
@@ -112,7 +112,7 @@ public class Star {
                                 message.what = CANCEL_STAR;
                                 message.obj = result;
                                 handler.sendMessage(message);
-                                cBack.onSuccess(i, null);
+                                cBack.onSuccess(i, null, 0);
                             } catch (UnsupportedEncodingException e) {
                                 e.printStackTrace();
                             }
@@ -153,7 +153,7 @@ public class Star {
                             mp.put("" + i, userObject.getString("" + i));
                         }
 
-                        callback.onSuccess(code, mp);
+                        callback.onSuccess(code, mp, 0);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -166,7 +166,7 @@ public class Star {
                         HashMap<String, String> mp = new HashMap<>();
                         mp.put("code", code + "");
                         mp.put("detail", detail);
-                        callback.onSuccess(code, mp);
+                        callback.onSuccess(code, mp, 0);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }

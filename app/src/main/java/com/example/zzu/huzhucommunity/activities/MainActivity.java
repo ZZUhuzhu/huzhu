@@ -13,6 +13,7 @@ import android.support.v7.app.AlertDialog;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
@@ -23,23 +24,31 @@ import com.example.zzu.huzhucommunity.R;
 import com.example.zzu.huzhucommunity.adapters.CommonRequestAdapter;
 import com.example.zzu.huzhucommunity.adapters.CommonResourcesAdapter;
 import com.example.zzu.huzhucommunity.adapters.CommonViewPagerAdapter;
+import com.example.zzu.huzhucommunity.asynchttp.AshncHttpCallbackImplemnet;
 import com.example.zzu.huzhucommunity.asynchttp.AsyncHttpCallback;
 import com.example.zzu.huzhucommunity.asynchttp.Comment;
+import com.example.zzu.huzhucommunity.asynchttp.Main;
 import com.example.zzu.huzhucommunity.commonclass.ActivitiesCollector;
 import com.example.zzu.huzhucommunity.commonclass.MyApplication;
 import com.example.zzu.huzhucommunity.commonclass.NewRequestItem;
 import com.example.zzu.huzhucommunity.commonclass.NewResourceItem;
+import com.example.zzu.huzhucommunity.dataclass.Request;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * 登录成功后的主界面
  */
-public class MainActivity extends BaseActivity {
+public class MainActivity extends BaseActivity implements AsyncHttpCallback {
     public static final String PUBLISH_TYPE = "PUBLISH_TYPE";
     private static long backLastPressedTime = 0;
     private static final int TASK_OVER = 1;
+    private static final String TAG = "MainActivity";
 
     private Handler handler = new Handler(new Handler.Callback() {
         @Override
@@ -129,35 +138,12 @@ public class MainActivity extends BaseActivity {
         addListener(R.id.MainActivity_search_text_view);
 
         initList();
+
+        //wjsay modify
+
+        Main.getOurInstance().getRequest("1", MainActivity.this);
     }
 
-    /**
-     * 下拉刷新时执行
-     * @param swipeRefreshLayout 正在刷新的SwipeRefreshLayout
-     * @param refreshResource true: 刷新发生着资源界面，否则为请求界面
-     */
-    public void refreshResource(final SwipeRefreshLayout swipeRefreshLayout, final boolean refreshResource){
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    if (refreshResource)
-                        Thread.sleep(2500);
-                    else
-                        Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        swipeRefreshLayout.setRefreshing(false);
-                        Toast.makeText(MyApplication.getContext(), "刷新完成", Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }
-        }).start();
-    }
     /**
      * 初始化列表项
      */
@@ -193,6 +179,41 @@ public class MainActivity extends BaseActivity {
     }
 
     /**
+     * 获取用户头像个人信息
+     */
+    public void initUserProfile(){
+        //todo 主活动获取信息
+    }
+
+    /**
+     * 下拉刷新时执行
+     * @param swipeRefreshLayout 正在刷新的SwipeRefreshLayout
+     * @param refreshResource true: 刷新发生着资源界面，否则为请求界面
+     */
+    public void refreshResource(final SwipeRefreshLayout swipeRefreshLayout, final boolean refreshResource){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    if (refreshResource)
+                        Thread.sleep(2500);
+                    else
+                        Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        swipeRefreshLayout.setRefreshing(false);
+                        Toast.makeText(MyApplication.getContext(), "刷新完成", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        }).start();
+    }
+
+    /**
      * ViewPager切换即MainActivity中页面改变时调用
      * @param position 切换到的页面对应的下标
      */
@@ -210,6 +231,7 @@ public class MainActivity extends BaseActivity {
             newRequestRecyclerView.setVisibility(View.VISIBLE);
         }
     }
+
     /**
      * 为每个控件添加监听器
      * @param res 控件ID
@@ -277,4 +299,27 @@ public class MainActivity extends BaseActivity {
         context.startActivity(new Intent(context, MainActivity.class));
     }
 
+    @Override
+    public void onSuccess(int statusCode, HashMap<String, String> mp, int requestCode) {
+        String json = "[";
+        String number = mp.get(Main.REQUEST_NUMBER_JSON_KEY);
+        int n = Integer.parseInt(number);
+        if(n > 0) json += mp.get("0");
+        for(int i = 1; i <n; ++i) {
+            json += "," + mp.get("" + i);
+        }
+        json += "]";
+        Log.e(TAG, "onSuccess: " + json);
+        Gson gson = new Gson();
+        List<Request> list = gson.fromJson(json,
+                new TypeToken<List<Request>>() {}.getType());
+        for (Request obj: list) {
+            Log.e(TAG, "onSuccess: " + obj.getResourceID());
+        }
+    }
+
+    @Override
+    public void onError(int statusCode) {
+
+    }
 }
