@@ -2,7 +2,11 @@ package com.example.zzu.huzhucommunity.asynchttp;
 
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 
+import com.example.zzu.huzhucommunity.dataclass.Request;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -12,6 +16,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by do_pc on 2018/1/25.
@@ -19,11 +25,15 @@ import java.io.UnsupportedEncodingException;
  */
 
 public class Main {
+    private static final String TAG = "Main";
     private static final Main ourInstance = new Main();
     private AsyncHttpCallback callback;
     private static final int GET_NEW_RESOURCE = 10301;
     private static final int GET_REQUEST = 10302;
     private static final int GET_RESOURCE_BY_TYPE = 10303;
+
+    public static final String REQUEST_NUMBER_JSON_KEY = "number";
+    public static final String REQUEST_CODE_JSON_KEY = "code";
 
     /**
      * 外部调用类方法，获得单体实例
@@ -110,12 +120,12 @@ public class Main {
                                 message.what = GET_REQUEST;
                                 message.obj = result;
                                 handler.sendMessage(message);
-                                cBack.onSuccess(i, null, 0);
+                                //cBack.onSuccess(i, null, 0);
                             } catch (UnsupportedEncodingException e) {
                                 e.printStackTrace();
                             }
                         } else {
-                            cBack.onError(i);
+                            //cBack.onError(i);
                         }
                     }
 
@@ -179,7 +189,7 @@ public class Main {
     private Handler handler = new Handler(new Handler.Callback() {
         @Override
         public boolean handleMessage(Message message) {
-            String Response = message.toString();
+            String Response = message.obj.toString();
             switch (message.what) {
                 case GET_NEW_RESOURCE:
                     try {
@@ -195,7 +205,27 @@ public class Main {
                     try {
                         JSONObject userObject = new JSONObject(Response);
                         int code = userObject.getInt("status");
-                        callback.onSuccess(code, null, 0);
+                        String number = userObject.getString("number");
+                        int n = Integer.parseInt(number);
+                        HashMap<String, String> mp = new HashMap<>();
+                        mp.put(REQUEST_CODE_JSON_KEY, code + "");
+                        mp.put(REQUEST_NUMBER_JSON_KEY, number);
+                        for (int i = 0; i < n; ++i) {
+                            //Log.e(TAG, "handleMessage: " + userObject.getString("" + i));
+                            mp.put("" + i, userObject.getString("" + i));
+                        }
+//                        String json = "[";
+//                        if (n > 0) json += userObject.getString("0");
+//                        for (int i = 1; i < n; ++i) {
+//                            json += "," + userObject.getString("" + i);
+//                        }
+//                        json += "]";
+//                        Gson gson = new Gson();
+//                        List<Request> list = gson.fromJson(json,
+//                                new TypeToken<List<Request>>() {}.getType());
+
+
+                        callback.onSuccess(code, mp, 0);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
