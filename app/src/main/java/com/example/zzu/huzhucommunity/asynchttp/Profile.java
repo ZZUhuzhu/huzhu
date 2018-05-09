@@ -24,9 +24,9 @@ public class Profile {
 
     private static final Profile ourInstance = new Profile();
     private AsyncHttpCallback callback;
-    private static final int UPDATE = 11401;
-    private static final int GET_ACCOUNT_PROFILE = 11406;
-    private static final int UPDATE_PASSWORD = 11407;
+    public static final int UPDATE = 11401;
+    public static final int GET_ACCOUNT_PROFILE = 11406;
+    public static final int UPDATE_PASSWORD = 11407;
 
     /**
      * 获取账户信息时 JSON 数据里面的键以及回调时 map 里面的键
@@ -247,7 +247,7 @@ public class Profile {
                         mp.put(GET_ACCOUNT_PROFILE_USER_REG_TIME_KEY, userRegisterTime);
                         mp.put(GET_ACCOUNT_PROFILE_LOGIN_TIME_KEY, userLoginTime);
 
-                        callback.onSuccess(code, mp, AccountProfileActivity.REQUEST_CODE_GET_ACCOUNT_PROFILE);
+                        callback.onSuccess(code, mp, GET_ACCOUNT_PROFILE);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }

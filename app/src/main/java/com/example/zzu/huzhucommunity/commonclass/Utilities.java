@@ -55,9 +55,13 @@ public class Utilities {
     public static final String MALE = "male";
     public static final String FEMALE = "female";
     /**
-     * 存放用户个人信息的sharedPreference的名字
+     * 用户ID --> sharedPreference 文件名
+     * 文件名后缀
+     * 已登录用户键
      */
-    private static final String USER_PROFILE_FILE_NAME = "Profile";
+    private static final String USER_ID_TO_PROFILE_FILE_NAME = "userIDToFileName";
+    private static final String USER_PROFILE_FILE_NAME_SUFFIX = "_Profile";
+    private static final String LOGIN_USER_ID_KEY = "loginUserID";
     /**
      * 存放到sharedPreference时的键
      */
@@ -84,17 +88,40 @@ public class Utilities {
     public static final int SWIPE_MAX_Y_DISTANCE = 120;
     public static final int SWIPE_THRESHOLD_VELOCITY = 200;
 
+    /**
+     * 根据用户ID确定用户信息所在文件
+     * @param userID 用户ID
+     * @return 存放用户个人信息的文件名
+     */
+    private static String GetUserProfileFileName(String userID){
+        SharedPreferences sp = MyApplication.getContext().
+                getSharedPreferences(USER_ID_TO_PROFILE_FILE_NAME, Context.MODE_PRIVATE);
+        String fileName = sp.getString(userID, null);
+        if (fileName != null){
+            return fileName;
+        }
+        fileName = userID + USER_PROFILE_FILE_NAME_SUFFIX;
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putString(userID, fileName);
+        editor.apply();
+        return fileName;
+    }
 
     /**
-     * 存储用户的基本个人信息到文件 {@link #USER_PROFILE_FILE_NAME} 中
+     * 存储用户的基本个人信息到文件 {@link #USER_PROFILE_FILE_NAME_SUFFIX} 中
      * @param userID 用户ID
      * @param userName 用户名
      * @param userHead 用户头像URL
      */
-    public static void SaveLoginUserProfile(int userID, String userName, String userHead){
-        SharedPreferences.Editor editor = MyApplication.getContext().getSharedPreferences(
-                USER_PROFILE_FILE_NAME, Context.MODE_PRIVATE).edit();
-        editor.putString(USER_ID_KEY_SHARED_PREFERENCE, userID + "");
+    public static void SaveLoginUserProfile(String userID, String userName, String userHead){
+        SharedPreferences.Editor editor;
+        editor = MyApplication.getContext().getSharedPreferences(
+                USER_ID_TO_PROFILE_FILE_NAME, Context.MODE_PRIVATE).edit();
+        editor.putString(LOGIN_USER_ID_KEY, userID);
+        editor.apply();
+        editor = MyApplication.getContext().getSharedPreferences(
+                GetUserProfileFileName(userID), Context.MODE_PRIVATE).edit();
+        editor.putString(USER_ID_KEY_SHARED_PREFERENCE, userID);
         editor.putString(USER_NAME_KEY_SHARED_PREFERENCE, userName);
         editor.putString(USER_HEAD_KEY_SHARED_PREFERENCE, userHead);
         editor.apply();
@@ -107,7 +134,7 @@ public class Utilities {
      */
     public static void SaveLoginUserProfile(HashMap<String, String> mp){
         SharedPreferences.Editor editor = MyApplication.getContext().
-                getSharedPreferences(USER_PROFILE_FILE_NAME, Context.MODE_PRIVATE).edit();
+                getSharedPreferences(GetUserProfileFileName(GetStingLoginUserId()), Context.MODE_PRIVATE).edit();
         for (Object o : mp.entrySet()) {
             Map.Entry entry = (Map.Entry) o;
             String key = (String) entry.getKey();
@@ -123,7 +150,8 @@ public class Utilities {
      * @return 返回存放信息的 map
      */
     public static HashMap<String, String> GetLoginUserAccountProfile(){
-        SharedPreferences sp = MyApplication.getContext().getSharedPreferences(USER_PROFILE_FILE_NAME, Context.MODE_PRIVATE);
+        SharedPreferences sp = MyApplication.getContext().
+                getSharedPreferences(GetUserProfileFileName(GetStingLoginUserId()), Context.MODE_PRIVATE);
         HashMap<String, String> mp = new HashMap<>();
         mp.put(GET_ACCOUNT_PROFILE_STATUS_CODE_KEY, sp.getString(GET_ACCOUNT_PROFILE_STATUS_CODE_KEY, DEF_STRING_VALUE_SHARED_PREFERENCE));
         mp.put(GET_ACCOUNT_PROFILE_USER_HEAD_KEY, sp.getString(GET_ACCOUNT_PROFILE_USER_HEAD_KEY, DEF_STRING_VALUE_SHARED_PREFERENCE));
@@ -144,7 +172,7 @@ public class Utilities {
      */
     public static void SaveLoginUserHeadBitmap(Bitmap bitmap){
         SharedPreferences.Editor editor = MyApplication.getContext().
-                getSharedPreferences(USER_PROFILE_FILE_NAME, Context.MODE_PRIVATE).edit();
+                getSharedPreferences(GetUserProfileFileName(GetStingLoginUserId()), Context.MODE_PRIVATE).edit();
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG, 50, baos);
         String imageBase64 = Base64.encodeToString(baos.toByteArray(), Base64.DEFAULT);
@@ -157,9 +185,9 @@ public class Utilities {
      * @return true：如果已经存储
      *          false：未存储
      */
-    public static boolean IsUserAccountProfileStored(){
+    public static boolean IsLoginUserAccountProfileStored(){
         SharedPreferences sharedPreferences = MyApplication.getContext().
-                getSharedPreferences(USER_PROFILE_FILE_NAME, Context.MODE_PRIVATE);
+                getSharedPreferences(GetUserProfileFileName(GetStingLoginUserId()), Context.MODE_PRIVATE);
         return sharedPreferences.contains(ACCOUNT_PROFILE_INSIDE_SHARED_PREFERENCE) &&
                 sharedPreferences.getBoolean(ACCOUNT_PROFILE_INSIDE_SHARED_PREFERENCE, false);
     }
@@ -171,14 +199,13 @@ public class Utilities {
      */
     public static Bitmap GetUserHeadBitmap(){
         SharedPreferences sharedPreferences = MyApplication.getContext().
-                getSharedPreferences(USER_PROFILE_FILE_NAME, Context.MODE_PRIVATE);
+                getSharedPreferences(GetUserProfileFileName(GetStingLoginUserId()), Context.MODE_PRIVATE);
         if (!sharedPreferences.contains(USER_HEAD_IMAGE_SHARED_PREFERENCE))
             return null;
         String temp = sharedPreferences.getString(USER_HEAD_IMAGE_SHARED_PREFERENCE, "");
         ByteArrayInputStream bais = new ByteArrayInputStream(Base64.decode(temp.getBytes(), Base64.DEFAULT));
         return BitmapFactory.decodeStream(bais);
     }
-
 
     /**
      * 获取已经登录的用户ID
@@ -187,9 +214,16 @@ public class Utilities {
      */
     public static int GetLoginUserId(){
         SharedPreferences sharedPreferences = MyApplication.getContext().getSharedPreferences
-                (USER_PROFILE_FILE_NAME, Context.MODE_PRIVATE);
-        return Integer.parseInt(sharedPreferences.getString(USER_ID_KEY_SHARED_PREFERENCE, USER_NOT_FOUND));
+                (USER_ID_TO_PROFILE_FILE_NAME, Context.MODE_PRIVATE);
+
+        return Integer.parseInt(sharedPreferences.getString(LOGIN_USER_ID_KEY, USER_NOT_FOUND));
     }
+    private static String GetStingLoginUserId(){
+        SharedPreferences sharedPreferences = MyApplication.getContext().getSharedPreferences
+                (USER_ID_TO_PROFILE_FILE_NAME, Context.MODE_PRIVATE);
+        return sharedPreferences.getString(LOGIN_USER_ID_KEY, USER_NOT_FOUND);
+    }
+
     /**
      * 选择照片对话框
      * @param context 上下文

@@ -171,7 +171,7 @@ public class LoginRegister {
                         JSONObject userObject = new JSONObject(responseStr);
                         int code=userObject.getInt("status");
                         if(code == 200) {
-                            Utilities.SaveLoginUserProfile(userObject.getInt(USER_ID_KEY), userObject.getString(USER_NAME_KEY),
+                            Utilities.SaveLoginUserProfile(userObject.getInt(USER_ID_KEY) + "", userObject.getString(USER_NAME_KEY),
                                     userObject.getString(USER_HEAD_KEY));
                             callback.onSuccess(code, null, 0);
                         }

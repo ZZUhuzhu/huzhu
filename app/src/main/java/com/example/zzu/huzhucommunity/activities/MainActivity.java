@@ -28,10 +28,12 @@ import com.example.zzu.huzhucommunity.asynchttp.AshncHttpCallbackImplemnet;
 import com.example.zzu.huzhucommunity.asynchttp.AsyncHttpCallback;
 import com.example.zzu.huzhucommunity.asynchttp.Comment;
 import com.example.zzu.huzhucommunity.asynchttp.Main;
+import com.example.zzu.huzhucommunity.asynchttp.UserProfile;
 import com.example.zzu.huzhucommunity.commonclass.ActivitiesCollector;
 import com.example.zzu.huzhucommunity.commonclass.MyApplication;
 import com.example.zzu.huzhucommunity.commonclass.NewRequestItem;
 import com.example.zzu.huzhucommunity.commonclass.NewResourceItem;
+import com.example.zzu.huzhucommunity.commonclass.Utilities;
 import com.example.zzu.huzhucommunity.dataclass.Request;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -137,11 +139,12 @@ public class MainActivity extends BaseActivity implements AsyncHttpCallback {
         addListener(R.id.MainActivity_message_button);
         addListener(R.id.MainActivity_search_text_view);
 
+        initUserProfile();
+
         initList();
 
         //wjsay modify
 
-        Main.getOurInstance().getRequest("1", MainActivity.this);
     }
 
     /**
@@ -176,13 +179,15 @@ public class MainActivity extends BaseActivity implements AsyncHttpCallback {
                 handler.sendMessage(message);
             }
         }).start();
+        //todo 获取请求
+        Main.getOurInstance().getRequest("1", MainActivity.this);
     }
 
     /**
      * 获取用户头像个人信息
      */
     public void initUserProfile(){
-        //todo 主活动获取信息
+
     }
 
     /**
@@ -299,23 +304,15 @@ public class MainActivity extends BaseActivity implements AsyncHttpCallback {
         context.startActivity(new Intent(context, MainActivity.class));
     }
 
+    /**
+     * 回调成功函数
+     * @param statusCode 返回状态
+     * @param mp 存储需要传递数据的哈希表，若无数据则 mp 为 null
+     * @param requestCode 请求码，标识同一个activity的不同网络请求
+     */
     @Override
     public void onSuccess(int statusCode, HashMap<String, String> mp, int requestCode) {
-        String json = "[";
-        String number = mp.get(Main.REQUEST_NUMBER_JSON_KEY);
-        int n = Integer.parseInt(number);
-        if(n > 0) json += mp.get("0");
-        for(int i = 1; i <n; ++i) {
-            json += "," + mp.get("" + i);
-        }
-        json += "]";
-        Log.e(TAG, "onSuccess: " + json);
-        Gson gson = new Gson();
-        List<Request> list = gson.fromJson(json,
-                new TypeToken<List<Request>>() {}.getType());
-        for (Request obj: list) {
-            Log.e(TAG, "onSuccess: " + obj.getResourceID());
-        }
+
     }
 
     @Override

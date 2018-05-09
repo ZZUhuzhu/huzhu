@@ -34,6 +34,8 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.HashMap;
 
+import static com.example.zzu.huzhucommunity.asynchttp.Profile.GET_ACCOUNT_PROFILE;
+
 
 public class AccountProfileActivity extends BaseActivity implements AsyncHttpCallback {
     private static final String TAG = "AccountProfileActivity";
@@ -45,13 +47,6 @@ public class AccountProfileActivity extends BaseActivity implements AsyncHttpCal
     private static final int REQUEST_USER_PHONE= 1;
     private static final int REQUEST_USER_GRADE = 2;
     private static final int REQUEST_USER_DEPARTMENT = 3;
-
-    /**
-     * 标识不同网络请求的请求码
-     * 与相关网络连接类 {@link Profile}配合使用
-     */
-    public static final int REQUEST_CODE_GET_ACCOUNT_PROFILE = 11;
-    public static final int REQUEST_CODE_UPDATE_ACCOUNT_PROFILE = 12;
 
     /**
      * 用于通过网络获取用户头像的 handler 以及 msg.what 值
@@ -110,7 +105,8 @@ public class AccountProfileActivity extends BaseActivity implements AsyncHttpCal
             Toast.makeText(MyApplication.getContext(), "出问题了，请重新登录", Toast.LENGTH_SHORT).show();
             ActivitiesCollector.exitLogin(this);
         }
-        if (Utilities.IsUserAccountProfileStored()){
+        //用户信息已经存储，则直接读取，否则通过网络获取
+        if (Utilities.IsLoginUserAccountProfileStored()){
             Log.e(TAG, "initUserAccountProfile: here");
             HashMap<String, String> mp = Utilities.GetLoginUserAccountProfile();
             AccountProfileItemLayout itemLayout = findViewById(R.id.AccountProfileActivity_sex_view);
@@ -302,13 +298,14 @@ public class AccountProfileActivity extends BaseActivity implements AsyncHttpCal
      * @param statusCode 返回状态
      * @param mp 存储需要传递数据的哈希表，若无数据则 mp 为 null
      * @param requestCode 请求码，标识同一个activity的不同网络请求
-     *                    {@link #REQUEST_CODE_GET_ACCOUNT_PROFILE}: 从服务器拉取用户账户信息
-     *                    {@link #REQUEST_CODE_UPDATE_ACCOUNT_PROFILE}: 更新用户信息
+     *                    {@link Profile#GET_ACCOUNT_PROFILE}: 从服务器拉取用户账户信息
+     *                    {@link Profile#UPDATE}: 更新用户信息
+     *                    {@link Profile#UPDATE_PASSWORD}
      */
     @Override
     public void onSuccess(int statusCode, final HashMap<String, String> mp, int requestCode) {
         switch (requestCode){
-            case REQUEST_CODE_GET_ACCOUNT_PROFILE:
+            case GET_ACCOUNT_PROFILE:
                 if (statusCode != 200){
                     onError(statusCode);
                     break;
@@ -342,7 +339,9 @@ public class AccountProfileActivity extends BaseActivity implements AsyncHttpCal
                 itemLayout = findViewById(R.id.AccountProfileActivity_phone_view);
                 itemLayout.setContent(mp.get(Profile.GET_ACCOUNT_PROFILE_USER_PHONE_KEY));
                 break;
-            case REQUEST_CODE_UPDATE_ACCOUNT_PROFILE:
+            case Profile.UPDATE:
+                break;
+            case Profile.UPDATE_PASSWORD:
                 break;
         }
     }

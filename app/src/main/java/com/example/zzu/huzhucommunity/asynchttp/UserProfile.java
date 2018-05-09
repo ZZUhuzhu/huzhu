@@ -103,7 +103,7 @@ public class UserProfile {
     }
 
     /**
-     * 获取用户信息，通过handler回调使用map返回数据
+     * 获取用户信息，通过 handler 回调使用 map返回数据
      * @param userID 用户ID
      * @param cBack 回调接口
      */
