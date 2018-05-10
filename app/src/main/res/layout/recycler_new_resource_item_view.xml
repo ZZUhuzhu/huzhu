@@ -15,7 +15,7 @@
         android:src="@drawable/default_image"/>
     <TextView
         android:id="@+id/NewResourceItem_title"
-        android:layout_width="220dp"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_alignTop="@id/NewResourceItem_thumbnail"
         android:layout_toEndOf="@id/NewResourceItem_thumbnail"

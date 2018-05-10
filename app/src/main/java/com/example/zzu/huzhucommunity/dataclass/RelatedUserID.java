@@ -4,7 +4,7 @@ public class RelatedUserID {
     private String
             mContent,
             lastChatTime,
-            oppsiteID,
+            oppositeID,
             oppositeURL,
             oppositeName;
 
@@ -17,7 +17,7 @@ public class RelatedUserID {
     }
 
     public String getOppsiteID() {
-        return oppsiteID;
+        return oppositeID;
     }
 
     public String getOppositeURL() {
@@ -37,7 +37,7 @@ public class RelatedUserID {
     }
 
     public void setOppsiteID(String oppsiteID) {
-        this.oppsiteID = oppsiteID;
+        this.oppositeID = oppsiteID;
     }
 
     public void setOppositeURL(String oppositeURL) {

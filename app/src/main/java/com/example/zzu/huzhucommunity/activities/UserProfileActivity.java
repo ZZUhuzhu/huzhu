@@ -3,6 +3,8 @@ package com.example.zzu.huzhucommunity.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.app.ActionBar;
 import android.os.Bundle;
@@ -13,8 +15,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.zzu.huzhucommunity.R;
+import com.example.zzu.huzhucommunity.asynchttp.UserProfile;
 import com.example.zzu.huzhucommunity.commonclass.Utilities;
 import com.example.zzu.huzhucommunity.customlayout.UserProfileItemLayout;
+
+import java.util.Objects;
 
 public class UserProfileActivity extends BaseActivity {
 
@@ -44,7 +49,7 @@ public class UserProfileActivity extends BaseActivity {
         addListener(R.id.UserProfile_me_holder);
         addListener(R.id.UserProfile_top_background_image_view);
 
-        initNumber();
+        initNumberAndUserHead();
     }
     /**
      * 为每个控件添加监听器
@@ -86,7 +91,31 @@ public class UserProfileActivity extends BaseActivity {
             }
         });
     }
-    public void initNumber(){
+
+    public void initNumberAndUserHead(){
+        String userName = Utilities.GetLoginUserUserName();
+        if (!Objects.equals(userName, Utilities.DEF_STRING_VALUE_SHARED_PREFERENCE))
+            ((TextView)findViewById(R.id.UserProfile_me_name_text_view)).setText(userName);
+        Bitmap bitmap = Utilities.GetLoginUserHeadBitmapFromSP();
+        if (bitmap == null){
+            UserProfile.getOurInstance().getImageBitmapByUrl(Utilities.GetLoginUserHeadUrl(), new Handler(new Handler.Callback() {
+                @Override
+                public boolean handleMessage(Message msg) {
+                    if (msg.what == UserProfile.GET_IMAGE_BITMAP_BY_URL){
+                        Bitmap bitmap = (Bitmap) msg.obj;
+                        if (bitmap != null){
+                            ((ImageView) findViewById(R.id.UserProfile_me_image_view)).setImageBitmap(bitmap);
+                            Utilities.SaveLoginUserHeadBitmap(bitmap);
+                        }
+                    }
+                    return false;
+                }
+            }));
+        }
+        else {
+            ((ImageView) findViewById(R.id.UserProfile_me_image_view)).setImageBitmap(bitmap);
+        }
+
         UserProfileItemLayout itemLayout = findViewById(R.id.UserProfile_resource_published_item);
         itemLayout.setAmount(0);
         itemLayout = findViewById(R.id.UserProfile_resource_received_item);

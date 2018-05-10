@@ -77,7 +77,6 @@ public class Main {
                                 message.what = GET_NEW_RESOURCE;
                                 message.obj = result;
                                 handler.sendMessage(message);
-                                cBack.onSuccess(i, null, 0);
                             } catch (UnsupportedEncodingException e) {
                                 e.printStackTrace();
                             }
@@ -199,8 +198,15 @@ public class Main {
                     try {
                         JSONObject userObject = new JSONObject(Response);
                         int code = userObject.getInt("status");
-                        //TODO 判断返回状态码&将返回数据写进本地数据库
-                        callback.onSuccess(code, null, 0);
+                        String number = userObject.getString("number");
+                        int n = Integer.parseInt(number);
+                        HashMap<String, String> mp = new HashMap<>();
+                        mp.put(REQUEST_CODE_JSON_KEY, code + "");
+                        mp.put(REQUEST_NUMBER_JSON_KEY, number);
+                        for (int i = 0; i < n; ++i) {
+                            mp.put("" + i, userObject.getString("" + i));
+                        }
+                        callback.onSuccess(code, mp, GET_NEW_RESOURCE);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -215,7 +221,6 @@ public class Main {
                         mp.put(REQUEST_CODE_JSON_KEY, code + "");
                         mp.put(REQUEST_NUMBER_JSON_KEY, number);
                         for (int i = 0; i < n; ++i) {
-                            //Log.e(TAG, "handleMessage: " + userObject.getString("" + i));
                             mp.put("" + i, userObject.getString("" + i));
                         }
                         callback.onSuccess(code, mp, GET_REQUEST);

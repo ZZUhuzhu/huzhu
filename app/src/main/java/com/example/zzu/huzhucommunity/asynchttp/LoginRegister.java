@@ -27,8 +27,8 @@ public class LoginRegister {
     private static final String TAG = "LoginRegister";
     private static final LoginRegister ourInstance = new LoginRegister();
     private AsyncHttpCallback callback;
-    private static final int LOGIN = 10101;
-    private static final int REGISTER = 10102;
+    public static final int LOGIN = 10101;
+    public static final int REGISTER = 10102;
     /**
      * 登录时 JsonObject 返回键值信息
      */
@@ -39,7 +39,7 @@ public class LoginRegister {
     /**
      * 回调时的json键
      */
-    public static final String STATUS_JSON_KEY = "code";
+    private static final String STATUS_JSON_KEY = "code";
 
 
     /**
@@ -84,7 +84,6 @@ public class LoginRegister {
                 client.post(path, params, new AsyncHttpResponseHandler() {
                     @Override
                     public void onSuccess(int i, org.apache.http.Header[] headers, byte[] bytes) {
-                        Log.d(TAG, ("onSuccess: 访问文件成功"));
                         //判断状态码
                         if(i == 200){
                             //获取结果
@@ -115,6 +114,16 @@ public class LoginRegister {
         }
     }
 
+    /**
+     * 执行注册操作
+     * @param account 用户账号
+     * @param password 密码
+     * @param phoneNumber 手机号
+     * @param gender 性别
+     * @param grade 年级
+     * @param department 院系
+     * @param cBack 回调对象
+     */
     public void register(final String account, final String password,
                          final String phoneNumber, final String gender,
                          final String grade, final String department,
@@ -198,7 +207,7 @@ public class LoginRegister {
                 case REGISTER:
                     try {
                         JSONObject userObject = new JSONObject(responseStr);
-                        int code=userObject.getInt("status");
+                        int code = userObject.getInt("status");
                         if(code == 200) {
                             HashMap<String, String> mp = new HashMap<>();
                             mp.put(STATUS_JSON_KEY, code + "");

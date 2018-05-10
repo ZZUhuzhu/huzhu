@@ -9,11 +9,8 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.JetPlayer;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
@@ -33,7 +30,6 @@ import com.google.gson.reflect.TypeToken;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
-import java.lang.reflect.Type;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
@@ -84,7 +80,7 @@ public class Utilities {
     private static final String USER_HEAD_KEY_SHARED_PREFERENCE = "userHead";
     private static final String USER_HEAD_IMAGE_SHARED_PREFERENCE = "userHeadImage";
     private static final String ACCOUNT_PROFILE_INSIDE_SHARED_PREFERENCE = "hasAccountProfile";
-    private static final String DEF_STRING_VALUE_SHARED_PREFERENCE = "";
+    public static final String DEF_STRING_VALUE_SHARED_PREFERENCE = "@@--@@--@@";
     /**
      * 未找到用户
      */
@@ -173,6 +169,16 @@ public class Utilities {
         String imageBase64 = Base64.encodeToString(baos.toByteArray(), Base64.DEFAULT);
         editor.putString(USER_HEAD_IMAGE_SHARED_PREFERENCE, imageBase64);
         editor.apply();
+    }
+
+    /**
+     * 获得已登录用户的用户名
+     * @return 返回已登录用户的用户名
+     */
+    public static String GetLoginUserUserName(){
+        SharedPreferences sp = MyApplication.getContext().
+                getSharedPreferences(GetUserProfileFileName(GetStingLoginUserId()), Context.MODE_PRIVATE);
+        return sp.getString(GET_ACCOUNT_PROFILE_USER_NAME_KEY, DEF_STRING_VALUE_SHARED_PREFERENCE);
     }
 
     /**
@@ -369,6 +375,24 @@ public class Utilities {
             return null;
         }
     }
+    public static List<Resource> getResource(HashMap<String, String> mp) {
+        try {
+            StringBuilder json = new StringBuilder("[");
+            int n = Integer.parseInt(mp.get("number"));
+            if(n > 0) json.append(mp.get("0"));
+            for(int i = 1; i < n; ++i) {
+                json.append(",").append(mp.get("" + i));
+            }
+            json.append("]");
+            Gson gson = new Gson();
+            return gson.fromJson(json.toString(),
+                    new TypeToken<List<Resource>>() {}.getType());
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
     public static List<Star> getStar(HashMap<String, String> mp) {
         try {
             StringBuilder json = new StringBuilder("[");
@@ -399,24 +423,6 @@ public class Utilities {
             Gson gson = new Gson();
             return gson.fromJson(json.toString(),
                     new TypeToken<List<UserTrack>>() {}.getType());
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-    public static List<Resource> getResource(HashMap<String, String> mp) {
-        try {
-            StringBuilder json = new StringBuilder("[");
-            int n = Integer.parseInt(mp.get("number"));
-            if(n > 0) json.append(mp.get("0"));
-            for(int i = 1; i < n; ++i) {
-                json.append(",").append(mp.get("" + i));
-            }
-            json.append("]");
-            Gson gson = new Gson();
-            return gson.fromJson(json.toString(),
-                    new TypeToken<List<Resource>>() {}.getType());
         }
         catch (Exception e) {
             e.printStackTrace();

@@ -5,12 +5,14 @@ package com.example.zzu.huzhucommunity.dataclass;
  */
 public class Resource {
     private String resourceAbbr,
+            imageUrl,
             resourceTitle,
             resourceDetail,
             resourcePrice,
+            resourceID,
             resourceStatus,
-            resourcePublishTime,
-            res_price;
+            publishDate,
+            resourcePublishTime;
 
     public String getResourceAbbr() {
         return resourceAbbr;
@@ -30,10 +32,6 @@ public class Resource {
 
     public String getResourceStatus() {
         return resourceStatus;
-    }
-
-    public String getRes_price() {
-        return res_price;
     }
 
     public String getResourcePublishTime() {
@@ -64,7 +62,27 @@ public class Resource {
         this.resourcePublishTime = resourcePublishTime;
     }
 
-    public void setRes_price(String res_price) {
-        this.res_price = res_price;
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public String getResourceID() {
+        return resourceID;
+    }
+
+    public void setResourceID(String resourceID) {
+        this.resourceID = resourceID;
+    }
+
+    public String getPublishDate() {
+        return publishDate;
+    }
+
+    public void setPublishDate(String publishDate) {
+        this.publishDate = publishDate;
     }
 }

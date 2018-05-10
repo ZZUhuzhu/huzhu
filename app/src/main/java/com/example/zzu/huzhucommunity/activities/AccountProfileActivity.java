@@ -208,7 +208,7 @@ public class AccountProfileActivity extends BaseActivity implements AsyncHttpCal
         });
     }
 
-    //todo 更新信息
+    //todo 更新信息，后台检查信息更新情况
     public void updateProfile(){
         Toast.makeText(MyApplication.getContext(), "正在全力开发中...", Toast.LENGTH_SHORT).show();
     }

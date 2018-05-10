@@ -3,6 +3,7 @@ package com.example.zzu.huzhucommunity.commonclass;
 import android.graphics.Bitmap;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 
 import com.example.zzu.huzhucommunity.dataclass.Request;
 import com.example.zzu.huzhucommunity.dataclass.Resource;
@@ -24,6 +25,9 @@ public class NewResourceItem implements Parcelable {
     private int itemThumbnailAmount;
     private ArrayList<Bitmap> itemThumbnails;
     private boolean received;
+    //todo 添加到 Parcelable
+    private String itemPublishTimeStr;
+    private String itemImageUrl;
 
     public NewResourceItem(String itemID, String itemTitle, String itemDetail,
                            long itemPublishTime,double itemPrice, ArrayList<Bitmap> itemThumbnails){
@@ -38,6 +42,16 @@ public class NewResourceItem implements Parcelable {
         else
             itemThumbnailAmount = itemThumbnails.size();
         this.itemThumbnails = itemThumbnails;
+    }
+
+    private NewResourceItem(String itemID, String itemTitle, String itemDetail,
+                            String itemPrice, String itemImageUrl, String itemPublishTimeStr){
+        this.itemID = itemID;
+        this.itemTitle = itemTitle;
+        this.itemDetail = itemDetail;
+        this.itemPrice = Double.parseDouble(itemPrice);
+        this.itemPublishTimeStr = itemPublishTimeStr;
+        this.itemImageUrl = itemImageUrl;
     }
 
     public boolean isReceived() {
@@ -124,4 +138,25 @@ public class NewResourceItem implements Parcelable {
         dest.writeTypedList(itemThumbnails);
     }
 
+    public String getItemImageUrl() {
+        return itemImageUrl;
+    }
+
+    public void setItemImageUrl(String itemImageUrl) {
+        this.itemImageUrl = itemImageUrl;
+    }
+
+    public String getItemPublishTimeStr() {
+        return itemPublishTimeStr;
+    }
+
+    public void setItemPublishTimeStr(String itemPublishTimeStr) {
+        this.itemPublishTimeStr = itemPublishTimeStr;
+    }
+
+    @NonNull
+    public static NewResourceItem TransferToMe(Resource resource){
+        return new NewResourceItem(resource.getResourceID(), resource.getResourceTitle(), resource.getResourceDetail(),
+                resource.getResourcePrice(), resource.getImageUrl(), resource.getPublishDate().substring(5, 16));
+    }
 }

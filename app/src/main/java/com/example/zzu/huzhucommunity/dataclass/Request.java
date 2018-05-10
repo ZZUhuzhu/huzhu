@@ -5,8 +5,8 @@ public class Request {
     private String resourceTitle;
     private String resourceDetail;
     private String resourceID;
-    private String publishDate,
-    res_price;
+    private String publishDate;
+    private String resourcePrice;
 
     public String getImageURL() {
         return imageURL;
@@ -20,8 +20,8 @@ public class Request {
         return resourceDetail;
     }
 
-    public String getRes_price() {
-        return res_price;
+    public String getResourcePrice() {
+        return resourcePrice;
     }
 
     public String getResourceID() {
@@ -52,7 +52,7 @@ public class Request {
         this.publishDate = publishDate;
     }
 
-    public void setRes_price(String res_price) {
-        this.res_price = res_price;
+    public void setResourcePrice(String resourcePrice) {
+        this.resourcePrice = resourcePrice;
     }
 }

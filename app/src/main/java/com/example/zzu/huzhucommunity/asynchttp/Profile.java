@@ -42,7 +42,7 @@ public class Profile {
     public static final String GET_ACCOUNT_PROFILE_USER_REG_TIME_KEY = "userRegisterTime";
     public static final String GET_ACCOUNT_PROFILE_LOGIN_TIME_KEY = "userLoginTime";
 
-    public static final String STATUS_JSON_KEY = "code";
+    private static final String STATUS_JSON_KEY = "code";
 
     /**
      * 外部调用类方法，获得单体实例

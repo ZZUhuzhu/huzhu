@@ -48,7 +48,7 @@ public class CommonRequestAdapter extends RecyclerView.Adapter<CommonRequestAdap
         holder.imageView.setImageBitmap(item.getItemThumbnail());
         holder.titleTextView.setText(item.getItemTitle());
         holder.detailTextView.setText(item.getItemDetail());
-        String time = "" + item.getItemPublishTime() + "天前";
+        String time = "" + item.getItemPublishTimeStr();
         holder.timeTextView.setText(time);
         String price = "" + item.getItemPrice() + "￥";
         holder.priceTextView.setText(price);

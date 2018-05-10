@@ -25,6 +25,7 @@ public class NewRequestItem implements Parcelable {
     private boolean received;
     private String itemPublishTimeStr;
     private String itemImageUrl;
+    //todo 重构 Parcelable
 
     public NewRequestItem(String itemID, String itemTitle, String itemDetail,
                            long itemPublishTime,double itemPrice, ArrayList<Bitmap> itemThumbnails){
@@ -42,12 +43,14 @@ public class NewRequestItem implements Parcelable {
         this.itemPublishTimeStr = Utilities.convertTimeInMillToString(itemPublishTime);
     }
 
-    private NewRequestItem(String itemID, String itemTitle, String itemDetail, String itemDate, String imageUrl){
+    private NewRequestItem(String itemID, String itemTitle, String itemDetail,
+                           String itemDate, String imageUrl, String itemPrice){
         this.itemDetail = itemDetail;
         this.itemID = itemID;
         this.itemPublishTimeStr = itemDate;
         this.itemTitle = itemTitle;
         this.itemImageUrl = imageUrl;
+        this.itemPrice = Double.parseDouble(itemPrice);
     }
 
     public boolean isReceived() {
@@ -134,11 +137,6 @@ public class NewRequestItem implements Parcelable {
         dest.writeTypedList(itemThumbnails);
     }
 
-    public static NewRequestItem TransferToMe(Request request){
-        return new NewRequestItem(request.getResourceID(), request.getResourceTitle(), request.getResourceDetail(),
-                request.getPublishDate(), request.getImageURL());
-    }
-
     public String getItemImageUrl() {
         return itemImageUrl;
     }
@@ -153,5 +151,9 @@ public class NewRequestItem implements Parcelable {
 
     public void setItemPublishTimeStr(String itemPublishTimeStr) {
         this.itemPublishTimeStr = itemPublishTimeStr;
+    }
+    public static NewRequestItem TransferToMe(Request request){
+        return new NewRequestItem(request.getResourceID(), request.getResourceTitle(), request.getResourceDetail(),
+                request.getPublishDate().substring(5, 16), request.getImageURL(), request.getResourcePrice());
     }
 }

@@ -13,6 +13,7 @@ import android.support.v7.app.AlertDialog;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
@@ -34,6 +35,7 @@ import com.example.zzu.huzhucommunity.commonclass.NewRequestItem;
 import com.example.zzu.huzhucommunity.commonclass.NewResourceItem;
 import com.example.zzu.huzhucommunity.commonclass.Utilities;
 import com.example.zzu.huzhucommunity.dataclass.Request;
+import com.example.zzu.huzhucommunity.dataclass.Resource;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -148,14 +150,18 @@ public class MainActivity extends BaseActivity implements AsyncHttpCallback {
     }
 
     /**
+     * todo 后台加载头像
      * 初始化列表项
      */
     public void initList(){
-        //todo 获取请求，资源
         Main.getOurInstance().getRequest("1", this);
         Main.getOurInstance().getRequest("2", this);
         Main.getOurInstance().getRequest("3", this);
+        Main.getOurInstance().getRequest("4", this);
         Main.getOurInstance().getNewResource("1", this);
+        Main.getOurInstance().getNewResource("2", this);
+        Main.getOurInstance().getNewResource("3", this);
+        Main.getOurInstance().getNewResource("4", this);
     }
 
     /**
@@ -317,6 +323,14 @@ public class MainActivity extends BaseActivity implements AsyncHttpCallback {
                 }
                 break;
             case GET_NEW_RESOURCE:
+                List<Resource> resList = Utilities.getResource(mp);
+                if (resList != null) {
+                    for (Resource resource : resList){
+                        resourceItems.add(NewResourceItem.TransferToMe(resource));
+                    }
+                    resourceAdapter.notifyDataSetChanged();
+                    findViewById(R.id.MainActivity_progress_bar).setVisibility(View.INVISIBLE);
+                }
                 break;
             case GET_RESOURCE_BY_TYPE:
                 break;
