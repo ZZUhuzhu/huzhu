@@ -5,6 +5,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.example.zzu.huzhucommunity.dataclass.Request;
+import com.example.zzu.huzhucommunity.dataclass.Resource;
 
 import java.util.ArrayList;
 
@@ -15,14 +16,14 @@ import java.util.ArrayList;
  */
 
 public class NewResourceItem implements Parcelable {
-    protected String itemID;
-    protected String itemDetail;
-    protected String itemTitle;
-    protected long itemPublishTime;
-    protected double itemPrice;
-    protected int itemThumbnailAmount;
-    protected ArrayList<Bitmap> itemThumbnails;
-    protected boolean received;
+    private String itemID;
+    private String itemDetail;
+    private String itemTitle;
+    private long itemPublishTime;
+    private double itemPrice;
+    private int itemThumbnailAmount;
+    private ArrayList<Bitmap> itemThumbnails;
+    private boolean received;
 
     public NewResourceItem(String itemID, String itemTitle, String itemDetail,
                            long itemPublishTime,double itemPrice, ArrayList<Bitmap> itemThumbnails){

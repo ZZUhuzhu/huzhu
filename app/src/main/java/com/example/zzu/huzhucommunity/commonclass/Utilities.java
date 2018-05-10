@@ -353,17 +353,16 @@ public class Utilities {
      */
     public static List<Request> getRequest(HashMap<String, String> mp) {
         try {
-            String json = "[";
+            StringBuilder json = new StringBuilder("[");
             int n = Integer.parseInt(mp.get("number"));
-            if(n > 0) json += mp.get("0");
+            if(n > 0) json.append(mp.get("0"));
             for(int i = 1; i < n; ++i) {
-                json += "," + mp.get("" + i);
+                json.append(",").append(mp.get("" + i));
             }
-            json += "]";
+            json.append("]");
             Gson gson = new Gson();
-            List<Request> list = gson.fromJson(json,
-                   new TypeToken<List<UserTrack>>() {}.getType());
-            return list;
+            return gson.fromJson(json.toString(),
+                   new TypeToken<List<Request>>() {}.getType());
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -372,17 +371,16 @@ public class Utilities {
     }
     public static List<Star> getStar(HashMap<String, String> mp) {
         try {
-            String json = "[";
+            StringBuilder json = new StringBuilder("[");
             int n = Integer.parseInt(mp.get("number"));
-            if(n > 0) json += mp.get("0");
+            if(n > 0) json.append(mp.get("0"));
             for(int i = 1; i < n; ++i) {
-                json += "," + mp.get("" + i);
+                json.append(",").append(mp.get("" + i));
             }
-            json += "]";
+            json.append("]");
             Gson gson = new Gson();
-            List<Star> list = gson.fromJson(json,
+            return gson.fromJson(json.toString(),
                     new TypeToken<List<Star>>() {}.getType());
-            return list;
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -391,17 +389,16 @@ public class Utilities {
     }
     public static List<UserTrack> getUserTrack(HashMap<String, String> mp) {
         try {
-            String json = "[";
+            StringBuilder json = new StringBuilder("[");
             int n = Integer.parseInt(mp.get("number"));
-            if(n > 0) json += mp.get("0");
+            if(n > 0) json.append(mp.get("0"));
             for(int i = 1; i < n; ++i) {
-                json += "," + mp.get("" + i);
+                json.append(",").append(mp.get("" + i));
             }
-            json += "]";
+            json.append("]");
             Gson gson = new Gson();
-            List<UserTrack> list = gson.fromJson(json,
+            return gson.fromJson(json.toString(),
                     new TypeToken<List<UserTrack>>() {}.getType());
-            return list;
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -410,17 +407,16 @@ public class Utilities {
     }
     public static List<Resource> getResource(HashMap<String, String> mp) {
         try {
-            String json = "[";
+            StringBuilder json = new StringBuilder("[");
             int n = Integer.parseInt(mp.get("number"));
-            if(n > 0) json += mp.get("0");
+            if(n > 0) json.append(mp.get("0"));
             for(int i = 1; i < n; ++i) {
-                json += "," + mp.get("" + i);
+                json.append(",").append(mp.get("" + i));
             }
-            json += "]";
+            json.append("]");
             Gson gson = new Gson();
-            List<Resource> list = gson.fromJson(json,
+            return gson.fromJson(json.toString(),
                     new TypeToken<List<Resource>>() {}.getType());
-            return list;
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -429,17 +425,16 @@ public class Utilities {
     }
     public static List<RelatedUserID> getRelatedUserID(HashMap<String, String> mp) {
         try {
-            String json = "[";
+            StringBuilder json = new StringBuilder("[");
             int n = Integer.parseInt(mp.get("number"));
-            if(n > 0) json += mp.get("0");
+            if(n > 0) json.append(mp.get("0"));
             for(int i = 1; i < n; ++i) {
-                json += "," + mp.get("" + i);
+                json.append(",").append(mp.get("" + i));
             }
-            json += "]";
+            json.append("]");
             Gson gson = new Gson();
-            List<RelatedUserID> list = gson.fromJson(json,
+            return gson.fromJson(json.toString(),
                     new TypeToken<List<RelatedUserID>>() {}.getType());
-            return list;
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -448,17 +443,16 @@ public class Utilities {
     }
     public static List<ChatRecord> getChatRecord(HashMap<String, String> mp) {
         try {
-            String json = "[";
+            StringBuilder json = new StringBuilder("[");
             int n = Integer.parseInt(mp.get("number"));
-            if(n > 0) json += mp.get("0");
+            if(n > 0) json.append(mp.get("0"));
             for(int i = 1; i < n; ++i) {
-                json += "," + mp.get("" + i);
+                json.append(",").append(mp.get("" + i));
             }
-            json += "]";
+            json.append("]");
             Gson gson = new Gson();
-            List<ChatRecord> list = gson.fromJson(json,
+            return gson.fromJson(json.toString(),
                     new TypeToken<List<ChatRecord>>() {}.getType());
-            return list;
         }
         catch (Exception e) {
             e.printStackTrace();

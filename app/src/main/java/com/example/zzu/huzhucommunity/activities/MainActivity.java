@@ -18,6 +18,7 @@ import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.zzu.huzhucommunity.R;
@@ -41,6 +42,10 @@ import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
+
+import static com.example.zzu.huzhucommunity.asynchttp.Main.GET_NEW_RESOURCE;
+import static com.example.zzu.huzhucommunity.asynchttp.Main.GET_REQUEST;
+import static com.example.zzu.huzhucommunity.asynchttp.Main.GET_RESOURCE_BY_TYPE;
 
 /**
  * 登录成功后的主界面
@@ -146,36 +151,11 @@ public class MainActivity extends BaseActivity implements AsyncHttpCallback {
      * 初始化列表项
      */
     public void initList(){
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                for(int i = 1; i < 22; i++){
-                    String title = "生命" + i + "号";
-                    String detail = getString(R.string.virtualResourceDetail);
-                    int time = i + (int) (Math.random() * 100);
-                    double price = ((int) (Math.random() * 1000)) / 10;
-                    ArrayList<Bitmap> bitmaps = new ArrayList<>();
-                    bitmaps.add(BitmapFactory.decodeResource(getResources(), R.drawable.default_image));
-                    NewResourceItem item = new NewResourceItem(i + "", title, detail, time, price, bitmaps);
-                    resourceItems.add(item);
-
-                    title = "给我个" + title;
-                    detail = getString(R.string.virtualRequestDetail);
-                    NewRequestItem requestItem = new NewRequestItem(i + "", title, detail, time, price, bitmaps);
-                    requestItems.add(requestItem);
-                }
-                Message message = new Message();
-                message.what = TASK_OVER;
-                handler.sendMessage(message);
-            }
-        }).start();
-        //todo 获取请求
-        Main.getOurInstance().getRequest("1", MainActivity.this);
+        //todo 获取请求，资源
+        Main.getOurInstance().getRequest("1", this);
+        Main.getOurInstance().getRequest("2", this);
+        Main.getOurInstance().getRequest("3", this);
+        Main.getOurInstance().getNewResource("1", this);
     }
 
     /**
@@ -325,18 +305,22 @@ public class MainActivity extends BaseActivity implements AsyncHttpCallback {
      */
     @Override
     public void onSuccess(int statusCode, HashMap<String, String> mp, int requestCode) {
-        int n = Integer.parseInt(mp.get("number"));
-        StringBuilder json = new StringBuilder("[");
-        if (n > 0)
-            json.append(mp.get("0"));
-        for (int i = 1; i < n; ++i) {
-            json.append(",").append(mp.get("" + i));
+        switch (requestCode){
+            case GET_REQUEST:
+                List<Request> list = Utilities.getRequest(mp);
+                if (list != null) {
+                    for (Request request: list) {
+                        requestItems.add(NewRequestItem.TransferToMe(request));
+                    }
+                    requestAdapter.notifyDataSetChanged();
+                    findViewById(R.id.MainActivity_progress_bar).setVisibility(View.INVISIBLE);
+                }
+                break;
+            case GET_NEW_RESOURCE:
+                break;
+            case GET_RESOURCE_BY_TYPE:
+                break;
         }
-        json.append("]");
-        Gson gson = new Gson();
-        ArrayList<Request> list = gson.fromJson(json.toString(),
-                new TypeToken<ArrayList<Request>>() {}.getType());
-
     }
 
     @Override

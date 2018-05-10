@@ -218,8 +218,6 @@ public class Main {
                             //Log.e(TAG, "handleMessage: " + userObject.getString("" + i));
                             mp.put("" + i, userObject.getString("" + i));
                         }
-
-
                         callback.onSuccess(code, mp, GET_REQUEST);
                     } catch (JSONException e) {
                         e.printStackTrace();
