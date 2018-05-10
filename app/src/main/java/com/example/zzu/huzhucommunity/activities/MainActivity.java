@@ -24,7 +24,6 @@ import com.example.zzu.huzhucommunity.R;
 import com.example.zzu.huzhucommunity.adapters.CommonRequestAdapter;
 import com.example.zzu.huzhucommunity.adapters.CommonResourcesAdapter;
 import com.example.zzu.huzhucommunity.adapters.CommonViewPagerAdapter;
-import com.example.zzu.huzhucommunity.asynchttp.AshncHttpCallbackImplemnet;
 import com.example.zzu.huzhucommunity.asynchttp.AsyncHttpCallback;
 import com.example.zzu.huzhucommunity.asynchttp.Comment;
 import com.example.zzu.huzhucommunity.asynchttp.Main;
@@ -229,7 +228,7 @@ public class MainActivity extends BaseActivity implements AsyncHttpCallback {
             newResourceRecyclerView.setVisibility(View.VISIBLE);
             newRequestRecyclerView.setVisibility(View.GONE);
         }
-        else if(position == 1){
+        else if(position == 1) {
             resourceButton.setImageResource(R.drawable.resource_gray);
             requestButton.setImageResource(R.drawable.request_yellow);
             newResourceRecyclerView.setVisibility(View.GONE);

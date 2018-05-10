@@ -198,7 +198,7 @@ public class Comment {
                             mp.put("" + i, userObject.getString("" + i));
                         }
 
-                        callback.onSuccess(code, mp, 0);
+                        callback.onSuccess(code, mp, GET_MY_COMMENT);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -207,7 +207,9 @@ public class Comment {
                     try {
                         JSONObject userObject = new JSONObject(Response);
                         int code = userObject.getInt("status");
-                        callback.onSuccess(code, null, 0);
+                        HashMap<String, String> mp = new HashMap<>();
+                        mp.put("code", "" + code);
+                        callback.onSuccess(code, mp, GET_MENTIONED_COMMENT);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -221,7 +223,7 @@ public class Comment {
                         mp.put("code", "" + code);
 
 
-                        callback.onSuccess(code, mp, 0);
+                        callback.onSuccess(code, mp, DELETE_COMMENT);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
