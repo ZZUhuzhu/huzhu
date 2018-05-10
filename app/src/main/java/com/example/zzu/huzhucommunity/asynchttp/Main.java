@@ -125,12 +125,11 @@ public class Main {
                                 message.what = GET_REQUEST;
                                 message.obj = result;
                                 handler.sendMessage(message);
-                                //cBack.onSuccess(i, null, 0);
                             } catch (UnsupportedEncodingException e) {
                                 e.printStackTrace();
                             }
                         } else {
-                            //cBack.onError(i);
+                            cBack.onError(i);
                         }
                     }
 
@@ -219,15 +218,6 @@ public class Main {
                             //Log.e(TAG, "handleMessage: " + userObject.getString("" + i));
                             mp.put("" + i, userObject.getString("" + i));
                         }
-//                        String json = "[";
-//                        if (n > 0) json += userObject.getString("0");
-//                        for (int i = 1; i < n; ++i) {
-//                            json += "," + userObject.getString("" + i);
-//                        }
-//                        json += "]";
-//                        Gson gson = new Gson();
-//                        List<Request> list = gson.fromJson(json,
-//                                new TypeToken<List<Request>>() {}.getType());
 
 
                         callback.onSuccess(code, mp, 0);

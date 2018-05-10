@@ -1,7 +1,11 @@
 package com.example.zzu.huzhucommunity.asynchttp;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.Nullable;
+import android.util.Log;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -20,11 +24,13 @@ import java.util.HashMap;
  */
 
 public class UserProfile {
+    private static final String TAG = "UserProfile";
 
     private static final UserProfile ourInstance = new UserProfile();
     private AsyncHttpCallback callback;
     private static final int GET_USER_ALL_KINDS_NUMBER = 10601;
     private static final int GET_USER_PROFILE = 10901;
+    public static final int GET_IMAGE_BITMAP_BY_URL = 11201;
     /**
      * 获取用户账户信息时的 JSON 键
      * 以及放入map里面时的键
@@ -149,6 +155,32 @@ public class UserProfile {
         }
     }
 
+    /**
+     * 通过给定的图片 URL 获取用户头像并通过 handler 返回
+     * @param imageUrl 图片网络位置
+     */
+    public void getImageBitmapByUrl(String imageUrl, final Handler handler){
+        AsyncHttpClient client = new AsyncHttpClient();
+        client.setTimeout(3000);
+        client.get(imageUrl, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int i, Header[] headers, byte[] bytes) {
+                if (i == 200){
+                    Message message = new Message();
+                    message.what = GET_IMAGE_BITMAP_BY_URL;
+                    message.obj = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                    handler.sendMessage(message);
+                }
+            }
+            @Override
+            public void onFailure(int i, Header[] headers, byte[] bytes, Throwable throwable) {
+                Message message = new Message();
+                message.what = GET_IMAGE_BITMAP_BY_URL;
+                message.obj = null;
+                handler.sendMessage(message);
+            }
+        });
+    }
 
 
     private Handler handler = new Handler(new Handler.Callback() {

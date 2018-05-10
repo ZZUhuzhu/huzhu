@@ -12,7 +12,6 @@ import android.support.v7.app.ActionBar;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -38,7 +37,6 @@ import static com.example.zzu.huzhucommunity.asynchttp.Profile.GET_ACCOUNT_PROFI
 
 
 public class AccountProfileActivity extends BaseActivity implements AsyncHttpCallback {
-    private static final String TAG = "AccountProfileActivity";
     /**
      * 标识不同更新活动的请求码
      * 开启新活动更新个人信息时用
@@ -107,7 +105,6 @@ public class AccountProfileActivity extends BaseActivity implements AsyncHttpCal
         }
         //用户信息已经存储，则直接读取，否则通过网络获取
         if (Utilities.IsLoginUserAccountProfileStored()){
-            Log.e(TAG, "initUserAccountProfile: here");
             HashMap<String, String> mp = Utilities.GetLoginUserAccountProfile();
             AccountProfileItemLayout itemLayout = findViewById(R.id.AccountProfileActivity_sex_view);
             if (mp.get(Profile.GET_ACCOUNT_PROFILE_USER_SEX_KEY).equals(Utilities.FEMALE))
@@ -127,7 +124,7 @@ public class AccountProfileActivity extends BaseActivity implements AsyncHttpCal
             itemLayout = findViewById(R.id.AccountProfileActivity_phone_view);
             itemLayout.setContent(mp.get(Profile.GET_ACCOUNT_PROFILE_USER_PHONE_KEY));
 
-            Bitmap bitmap = Utilities.GetUserHeadBitmap();
+            Bitmap bitmap = Utilities.GetLoginUserHeadBitmapFromSP();
             if (bitmap != null) {
                 ImageView view = findViewById(R.id.AccountProfileActivity_head_image_view);
                 view.setImageBitmap(bitmap);
@@ -310,7 +307,7 @@ public class AccountProfileActivity extends BaseActivity implements AsyncHttpCal
                     onError(statusCode);
                     break;
                 }
-                Bitmap bitmap = Utilities.GetUserHeadBitmap();
+                Bitmap bitmap = Utilities.GetLoginUserHeadBitmapFromSP();
                 if (bitmap != null){
                     ((ImageView) findViewById(R.id.AccountProfileActivity_head_image_view)).setImageBitmap(bitmap);
                     ((ImageView) findViewById(R.id.AccountProfileActivity_expanded_image_view)).setImageBitmap(bitmap);

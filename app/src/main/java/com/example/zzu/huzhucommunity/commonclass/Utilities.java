@@ -11,12 +11,16 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.provider.MediaStore;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.util.Base64;
 import android.util.DisplayMetrics;
 
 import com.example.zzu.huzhucommunity.R;
+import com.example.zzu.huzhucommunity.asynchttp.UserProfile;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -108,7 +112,8 @@ public class Utilities {
     }
 
     /**
-     * 存储用户的基本个人信息到文件 {@link #USER_PROFILE_FILE_NAME_SUFFIX} 中
+     * 登录后调用
+     * 存储用户的基本个人信息到 sharedPreference 中，文件名为 userID + {@link #USER_PROFILE_FILE_NAME_SUFFIX}
      * @param userID 用户ID
      * @param userName 用户名
      * @param userHead 用户头像URL
@@ -128,7 +133,8 @@ public class Utilities {
     }
 
     /**
-     * 将 map 中的数据保存到 sharedPreference 中
+     * 用户账户信息界面调用
+     * 将获得的用户账户信息 map 数据保存到 sharedPreference 中
      * 同时写入 {@link #ACCOUNT_PROFILE_INSIDE_SHARED_PREFERENCE} 值为 true
      * @param mp 待保存的数据集
      */
@@ -142,6 +148,20 @@ public class Utilities {
             editor.putString(key, value);
         }
         editor.putBoolean(ACCOUNT_PROFILE_INSIDE_SHARED_PREFERENCE, true);
+        editor.apply();
+    }
+
+    /**
+     * 将用户的头像 bitmap 压缩之后保存到 sharedPreference 中
+     * @param bitmap 待保存的 bitmap
+     */
+    public static void SaveLoginUserHeadBitmap(Bitmap bitmap){
+        SharedPreferences.Editor editor = MyApplication.getContext().
+                getSharedPreferences(GetUserProfileFileName(GetStingLoginUserId()), Context.MODE_PRIVATE).edit();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 50, baos);
+        String imageBase64 = Base64.encodeToString(baos.toByteArray(), Base64.DEFAULT);
+        editor.putString(USER_HEAD_IMAGE_SHARED_PREFERENCE, imageBase64);
         editor.apply();
     }
 
@@ -167,37 +187,12 @@ public class Utilities {
     }
 
     /**
-     * 将用户的头像 bitmap 压缩之后保存到 sharedPreference 中
-     * @param bitmap 待保存的 bitmap
-     */
-    public static void SaveLoginUserHeadBitmap(Bitmap bitmap){
-        SharedPreferences.Editor editor = MyApplication.getContext().
-                getSharedPreferences(GetUserProfileFileName(GetStingLoginUserId()), Context.MODE_PRIVATE).edit();
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 50, baos);
-        String imageBase64 = Base64.encodeToString(baos.toByteArray(), Base64.DEFAULT);
-        editor.putString(USER_HEAD_IMAGE_SHARED_PREFERENCE, imageBase64);
-        editor.apply();
-    }
-
-    /**
-     * 判断是否已经将用户的账户信息存放到 sharedPreference 里面
-     * @return true：如果已经存储
-     *          false：未存储
-     */
-    public static boolean IsLoginUserAccountProfileStored(){
-        SharedPreferences sharedPreferences = MyApplication.getContext().
-                getSharedPreferences(GetUserProfileFileName(GetStingLoginUserId()), Context.MODE_PRIVATE);
-        return sharedPreferences.contains(ACCOUNT_PROFILE_INSIDE_SHARED_PREFERENCE) &&
-                sharedPreferences.getBoolean(ACCOUNT_PROFILE_INSIDE_SHARED_PREFERENCE, false);
-    }
-
-    /**
      * 获取 sharedPreference 中存储的用户头像 bitmap
      * @return 如果有，返回用户头像
      *          否则返回 null
      */
-    public static Bitmap GetUserHeadBitmap(){
+    @Nullable
+    public static Bitmap GetLoginUserHeadBitmapFromSP(){
         SharedPreferences sharedPreferences = MyApplication.getContext().
                 getSharedPreferences(GetUserProfileFileName(GetStingLoginUserId()), Context.MODE_PRIVATE);
         if (!sharedPreferences.contains(USER_HEAD_IMAGE_SHARED_PREFERENCE))
@@ -222,6 +217,28 @@ public class Utilities {
         SharedPreferences sharedPreferences = MyApplication.getContext().getSharedPreferences
                 (USER_ID_TO_PROFILE_FILE_NAME, Context.MODE_PRIVATE);
         return sharedPreferences.getString(LOGIN_USER_ID_KEY, USER_NOT_FOUND);
+    }
+
+    /**
+     * 从 sharedPreference 获取已登录用户的头像 URL
+     * @return 返回已登录用户的头像 URL
+     */
+    public static String GetLoginUserHeadUrl(){
+        SharedPreferences sharedPreferences = MyApplication.getContext().getSharedPreferences(
+                GetUserProfileFileName(GetStingLoginUserId()), Context.MODE_PRIVATE);
+        return sharedPreferences.getString(USER_HEAD_KEY_SHARED_PREFERENCE, "");
+    }
+
+    /**
+     * 判断是否已经将用户的账户信息存放到 sharedPreference 里面
+     * @return true：如果已经存储
+     *          false：未存储
+     */
+    public static boolean IsLoginUserAccountProfileStored(){
+        SharedPreferences sharedPreferences = MyApplication.getContext().
+                getSharedPreferences(GetUserProfileFileName(GetStingLoginUserId()), Context.MODE_PRIVATE);
+        return sharedPreferences.contains(ACCOUNT_PROFILE_INSIDE_SHARED_PREFERENCE) &&
+                sharedPreferences.getBoolean(ACCOUNT_PROFILE_INSIDE_SHARED_PREFERENCE, false);
     }
 
     /**

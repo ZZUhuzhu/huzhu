@@ -102,12 +102,12 @@ public class PubRecStarTrackActivity extends BaseActivity {
                     double price = ((int) (Math.random() * 1000)) / 10;
                     ArrayList<Bitmap> bitmaps = new ArrayList<>();
                     bitmaps.add(BitmapFactory.decodeResource(getResources(), R.drawable.default_image));
-                    NewResourceItem item = new NewResourceItem(title, detail, time, price, bitmaps);
+                    NewResourceItem item = new NewResourceItem(i + "", title, detail, time, price, bitmaps);
                     resourceItems.add(item);
 
                     title = "给我个" + title;
                     detail = getString(R.string.virtualRequestDetail);
-                    NewRequestItem requestItem = new NewRequestItem(title, detail, time, price, bitmaps);
+                    NewRequestItem requestItem = new NewRequestItem(i + "", title, detail, time, price, bitmaps);
                     requestItems.add(requestItem);
                 }
                 Message msg = new Message();

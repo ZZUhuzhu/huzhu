@@ -2,6 +2,8 @@ package com.example.zzu.huzhucommunity.commonclass;
 
 import android.graphics.Bitmap;
 
+import com.example.zzu.huzhucommunity.dataclass.Request;
+
 import java.util.ArrayList;
 
 /**
@@ -11,7 +13,9 @@ import java.util.ArrayList;
  */
 
 public class NewRequestItem extends NewResourceItem{
-    public NewRequestItem(String itemDetail, String itemTitle, int itemPublishTime, double itemPrice, ArrayList<Bitmap> itemThumbnails) {
-        super(itemDetail, itemTitle, itemPublishTime, itemPrice, itemThumbnails);
+    public NewRequestItem(String itemID, String itemDetail, String itemTitle, int itemPublishTime,
+                          double itemPrice, ArrayList<Bitmap> itemThumbnails) {
+        super(itemID, itemDetail, itemTitle, itemPublishTime, itemPrice, itemThumbnails);
     }
+
 }

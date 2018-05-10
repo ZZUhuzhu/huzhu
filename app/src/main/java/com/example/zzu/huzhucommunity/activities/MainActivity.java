@@ -13,20 +13,18 @@ import android.support.v7.app.AlertDialog;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.zzu.huzhucommunity.R;
 import com.example.zzu.huzhucommunity.adapters.CommonRequestAdapter;
 import com.example.zzu.huzhucommunity.adapters.CommonResourcesAdapter;
 import com.example.zzu.huzhucommunity.adapters.CommonViewPagerAdapter;
-import com.example.zzu.huzhucommunity.asynchttp.AshncHttpCallbackImplemnet;
 import com.example.zzu.huzhucommunity.asynchttp.AsyncHttpCallback;
-import com.example.zzu.huzhucommunity.asynchttp.Comment;
 import com.example.zzu.huzhucommunity.asynchttp.Main;
 import com.example.zzu.huzhucommunity.asynchttp.UserProfile;
 import com.example.zzu.huzhucommunity.commonclass.ActivitiesCollector;
@@ -38,6 +36,7 @@ import com.example.zzu.huzhucommunity.dataclass.Request;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
@@ -139,12 +138,8 @@ public class MainActivity extends BaseActivity implements AsyncHttpCallback {
         addListener(R.id.MainActivity_message_button);
         addListener(R.id.MainActivity_search_text_view);
 
-        initUserProfile();
-
+        initUserHeadImage();
         initList();
-
-        //wjsay modify
-
     }
 
     /**
@@ -166,12 +161,12 @@ public class MainActivity extends BaseActivity implements AsyncHttpCallback {
                     double price = ((int) (Math.random() * 1000)) / 10;
                     ArrayList<Bitmap> bitmaps = new ArrayList<>();
                     bitmaps.add(BitmapFactory.decodeResource(getResources(), R.drawable.default_image));
-                    NewResourceItem item = new NewResourceItem(title, detail, time, price, bitmaps);
+                    NewResourceItem item = new NewResourceItem(i + "", title, detail, time, price, bitmaps);
                     resourceItems.add(item);
 
                     title = "给我个" + title;
                     detail = getString(R.string.virtualRequestDetail);
-                    NewRequestItem requestItem = new NewRequestItem(title, detail, time, price, bitmaps);
+                    NewRequestItem requestItem = new NewRequestItem(i + "", title, detail, time, price, bitmaps);
                     requestItems.add(requestItem);
                 }
                 Message message = new Message();
@@ -184,10 +179,28 @@ public class MainActivity extends BaseActivity implements AsyncHttpCallback {
     }
 
     /**
-     * 获取用户头像个人信息
+     * 获取用户头像
      */
-    public void initUserProfile(){
-
+    public void initUserHeadImage(){
+        Bitmap bitmap = Utilities.GetLoginUserHeadBitmapFromSP();
+        if (bitmap == null){
+            UserProfile.getOurInstance().getImageBitmapByUrl(Utilities.GetLoginUserHeadUrl(), new Handler(new Handler.Callback() {
+                @Override
+                public boolean handleMessage(Message msg) {
+                    if (msg.what == UserProfile.GET_IMAGE_BITMAP_BY_URL){
+                        Bitmap bitmap = (Bitmap) msg.obj;
+                        if (bitmap != null){
+                            ((ImageView) findViewById(R.id.MainActivity_head_button)).setImageBitmap(bitmap);
+                            Utilities.SaveLoginUserHeadBitmap(bitmap);
+                        }
+                    }
+                    return false;
+                }
+            }));
+        }
+        else {
+            ((ImageView) findViewById(R.id.MainActivity_head_button)).setImageBitmap(bitmap);
+        }
     }
 
     /**
@@ -312,6 +325,17 @@ public class MainActivity extends BaseActivity implements AsyncHttpCallback {
      */
     @Override
     public void onSuccess(int statusCode, HashMap<String, String> mp, int requestCode) {
+        int n = Integer.parseInt(mp.get("number"));
+        StringBuilder json = new StringBuilder("[");
+        if (n > 0)
+            json.append(mp.get("0"));
+        for (int i = 1; i < n; ++i) {
+            json.append(",").append(mp.get("" + i));
+        }
+        json.append("]");
+        Gson gson = new Gson();
+        ArrayList<Request> list = gson.fromJson(json.toString(),
+                new TypeToken<ArrayList<Request>>() {}.getType());
 
     }
 

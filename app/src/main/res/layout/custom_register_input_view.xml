@@ -19,6 +19,7 @@
             android:id="@+id/register_input_custom_edit_text"
             android:inputType="text"
             android:imeOptions="actionNext"
+            android:textCursorDrawable="@drawable/edit_text_cursor_white"
             style="@style/RegisterActivityEditText" />
         <View
             android:id="@+id/register_under_line_view"

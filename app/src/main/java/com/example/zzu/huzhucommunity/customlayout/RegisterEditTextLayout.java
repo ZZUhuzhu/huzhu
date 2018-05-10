@@ -32,7 +32,8 @@ public class RegisterEditTextLayout extends LinearLayout {
         boolean imeOptionDone = typedArray.getBoolean(R.styleable.RegisterEditTextLayout_ime_option_action_done, false);
         typedArray.recycle();
         textView.setText(String.format("%s:", temp));
-        if(inputPassword) editText.setInputType(EditorInfo.TYPE_TEXT_VARIATION_PASSWORD);
+        if(inputPassword)
+            editText.setInputType(EditorInfo.TYPE_TEXT_VARIATION_PASSWORD | EditorInfo.TYPE_CLASS_TEXT);
         if(textColorBlack){
             textView.setTextColor(Color.BLACK);
             editText.setTextColor(Color.BLACK);

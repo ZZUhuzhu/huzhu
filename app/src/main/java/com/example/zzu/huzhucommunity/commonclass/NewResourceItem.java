@@ -4,6 +4,8 @@ import android.graphics.Bitmap;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.example.zzu.huzhucommunity.dataclass.Request;
+
 import java.util.ArrayList;
 
 /**
@@ -13,15 +15,18 @@ import java.util.ArrayList;
  */
 
 public class NewResourceItem implements Parcelable {
-    private String itemDetail;
-    private String itemTitle;
-    private long itemPublishTime;
-    private double itemPrice;
-    private int itemThumbnailAmount;
-    private ArrayList<Bitmap> itemThumbnails;
-    private boolean received;
+    protected String itemID;
+    protected String itemDetail;
+    protected String itemTitle;
+    protected long itemPublishTime;
+    protected double itemPrice;
+    protected int itemThumbnailAmount;
+    protected ArrayList<Bitmap> itemThumbnails;
+    protected boolean received;
 
-    public NewResourceItem(String itemTitle, String itemDetail, long itemPublishTime, double itemPrice, ArrayList<Bitmap> itemThumbnails){
+    public NewResourceItem(String itemID, String itemTitle, String itemDetail,
+                           long itemPublishTime,double itemPrice, ArrayList<Bitmap> itemThumbnails){
+        this.itemID = itemID;
         this.received = Math.random() * 100 > 50;
         this.itemTitle = itemTitle;
         this.itemDetail = itemDetail;
@@ -34,17 +39,10 @@ public class NewResourceItem implements Parcelable {
         this.itemThumbnails = itemThumbnails;
     }
 
-    private NewResourceItem(Parcel in) {
-        itemDetail = in.readString();
-        itemTitle = in.readString();
-        itemPublishTime = in.readLong();
-        itemPrice = in.readDouble();
-        itemThumbnailAmount = in.readInt();
-        itemThumbnails = in.createTypedArrayList(Bitmap.CREATOR);
-    }
     public boolean isReceived() {
         return received;
     }
+
     public void setReceived() {
         this.received = true;
     }
@@ -80,9 +78,19 @@ public class NewResourceItem implements Parcelable {
     public ArrayList<Bitmap> getItemThumbnails() {
         return itemThumbnails;
     }
+
     private boolean itemHasThumbnails(){
         return itemThumbnailAmount > 0;
     }
+
+    public void setItemID(String itemID) {
+        this.itemID = itemID;
+    }
+
+    public String getItemID() {
+        return itemID;
+    }
+
     public Bitmap getItemThumbnail() {
         if(itemHasThumbnails())
             return itemThumbnails.get(0);
@@ -94,8 +102,19 @@ public class NewResourceItem implements Parcelable {
         return 0;
     }
 
+    private NewResourceItem(Parcel in) {
+        itemID = in.readString();
+        itemDetail = in.readString();
+        itemTitle = in.readString();
+        itemPublishTime = in.readLong();
+        itemPrice = in.readDouble();
+        itemThumbnailAmount = in.readInt();
+        itemThumbnails = in.createTypedArrayList(Bitmap.CREATOR);
+    }
+
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(itemID);
         dest.writeString(itemDetail);
         dest.writeString(itemTitle);
         dest.writeLong(itemPublishTime);
@@ -103,4 +122,5 @@ public class NewResourceItem implements Parcelable {
         dest.writeInt(itemThumbnailAmount);
         dest.writeTypedList(itemThumbnails);
     }
+
 }
