@@ -220,7 +220,7 @@ public class Main {
                         }
 
 
-                        callback.onSuccess(code, mp, 0);
+                        callback.onSuccess(code, mp, GET_REQUEST);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -229,7 +229,15 @@ public class Main {
                     try {
                         JSONObject userObject = new JSONObject(Response);
                         int code = userObject.getInt("status");
-                        callback.onSuccess(code, null, 0);
+                        String number = userObject.getString("number");
+                        HashMap<String, String> mp = new HashMap<>();
+                        mp.put(REQUEST_CODE_JSON_KEY, userObject.getString(REQUEST_CODE_JSON_KEY));
+                        mp.put(REQUEST_NUMBER_JSON_KEY, userObject.getString(REQUEST_NUMBER_JSON_KEY));
+                        int n = Integer.parseInt(number);
+                        for (int i = 0; i < n; ++i) {
+                            mp.put("" + i, userObject.getString("" + i));
+                        }
+                        callback.onSuccess(code, mp, GET_RESOURCE_BY_TYPE);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }

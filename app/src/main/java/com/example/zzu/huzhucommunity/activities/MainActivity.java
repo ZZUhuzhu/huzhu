@@ -242,7 +242,7 @@ public class MainActivity extends BaseActivity implements AsyncHttpCallback {
             newResourceRecyclerView.setVisibility(View.VISIBLE);
             newRequestRecyclerView.setVisibility(View.GONE);
         }
-        else if(position == 1){
+        else if(position == 1) {
             resourceButton.setImageResource(R.drawable.resource_gray);
             requestButton.setImageResource(R.drawable.request_yellow);
             newResourceRecyclerView.setVisibility(View.GONE);

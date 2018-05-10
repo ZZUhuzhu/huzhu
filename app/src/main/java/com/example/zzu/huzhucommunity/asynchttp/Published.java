@@ -144,8 +144,12 @@ public class Published {
 
                         HashMap<String, String> mp = new HashMap<>();
                         mp.put("number", number);
+                        int n = Integer.parseInt(number);
+                        for (int i = 0; i < n;++i) {
+                            mp.put("" + i, userObject.getString("" + i));
+                        }
 
-                        callback.onSuccess(code, mp, 0);
+                        callback.onSuccess(code, mp, GET_PUBLISHED);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -159,7 +163,7 @@ public class Published {
                         HashMap<String, String> mp = new HashMap<>();
                         mp.put("detail", detail);
 
-                        callback.onSuccess(code, mp, 0);
+                        callback.onSuccess(code, mp, DELETE_USER_RESOURCE);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }

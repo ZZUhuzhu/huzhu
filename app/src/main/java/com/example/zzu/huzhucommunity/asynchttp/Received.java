@@ -26,6 +26,9 @@ public class Received {
     private static final int GET_RECEIVED_RESOURCE = 11301;
     private static final int DELETE_RECEIVED_RESOURCE = 11302;
 
+    public static final String STATUS_JSON_KEY = "code";
+    public static final String NUNBER_JSON_KEY = "number";
+
     /**
      * 外部调用类方法，获得单体实例
      *
@@ -97,6 +100,7 @@ public class Received {
                 RequestParams params = new RequestParams();
                 params.put("resourceID", resourceID);
                 params.put("userID", userID);
+                //缺少该PHP文件
                 String path = "http://139.199.38.177/huzhu/php/deleteReceivedResource.php";
                 client.post(path, params, new AsyncHttpResponseHandler() {
                     @Override
@@ -140,11 +144,16 @@ public class Received {
                     try {
                         JSONObject userObject = new JSONObject(Response);
                         int code=userObject.getInt("status");
-
-
+                        String number = userObject.getString(NUNBER_JSON_KEY);
+                        int n = Integer.parseInt(number);
                         HashMap<String, String> mp = new HashMap<>();
+                        mp.put(STATUS_JSON_KEY, code + "");
+                        mp.put(NUNBER_JSON_KEY, number);
+                        for (int i = 0; i < n; ++i) {
+                            mp.put("" + i, userObject.getString("" + i));
+                        }
 
-                        callback.onSuccess(code, null, 0);
+                        callback.onSuccess(code, mp, GET_RECEIVED_RESOURCE);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -153,7 +162,9 @@ public class Received {
                     try {
                         JSONObject userObject = new JSONObject(Response);
                         int code=userObject.getInt("status");
-                        callback.onSuccess(code, null, 0);
+                        HashMap<String, String> mp = new HashMap<>();
+                        mp.put(STATUS_JSON_KEY, code + "");
+                        callback.onSuccess(code, mp, DELETE_RECEIVED_RESOURCE);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }

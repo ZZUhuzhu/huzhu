@@ -15,6 +15,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
 
 
 /**
@@ -34,6 +35,13 @@ public class LoginRegister {
     private static final String USER_ID_KEY = "User_id";
     private static final String USER_NAME_KEY = "User_name";
     private static final String USER_HEAD_KEY = "User_head";
+
+    /**
+     * 回调时的json键
+     */
+    public static final String STATUS_JSON_KEY = "code";
+
+
     /**
      * 外部调用类方法，获得单体实例
      *
@@ -173,7 +181,12 @@ public class LoginRegister {
                         if(code == 200) {
                             Utilities.SaveLoginUserProfile(userObject.getInt(USER_ID_KEY) + "", userObject.getString(USER_NAME_KEY),
                                     userObject.getString(USER_HEAD_KEY));
-                            callback.onSuccess(code, null, 0);
+                            HashMap<String, String> mp = new HashMap<>();
+                            mp.put(USER_HEAD_KEY, userObject.getString(USER_HEAD_KEY));
+                            mp.put(USER_ID_KEY, userObject.getString(USER_ID_KEY));
+                            mp.put(USER_NAME_KEY, userObject.getString(USER_NAME_KEY));
+
+                            callback.onSuccess(code, mp, LOGIN);
                         }
                         else {
                             callback.onError(code);
@@ -183,7 +196,20 @@ public class LoginRegister {
                     }
                     break;
                 case REGISTER:
-
+                    try {
+                        JSONObject userObject = new JSONObject(responseStr);
+                        int code=userObject.getInt("status");
+                        if(code == 200) {
+                            HashMap<String, String> mp = new HashMap<>();
+                            mp.put(STATUS_JSON_KEY, code + "");
+                            callback.onSuccess(code, mp, REGISTER);
+                        }
+                        else {
+                            callback.onError(code);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                     break;
                 default:
                     break;

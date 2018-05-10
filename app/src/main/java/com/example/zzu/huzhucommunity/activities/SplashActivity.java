@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.example.zzu.huzhucommunity.R;
-import com.example.zzu.huzhucommunity.asynchttp.AshncHttpCallbackImplemnet;
 import com.example.zzu.huzhucommunity.asynchttp.Main;
 
 public class SplashActivity extends BaseActivity {
