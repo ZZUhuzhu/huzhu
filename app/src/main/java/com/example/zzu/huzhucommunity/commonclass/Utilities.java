@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.JetPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -17,13 +18,23 @@ import android.util.Base64;
 import android.util.DisplayMetrics;
 
 import com.example.zzu.huzhucommunity.R;
+import com.example.zzu.huzhucommunity.asynchttp.Star;
+import com.example.zzu.huzhucommunity.dataclass.ChatRecord;
+import com.example.zzu.huzhucommunity.dataclass.RelatedUserID;
+import com.example.zzu.huzhucommunity.dataclass.Request;
+import com.example.zzu.huzhucommunity.dataclass.Resource;
+import com.example.zzu.huzhucommunity.dataclass.UserTrack;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
+import java.lang.reflect.Type;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static com.example.zzu.huzhucommunity.asynchttp.Profile.GET_ACCOUNT_PROFILE_LOGIN_TIME_KEY;
@@ -318,5 +329,124 @@ public class Utilities {
                 + calendar.get(Calendar.HOUR_OF_DAY) + ":"
                 + calendar.get(Calendar.MINUTE) + ":"
                 + calendar.get(Calendar.SECOND);
+    }
+
+    /**
+     * by wj
+     *2018-5-10 16:31:12
+     */
+    public static List<Request> getRequest(HashMap<String, String> mp) {
+        try {
+            String json = "[";
+            int n = Integer.parseInt(mp.get("number"));
+            if(n > 0) json += mp.get("0");
+            for(int i = 1; i < n; ++i) {
+                json += "," + mp.get("" + i);
+            }
+            json += "]";
+            Gson gson = new Gson();
+            List<Request> list = gson.fromJson(json,
+                   new TypeToken<List<UserTrack>>() {}.getType());
+            return list;
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+    public static List<Star> getStar(HashMap<String, String> mp) {
+        try {
+            String json = "[";
+            int n = Integer.parseInt(mp.get("number"));
+            if(n > 0) json += mp.get("0");
+            for(int i = 1; i < n; ++i) {
+                json += "," + mp.get("" + i);
+            }
+            json += "]";
+            Gson gson = new Gson();
+            List<Star> list = gson.fromJson(json,
+                    new TypeToken<List<Star>>() {}.getType());
+            return list;
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+    public static List<UserTrack> getUserTrack(HashMap<String, String> mp) {
+        try {
+            String json = "[";
+            int n = Integer.parseInt(mp.get("number"));
+            if(n > 0) json += mp.get("0");
+            for(int i = 1; i < n; ++i) {
+                json += "," + mp.get("" + i);
+            }
+            json += "]";
+            Gson gson = new Gson();
+            List<UserTrack> list = gson.fromJson(json,
+                    new TypeToken<List<UserTrack>>() {}.getType());
+            return list;
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+    public static List<Resource> getResource(HashMap<String, String> mp) {
+        try {
+            String json = "[";
+            int n = Integer.parseInt(mp.get("number"));
+            if(n > 0) json += mp.get("0");
+            for(int i = 1; i < n; ++i) {
+                json += "," + mp.get("" + i);
+            }
+            json += "]";
+            Gson gson = new Gson();
+            List<Resource> list = gson.fromJson(json,
+                    new TypeToken<List<Resource>>() {}.getType());
+            return list;
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+    public static List<RelatedUserID> getRelatedUserID(HashMap<String, String> mp) {
+        try {
+            String json = "[";
+            int n = Integer.parseInt(mp.get("number"));
+            if(n > 0) json += mp.get("0");
+            for(int i = 1; i < n; ++i) {
+                json += "," + mp.get("" + i);
+            }
+            json += "]";
+            Gson gson = new Gson();
+            List<RelatedUserID> list = gson.fromJson(json,
+                    new TypeToken<List<RelatedUserID>>() {}.getType());
+            return list;
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+    public static List<ChatRecord> getChatRecord(HashMap<String, String> mp) {
+        try {
+            String json = "[";
+            int n = Integer.parseInt(mp.get("number"));
+            if(n > 0) json += mp.get("0");
+            for(int i = 1; i < n; ++i) {
+                json += "," + mp.get("" + i);
+            }
+            json += "]";
+            Gson gson = new Gson();
+            List<ChatRecord> list = gson.fromJson(json,
+                    new TypeToken<List<ChatRecord>>() {}.getType());
+            return list;
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }
