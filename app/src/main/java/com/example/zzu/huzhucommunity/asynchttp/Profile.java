@@ -24,21 +24,21 @@ public class Profile {
 
     private static final Profile ourInstance = new Profile();
     private AsyncHttpCallback callback;
-    private static final int UPDATE = 11401;
-    private static final int GET_ACCOUNT_PROFILE = 11406;
-    private static final int UPDATE_PASSWORD = 11407;
+    public static final int UPDATE = 11401;
+    public static final int GET_ACCOUNT_PROFILE = 11406;
+    public static final int UPDATE_PASSWORD = 11407;
 
     /**
      * 获取账户信息时 JSON 数据里面的键以及回调时 map 里面的键
      */
-    private static final String GET_ACCOUNT_PROFILE_STATUS_CODE_KEY = "status";
+    public static final String GET_ACCOUNT_PROFILE_STATUS_CODE_KEY = "status";
     public static final String GET_ACCOUNT_PROFILE_USER_HEAD_KEY = "userHead";
     public static final String GET_ACCOUNT_PROFILE_USER_NAME_KEY = "userName";
-    private static final String GET_ACCOUNT_PROFILE_USER_ACCOUNT_KEY = "userAccount";
+    public static final String GET_ACCOUNT_PROFILE_USER_ACCOUNT_KEY = "userAccount";
     public static final String GET_ACCOUNT_PROFILE_USER_SEX_KEY = "userSex";
     public static final String GET_ACCOUNT_PROFILE_USER_PHONE_KEY = "userPhone";
     public static final String GET_ACCOUNT_PROFILE_USER_GRADE_KEY = "userGrade";
-    public static final String GET_ACCOUNT_PROFILE_USER_DEPT_KEY = "userDept";
+    public static final String GET_ACCOUNT_PROFILE_USER_DEPT_KEY = "userDepartment";
     public static final String GET_ACCOUNT_PROFILE_USER_REG_TIME_KEY = "userRegisterTime";
     public static final String GET_ACCOUNT_PROFILE_LOGIN_TIME_KEY = "userLoginTime";
 
@@ -106,6 +106,11 @@ public class Profile {
         }
     }
 
+    /**
+     * 获取用户账户信息
+     * @param userID 待获取的用户ID
+     * @param cBack 回调对象
+     */
     public void getAccountProfile(final String userID, final AsyncHttpCallback cBack) {
         try {
             if (userID != null && cBack != null) {
@@ -242,7 +247,7 @@ public class Profile {
                         mp.put(GET_ACCOUNT_PROFILE_USER_REG_TIME_KEY, userRegisterTime);
                         mp.put(GET_ACCOUNT_PROFILE_LOGIN_TIME_KEY, userLoginTime);
 
-                        callback.onSuccess(code, mp, AccountProfileActivity.REQUEST_CODE_GET_ACCOUNT_PROFILE);
+                        callback.onSuccess(code, mp, GET_ACCOUNT_PROFILE);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }

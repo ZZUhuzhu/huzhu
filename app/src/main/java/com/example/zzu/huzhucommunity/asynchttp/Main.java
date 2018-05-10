@@ -28,9 +28,10 @@ public class Main {
     private static final String TAG = "Main";
     private static final Main ourInstance = new Main();
     private AsyncHttpCallback callback;
-    private static final int GET_NEW_RESOURCE = 10301;
-    private static final int GET_REQUEST = 10302;
-    private static final int GET_RESOURCE_BY_TYPE = 10303;
+
+    public static final int GET_NEW_RESOURCE = 10301;
+    public static final int GET_REQUEST = 10302;
+    public static final int GET_RESOURCE_BY_TYPE = 10303;
 
     public static final String REQUEST_NUMBER_JSON_KEY = "number";
     public static final String REQUEST_CODE_JSON_KEY = "code";
@@ -98,7 +99,11 @@ public class Main {
         }
     }
 
-
+    /**
+     * 获取资源
+     * @param times 次数
+     * @param cBack 回调对象
+     */
     public void getRequest(final String times, final AsyncHttpCallback cBack) {
         try {
             if (times != null && cBack != null) {
