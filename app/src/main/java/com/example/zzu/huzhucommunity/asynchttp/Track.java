@@ -27,6 +27,9 @@ public class Track {
     private static final int DELETE_TRACK = 11002;
     private static final int DELETE_ALL_TRACK = 11003;
 
+    public static final String TRACK_NUMBER_JSON_KEY = "number";
+    public static final String TRACK_CODE_JSON_KEY = "code";
+
     /**
      * 外部调用类方法，获得单体实例
      *
@@ -69,12 +72,12 @@ public class Track {
                                 message.what = GET_USER_TRACK;
                                 message.obj = result;
                                 handler.sendMessage(message);
-                                cBack.onSuccess(i, null, 0);
+                                //cBack.onSuccess(i, null, 0);
                             } catch (UnsupportedEncodingException e) {
                                 e.printStackTrace();
                             }
                         }else{
-                            cBack.onError(i);
+                            //cBack.onError(i);
                         }
                     }
                     @Override
@@ -178,15 +181,23 @@ public class Track {
     private Handler handler = new Handler(new Handler.Callback() {
         @Override
         public boolean handleMessage(Message message) {
-            String Response = message.toString();
+            String Response = message.obj.toString();
             switch (message.what) {
                 case GET_USER_TRACK:
                     try {
                         JSONObject userObject = new JSONObject(Response);
                         int code=userObject.getInt("status");
+                        String number = userObject.getString(TRACK_NUMBER_JSON_KEY);
+                        int n = Integer.parseInt(number);
                         HashMap<String, String> mp = new HashMap<>();
-                        mp.put("code", "" + code);
-                        callback.onSuccess(code, mp, 0);
+                        mp.put(TRACK_NUMBER_JSON_KEY, number);
+                        mp.put(TRACK_CODE_JSON_KEY, code + "");
+                        if(n > 0) mp.put("0", userObject.getString("0"));
+                        for(int i = 1; i < n; ++i) {
+                            mp.put("" + i, userObject.getString("" + i));
+                        }
+
+                        callback.onSuccess(code, mp, GET_USER_TRACK);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -197,7 +208,7 @@ public class Track {
                         int code=userObject.getInt("status");
                         HashMap<String, String> mp = new HashMap<>();
                         mp.put("code", "" + code);
-                        callback.onSuccess(code, mp, 0);
+                        callback.onSuccess(code, mp, DELETE_TRACK);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -205,8 +216,11 @@ public class Track {
                 case DELETE_ALL_TRACK:
                     try {
                         JSONObject userObject = new JSONObject(Response);
+
                         int code=userObject.getInt("status");
-                        callback.onSuccess(code, null, 0);
+                        HashMap<String, String> mp = new HashMap<>();
+                        mp.put(TRACK_CODE_JSON_KEY, "" + code);
+                        callback.onSuccess(code, mp, DELETE_ALL_TRACK);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }

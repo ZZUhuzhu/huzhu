@@ -12,6 +12,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
 
 
 /**
@@ -23,6 +24,8 @@ public class Search {
     private static final Search ourInstance = new Search();
     private AsyncHttpCallback callback;
     private static final int GET_RESOURCE_BY_KEYWORDS = 10401;
+
+    public static final String SEARCH_CODE_JSON_KEY = "code";
 
 
     /**
@@ -111,7 +114,12 @@ public class Search {
                 try {
                     JSONObject userObject = new JSONObject(Response);
                     int code=userObject.getInt("status");
-                    callback.onSuccess(code, null, 0);
+
+                    HashMap<String, String> mp = new HashMap<>();
+                    mp.put(SEARCH_CODE_JSON_KEY, code +"");
+
+
+                    callback.onSuccess(code, mp, GET_RESOURCE_BY_KEYWORDS);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

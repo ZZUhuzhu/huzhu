@@ -146,6 +146,7 @@ public class Star {
                         int code = userObject.getInt("status");
                         String number =userObject.getString("number");
                         int n = Integer.parseInt(number);
+                        //这个是很危险的方法，n可能很大，消耗内存
 
                         HashMap<String, String> mp = new HashMap<>();
                         mp.put("number", number);
@@ -153,7 +154,7 @@ public class Star {
                             mp.put("" + i, userObject.getString("" + i));
                         }
 
-                        callback.onSuccess(code, mp, 0);
+                        callback.onSuccess(code, mp, GET_STAR);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -166,7 +167,7 @@ public class Star {
                         HashMap<String, String> mp = new HashMap<>();
                         mp.put("code", code + "");
                         mp.put("detail", detail);
-                        callback.onSuccess(code, mp, 0);
+                        callback.onSuccess(code, mp, CANCEL_STAR);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }

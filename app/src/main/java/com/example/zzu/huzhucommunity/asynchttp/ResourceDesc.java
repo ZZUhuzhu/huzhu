@@ -30,6 +30,23 @@ public class ResourceDesc {
     private static final int RECEIVE_RESOURCE = 10806;
     private static final int ADD_TO_TRACK = 10807;
 
+    public static final String RESOURCE_STATUS_JSON_KEY ="status";
+    public static final String RESOURCE_USERHEAD_JSON_KEY = "User_head";
+    public static final String RESOURCE_USERNAME_JSON_KEY = "User_name";
+    public static final String RESOURCE_USERLASTLOGIN_JSON_KEY = "userLastLogin",
+            RESOURCE_TITLE_JSON_KEY = "Res_title",
+            RRESOURCE_DETAIL_JSON_KEY = "Res_detail",
+            RRESOURCE_PRICE_JSON_KEY = "price",
+    PUBLISHDATE = "publishDate",
+            DEADLINE = "deadline",
+            IMAGENUMBERS = "imageNumbers",
+            RESOURCESTATUS = "resourceStatus",
+            PUBLISHSTATE = "publishState",
+            RESOURCE_NUMBER_JSON_KEY = "number",
+    _1 = "1";
+
+
+
     /**
      * 外部调用类方法，获得单体实例
      *
@@ -363,11 +380,14 @@ public class ResourceDesc {
                         JSONObject userObject = new JSONObject(Response);
                         HashMap<String, String> mp = new HashMap<>();
                         int code= userObject.getInt("status");
-                        mp.put("status", code + "");
-                        mp.put("User_head", userObject.getString("User_head"));
-                        mp.put("User_name", userObject.getString("User_name"));
-                        mp.put("userLastLogin", userObject.getString("userLastLogin"));
-                        callback.onSuccess(code, mp, 0);
+                        mp.put(RESOURCE_STATUS_JSON_KEY, code + "");
+                        mp.put(RESOURCE_USERHEAD_JSON_KEY,
+                                userObject.getString(RESOURCE_USERHEAD_JSON_KEY));
+                        mp.put(RESOURCE_USERNAME_JSON_KEY,
+                                userObject.getString(RESOURCE_USERNAME_JSON_KEY));
+                        mp.put(RESOURCE_USERLASTLOGIN_JSON_KEY,
+                                userObject.getString(RESOURCE_USERLASTLOGIN_JSON_KEY));
+                        callback.onSuccess(code, mp, GET_RES_PUBLISHER_INFO);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -378,14 +398,17 @@ public class ResourceDesc {
                         int code=userObject.getInt("status");
                         callback.onSuccess(code, null, 0);
                         HashMap<String, String> mp = new HashMap<>();
-                        mp.put("status", code + "");
-                        mp.put("resourceTitle", userObject.getString("Res_title"));
-                        mp.put("RresourceDetail", userObject.getString("Res_detail"));
-                        mp.put("price", userObject.getString("price"));
-                        mp.put("publishDate", userObject.getString("publishDate"));
-                        mp.put("deadline", userObject.getString("deadline"));
-                        mp.put("imageNumbers", userObject.getString("imageNumbers"));
-                        mp.put("resourceStatus", userObject.getString("resourceStatus"));
+                        mp.put(RESOURCE_STATUS_JSON_KEY, code + "");
+                        mp.put(RESOURCE_TITLE_JSON_KEY,
+                                userObject.getString("Res_title"));
+                        mp.put(RRESOURCE_DETAIL_JSON_KEY, userObject.getString("Res_detail"));
+                        mp.put(RRESOURCE_PRICE_JSON_KEY,
+                                userObject.getString("price"));
+                        mp.put(PUBLISHDATE, userObject.getString("publishDate"));
+                        mp.put(DEADLINE, userObject.getString("deadline"));
+                        mp.put(IMAGENUMBERS, userObject.getString("imageNumbers"));
+                        mp.put(PUBLISHSTATE, userObject.getString("resourceStatus"));
+                        callback.onSuccess(code, mp, GET_RESOURCE_DESC);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -398,7 +421,7 @@ public class ResourceDesc {
                         String number =userObject.getString("number");
                         int n = Integer.parseInt(number);
 
-                        mp.put("number", number);
+                        mp.put(RESOURCE_NUMBER_JSON_KEY, number);
                         for (int i = 0; i < n; ++i) {
                             mp.put("" + i, userObject.getString("" + i));
                         }
@@ -414,13 +437,13 @@ public class ResourceDesc {
                         int code=userObject.getInt("status");
                         String publishState = userObject.getString("publishState");
                         String resourceID = userObject.getString("resourceID");
-                        String _1 = userObject.getString("1");
+                        String _1local = userObject.getString("1");
                         HashMap<String, String> mp = new HashMap<>();
-                        mp.put("1", _1);
-                        mp.put("resourceID", resourceID);
-                        mp.put("publishState", publishState);
+                        mp.put(_1, _1local);
+                        mp.put(RESOURCESTATUS, resourceID);
+                        mp.put(PUBLISHSTATE, publishState);
 
-                        callback.onSuccess(code, null, 0);
+                        callback.onSuccess(code, mp, PUBLISH_COMMENT);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -429,7 +452,10 @@ public class ResourceDesc {
                     try {
                         JSONObject userObject = new JSONObject(Response);
                         int code=userObject.getInt("status");
-                        callback.onSuccess(code, null, 0);
+                        HashMap<String, String> mp = new HashMap<>();
+                        mp.put(RESOURCE_STATUS_JSON_KEY, code + "");
+
+                        callback.onSuccess(code, mp, UPDATE_STAR);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -438,7 +464,10 @@ public class ResourceDesc {
                     try {
                         JSONObject userObject = new JSONObject(Response);
                         int code=userObject.getInt("status");
-                        callback.onSuccess(code, null, 0);
+                        HashMap<String, String> mp = new HashMap<>();
+                        mp.put(RESOURCE_STATUS_JSON_KEY, code + "");
+
+                        callback.onSuccess(code, mp, RECEIVE_RESOURCE);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -447,7 +476,10 @@ public class ResourceDesc {
                     try {
                         JSONObject userObject = new JSONObject(Response);
                         int code=userObject.getInt("status");
-                        callback.onSuccess(code, null, 0);
+                        HashMap<String, String> mp = new HashMap<>();
+                        mp.put(RESOURCE_STATUS_JSON_KEY, code + "");
+
+                        callback.onSuccess(code, mp, RECEIVE_RESOURCE);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }

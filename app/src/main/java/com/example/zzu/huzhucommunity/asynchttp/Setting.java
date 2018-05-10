@@ -142,13 +142,11 @@ public class Setting {
                 try {
                     JSONObject userObject = new JSONObject(Response);
                     int code = userObject.getInt("status");
-                    String URL = userObject.getString("URL");
 
                     HashMap<String, String> mp = new HashMap<>();
                     mp.put("code", code + "");
-                    mp.put("URL", URL);
 
-                    callback.onSuccess(code, mp, 0);
+                    callback.onSuccess(code, mp, RECORD_USER_FEEDBACK);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
