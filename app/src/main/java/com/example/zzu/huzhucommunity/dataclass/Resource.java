@@ -9,7 +9,8 @@ public class Resource {
             resourceDetail,
             resourcePrice,
             resourceStatus,
-            resourcePublishTime;
+            resourcePublishTime,
+            res_price;
 
     public String getResourceAbbr() {
         return resourceAbbr;
@@ -29,6 +30,10 @@ public class Resource {
 
     public String getResourceStatus() {
         return resourceStatus;
+    }
+
+    public String getRes_price() {
+        return res_price;
     }
 
     public String getResourcePublishTime() {
@@ -57,5 +62,9 @@ public class Resource {
 
     public void setResourcePublishTime(String resourcePublishTime) {
         this.resourcePublishTime = resourcePublishTime;
+    }
+
+    public void setRes_price(String res_price) {
+        this.res_price = res_price;
     }
 }
