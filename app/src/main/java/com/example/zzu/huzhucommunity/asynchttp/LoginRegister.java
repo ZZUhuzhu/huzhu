@@ -181,7 +181,12 @@ public class LoginRegister {
                         if(code == 200) {
                             Utilities.SaveLoginUserProfile(userObject.getInt(USER_ID_KEY) + "", userObject.getString(USER_NAME_KEY),
                                     userObject.getString(USER_HEAD_KEY));
-                            callback.onSuccess(code, null, 0);
+                            HashMap<String, String> mp = new HashMap<>();
+                            mp.put(USER_HEAD_KEY, userObject.getString(USER_HEAD_KEY));
+                            mp.put(USER_ID_KEY, userObject.getString(USER_ID_KEY));
+                            mp.put(USER_NAME_KEY, userObject.getString(USER_NAME_KEY));
+
+                            callback.onSuccess(code, mp, LOGIN);
                         }
                         else {
                             callback.onError(code);

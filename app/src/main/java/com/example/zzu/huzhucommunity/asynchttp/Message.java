@@ -25,6 +25,9 @@ public class Message {
     private static final int GET_RELATED_USER_ID = 10701;
     private static final int GET_CHAT_RECORDS = 10702;
 
+    public static final String NUMBER_JSON_KEY = "number";
+    public static final String STATUS_JSON_KEY = "code";
+
     /**
      * 外部调用类方法，获得单体实例
      *
@@ -143,7 +146,17 @@ public class Message {
                     try {
                         JSONObject userObject = new JSONObject(Response);
                         int code=userObject.getInt("status");
-                        callback.onSuccess(code, null, 0);
+                        String number = userObject.getString(NUMBER_JSON_KEY);
+                        //n可能很大
+                        int n = Integer.parseInt(number);
+                        HashMap<String, String> mp = new HashMap<>();
+                        mp.put(STATUS_JSON_KEY, code + "");
+                        mp.put(NUMBER_JSON_KEY, number);
+                        for(int i = 0; i < n;++i) {
+                            mp.put("" + i, userObject.getString("" + i));
+                        }
+
+                        callback.onSuccess(code, mp, GET_RELATED_USER_ID);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -152,12 +165,19 @@ public class Message {
                     try {
                         JSONObject userObject = new JSONObject(Response);
                         int code=userObject.getInt("status");
-
-
+                        String number = userObject.getString(NUMBER_JSON_KEY);
+                        //n可能很大
+                        int n = Integer.parseInt(number);
                         HashMap<String, String> mp = new HashMap<>();
+                        mp.put(STATUS_JSON_KEY, code + "");
+                        mp.put(NUMBER_JSON_KEY, number);
+                        for(int i = 0; i < n;++i) {
+                            mp.put("" + i, userObject.getString("" + i));
+                        }
+
                         mp.put("code", code + "");
 
-                        callback.onSuccess(code, mp, 0);
+                        callback.onSuccess(code, mp, GET_CHAT_RECORDS);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
