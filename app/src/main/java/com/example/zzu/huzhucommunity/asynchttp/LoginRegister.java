@@ -24,7 +24,6 @@ import java.util.HashMap;
  */
 
 public class LoginRegister {
-    private static final String TAG = "LoginRegister";
     private static final LoginRegister ourInstance = new LoginRegister();
     private AsyncHttpCallback callback;
     public static final int LOGIN = 10101;
@@ -71,7 +70,6 @@ public class LoginRegister {
      * @param password 用户输入的密码
      */
     public void login(final String account, final String password, final AsyncHttpCallback cBack) {
-        Log.e(TAG, "login: now login");
         try {
             if (account != null && password != null && cBack != null) {
                 this.callback = cBack;
@@ -102,7 +100,6 @@ public class LoginRegister {
                     }
                     @Override
                     public void onFailure(int i, Header[] headers, byte[] bytes, Throwable throwable) {
-                        Log.d(TAG, "onFailure: 访问文件失败");
                         cBack.onError(i);
                     }
                 });

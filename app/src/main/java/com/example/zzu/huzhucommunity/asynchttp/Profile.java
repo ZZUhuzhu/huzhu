@@ -64,12 +64,20 @@ public class Profile {
         return this.callback;
     }
 
+    /**
+     * 更新信息
+     * @param target 待更新的目标对象，值为以下之一：
+     *              name, phone, grade, department, head
+     * @param userID 用户ID
+     * @param newItem 待更新的新值
+     * @param cBack 回调对象
+     */
     public void update(final String target, final String userID,final String newItem, final AsyncHttpCallback cBack) {
         try {
             if (target != null && userID != null && newItem != null && cBack != null) {
                 this.callback = cBack;
                 AsyncHttpClient client = new AsyncHttpClient();
-                client.setTimeout(3000);
+                client.setTimeout(1000);
                 RequestParams params = new RequestParams();
                 params.put("target", target);
                 params.put("userID", userID);
@@ -87,7 +95,6 @@ public class Profile {
                                 message.what =UPDATE;
                                 message.obj = result;
                                 handler.sendMessage(message);
-                                cBack.onSuccess(i, null, 0);
                             } catch (UnsupportedEncodingException e) {
                                 e.printStackTrace();
                             }
@@ -135,6 +142,7 @@ public class Profile {
                                 message.obj = result;
                                 handler.sendMessage(message);
                             } catch (UnsupportedEncodingException e) {
+                                cBack.onError(i);
                                 e.printStackTrace();
                             }
                         }else{
@@ -182,8 +190,8 @@ public class Profile {
                                 message.what = UPDATE_PASSWORD;
                                 message.obj = result;
                                 handler.sendMessage(message);
-                                cBack.onSuccess(i, null, 0);
                             } catch (UnsupportedEncodingException e) {
+                                cBack.onError(i);
                                 e.printStackTrace();
                             }
                         }else{
@@ -204,11 +212,10 @@ public class Profile {
     }
 
 
-
     private Handler handler = new Handler(new Handler.Callback() {
         @Override
         public boolean handleMessage(Message message) {
-            String Response = message.toString();
+            String Response = message.obj.toString();
             switch (message.what) {
                 case UPDATE:
                     try {

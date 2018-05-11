@@ -21,16 +21,22 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.example.zzu.huzhucommunity.R;
+import com.example.zzu.huzhucommunity.asynchttp.AsyncHttpCallback;
 import com.example.zzu.huzhucommunity.commonclass.MyApplication;
 import com.example.zzu.huzhucommunity.commonclass.Utilities;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 
-public class PublishNewActivity extends BaseActivity {
+public class PublishNewActivity extends BaseActivity implements AsyncHttpCallback {
     public static final int PUBLISH_NEW_RESOURCE = 0;
     public static final int PUBLISH_NEW_REQUEST = 1;
+
+    private int publishWhich = PUBLISH_NEW_REQUEST;
+
     private Calendar calendar = GregorianCalendar.getInstance();
+
     private TextView dateTextView;
     private TextView timeTextView;
 
@@ -40,6 +46,7 @@ public class PublishNewActivity extends BaseActivity {
         setContentView(R.layout.activity_publish_new_layout);
         Toolbar toolbar = findViewById(R.id.PublishNewRes_toolbar);
         int which = getIntent().getIntExtra(MainActivity.PUBLISH_TYPE, PUBLISH_NEW_RESOURCE);
+        publishWhich = which;
         if(which == PUBLISH_NEW_REQUEST)
             toolbar.setTitle(R.string.publishNewRequest);
         else if(which == PUBLISH_NEW_RESOURCE)
@@ -68,9 +75,9 @@ public class PublishNewActivity extends BaseActivity {
         addListener(R.id.PublishNewRes_price_edit_text);
         addListener(R.id.PublishNewRes_publish_button);
     }
+
     public void addListener(final int res){
         findViewById(res).setOnClickListener(new View.OnClickListener() {
-            Intent intent;
             @Override
             public void onClick(View v) {
                 switch (res){
@@ -107,12 +114,27 @@ public class PublishNewActivity extends BaseActivity {
                         scrollView.smoothScrollTo(0, 320);
                         break;
                     case R.id.PublishNewRes_publish_button:
+                        publishNew();
                         Toast.makeText(MyApplication.getContext(), "正在全力开发中...", Toast.LENGTH_SHORT).show();
                         break;
                 }
             }
         });
     }
+
+    /**
+     * TODO 发布新资源，请求
+     */
+    public void publishNew(){
+        String userID = Utilities.GetStringLoginUserId();
+        switch (publishWhich){
+            case PUBLISH_NEW_REQUEST:
+                break;
+            case PUBLISH_NEW_RESOURCE:
+                break;
+        }
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
@@ -144,5 +166,15 @@ public class PublishNewActivity extends BaseActivity {
         Intent intent = new Intent(context, PublishNewActivity.class);
         intent.putExtra(MainActivity.PUBLISH_TYPE, typeExtra);
         context.startActivity(intent);
+    }
+
+    @Override
+    public void onSuccess(int statusCode, HashMap<String, String> mp, int requestCode) {
+
+    }
+
+    @Override
+    public void onError(int statusCode) {
+        Toast.makeText(MyApplication.getContext(), Utilities.TOAST_NET_WORK_ERROR, Toast.LENGTH_SHORT).show();
     }
 }

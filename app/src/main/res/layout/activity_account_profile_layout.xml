@@ -16,6 +16,7 @@
         android:background="@color/colorBlack"
         app:elevation="0dp">
         <android.support.design.widget.CollapsingToolbarLayout
+            android:id="@+id/AccountProfileActivity_collapse_tool_bar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
@@ -23,7 +24,7 @@
             app:statusBarScrim="@color/colorDeepSkyBlue"
             app:contentScrim="@color/colorDeepSkyBlue"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
-            app:title="@string/solider"
+            app:title=""
             app:expandedTitleMarginBottom="@dimen/common_margin_normal"
             app:expandedTitleMarginStart="@dimen/common_margin_large"
             app:expandedTitleTextAppearance="?android:attr/textAppearanceLarge">

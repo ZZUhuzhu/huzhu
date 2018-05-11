@@ -8,6 +8,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Point;
 import android.os.Handler;
 import android.os.Message;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.ActionBar;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -19,6 +20,7 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.AnimationSet;
 import android.view.animation.ScaleAnimation;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.zzu.huzhucommunity.R;
@@ -41,10 +43,14 @@ public class AccountProfileActivity extends BaseActivity implements AsyncHttpCal
      * 标识不同更新活动的请求码
      * 开启新活动更新个人信息时用
      */
-    private static final int REQUEST_USER_NAME = 0;
-    private static final int REQUEST_USER_PHONE= 1;
-    private static final int REQUEST_USER_GRADE = 2;
-    private static final int REQUEST_USER_DEPARTMENT = 3;
+    private static final int REQUEST_USER_NAME = Utilities.SAVE_USER_PROFILE_TARGET_USER_NAME;
+    private static final int REQUEST_USER_PHONE= Utilities.SAVE_USER_PROFILE_TARGET_USER_PHONE;
+    private static final int REQUEST_USER_GRADE = Utilities.SAVE_USER_PROFILE_TARGET_USER_GRADE;
+    private static final int REQUEST_USER_DEPARTMENT = Utilities.SAVE_USER_PROFILE_TARGET_USER_DEPARTMENT;
+
+    private static final String UPDATE_PROFILE_SUCCESS = "修改成功";
+
+    private static final String UPDATE_HEAD_TARGET = "head";
 
     /**
      * 用于通过网络获取用户头像的 handler 以及 msg.what 值
@@ -113,6 +119,9 @@ public class AccountProfileActivity extends BaseActivity implements AsyncHttpCal
                 itemLayout.setImageDrawable(getDrawable(R.drawable.male_icon));
             itemLayout = findViewById(R.id.AccountProfileActivity_user_name_view);
             itemLayout.setContent(mp.get(Profile.GET_ACCOUNT_PROFILE_USER_NAME_KEY));
+            ((CollapsingToolbarLayout) findViewById(R.id.AccountProfileActivity_collapse_tool_bar)).
+                    setTitle(mp.get(Profile.GET_ACCOUNT_PROFILE_USER_NAME_KEY));
+
             itemLayout = findViewById(R.id.AccountProfileActivity_grade_view);
             itemLayout.setContent(mp.get(Profile.GET_ACCOUNT_PROFILE_USER_GRADE_KEY));
             itemLayout = findViewById(R.id.AccountProfileActivity_department_view);
@@ -178,28 +187,28 @@ public class AccountProfileActivity extends BaseActivity implements AsyncHttpCal
                     case R.id.AccountProfileActivity_expanded_image_view:
                     case R.id.AccountProfileActivity_expanded_holder:
                         headImageExpandedDisappear();
-                        break;
-                    case R.id.AccountProfileActivity_sex_view:
-                        new AlertDialog.Builder(AccountProfileActivity.this)
-                                .setCancelable(true)
-                                .setItems(R.array.sexChoice, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        AccountProfileItemLayout itemLayout1 = findViewById(res);
-                                        if (which == 0){
-                                            itemLayout1.setImageDrawable(getDrawable(R.drawable.male_icon));
-                                            updateProfile();
-                                            dialog.dismiss();
-                                        }
-                                        else if (which == 1){
-                                            itemLayout1.setImageDrawable(getDrawable(R.drawable.female_icon));
-                                            updateProfile();
-                                            dialog.dismiss();
-                                        }
-                                    }
-                                })
-                                .setTitle(R.string.sex)
-                                .show();
+//                        break;
+//                    case R.id.AccountProfileActivity_sex_view:
+//                        new AlertDialog.Builder(AccountProfileActivity.this)
+//                                .setCancelable(true)
+//                                .setItems(R.array.sexChoice, new DialogInterface.OnClickListener() {
+//                                    @Override
+//                                    public void onClick(DialogInterface dialog, int which) {
+//                                        AccountProfileItemLayout itemLayout1 = findViewById(res);
+//                                        if (which == 0){
+//                                            itemLayout1.setImageDrawable(getDrawable(R.drawable.male_icon));
+//                                            updateProfile();
+//                                            dialog.dismiss();
+//                                        }
+//                                        else if (which == 1){
+//                                            itemLayout1.setImageDrawable(getDrawable(R.drawable.female_icon));
+//                                            updateProfile();
+//                                            dialog.dismiss();
+//                                        }
+//                                    }
+//                                })
+//                                .setTitle(R.string.sex)
+//                                .show();
                     case R.id.AccountProfileActivity_update_password_view:
                         Toast.makeText(MyApplication.getContext(), "正在全力开发中...", Toast.LENGTH_SHORT).show();
                         break;
@@ -208,10 +217,6 @@ public class AccountProfileActivity extends BaseActivity implements AsyncHttpCal
         });
     }
 
-    //todo 更新信息，后台检查信息更新情况
-    public void updateProfile(){
-        Toast.makeText(MyApplication.getContext(), "正在全力开发中...", Toast.LENGTH_SHORT).show();
-    }
     /**
      * 显示头像大图
      */
@@ -272,22 +277,46 @@ public class AccountProfileActivity extends BaseActivity implements AsyncHttpCal
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode != RESULT_OK)
+            return;
+        Bundle extra = data.getExtras();
+        if (extra == null)
+            return;
+
+        String newInfo = extra.getString(ProfileUpdateActivity.RETURN_INFO);
+        AccountProfileItemLayout itemLayout;
+
         switch (requestCode){
             case Utilities.PICK_IMAGE_FROM_CAMERA:
             case Utilities.PICK_IMAGE_FROM_GALLERY:
+                requestCode = Utilities.SAVE_USER_PROFILE_TARGET_USER_HEAD;
                 Bitmap bitmap = Utilities.getImageFromDialog(requestCode, resultCode, data);
                 if (bitmap != null){
                     ((ImageView) findViewById(R.id.AccountProfileActivity_head_image_view)).setImageBitmap(bitmap);
                     ((ImageView) findViewById(R.id.AccountProfileActivity_expanded_image_view)).setImageBitmap(bitmap);
                 }
+                //todo 用户更新头像时传输问题
                 break;
             case REQUEST_USER_NAME:
+                itemLayout = findViewById(R.id.AccountProfileActivity_user_name_view);
+                ((CollapsingToolbarLayout) findViewById(R.id.AccountProfileActivity_collapse_tool_bar)).setTitle(newInfo);
+                itemLayout.setContent(newInfo);
+                break;
             case REQUEST_USER_PHONE:
+                itemLayout = findViewById(R.id.AccountProfileActivity_phone_view);
+                itemLayout.setContent(newInfo);
+                break;
             case REQUEST_USER_GRADE:
+                itemLayout = findViewById(R.id.AccountProfileActivity_grade_view);
+                itemLayout.setContent(newInfo);
+                break;
             case REQUEST_USER_DEPARTMENT:
-                updateProfile();
+                itemLayout = findViewById(R.id.AccountProfileActivity_department_view);
+                itemLayout.setContent(newInfo);
                 break;
         }
+        Utilities.SaveLoginUserProfile(newInfo, requestCode);
+        Toast.makeText(MyApplication.getContext(), UPDATE_PROFILE_SUCCESS, Toast.LENGTH_SHORT).show();
     }
 
     /**

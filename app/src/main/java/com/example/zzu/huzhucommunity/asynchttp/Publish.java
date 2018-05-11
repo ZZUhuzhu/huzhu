@@ -44,9 +44,18 @@ public class Publish {
         return this.callback;
     }
 
-
-
-
+    /**
+     * 发布新资源
+     * @param userID 发布者ID
+     * @param resourceType 发布的资源类型
+     * @param resourceTitle 发布的资源标题
+     * @param resourceDetail 发布的资源详细信息
+     * @param resourceImageNumber 发布的图片数量
+     * @param resourcePrice 发布的价格
+     * @param resourceDeadline 资源截止日期
+     * @param resourceImages 资源图片
+     * @param cBack 回调对象
+     */
     public void publishResource(final String userID, final String resourceType,
                                 final String resourceTitle, final String resourceDetail,
                                 final String resourceImageNumber, final String resourcePrice,
@@ -80,7 +89,6 @@ public class Publish {
                                 message.what = PUBLISH_RESOURCE;
                                 message.obj = result;
                                 handler.sendMessage(message);
-                                cBack.onSuccess(i, null, 0);
                             } catch (UnsupportedEncodingException e) {
                                 e.printStackTrace();
                             }

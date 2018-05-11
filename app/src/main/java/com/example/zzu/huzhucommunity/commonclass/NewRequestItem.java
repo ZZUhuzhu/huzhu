@@ -51,6 +51,7 @@ public class NewRequestItem implements Parcelable {
         this.itemTitle = itemTitle;
         this.itemImageUrl = imageUrl;
         this.itemPrice = Double.parseDouble(itemPrice);
+        this.itemThumbnails = new ArrayList<>();
     }
 
     public boolean isReceived() {
@@ -89,8 +90,9 @@ public class NewRequestItem implements Parcelable {
         return itemTitle;
     }
 
-    public ArrayList<Bitmap> getItemThumbnails() {
-        return itemThumbnails;
+    public void addItemThumbnail(Bitmap bitmap){
+        itemThumbnails.add(bitmap);
+        itemThumbnailAmount++;
     }
 
     private boolean itemHasThumbnails(){

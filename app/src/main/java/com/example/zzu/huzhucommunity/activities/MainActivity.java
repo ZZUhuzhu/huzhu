@@ -19,7 +19,6 @@ import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.zzu.huzhucommunity.R;
@@ -36,10 +35,11 @@ import com.example.zzu.huzhucommunity.commonclass.NewResourceItem;
 import com.example.zzu.huzhucommunity.commonclass.Utilities;
 import com.example.zzu.huzhucommunity.dataclass.Request;
 import com.example.zzu.huzhucommunity.dataclass.Resource;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
-import java.lang.reflect.Array;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
@@ -54,25 +54,40 @@ import static com.example.zzu.huzhucommunity.asynchttp.Main.GET_RESOURCE_BY_TYPE
  */
 public class MainActivity extends BaseActivity implements AsyncHttpCallback {
     public static final String PUBLISH_TYPE = "PUBLISH_TYPE";
-    private static long backLastPressedTime = 0;
-    private static final int TASK_OVER = 1;
+    private static long lastTimeBackPressed = 0;
+
+    private static final int REFRESHING_RES = 3;
+    private static final int REFRESHING_REQ = 2;
+
+    private static final int LOAD_RES_IMAGE = 11;
+    private static final int LOAD_REQ_IMAGE = 12;
     private static final String TAG = "MainActivity";
 
     private Handler handler = new Handler(new Handler.Callback() {
         @Override
         public boolean handleMessage(Message msg) {
             switch (msg.what){
-                case TASK_OVER:
-                    findViewById(R.id.MainActivity_progress_bar).setVisibility(View.GONE);
-                    resourceAdapter.notifyDataSetChanged();
-                    requestAdapter.notifyDataSetChanged();
-                    return true;
+                case LOAD_REQ_IMAGE:
+                case LOAD_RES_IMAGE:
+                    Bitmap bitmap = (Bitmap) msg.obj;
+                    int ind = msg.arg1;
+                    if (msg.what == LOAD_REQ_IMAGE){
+                        requestItems.get(ind).addItemThumbnail(bitmap);
+                        requestAdapter.notifyItemChanged(ind);
+                    }
+                    else {
+                        resourceItems.get(ind).addItemThumbil(bitmap);
+                        resourceAdapter.notifyItemChanged(ind);
+                    }
+                    break;
             }
             return false;
         }
     });
     private ImageButton resourceButton;
     private ImageButton requestButton;
+
+    private SwipeRefreshLayout resSwipeRefreshLayout, requestSwipeRefreshLayout;
 
     private RecyclerView newResourceRecyclerView;
     private ArrayList<NewResourceItem> resourceItems = new ArrayList<>();
@@ -99,11 +114,11 @@ public class MainActivity extends BaseActivity implements AsyncHttpCallback {
         newResourceRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         resourceAdapter = new CommonResourcesAdapter(resourceItems, this);
         newResourceRecyclerView.setAdapter(resourceAdapter);
-        final SwipeRefreshLayout resSwipeRefreshLayout = new SwipeRefreshLayout(this);
+        resSwipeRefreshLayout = new SwipeRefreshLayout(this);
         resSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                refreshResource(resSwipeRefreshLayout, true);
+                refreshResource(REFRESHING_RES);
             }
         });
         resSwipeRefreshLayout.addView(newResourceRecyclerView);
@@ -113,11 +128,11 @@ public class MainActivity extends BaseActivity implements AsyncHttpCallback {
         newRequestRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         requestAdapter = new CommonRequestAdapter(requestItems, this);
         newRequestRecyclerView.setAdapter(requestAdapter);
-        final SwipeRefreshLayout requestSwipeRefreshLayout = new SwipeRefreshLayout(this);
+        requestSwipeRefreshLayout = new SwipeRefreshLayout(this);
         requestSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                refreshResource(requestSwipeRefreshLayout, false);
+                refreshResource(REFRESHING_REQ);
             }
         });
         requestSwipeRefreshLayout.addView(newRequestRecyclerView);
@@ -150,7 +165,6 @@ public class MainActivity extends BaseActivity implements AsyncHttpCallback {
     }
 
     /**
-     * todo 后台加载头像
      * 初始化列表项
      */
     public void initList(){
@@ -191,30 +205,80 @@ public class MainActivity extends BaseActivity implements AsyncHttpCallback {
 
     /**
      * 下拉刷新时执行
-     * @param swipeRefreshLayout 正在刷新的SwipeRefreshLayout
-     * @param refreshResource true: 刷新发生着资源界面，否则为请求界面
      */
-    public void refreshResource(final SwipeRefreshLayout swipeRefreshLayout, final boolean refreshResource){
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    if (refreshResource)
-                        Thread.sleep(2500);
-                    else
-                        Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        swipeRefreshLayout.setRefreshing(false);
-                        Toast.makeText(MyApplication.getContext(), "刷新完成", Toast.LENGTH_SHORT).show();
+    public void refreshResource(int which){
+        if (which == REFRESHING_REQ) {
+            requestItems.clear();
+            Main.getOurInstance().getRequest("1", this);
+            Main.getOurInstance().getRequest("2", this);
+            Main.getOurInstance().getRequest("3", this);
+            Main.getOurInstance().getRequest("4", this);
+        }
+        else if (which == REFRESHING_RES){
+            resourceItems.clear();
+            Main.getOurInstance().getNewResource("1", this);
+            Main.getOurInstance().getNewResource("2", this);
+            Main.getOurInstance().getNewResource("3", this);
+            Main.getOurInstance().getNewResource("4", this);
+        }
+    }
+
+    /**
+     * 加载资源，请求之后加载每一项的(缩略)图片
+     */
+    public void loadResItemImage(){
+        for (int i = 0; i < resourceItems.size(); i++){
+            final int ind = i;
+            final String tmpUrl = resourceItems.get(i).getItemImageUrl();
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    Bitmap bitmap;
+                    try {
+                        URL url = new URL(tmpUrl);
+                        HttpURLConnection con = (HttpURLConnection) url.openConnection();
+                        con.setConnectTimeout(2000);
+                        InputStream in = con.getInputStream();
+                        bitmap = BitmapFactory.decodeStream(in);
+                        Message message = new Message();
+                        message.obj = bitmap;
+                        message.what = LOAD_RES_IMAGE;
+                        message.arg1 = ind;
+                        handler.sendMessage(message);
+                        in.close();
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
-                });
-            }
-        }).start();
+                }
+            }).start();
+        }
+    }
+    public void loadReqItemImage(){
+        for (int i = 0; i < requestItems.size(); i++){
+            final int ind = i;
+            final String tmpUrl = requestItems.get(i).getItemImageUrl();
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    Bitmap bitmap;
+                    try {
+                        URL url = new URL(tmpUrl);
+                        HttpURLConnection con = (HttpURLConnection) url.openConnection();
+                        con.setConnectTimeout(2000);
+                        InputStream in = con.getInputStream();
+                        bitmap = BitmapFactory.decodeStream(in);
+                        Message message = new Message();
+                        message.obj = bitmap;
+                        message.what = LOAD_REQ_IMAGE;
+                        message.arg1 = ind;
+                        handler.sendMessage(message);
+                        in.close();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }).start();
+        }
     }
 
     /**
@@ -290,12 +354,12 @@ public class MainActivity extends BaseActivity implements AsyncHttpCallback {
     public void onBackPressed() {
         long curTime = GregorianCalendar.getInstance().getTimeInMillis();
         long exitInterval = 2000;
-        if (curTime - backLastPressedTime <= exitInterval){
+        if (curTime - lastTimeBackPressed <= exitInterval){
             ActivitiesCollector.finishAll();
         }
         else {
             Toast.makeText(MyApplication.getContext(), "再按一次退出程序", Toast.LENGTH_SHORT).show();
-            backLastPressedTime = GregorianCalendar.getInstance().getTimeInMillis();
+            lastTimeBackPressed = GregorianCalendar.getInstance().getTimeInMillis();
         }
     }
 
@@ -320,6 +384,9 @@ public class MainActivity extends BaseActivity implements AsyncHttpCallback {
                     }
                     requestAdapter.notifyDataSetChanged();
                     findViewById(R.id.MainActivity_progress_bar).setVisibility(View.INVISIBLE);
+                    if (requestSwipeRefreshLayout.isRefreshing())
+                        requestSwipeRefreshLayout.setRefreshing(false);
+                    loadReqItemImage();
                 }
                 break;
             case GET_NEW_RESOURCE:
@@ -330,6 +397,9 @@ public class MainActivity extends BaseActivity implements AsyncHttpCallback {
                     }
                     resourceAdapter.notifyDataSetChanged();
                     findViewById(R.id.MainActivity_progress_bar).setVisibility(View.INVISIBLE);
+                    if (resSwipeRefreshLayout.isRefreshing())
+                        resSwipeRefreshLayout.setRefreshing(false);
+                    loadResItemImage();
                 }
                 break;
             case GET_RESOURCE_BY_TYPE:
@@ -339,6 +409,6 @@ public class MainActivity extends BaseActivity implements AsyncHttpCallback {
 
     @Override
     public void onError(int statusCode) {
-
+        Toast.makeText(MyApplication.getContext(), Utilities.TOAST_NET_WORK_ERROR, Toast.LENGTH_SHORT).show();
     }
 }

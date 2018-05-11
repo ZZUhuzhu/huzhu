@@ -90,12 +90,9 @@ public class NewResourceItem implements Parcelable {
         return itemTitle;
     }
 
-    public ArrayList<Bitmap> getItemThumbnails() {
-        return itemThumbnails;
-    }
-
-    private boolean itemHasThumbnails(){
-        return itemThumbnailAmount > 0;
+    public void addItemThumbil(Bitmap bitmap){
+        itemThumbnails.add(bitmap);
+        itemThumbnailAmount++;
     }
 
     public void setItemID(String itemID) {
@@ -107,7 +104,7 @@ public class NewResourceItem implements Parcelable {
     }
 
     public Bitmap getItemThumbnail() {
-        if(itemHasThumbnails())
+        if(itemThumbnailAmount > 0)
             return itemThumbnails.get(0);
         return null;
     }

@@ -92,6 +92,9 @@ public class UserProfileActivity extends BaseActivity {
         });
     }
 
+    /**
+     * 初始化用户头像和数字信息
+     */
     public void initNumberAndUserHead(){
         String userName = Utilities.GetLoginUserUserName();
         if (!Objects.equals(userName, Utilities.DEF_STRING_VALUE_SHARED_PREFERENCE))
@@ -159,6 +162,12 @@ public class UserProfileActivity extends BaseActivity {
                 }
                 break;
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        initNumberAndUserHead();
     }
 
     public static void startMe(Context context){

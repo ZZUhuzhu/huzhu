@@ -14,10 +14,17 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.zzu.huzhucommunity.R;
+import com.example.zzu.huzhucommunity.asynchttp.AsyncHttpCallback;
+import com.example.zzu.huzhucommunity.asynchttp.Profile;
+import com.example.zzu.huzhucommunity.commonclass.MyApplication;
+import com.example.zzu.huzhucommunity.commonclass.Utilities;
 
-public class ProfileUpdateActivity extends BaseActivity {
+import java.util.HashMap;
+
+public class ProfileUpdateActivity extends BaseActivity implements AsyncHttpCallback {
     public static final String RETURN_INFO = "RETURN_INFO";
     private static final String STRING_EXTRA = "STRING_EXTRA";
     private static final String TYPE_EXTRA = "TYPE";
@@ -25,9 +32,16 @@ public class ProfileUpdateActivity extends BaseActivity {
     public static final int TYPE_PHONE = 2;
     public static final int TYPE_GRADE = 3;
     public static final int TYPE_DEPARTMENT= 4;
+
+    private static final String UPDATE_NAME_TARGET = "name";
+    private static final String UPDATE_PHONE_TARGET = "phone";
+    private static final String UPDATE_GRADE_TARGET = "grade";
+    private static final String UPDATE_DEPARTMENT_TARGET = "department";
+    private int type = TYPE_USER_NAME;
+
     private EditText editText;
     private Menu menu;
-    private String info = "";
+    private String oldInfo = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,15 +49,18 @@ public class ProfileUpdateActivity extends BaseActivity {
         setContentView(R.layout.activity_profile_update_layout);
         Toolbar toolbar = findViewById(R.id.ProfileUpdateActivity_toolbar);
         setSupportActionBar(toolbar);
+
         editText = findViewById(R.id.ProfileUpdateActivity_text_view);
-        info = getIntent().getStringExtra(STRING_EXTRA);
-        editText.setText(info);
-        editText.setSelection(info.length());
+        oldInfo = getIntent().getStringExtra(STRING_EXTRA);
+        editText.setText(oldInfo);
+        editText.setSelection(oldInfo.length());
+
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
             String title = getString(R.string.userName);
-            switch (getIntent().getIntExtra(TYPE_EXTRA, 1)){
+            type = getIntent().getIntExtra(TYPE_EXTRA, TYPE_USER_NAME);
+            switch (type){
                 case TYPE_USER_NAME:
                     title = getString(R.string.userName);
                     break;
@@ -114,17 +131,44 @@ public class ProfileUpdateActivity extends BaseActivity {
                 finish();
                 return true;
             case R.id.profile_update_menu_item:
-                if (!TextUtils.equals(info, editText.getText()))
-                    setResult(RESULT_OK, new Intent().putExtra(RETURN_INFO, editText.getText().toString()));
-                finish();
+                String userID = Utilities.GetStringLoginUserId();
+                String newInfo = editText.getText().toString();
+                if (!TextUtils.equals(oldInfo, newInfo)) {
+                    switch (type){
+                        case TYPE_USER_NAME:
+                            Profile.getOurInstance().update(UPDATE_NAME_TARGET, userID, newInfo, this);
+                            break;
+                        case TYPE_PHONE:
+                            Profile.getOurInstance().update(UPDATE_PHONE_TARGET, userID, newInfo, this);
+                            break;
+                        case TYPE_GRADE:
+                            Profile.getOurInstance().update(UPDATE_GRADE_TARGET, userID, newInfo, this);
+                            break;
+                        case TYPE_DEPARTMENT:
+                            Profile.getOurInstance().update(UPDATE_DEPARTMENT_TARGET, userID, newInfo, this);
+                            break;
+                    }
+                }
                 return true;
         }
         return super.onOptionsItemSelected(item);
     }
+
     public static void startMe(Context context, int type, int requestCode, String data){
         Intent intent = new Intent(context, ProfileUpdateActivity.class);
         intent.putExtra(TYPE_EXTRA, type);
         intent.putExtra(STRING_EXTRA, data);
         ((Activity)context).startActivityForResult(intent, requestCode);
+    }
+
+    @Override
+    public void onSuccess(int statusCode, HashMap<String, String> mp, int requestCode) {
+        setResult(RESULT_OK, new Intent().putExtra(RETURN_INFO, editText.getText().toString()));
+        finish();
+    }
+
+    @Override
+    public void onError(int statusCode) {
+        Toast.makeText(MyApplication.getContext(), Utilities.TOAST_NET_WORK_ERROR, Toast.LENGTH_SHORT).show();
     }
 }
