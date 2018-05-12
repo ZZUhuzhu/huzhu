@@ -18,7 +18,7 @@
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
         <activity
             android:name=".activities.LoginActivity"
-            android:theme="@style/TranslucentTheme"/>
+            android:theme="@style/TranslucentTheme" />
         <activity
             android:name=".activities.RegisterActivity"
             android:label="@string/register"
@@ -76,7 +76,8 @@
             android:name=".activities.MyCommentActivity"
             android:label="@string/myComment"
             android:theme="@style/TranslucentTheme" />
-        <activity android:name=".activities.SplashActivity"
+        <activity
+            android:name=".activities.SplashActivity"
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -84,6 +85,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".activities.UpdatePasswordActivity"
+            android:theme="@style/TranslucentTheme"/>
     </application>
 
 </manifest>

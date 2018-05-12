@@ -24,6 +24,7 @@ import com.example.zzu.huzhucommunity.customlayout.RegisterEditTextLayout;
 import java.util.HashMap;
 
 public class RegisterActivity extends BaseActivity implements AsyncHttpCallback {
+    public static final String CONFIRM_PASSWORD_MATCH = "请保持两次输入密码一致";
     private static final String TAG = "RegisterActivity";
     private Spinner gradeSpinner;
     private Spinner depSpinner;
@@ -97,7 +98,7 @@ public class RegisterActivity extends BaseActivity implements AsyncHttpCallback 
                             break;
                         }
                         if(!TextUtils.equals(password, confirmPassword)){
-                            Toast.makeText(MyApplication.getContext(), "请保持两次输入密码一致", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MyApplication.getContext(), CONFIRM_PASSWORD_MATCH, Toast.LENGTH_SHORT).show();
                             break;
                         }
                         String sex = Utilities.MALE;

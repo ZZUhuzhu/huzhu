@@ -1,7 +1,6 @@
 package com.example.zzu.huzhucommunity.activities;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -11,7 +10,6 @@ import android.os.Message;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.ActionBar;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -20,7 +18,6 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.AnimationSet;
 import android.view.animation.ScaleAnimation;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.zzu.huzhucommunity.R;
@@ -187,7 +184,7 @@ public class AccountProfileActivity extends BaseActivity implements AsyncHttpCal
                     case R.id.AccountProfileActivity_expanded_image_view:
                     case R.id.AccountProfileActivity_expanded_holder:
                         headImageExpandedDisappear();
-//                        break;
+                        break;
 //                    case R.id.AccountProfileActivity_sex_view:
 //                        new AlertDialog.Builder(AccountProfileActivity.this)
 //                                .setCancelable(true)
@@ -210,7 +207,7 @@ public class AccountProfileActivity extends BaseActivity implements AsyncHttpCal
 //                                .setTitle(R.string.sex)
 //                                .show();
                     case R.id.AccountProfileActivity_update_password_view:
-                        Toast.makeText(MyApplication.getContext(), "正在全力开发中...", Toast.LENGTH_SHORT).show();
+                        UpdatePasswordActivity.StartMe(AccountProfileActivity.this);
                         break;
                 }
             }

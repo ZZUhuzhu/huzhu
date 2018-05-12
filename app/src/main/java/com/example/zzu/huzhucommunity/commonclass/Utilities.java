@@ -37,7 +37,7 @@ import java.util.List;
 import java.util.Map;
 
 import static com.example.zzu.huzhucommunity.asynchttp.Profile.GET_ACCOUNT_PROFILE_LOGIN_TIME_KEY;
-import static com.example.zzu.huzhucommunity.asynchttp.Profile.GET_ACCOUNT_PROFILE_STATUS_CODE_KEY;
+import static com.example.zzu.huzhucommunity.asynchttp.Profile.STATUS_JSON_KEY;
 import static com.example.zzu.huzhucommunity.asynchttp.Profile.GET_ACCOUNT_PROFILE_USER_ACCOUNT_KEY;
 import static com.example.zzu.huzhucommunity.asynchttp.Profile.GET_ACCOUNT_PROFILE_USER_DEPT_KEY;
 import static com.example.zzu.huzhucommunity.asynchttp.Profile.GET_ACCOUNT_PROFILE_USER_GRADE_KEY;
@@ -236,7 +236,7 @@ public class Utilities {
         SharedPreferences sp = MyApplication.getContext().
                 getSharedPreferences(GetSPFileNameFromUserID(GetStringLoginUserId()), Context.MODE_PRIVATE);
         HashMap<String, String> mp = new HashMap<>();
-        mp.put(GET_ACCOUNT_PROFILE_STATUS_CODE_KEY, sp.getString(GET_ACCOUNT_PROFILE_STATUS_CODE_KEY, DEF_STRING_VALUE_SHARED_PREFERENCE));
+        mp.put(STATUS_JSON_KEY, sp.getString(STATUS_JSON_KEY, DEF_STRING_VALUE_SHARED_PREFERENCE));
         mp.put(GET_ACCOUNT_PROFILE_USER_HEAD_KEY, sp.getString(GET_ACCOUNT_PROFILE_USER_HEAD_KEY, DEF_STRING_VALUE_SHARED_PREFERENCE));
         mp.put(GET_ACCOUNT_PROFILE_USER_NAME_KEY, sp.getString(GET_ACCOUNT_PROFILE_USER_NAME_KEY, DEF_STRING_VALUE_SHARED_PREFERENCE));
         mp.put(GET_ACCOUNT_PROFILE_USER_ACCOUNT_KEY, sp.getString(GET_ACCOUNT_PROFILE_USER_ACCOUNT_KEY, DEF_STRING_VALUE_SHARED_PREFERENCE));
@@ -278,6 +278,16 @@ public class Utilities {
         SharedPreferences sharedPreferences = MyApplication.getContext().getSharedPreferences(
                 GetSPFileNameFromUserID(GetStringLoginUserId()), Context.MODE_PRIVATE);
         return sharedPreferences.getString(USER_HEAD_KEY_SHARED_PREFERENCE, "");
+    }
+
+    /**
+     * 用户登出时清空 SP 中的
+     */
+    public static void Logout(){
+        SharedPreferences.Editor editor = MyApplication.getContext().
+                getSharedPreferences(USER_ID_TO_PROFILE_FILE_NAME, Context.MODE_PRIVATE).edit();
+        editor.remove(LOGIN_USER_ID_KEY);
+        editor.apply();
     }
 
     /**

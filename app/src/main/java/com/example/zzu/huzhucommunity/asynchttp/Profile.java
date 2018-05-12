@@ -3,7 +3,6 @@ package com.example.zzu.huzhucommunity.asynchttp;
 import android.os.Handler;
 import android.os.Message;
 
-import com.example.zzu.huzhucommunity.activities.AccountProfileActivity;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -31,7 +30,7 @@ public class Profile {
     /**
      * 获取账户信息时 JSON 数据里面的键以及回调时 map 里面的键
      */
-    public static final String GET_ACCOUNT_PROFILE_STATUS_CODE_KEY = "status";
+    public static final String STATUS_JSON_KEY = "status";
     public static final String GET_ACCOUNT_PROFILE_USER_HEAD_KEY = "userHead";
     public static final String GET_ACCOUNT_PROFILE_USER_NAME_KEY = "userName";
     public static final String GET_ACCOUNT_PROFILE_USER_ACCOUNT_KEY = "userAccount";
@@ -42,7 +41,6 @@ public class Profile {
     public static final String GET_ACCOUNT_PROFILE_USER_REG_TIME_KEY = "userRegisterTime";
     public static final String GET_ACCOUNT_PROFILE_LOGIN_TIME_KEY = "userLoginTime";
 
-    private static final String STATUS_JSON_KEY = "code";
 
     /**
      * 外部调用类方法，获得单体实例
@@ -233,7 +231,7 @@ public class Profile {
                 case GET_ACCOUNT_PROFILE:
                     try {
                         JSONObject userObject = new JSONObject(message.obj.toString());
-                        int code=userObject.getInt(GET_ACCOUNT_PROFILE_STATUS_CODE_KEY);
+                        int code=userObject.getInt(STATUS_JSON_KEY);
                         String userHead = userObject.getString(GET_ACCOUNT_PROFILE_USER_HEAD_KEY);
                         String userName = userObject.getString(GET_ACCOUNT_PROFILE_USER_NAME_KEY);
                         String userAccount = userObject.getString(GET_ACCOUNT_PROFILE_USER_ACCOUNT_KEY);
@@ -245,7 +243,7 @@ public class Profile {
                         String userLoginTime = userObject.getString(GET_ACCOUNT_PROFILE_LOGIN_TIME_KEY);
 
                         HashMap<String, String> mp = new HashMap<>();
-                        mp.put(GET_ACCOUNT_PROFILE_STATUS_CODE_KEY, code + "");
+                        mp.put(STATUS_JSON_KEY, code + "");
                         mp.put(GET_ACCOUNT_PROFILE_USER_HEAD_KEY, userHead);
                         mp.put(GET_ACCOUNT_PROFILE_USER_NAME_KEY, userName);
                         mp.put(GET_ACCOUNT_PROFILE_USER_ACCOUNT_KEY, userAccount);
@@ -262,6 +260,18 @@ public class Profile {
                     }
                     break;
                 case UPDATE_PASSWORD:
+                    JSONObject userObject;
+                    try {
+                        userObject = new JSONObject(Response);
+                        int code = userObject.getInt("status");
+
+                        HashMap<String, String> mp = new HashMap<>();
+                        mp.put(STATUS_JSON_KEY, code + "");
+
+                        callback.onSuccess(code, mp, UPDATE_PASSWORD);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                     break;
                 default:
                     break;

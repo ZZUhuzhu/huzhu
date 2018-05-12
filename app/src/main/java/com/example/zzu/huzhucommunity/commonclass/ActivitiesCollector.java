@@ -38,6 +38,7 @@ public class ActivitiesCollector {
      * 退出程序并回到登录界面
      */
     public static void exitLogin(Context context){
+        Utilities.Logout();
         LoginActivity.startMe(context);
         for (int i = 0; i < activities.size(); i++){
             activities.get(i).finish();
