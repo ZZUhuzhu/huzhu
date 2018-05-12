@@ -5,7 +5,6 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 
-import com.example.zzu.huzhucommunity.dataclass.Request;
 import com.example.zzu.huzhucommunity.dataclass.Resource;
 
 import java.util.ArrayList;
@@ -52,6 +51,7 @@ public class NewResourceItem implements Parcelable {
         this.itemPrice = Double.parseDouble(itemPrice);
         this.itemPublishTimeStr = itemPublishTimeStr;
         this.itemImageUrl = itemImageUrl;
+        itemThumbnails = new ArrayList<>();
     }
 
     public boolean isReceived() {
@@ -90,7 +90,7 @@ public class NewResourceItem implements Parcelable {
         return itemTitle;
     }
 
-    public void addItemThumbil(Bitmap bitmap){
+    public void addItemThumbnail(Bitmap bitmap){
         itemThumbnails.add(bitmap);
         itemThumbnailAmount++;
     }
@@ -154,6 +154,6 @@ public class NewResourceItem implements Parcelable {
     @NonNull
     public static NewResourceItem TransferToMe(Resource resource){
         return new NewResourceItem(resource.getResourceID(), resource.getResourceTitle(), resource.getResourceDetail(),
-                resource.getResourcePrice(), resource.getImageUrl(), resource.getPublishDate().substring(5, 16));
+                resource.getResourcePrice(), resource.getImageURL(), resource.getPublishDate().substring(5, 16));
     }
 }

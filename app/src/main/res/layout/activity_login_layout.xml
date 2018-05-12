@@ -40,6 +40,7 @@
             tools:ignore="RelativeOverlap" />
         <ImageButton
             android:id="@+id/LoginActivity_account_cancel_button"
+            android:focusable="false"
             android:visibility="gone"
             android:contentDescription="@string/app_name"
             android:layout_width="15dp"
@@ -80,6 +81,7 @@
             android:hint="@string/password"/>
         <ImageButton
             android:id="@+id/LoginActivity_password_cancel_button"
+            android:focusable="false"
             android:visibility="gone"
             android:contentDescription="@string/app_name"
             android:layout_width="15dp"

@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
@@ -22,23 +23,30 @@ import android.widget.Toast;
 
 import com.example.zzu.huzhucommunity.R;
 import com.example.zzu.huzhucommunity.asynchttp.AsyncHttpCallback;
+import com.example.zzu.huzhucommunity.asynchttp.Profile;
+import com.example.zzu.huzhucommunity.asynchttp.Publish;
 import com.example.zzu.huzhucommunity.commonclass.MyApplication;
 import com.example.zzu.huzhucommunity.commonclass.Utilities;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 
 public class PublishNewActivity extends BaseActivity implements AsyncHttpCallback {
-    public static final int PUBLISH_NEW_RESOURCE = 0;
-    public static final int PUBLISH_NEW_REQUEST = 1;
+    public static final int PUBLISH_NEW_RESOURCE = 1;
+    public static final int PUBLISH_NEW_REQUEST = 2;
+
+    private static final String PUBLISH_SUCCESS = "发布成功";
 
     private int publishWhich = PUBLISH_NEW_REQUEST;
 
     private Calendar calendar = GregorianCalendar.getInstance();
+    private ArrayList<Bitmap> bitmaps;
 
-    private TextView dateTextView;
-    private TextView timeTextView;
+    private TextView dateTextView, timeTextView;
+    private EditText titleEditText, contentEditText, priceEditText;
+    private Spinner typeSpinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,21 +54,30 @@ public class PublishNewActivity extends BaseActivity implements AsyncHttpCallbac
         setContentView(R.layout.activity_publish_new_layout);
         Toolbar toolbar = findViewById(R.id.PublishNewRes_toolbar);
         int which = getIntent().getIntExtra(MainActivity.PUBLISH_TYPE, PUBLISH_NEW_RESOURCE);
+
         publishWhich = which;
         if(which == PUBLISH_NEW_REQUEST)
             toolbar.setTitle(R.string.publishNewRequest);
         else if(which == PUBLISH_NEW_RESOURCE)
             toolbar.setTitle(R.string.publishNewResource);
+
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         if(actionBar != null){
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        String curDate = calendar.get(Calendar.YEAR) + "/" + (calendar.get(Calendar.MONTH) + 1) + "/" + calendar.get(Calendar.DAY_OF_MONTH);
-        String curTime = calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE);
+        bitmaps = new ArrayList<>();
         dateTextView = findViewById(R.id.PublishNewRes_date_text_view);
         timeTextView = findViewById(R.id.PublishNewRes_time_text_view);
+        titleEditText = findViewById(R.id.PublishNewRes_title_edit_text);
+        contentEditText = findViewById(R.id.PublishNewRes_content_edit_text);
+        priceEditText = findViewById(R.id.PublishNewRes_price_edit_text);
+        typeSpinner = findViewById(R.id.PublishNewRes_type_spinner);
+
+        String curDate = calendar.get(Calendar.YEAR) + "-" + (calendar.get(Calendar.MONTH) + 1) + "-"
+                + calendar.get(Calendar.DAY_OF_MONTH);
+        String curTime = calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE);
         dateTextView.setText(curDate);
         timeTextView.setText(curTime);
 
@@ -90,8 +107,10 @@ public class PublishNewActivity extends BaseActivity implements AsyncHttpCallbac
                                     @Override
                                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                                         String hour = "" + hourOfDay, min = "" + minute;
-                                        if(hour.length() == 1) hour = "0" + hour;
-                                        if(min.length() == 1) min = "0" + min;
+                                        if (hour.length() == 1)
+                                            hour = "0" + hour;
+                                        if (min.length() == 1)
+                                            min = "0" + min;
                                         String pickedTime = hour + ":" + min;
                                         timeTextView.setText(pickedTime);
                                     }
@@ -103,7 +122,7 @@ public class PublishNewActivity extends BaseActivity implements AsyncHttpCallbac
                                 new DatePickerDialog.OnDateSetListener() {
                                     @Override
                                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                                        String setDate = year + "/" + (month + 1) + "/" + dayOfMonth;
+                                        String setDate = year + "-" + (month + 1) + "-" + dayOfMonth;
                                         dateTextView.setText(setDate);
                                     }
                                 }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
@@ -115,7 +134,6 @@ public class PublishNewActivity extends BaseActivity implements AsyncHttpCallbac
                         break;
                     case R.id.PublishNewRes_publish_button:
                         publishNew();
-                        Toast.makeText(MyApplication.getContext(), "正在全力开发中...", Toast.LENGTH_SHORT).show();
                         break;
                 }
             }
@@ -127,10 +145,20 @@ public class PublishNewActivity extends BaseActivity implements AsyncHttpCallbac
      */
     public void publishNew(){
         String userID = Utilities.GetStringLoginUserId();
+        String title = titleEditText.getText().toString();
+        String content = contentEditText.getText().toString(),
+                date = dateTextView.getText().toString(),
+                time = timeTextView.getText().toString(),
+                price = priceEditText.getText().toString();
+        String type = (String) typeSpinner.getSelectedItem();
         switch (publishWhich){
             case PUBLISH_NEW_REQUEST:
+                Publish.getOurInstance().publishResource(userID, PUBLISH_NEW_REQUEST + "", title, content,
+                        bitmaps.size() + "", price, date + " " + time, this);
                 break;
             case PUBLISH_NEW_RESOURCE:
+                Publish.getOurInstance().publishResource(userID, PUBLISH_NEW_RESOURCE + "", title, content,
+                        bitmaps.size() + "", price, date + " " + time, this);
                 break;
         }
     }
@@ -157,6 +185,7 @@ public class PublishNewActivity extends BaseActivity implements AsyncHttpCallbac
                 if (bitmap != null){
                     imageView.setImageBitmap(bitmap);
                     layout.addView(imageView, 0);
+                    bitmaps.add(bitmap);
                 }
                 break;
         }
@@ -170,7 +199,33 @@ public class PublishNewActivity extends BaseActivity implements AsyncHttpCallbac
 
     @Override
     public void onSuccess(int statusCode, HashMap<String, String> mp, int requestCode) {
+        if (statusCode != 200)
+            return;
+        switch (requestCode){
+            case Publish.PUBLISH_RES_REQ:
+                String resID = mp.get(Publish.PUBLISH_RET_RES_ID_KEY);
+                int bitmapSz = bitmaps.size();
 
+                if (bitmapSz == 0){
+                    Toast.makeText(MyApplication.getContext(), PUBLISH_SUCCESS, Toast.LENGTH_SHORT).show();
+                    finish();
+                    return;
+                }
+                else if (bitmapSz == 1){
+                    Publish.getOurInstance().uploadImage(bitmaps.get(0), resID + "_1", this);
+                }
+                else{
+                    ArrayList<String> names = new ArrayList<>();
+                    for (int i = 0; i < bitmapSz; i++)
+                        names.add(resID + "_" + (i + 1));
+                    Publish.getOurInstance().uploadImage(bitmaps, names, this);
+                }
+                break;
+            case Publish.UPLOAD_IMAGE:
+                Toast.makeText(MyApplication.getContext(), PUBLISH_SUCCESS, Toast.LENGTH_SHORT).show();
+                finish();
+                break;
+        }
     }
 
     @Override

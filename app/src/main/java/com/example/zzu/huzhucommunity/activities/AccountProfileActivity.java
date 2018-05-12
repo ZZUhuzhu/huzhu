@@ -11,6 +11,8 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.ActionBar;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Base64;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,11 +25,13 @@ import android.widget.Toast;
 import com.example.zzu.huzhucommunity.R;
 import com.example.zzu.huzhucommunity.asynchttp.AsyncHttpCallback;
 import com.example.zzu.huzhucommunity.asynchttp.Profile;
+import com.example.zzu.huzhucommunity.asynchttp.Publish;
 import com.example.zzu.huzhucommunity.commonclass.ActivitiesCollector;
 import com.example.zzu.huzhucommunity.commonclass.MyApplication;
 import com.example.zzu.huzhucommunity.commonclass.Utilities;
 import com.example.zzu.huzhucommunity.customlayout.AccountProfileItemLayout;
 
+import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.HashMap;
@@ -36,6 +40,7 @@ import static com.example.zzu.huzhucommunity.asynchttp.Profile.GET_ACCOUNT_PROFI
 
 
 public class AccountProfileActivity extends BaseActivity implements AsyncHttpCallback {
+    private static final String USER_HEAD_IMG_NAME_SUFFIX = "_avatar";
     /**
      * 标识不同更新活动的请求码
      * 开启新活动更新个人信息时用
@@ -259,7 +264,7 @@ public class AccountProfileActivity extends BaseActivity implements AsyncHttpCal
                 finish();
                 break;
             case R.id.account_profile_menu_item_change_image:
-                Utilities.startPickImageDialog(AccountProfileActivity.this);
+                Utilities.startPickImageDialog(this);
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -277,22 +282,26 @@ public class AccountProfileActivity extends BaseActivity implements AsyncHttpCal
         if (resultCode != RESULT_OK)
             return;
         Bundle extra = data.getExtras();
-        if (extra == null)
-            return;
-
-        String newInfo = extra.getString(ProfileUpdateActivity.RETURN_INFO);
+        String newInfo = null;
+        if (extra != null) {
+            newInfo = extra.getString(ProfileUpdateActivity.RETURN_INFO);
+        }
         AccountProfileItemLayout itemLayout;
 
         switch (requestCode){
             case Utilities.PICK_IMAGE_FROM_CAMERA:
             case Utilities.PICK_IMAGE_FROM_GALLERY:
-                requestCode = Utilities.SAVE_USER_PROFILE_TARGET_USER_HEAD;
                 Bitmap bitmap = Utilities.getImageFromDialog(requestCode, resultCode, data);
                 if (bitmap != null){
                     ((ImageView) findViewById(R.id.AccountProfileActivity_head_image_view)).setImageBitmap(bitmap);
                     ((ImageView) findViewById(R.id.AccountProfileActivity_expanded_image_view)).setImageBitmap(bitmap);
+                    Publish.getOurInstance().uploadImage(bitmap,
+                            Utilities.GetStringLoginUserId() + USER_HEAD_IMG_NAME_SUFFIX, this);
+                    ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
+                    newInfo = Base64.encodeToString(outputStream.toByteArray(), Base64.DEFAULT);
+                    requestCode = Utilities.SAVE_USER_PROFILE_TARGET_USER_HEAD_IMAGE;
                 }
-                //todo 用户更新头像时传输问题
                 break;
             case REQUEST_USER_NAME:
                 itemLayout = findViewById(R.id.AccountProfileActivity_user_name_view);

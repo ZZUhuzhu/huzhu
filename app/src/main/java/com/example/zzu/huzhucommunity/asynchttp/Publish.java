@@ -1,8 +1,11 @@
 package com.example.zzu.huzhucommunity.asynchttp;
 
 
+import android.graphics.Bitmap;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Base64;
+import android.util.Log;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -12,7 +15,10 @@ import org.apache.http.Header;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by do_pc on 2018/1/25.
@@ -20,9 +26,19 @@ import java.io.UnsupportedEncodingException;
  */
 
 public class Publish {
+    private static final String TAG = "Publish";
+
     private static final Publish ourInstance = new Publish();
     private AsyncHttpCallback callback;
-    private static final int PUBLISH_RESOURCE = 10501;
+    public static final int PUBLISH_RES_REQ = 10501;
+    public static final int UPLOAD_IMAGE = 10502;
+
+    private static final String NAME_PARA = "name";
+    private static final String IMAGE_PARA = "image";
+    private static final String SERVER_PATH = "http://139.199.38.177/huzhu/php/SavePicture.php";
+
+    public static final String PUBLISH_RET_RES_ID_KEY = "resourceID";
+
 
     /**
      * 外部调用类方法，获得单体实例
@@ -53,17 +69,16 @@ public class Publish {
      * @param resourceImageNumber 发布的图片数量
      * @param resourcePrice 发布的价格
      * @param resourceDeadline 资源截止日期
-     * @param resourceImages 资源图片
      * @param cBack 回调对象
      */
     public void publishResource(final String userID, final String resourceType,
                                 final String resourceTitle, final String resourceDetail,
                                 final String resourceImageNumber, final String resourcePrice,
-                                final String resourceDeadline, final String resourceImages,
-                                final AsyncHttpCallback cBack) {
+                                final String resourceDeadline, final AsyncHttpCallback cBack) {
         try {
             //Images 允许为NUll
-            if (userID != null && resourceType != null && resourceTitle != null && resourceDetail != null && resourceImageNumber != null && resourcePrice != null && resourceDeadline != null && cBack != null) {
+            if (userID != null && resourceType != null && resourceTitle != null && resourceDetail != null &&
+                    resourceImageNumber != null && resourcePrice != null && resourceDeadline != null && cBack != null) {
                 this.callback = cBack;
                 AsyncHttpClient client = new AsyncHttpClient();
                 client.setTimeout(3000);
@@ -75,7 +90,6 @@ public class Publish {
                 params.put("resourceImageNumber", resourceImageNumber);
                 params.put("resourcePrice", resourcePrice);
                 params.put("resourceDeadline", resourceDeadline);
-                params.put("resourceImages", resourceImages);
                 String path = "http://139.199.38.177/huzhu/php/publishResource.php";
                 client.post(path, params, new AsyncHttpResponseHandler() {
                     @Override
@@ -86,7 +100,7 @@ public class Publish {
                             try {
                                 String result = new String(bytes, "utf-8");
                                 Message message = new Message();
-                                message.what = PUBLISH_RESOURCE;
+                                message.what = PUBLISH_RES_REQ;
                                 message.obj = result;
                                 handler.sendMessage(message);
                             } catch (UnsupportedEncodingException e) {
@@ -110,20 +124,90 @@ public class Publish {
         }
     }
 
+    /**
+     * 上传资源，请求，用户头像图片
+     * @param image 待上传的图片
+     * @param name 图片名
+     * @param callback 回调对象
+     */
+    public void uploadImage(Bitmap image, String name, final AsyncHttpCallback callback){
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        image.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
+        String encodedImage = Base64.encodeToString(byteArrayOutputStream.toByteArray(), Base64.DEFAULT);
+
+        AsyncHttpClient client = new AsyncHttpClient();
+        client.setTimeout(3000);
+        RequestParams params = new RequestParams();
+        params.add(NAME_PARA, name);
+        params.add(IMAGE_PARA, encodedImage);
+        client.post(SERVER_PATH, params, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int i, Header[] headers, byte[] bytes) {
+                if (i == 200)
+                    callback.onSuccess(i, null, UPLOAD_IMAGE);
+                else
+                    callback.onError(i);
+            }
+
+            @Override
+            public void onFailure(int i, Header[] headers, byte[] bytes, Throwable throwable) {
+                callback.onError(i);
+            }
+        });
+    }
+
+    /**
+     * 上传多张图片
+     * @param bitmaps 图片列表
+     * @param names 图片名列表
+     * @param callback 回调对象
+     */
+    public void uploadImage(ArrayList<Bitmap> bitmaps, ArrayList<String> names, final AsyncHttpCallback callback){
+        if (names == null || bitmaps == null)
+            return;
+        for (int i = 0; i < bitmaps.size(); i++){
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            bitmaps.get(i).compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
+            String encodedImage = Base64.encodeToString(byteArrayOutputStream.toByteArray(), Base64.DEFAULT);
+
+            AsyncHttpClient client = new AsyncHttpClient();
+            client.setTimeout(3000);
+            RequestParams params = new RequestParams();
+            params.add(NAME_PARA, names.get(i));
+            params.add(IMAGE_PARA, encodedImage);
+            client.post(SERVER_PATH, params, new AsyncHttpResponseHandler() {
+                @Override
+                public void onSuccess(int i, Header[] headers, byte[] bytes) {
+                    Log.e(TAG, "onSuccess: upload image 3 status: " + i);
+                    if (i == 200)
+                        callback.onSuccess(i, null, UPLOAD_IMAGE);
+                    else
+                        callback.onError(i);
+                }
+
+                @Override
+                public void onFailure(int i, Header[] headers, byte[] bytes, Throwable throwable) {
+                    callback.onError(i);
+                }
+            });
+        }
+    }
+
     private Handler handler = new Handler(new Handler.Callback() {
         @Override
         public boolean handleMessage(Message message) {
-            String Response = message.toString();
+            String Response = message.obj.toString();
             switch (message.what) {
-                case PUBLISH_RESOURCE:
+                case PUBLISH_RES_REQ:
                 try {
                     JSONObject userObject = new JSONObject(Response);
-                    int code=userObject.getInt("status");
-                    callback.onSuccess(code, null, 0);
+                    HashMap<String, String> mp = new HashMap<>();
+                    mp.put(PUBLISH_RET_RES_ID_KEY, userObject.getString(PUBLISH_RET_RES_ID_KEY));
+                    callback.onSuccess(200, mp, PUBLISH_RES_REQ);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                break;
+                    break;
                 default:
                     break;
             }

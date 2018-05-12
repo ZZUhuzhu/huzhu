@@ -52,8 +52,7 @@ public class UpdatePasswordActivity extends BaseActivity implements AsyncHttpCal
                 return true;
             case R.id.profile_update_menu_item:
                 String newPW = newPWEditText.getText().toString();
-                if (TextUtils.equals(newPW, confirmEditText.getText())){
-                    Log.e(TAG, "onOptionsItemSelected: here: " + newPW);
+                if (TextUtils.equals(newPW, confirmEditText.getText()) && newPW.length() > 0){
                     Profile.getOurInstance().updatePassword(Utilities.GetStringLoginUserId(), newPW, this);
                 }
                 else {

@@ -16,6 +16,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.util.Base64;
 import android.util.DisplayMetrics;
+import android.util.Log;
 
 import com.example.zzu.huzhucommunity.R;
 import com.example.zzu.huzhucommunity.asynchttp.Star;
@@ -36,6 +37,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static android.content.ContentValues.TAG;
 import static com.example.zzu.huzhucommunity.asynchttp.Profile.GET_ACCOUNT_PROFILE_LOGIN_TIME_KEY;
 import static com.example.zzu.huzhucommunity.asynchttp.Profile.STATUS_JSON_KEY;
 import static com.example.zzu.huzhucommunity.asynchttp.Profile.GET_ACCOUNT_PROFILE_USER_ACCOUNT_KEY;
@@ -96,7 +98,8 @@ public class Utilities {
     public static final int SAVE_USER_PROFILE_TARGET_USER_PHONE = 221;
     public static final int SAVE_USER_PROFILE_TARGET_USER_GRADE = 222;
     public static final int SAVE_USER_PROFILE_TARGET_USER_DEPARTMENT = 223;
-    public static final int SAVE_USER_PROFILE_TARGET_USER_HEAD = 224;
+    private static final int SAVE_USER_PROFILE_TARGET_USER_HEAD = 224;
+    public static final int SAVE_USER_PROFILE_TARGET_USER_HEAD_IMAGE = 225;
 
     /**
      * 抓取图片对话框相关常量
@@ -168,6 +171,9 @@ public class Utilities {
                 break;
             case SAVE_USER_PROFILE_TARGET_USER_HEAD:
                 editor.putString(USER_HEAD_KEY_SHARED_PREFERENCE, info);
+                break;
+            case SAVE_USER_PROFILE_TARGET_USER_HEAD_IMAGE:
+                editor.putString(USER_HEAD_IMAGE_SHARED_PREFERENCE, info);
                 break;
         }
         editor.apply();

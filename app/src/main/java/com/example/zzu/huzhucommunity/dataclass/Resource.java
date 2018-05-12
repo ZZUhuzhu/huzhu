@@ -5,7 +5,7 @@ package com.example.zzu.huzhucommunity.dataclass;
  */
 public class Resource {
     private String resourceAbbr,
-            imageUrl,
+            imageURL,
             resourceTitle,
             resourceDetail,
             resourcePrice,
@@ -62,12 +62,12 @@ public class Resource {
         this.resourcePublishTime = resourcePublishTime;
     }
 
-    public String getImageUrl() {
-        return imageUrl;
+    public String getImageURL() {
+        return imageURL;
     }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+    public void setImageURL(String imageURL) {
+        this.imageURL = imageURL;
     }
 
     public String getResourceID() {

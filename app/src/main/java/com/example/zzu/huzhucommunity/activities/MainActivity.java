@@ -13,7 +13,6 @@ import android.support.v7.app.AlertDialog;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
@@ -39,7 +38,6 @@ import com.example.zzu.huzhucommunity.dataclass.Resource;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
@@ -53,6 +51,7 @@ import static com.example.zzu.huzhucommunity.asynchttp.Main.GET_RESOURCE_BY_TYPE
  * 登录成功后的主界面
  */
 public class MainActivity extends BaseActivity implements AsyncHttpCallback {
+    private static final String TAG = "MainActivity";
     public static final String PUBLISH_TYPE = "PUBLISH_TYPE";
     private static long lastTimeBackPressed = 0;
 
@@ -61,7 +60,6 @@ public class MainActivity extends BaseActivity implements AsyncHttpCallback {
 
     private static final int LOAD_RES_IMAGE = 11;
     private static final int LOAD_REQ_IMAGE = 12;
-    private static final String TAG = "MainActivity";
 
     private Handler handler = new Handler(new Handler.Callback() {
         @Override
@@ -76,7 +74,7 @@ public class MainActivity extends BaseActivity implements AsyncHttpCallback {
                         requestAdapter.notifyItemChanged(ind);
                     }
                     else {
-                        resourceItems.get(ind).addItemThumbil(bitmap);
+                        resourceItems.get(ind).addItemThumbnail(bitmap);
                         resourceAdapter.notifyItemChanged(ind);
                     }
                     break;
@@ -361,6 +359,14 @@ public class MainActivity extends BaseActivity implements AsyncHttpCallback {
             Toast.makeText(MyApplication.getContext(), "再按一次退出程序", Toast.LENGTH_SHORT).show();
             lastTimeBackPressed = GregorianCalendar.getInstance().getTimeInMillis();
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Bitmap bitmap = Utilities.GetLoginUserHeadBitmapFromSP();
+        if (bitmap != null)
+            ((ImageView) findViewById(R.id.MainActivity_head_button)).setImageBitmap(bitmap);
     }
 
     public static void startMe(Context context){
