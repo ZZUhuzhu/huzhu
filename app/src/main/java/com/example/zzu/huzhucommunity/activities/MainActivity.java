@@ -43,15 +43,13 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 
-import static com.example.zzu.huzhucommunity.asynchttp.Main.GET_NEW_RESOURCE;
-import static com.example.zzu.huzhucommunity.asynchttp.Main.GET_REQUEST;
-import static com.example.zzu.huzhucommunity.asynchttp.Main.GET_RESOURCE_BY_TYPE;
-
 /**
  * 登录成功后的主界面
  */
 public class MainActivity extends BaseActivity implements AsyncHttpCallback {
     private static final String TAG = "MainActivity";
+
+    private static final String REFRESH_FINISH = "刷新完成";
     public static final String PUBLISH_TYPE = "PUBLISH_TYPE";
     private static long lastTimeBackPressed = 0;
 
@@ -88,15 +86,17 @@ public class MainActivity extends BaseActivity implements AsyncHttpCallback {
     private SwipeRefreshLayout resSwipeRefreshLayout, requestSwipeRefreshLayout;
 
     private RecyclerView newResourceRecyclerView;
-    private ArrayList<NewResourceItem> resourceItems = new ArrayList<>();
+    private final ArrayList<NewResourceItem> resourceItems = new ArrayList<>();
     private CommonResourcesAdapter resourceAdapter;
 
     private RecyclerView newRequestRecyclerView;
-    private ArrayList<NewRequestItem> requestItems = new ArrayList<>();
+    private final ArrayList<NewRequestItem> requestItems = new ArrayList<>();
     private CommonRequestAdapter requestAdapter;
 
     private ViewPager mainViewPager;
     private ArrayList<View> pagerViews = new ArrayList<>();
+
+    private int cur_load_image_seq = 0x80000000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -167,13 +167,7 @@ public class MainActivity extends BaseActivity implements AsyncHttpCallback {
      */
     public void initList(){
         Main.getOurInstance().getRequest("1", this);
-        Main.getOurInstance().getRequest("2", this);
-        Main.getOurInstance().getRequest("3", this);
-        Main.getOurInstance().getRequest("4", this);
         Main.getOurInstance().getNewResource("1", this);
-        Main.getOurInstance().getNewResource("2", this);
-        Main.getOurInstance().getNewResource("3", this);
-        Main.getOurInstance().getNewResource("4", this);
     }
 
     /**
@@ -205,32 +199,26 @@ public class MainActivity extends BaseActivity implements AsyncHttpCallback {
      * 下拉刷新时执行
      */
     public void refreshResource(int which){
-        if (which == REFRESHING_REQ) {
-            requestItems.clear();
-            Main.getOurInstance().getRequest("1", this);
-            Main.getOurInstance().getRequest("2", this);
-            Main.getOurInstance().getRequest("3", this);
-            Main.getOurInstance().getRequest("4", this);
+        if (which == REFRESHING_RES) {
+            Main.getOurInstance().checkNewResUpdate(resourceItems, this);
         }
-        else if (which == REFRESHING_RES){
-            resourceItems.clear();
-            Main.getOurInstance().getNewResource("1", this);
-            Main.getOurInstance().getNewResource("2", this);
-            Main.getOurInstance().getNewResource("3", this);
-            Main.getOurInstance().getNewResource("4", this);
+        else if (which == REFRESHING_REQ){
+            Main.getOurInstance().checkNewReqUpdate(requestItems, this);
         }
     }
 
     /**
      * 加载资源，请求之后加载每一项的(缩略)图片
      */
-    public void loadResItemImage(){
+    public void loadResItemImage(final int seq){
         for (int i = 0; i < resourceItems.size(); i++){
             final int ind = i;
             final String tmpUrl = resourceItems.get(i).getItemImageUrl();
             new Thread(new Runnable() {
                 @Override
                 public void run() {
+                    if (seq != cur_load_image_seq)
+                        return;
                     Bitmap bitmap;
                     try {
                         URL url = new URL(tmpUrl);
@@ -242,6 +230,7 @@ public class MainActivity extends BaseActivity implements AsyncHttpCallback {
                         message.obj = bitmap;
                         message.what = LOAD_RES_IMAGE;
                         message.arg1 = ind;
+                        message.arg2 = seq;
                         handler.sendMessage(message);
                         in.close();
                     } catch (Exception e) {
@@ -251,13 +240,15 @@ public class MainActivity extends BaseActivity implements AsyncHttpCallback {
             }).start();
         }
     }
-    public void loadReqItemImage(){
+    public void loadReqItemImage(final int seq){
         for (int i = 0; i < requestItems.size(); i++){
             final int ind = i;
             final String tmpUrl = requestItems.get(i).getItemImageUrl();
             new Thread(new Runnable() {
                 @Override
                 public void run() {
+                    if (seq != cur_load_image_seq)
+                        return;
                     Bitmap bitmap;
                     try {
                         URL url = new URL(tmpUrl);
@@ -269,6 +260,7 @@ public class MainActivity extends BaseActivity implements AsyncHttpCallback {
                         message.obj = bitmap;
                         message.what = LOAD_REQ_IMAGE;
                         message.arg1 = ind;
+                        message.arg2 = seq;
                         handler.sendMessage(message);
                         in.close();
                     } catch (Exception e) {
@@ -381,22 +373,24 @@ public class MainActivity extends BaseActivity implements AsyncHttpCallback {
      */
     @Override
     public void onSuccess(int statusCode, HashMap<String, String> mp, int requestCode) {
+        List<Resource> resList;
+        List<Request> reqList;
         switch (requestCode){
-            case GET_REQUEST:
-                List<Request> list = Utilities.getRequest(mp);
-                if (list != null) {
-                    for (Request request: list) {
+            case Main.GET_REQUEST:
+                reqList = Utilities.getRequest(mp);
+                if (reqList != null) {
+                    for (Request request: reqList) {
                         requestItems.add(NewRequestItem.TransferToMe(request));
                     }
                     requestAdapter.notifyDataSetChanged();
                     findViewById(R.id.MainActivity_progress_bar).setVisibility(View.INVISIBLE);
                     if (requestSwipeRefreshLayout.isRefreshing())
                         requestSwipeRefreshLayout.setRefreshing(false);
-                    loadReqItemImage();
+                    loadReqItemImage(cur_load_image_seq);
                 }
                 break;
-            case GET_NEW_RESOURCE:
-                List<Resource> resList = Utilities.getResource(mp);
+            case Main.GET_NEW_RESOURCE:
+                resList = Utilities.getResource(mp);
                 if (resList != null) {
                     for (Resource resource : resList){
                         resourceItems.add(NewResourceItem.TransferToMe(resource));
@@ -405,10 +399,54 @@ public class MainActivity extends BaseActivity implements AsyncHttpCallback {
                     findViewById(R.id.MainActivity_progress_bar).setVisibility(View.INVISIBLE);
                     if (resSwipeRefreshLayout.isRefreshing())
                         resSwipeRefreshLayout.setRefreshing(false);
-                    loadResItemImage();
+                    loadResItemImage(cur_load_image_seq);
                 }
                 break;
-            case GET_RESOURCE_BY_TYPE:
+            case Main.GET_RESOURCE_BY_TYPE:
+                break;
+            case Main.UPDATE_REQUEST:
+                if (mp == null){
+                    Toast.makeText(MyApplication.getContext(), REFRESH_FINISH, Toast.LENGTH_SHORT).show();
+                    requestSwipeRefreshLayout.setRefreshing(false);
+                    return;
+                }
+                cur_load_image_seq++;
+                synchronized (requestItems){
+                    requestItems.clear();
+                }
+                reqList = Utilities.getRequest(mp);
+                if (reqList != null) {
+                    for (Request request: reqList) {
+                        requestItems.add(NewRequestItem.TransferToMe(request));
+                    }
+                    requestAdapter.notifyDataSetChanged();
+                    findViewById(R.id.MainActivity_progress_bar).setVisibility(View.INVISIBLE);
+                    if (requestSwipeRefreshLayout.isRefreshing())
+                        requestSwipeRefreshLayout.setRefreshing(false);
+                    loadReqItemImage(cur_load_image_seq);
+                }
+                break;
+            case Main.UPDATE_RESOURCE:
+                if (mp == null){
+                    Toast.makeText(MyApplication.getContext(), REFRESH_FINISH, Toast.LENGTH_SHORT).show();
+                    resSwipeRefreshLayout.setRefreshing(false);
+                    return;
+                }
+                cur_load_image_seq++;
+                synchronized (resourceItems){
+                    resourceItems.clear();
+                }
+                resList = Utilities.getResource(mp);
+                if (resList != null) {
+                    for (Resource resource : resList){
+                        resourceItems.add(NewResourceItem.TransferToMe(resource));
+                    }
+                    resourceAdapter.notifyDataSetChanged();
+                    findViewById(R.id.MainActivity_progress_bar).setVisibility(View.INVISIBLE);
+                    if (resSwipeRefreshLayout.isRefreshing())
+                        resSwipeRefreshLayout.setRefreshing(false);
+                    loadResItemImage(cur_load_image_seq);
+                }
                 break;
         }
     }

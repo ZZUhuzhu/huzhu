@@ -141,7 +141,7 @@ public class PublishNewActivity extends BaseActivity implements AsyncHttpCallbac
     }
 
     /**
-     * TODO 发布新资源，请求
+     * 发布新资源
      */
     public void publishNew(){
         String userID = Utilities.GetStringLoginUserId();
