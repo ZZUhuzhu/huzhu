@@ -12,7 +12,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
@@ -32,6 +31,7 @@ import com.example.zzu.huzhucommunity.commonclass.MyApplication;
 import com.example.zzu.huzhucommunity.commonclass.NewRequestItem;
 import com.example.zzu.huzhucommunity.commonclass.NewResourceItem;
 import com.example.zzu.huzhucommunity.commonclass.Utilities;
+import com.example.zzu.huzhucommunity.customlayout.PullUpLoadRecycler;
 import com.example.zzu.huzhucommunity.dataclass.Request;
 import com.example.zzu.huzhucommunity.dataclass.Resource;
 
@@ -49,6 +49,7 @@ import java.util.List;
 public class MainActivity extends BaseActivity implements AsyncHttpCallback {
     private static final String TAG = "MainActivity";
 
+    private static final String NO_MORE = "没有更多了";
     private static final String REFRESH_FINISH = "刷新完成";
     public static final String PUBLISH_TYPE = "PUBLISH_TYPE";
     private static long lastTimeBackPressed = 0;
@@ -85,18 +86,20 @@ public class MainActivity extends BaseActivity implements AsyncHttpCallback {
 
     private SwipeRefreshLayout resSwipeRefreshLayout, requestSwipeRefreshLayout;
 
-    private RecyclerView newResourceRecyclerView;
+    private PullUpLoadRecycler newResourceRecyclerView;
     private final ArrayList<NewResourceItem> resourceItems = new ArrayList<>();
     private CommonResourcesAdapter resourceAdapter;
 
-    private RecyclerView newRequestRecyclerView;
+    private PullUpLoadRecycler newRequestRecyclerView;
     private final ArrayList<NewRequestItem> requestItems = new ArrayList<>();
     private CommonRequestAdapter requestAdapter;
 
     private ViewPager mainViewPager;
     private ArrayList<View> pagerViews = new ArrayList<>();
 
-    private int cur_load_image_seq = 0x80000000;
+    private int curLoadImageSeq = 0x80000000;
+    private int curResTimes = 0, curReqTimes = 0;
+    private boolean loadingMoreRes = false, loadingMoreReq = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,29 +111,49 @@ public class MainActivity extends BaseActivity implements AsyncHttpCallback {
         resourceButton = findViewById(R.id.MainActivity_resource_button);
         requestButton = findViewById(R.id.MainActivity_request_button);
 
-        newResourceRecyclerView = new RecyclerView(this);
+        newResourceRecyclerView = new PullUpLoadRecycler(this);
         newResourceRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         resourceAdapter = new CommonResourcesAdapter(resourceItems, this);
         newResourceRecyclerView.setAdapter(resourceAdapter);
+        newResourceRecyclerView.setOnBottomCallback(new PullUpLoadRecycler.OnBottomCallback() {
+            @Override
+            public void onBottom() {
+                if (loadingMoreRes)
+                    return;
+                loadingMoreRes = true;
+                Main.getOurInstance().getNewResource(++curResTimes + "", MainActivity.this);
+            }
+        });
+
         resSwipeRefreshLayout = new SwipeRefreshLayout(this);
         resSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                refreshResource(REFRESHING_RES);
+                Main.getOurInstance().checkNewResUpdate(resourceItems, MainActivity.this);
             }
         });
         resSwipeRefreshLayout.addView(newResourceRecyclerView);
         pagerViews.add(resSwipeRefreshLayout);
 
-        newRequestRecyclerView = new RecyclerView(this);
+        newRequestRecyclerView = new PullUpLoadRecycler(this);
         newRequestRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         requestAdapter = new CommonRequestAdapter(requestItems, this);
         newRequestRecyclerView.setAdapter(requestAdapter);
+        newRequestRecyclerView.setOnBottomCallback(new PullUpLoadRecycler.OnBottomCallback() {
+            @Override
+            public void onBottom() {
+                if (loadingMoreReq)
+                    return;
+                loadingMoreReq = true;
+                Main.getOurInstance().getNewRequest(++curReqTimes + "", MainActivity.this);
+            }
+        });
+
         requestSwipeRefreshLayout = new SwipeRefreshLayout(this);
         requestSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                refreshResource(REFRESHING_REQ);
+                Main.getOurInstance().checkNewReqUpdate(requestItems, MainActivity.this);
             }
         });
         requestSwipeRefreshLayout.addView(newRequestRecyclerView);
@@ -159,14 +182,7 @@ public class MainActivity extends BaseActivity implements AsyncHttpCallback {
         addListener(R.id.MainActivity_search_text_view);
 
         initUserHeadImage();
-        initList();
-    }
-
-    /**
-     * 初始化列表项
-     */
-    public void initList(){
-        Main.getOurInstance().getRequest("1", this);
+        Main.getOurInstance().getNewRequest("1", this);
         Main.getOurInstance().getNewResource("1", this);
     }
 
@@ -196,28 +212,16 @@ public class MainActivity extends BaseActivity implements AsyncHttpCallback {
     }
 
     /**
-     * 下拉刷新时执行
-     */
-    public void refreshResource(int which){
-        if (which == REFRESHING_RES) {
-            Main.getOurInstance().checkNewResUpdate(resourceItems, this);
-        }
-        else if (which == REFRESHING_REQ){
-            Main.getOurInstance().checkNewReqUpdate(requestItems, this);
-        }
-    }
-
-    /**
      * 加载资源，请求之后加载每一项的(缩略)图片
      */
-    public void loadResItemImage(final int seq){
-        for (int i = 0; i < resourceItems.size(); i++){
+    public void loadResItemImage(final int seq, int startInd){
+        for (int i = startInd; i < resourceItems.size(); i++){
             final int ind = i;
             final String tmpUrl = resourceItems.get(i).getItemImageUrl();
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    if (seq != cur_load_image_seq)
+                    if (seq != curLoadImageSeq)
                         return;
                     Bitmap bitmap;
                     try {
@@ -234,20 +238,20 @@ public class MainActivity extends BaseActivity implements AsyncHttpCallback {
                         handler.sendMessage(message);
                         in.close();
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        //e.printStackTrace();
                     }
                 }
             }).start();
         }
     }
-    public void loadReqItemImage(final int seq){
-        for (int i = 0; i < requestItems.size(); i++){
+    public void loadReqItemImage(final int seq, int startInd){
+        for (int i = startInd; i < requestItems.size(); i++){
             final int ind = i;
             final String tmpUrl = requestItems.get(i).getItemImageUrl();
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    if (seq != cur_load_image_seq)
+                    if (seq != curLoadImageSeq)
                         return;
                     Bitmap bitmap;
                     try {
@@ -376,7 +380,12 @@ public class MainActivity extends BaseActivity implements AsyncHttpCallback {
         List<Resource> resList;
         List<Request> reqList;
         switch (requestCode){
-            case Main.GET_REQUEST:
+            case Main.GET_NEW_REQUEST:
+                if (mp.get(Main.REQUEST_NUMBER_JSON_KEY).equals("0")){
+                    Toast.makeText(MyApplication.getContext(), NO_MORE, Toast.LENGTH_SHORT).show();
+                    loadingMoreReq = false;
+                    break;
+                }
                 reqList = Utilities.getRequest(mp);
                 if (reqList != null) {
                     for (Request request: reqList) {
@@ -386,10 +395,16 @@ public class MainActivity extends BaseActivity implements AsyncHttpCallback {
                     findViewById(R.id.MainActivity_progress_bar).setVisibility(View.INVISIBLE);
                     if (requestSwipeRefreshLayout.isRefreshing())
                         requestSwipeRefreshLayout.setRefreshing(false);
-                    loadReqItemImage(cur_load_image_seq);
+                    loadingMoreReq = false;
+                    loadReqItemImage(curLoadImageSeq, curReqTimes * 20);
                 }
                 break;
             case Main.GET_NEW_RESOURCE:
+                if (mp.get(Main.REQUEST_NUMBER_JSON_KEY).equals("0")){
+                    Toast.makeText(MyApplication.getContext(), NO_MORE, Toast.LENGTH_SHORT).show();
+                    loadingMoreRes = false;
+                    break;
+                }
                 resList = Utilities.getResource(mp);
                 if (resList != null) {
                     for (Resource resource : resList){
@@ -399,7 +414,8 @@ public class MainActivity extends BaseActivity implements AsyncHttpCallback {
                     findViewById(R.id.MainActivity_progress_bar).setVisibility(View.INVISIBLE);
                     if (resSwipeRefreshLayout.isRefreshing())
                         resSwipeRefreshLayout.setRefreshing(false);
-                    loadResItemImage(cur_load_image_seq);
+                    loadingMoreRes = false;
+                    loadResItemImage(curLoadImageSeq, curResTimes * 20);
                 }
                 break;
             case Main.GET_RESOURCE_BY_TYPE:
@@ -410,7 +426,7 @@ public class MainActivity extends BaseActivity implements AsyncHttpCallback {
                     requestSwipeRefreshLayout.setRefreshing(false);
                     return;
                 }
-                cur_load_image_seq++;
+                curLoadImageSeq++;
                 synchronized (requestItems){
                     requestItems.clear();
                 }
@@ -423,7 +439,7 @@ public class MainActivity extends BaseActivity implements AsyncHttpCallback {
                     findViewById(R.id.MainActivity_progress_bar).setVisibility(View.INVISIBLE);
                     if (requestSwipeRefreshLayout.isRefreshing())
                         requestSwipeRefreshLayout.setRefreshing(false);
-                    loadReqItemImage(cur_load_image_seq);
+                    loadReqItemImage(curLoadImageSeq, 0);
                 }
                 break;
             case Main.UPDATE_RESOURCE:
@@ -432,7 +448,7 @@ public class MainActivity extends BaseActivity implements AsyncHttpCallback {
                     resSwipeRefreshLayout.setRefreshing(false);
                     return;
                 }
-                cur_load_image_seq++;
+                curLoadImageSeq++;
                 synchronized (resourceItems){
                     resourceItems.clear();
                 }
@@ -445,7 +461,7 @@ public class MainActivity extends BaseActivity implements AsyncHttpCallback {
                     findViewById(R.id.MainActivity_progress_bar).setVisibility(View.INVISIBLE);
                     if (resSwipeRefreshLayout.isRefreshing())
                         resSwipeRefreshLayout.setRefreshing(false);
-                    loadResItemImage(cur_load_image_seq);
+                    loadResItemImage(curLoadImageSeq, 0);
                 }
                 break;
         }
@@ -454,5 +470,9 @@ public class MainActivity extends BaseActivity implements AsyncHttpCallback {
     @Override
     public void onError(int statusCode) {
         Toast.makeText(MyApplication.getContext(), Utilities.TOAST_NET_WORK_ERROR, Toast.LENGTH_SHORT).show();
+        if (resSwipeRefreshLayout.isRefreshing())
+            resSwipeRefreshLayout.setRefreshing(false);
+        if (requestSwipeRefreshLayout.isRefreshing())
+            requestSwipeRefreshLayout.setRefreshing(false);
     }
 }

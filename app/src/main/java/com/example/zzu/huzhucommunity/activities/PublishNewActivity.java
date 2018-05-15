@@ -39,7 +39,7 @@ public class PublishNewActivity extends BaseActivity implements AsyncHttpCallbac
 
     private static final String PUBLISH_SUCCESS = "发布成功";
 
-    private int publishWhich = PUBLISH_NEW_REQUEST;
+    private int publishWhich;
 
     private Calendar calendar = GregorianCalendar.getInstance();
     private ArrayList<Bitmap> bitmaps;

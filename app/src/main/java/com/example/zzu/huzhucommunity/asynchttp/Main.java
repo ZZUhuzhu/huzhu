@@ -3,9 +3,7 @@ package com.example.zzu.huzhucommunity.asynchttp;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
-import android.widget.Toast;
 
-import com.example.zzu.huzhucommunity.commonclass.MyApplication;
 import com.example.zzu.huzhucommunity.commonclass.NewRequestItem;
 import com.example.zzu.huzhucommunity.commonclass.NewResourceItem;
 import com.example.zzu.huzhucommunity.dataclass.Request;
@@ -36,12 +34,12 @@ public class Main {
     private AsyncHttpCallback callback;
 
     public static final int GET_NEW_RESOURCE = 10301;
-    public static final int GET_REQUEST = 10302;
+    public static final int GET_NEW_REQUEST = 10302;
     public static final int GET_RESOURCE_BY_TYPE = 10303;
     public static final int UPDATE_RESOURCE = 10304;
     public static final int UPDATE_REQUEST = 10305;
 
-    private static final String REQUEST_NUMBER_JSON_KEY = "number";
+    public static final String REQUEST_NUMBER_JSON_KEY = "number";
     private static final String REQUEST_CODE_JSON_KEY = "code";
 
     /**
@@ -116,7 +114,7 @@ public class Main {
      * @param times 次数
      * @param cBack 回调对象
      */
-    public void getRequest(final String times, final AsyncHttpCallback cBack) {
+    public void getNewRequest(final String times, final AsyncHttpCallback cBack) {
         try {
             if (times != null && cBack != null) {
                 this.callback = cBack;
@@ -134,7 +132,7 @@ public class Main {
                             try {
                                 String result = new String(bytes, "utf-8");
                                 Message message = new Message();
-                                message.what = GET_REQUEST;
+                                message.what = GET_NEW_REQUEST;
                                 message.obj = result;
                                 handler.sendMessage(message);
                             } catch (UnsupportedEncodingException e) {
@@ -218,7 +216,6 @@ public class Main {
                 client.post(path, params, new AsyncHttpResponseHandler() {
                     @Override
                     public void onSuccess(int i, org.apache.http.Header[] headers, byte[] bytes) {
-                        Log.e(TAG, "onSuccess: refresh res status: " + i);
                         //判断状态码
                         if (i == 200) {
                             //获取结果
@@ -301,6 +298,7 @@ public class Main {
                                 json.append("]");
                                 List<Request> resList = new Gson().fromJson(json.toString(),
                                         new TypeToken<List<Request>>() {}.getType());
+                                Log.e(TAG, "onSuccess: id: " + resList.get(0).getResourceID());
                                 if (!resList.get(0).getResourceID().equals(list.get(0).getItemID())){
                                     int code = userObject.getInt("status");
                                     String number = userObject.getString("number");
@@ -358,8 +356,9 @@ public class Main {
                         e.printStackTrace();
                     }
                     break;
-                case GET_REQUEST:
+                case GET_NEW_REQUEST:
                     try {
+                        Log.e(TAG, "handleMessage: handle request");
                         JSONObject userObject = new JSONObject(Response);
                         int code = userObject.getInt("status");
                         String number = userObject.getString("number");
@@ -370,7 +369,7 @@ public class Main {
                         for (int i = 0; i < n; ++i) {
                             mp.put("" + i, userObject.getString("" + i));
                         }
-                        callback.onSuccess(code, mp, GET_REQUEST);
+                        callback.onSuccess(code, mp, GET_NEW_REQUEST);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
