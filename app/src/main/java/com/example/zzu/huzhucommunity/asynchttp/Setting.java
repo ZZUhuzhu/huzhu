@@ -25,6 +25,8 @@ public class Setting {
     public static final int RECORD_USER_FEEDBACK = 11601;
     public static final int CHECK_FOR_UPDATE = 11602;
 
+    public static final String URL_JOSN_KEY = "URL";
+
     /**
      * 外部调用类方法，获得单体实例
      *
@@ -135,7 +137,7 @@ public class Setting {
     private Handler handler = new Handler(new Handler.Callback() {
         @Override
         public boolean handleMessage(Message message) {
-            String Response = message.toString();
+            String Response = message.obj.toString();
             switch (message.what) {
                 case RECORD_USER_FEEDBACK:
                 try {
@@ -151,7 +153,18 @@ public class Setting {
                 }
                 break;
                 case CHECK_FOR_UPDATE:
-                    callback.onSuccess(200, null, CHECK_FOR_UPDATE);
+                    try {
+                        JSONObject userObject = new JSONObject(Response);
+                        int code = userObject.getInt("status");
+                        String URL = userObject.getString("URL");
+                        HashMap<String, String> mp = new HashMap<>();
+                        mp.put("code", code + "");
+                        mp.put(URL_JOSN_KEY, URL);
+
+                        callback.onSuccess(code, mp, CHECK_FOR_UPDATE);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                     break;
                 default:
                     break;

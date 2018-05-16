@@ -7,6 +7,8 @@ public class Request {
     private String resourceID;
     private String publishDate;
     private String resourcePrice;
+    private String resourceImageNumber;
+    private String deadline;
 
     public String getImageURL() {
         return imageURL;
@@ -54,5 +56,21 @@ public class Request {
 
     public void setResourcePrice(String resourcePrice) {
         this.resourcePrice = resourcePrice;
+    }
+
+    public String getDeadline() {
+        return deadline;
+    }
+
+    public void setDeadline(String deadline) {
+        this.deadline = deadline;
+    }
+
+    public String getResourceImageNumber() {
+        return resourceImageNumber;
+    }
+
+    public void setResourceImageNumber(String resourceImageNumber) {
+        this.resourceImageNumber = resourceImageNumber;
     }
 }

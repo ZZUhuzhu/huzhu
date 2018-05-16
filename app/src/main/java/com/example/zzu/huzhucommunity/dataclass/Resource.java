@@ -13,6 +13,8 @@ public class Resource {
             resourceStatus,
             publishDate,
             resourcePublishTime;
+    private String resourceImageNumber;
+    private String deadline;
 
     public String getResourceAbbr() {
         return resourceAbbr;
@@ -84,5 +86,21 @@ public class Resource {
 
     public void setPublishDate(String publishDate) {
         this.publishDate = publishDate;
+    }
+
+    public String getDeadline() {
+        return deadline;
+    }
+
+    public void setDeadline(String deadline) {
+        this.deadline = deadline;
+    }
+
+    public String getResourceImageNumber() {
+        return resourceImageNumber;
+    }
+
+    public void setResourceImageNumber(String resourceImageNumber) {
+        this.resourceImageNumber = resourceImageNumber;
     }
 }
