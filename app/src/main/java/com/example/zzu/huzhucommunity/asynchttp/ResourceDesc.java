@@ -2,6 +2,7 @@ package com.example.zzu.huzhucommunity.asynchttp;
 
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -20,30 +21,32 @@ import java.util.HashMap;
  */
 
 public class ResourceDesc {
+    private static final String TAG = "ResourceDesc";
     private static final ResourceDesc ourInstance = new ResourceDesc();
     private AsyncHttpCallback callback;
-    private static final int GET_RES_PUBLISHER_INFO = 10801;
-    private static final int GET_RESOURCE_DESC = 10802;
-    private static final int GET_RESOURCE_COMMENT = 10803;
-    private static final int PUBLISH_COMMENT = 10804;
-    private static final int UPDATE_STAR = 10805;
-    private static final int RECEIVE_RESOURCE = 10806;
-    private static final int ADD_TO_TRACK = 10807;
 
-    public static final String RESOURCE_STATUS_JSON_KEY ="status";
-    public static final String RESOURCE_USERHEAD_JSON_KEY = "User_head";
-    public static final String RESOURCE_USERNAME_JSON_KEY = "User_name";
-    public static final String RESOURCE_USERLASTLOGIN_JSON_KEY = "userLastLogin",
-            RESOURCE_TITLE_JSON_KEY = "Res_title",
-            RRESOURCE_DETAIL_JSON_KEY = "Res_detail",
-            RRESOURCE_PRICE_JSON_KEY = "price",
-    PUBLISHDATE = "publishDate",
+    public static final int GET_RES_PUBLISHER_INFO = 10801;
+    public static final int GET_RESOURCE_DESC = 10802;
+    public static final int GET_RESOURCE_COMMENT = 10803;
+    public static final int PUBLISH_COMMENT = 10804;
+    public static final int UPDATE_STAR = 10805;
+    public static final int RECEIVE_RESOURCE = 10806;
+    public static final int ADD_TO_TRACK = 10807;
+
+    public static final String RESOURCE_STATUS_JSON_KEY ="status",
+            RESOURCE_USER_HEAD_JSON_KEY = "userHead",
+            RESOURCE_USERNAME_JSON_KEY = "userName",
+            RESOURCE_USER_LAST_LOGIN_JSON_KEY = "userLastLogin",
+            RESOURCE_TITLE_JSON_KEY = "resourceTitle",
+            RESOURCE_DETAIL_JSON_KEY = "resourceDetail",
+            RESOURCE_PRICE_JSON_KEY = "resourcePrice",
+            PUBLISH_DATE = "publishDate",
             DEADLINE = "deadline",
-            IMAGENUMBERS = "imageNumbers",
-            RESOURCESTATUS = "resourceStatus",
-            PUBLISHSTATE = "publishState",
+            IMAGE_NUMBERS = "resourceImageNumber",
+            RESOURCE_STATUS = "resourceStatus",
+            PUBLISH_STATE = "publishState",
             RESOURCE_NUMBER_JSON_KEY = "number",
-    _1 = "1";
+            _1 = "1";
 
 
 
@@ -88,10 +91,9 @@ public class ResourceDesc {
                         if(i == 200){
                             //获取结果
                             try {
-                                String result = new String(bytes,"utf-8");
                                 Message message = new Message();
                                 message.what = GET_RES_PUBLISHER_INFO;
-                                message.obj = result;
+                                message.obj = new String(bytes,"utf-8");
                                 handler.sendMessage(message);
                             } catch (UnsupportedEncodingException e) {
                                 e.printStackTrace();
@@ -411,7 +413,7 @@ public class ResourceDesc {
     private Handler handler = new Handler(new Handler.Callback() {
         @Override
         public boolean handleMessage(Message message) {
-            String Response = message.toString();
+            String Response = message.obj.toString();
             switch (message.what) {
                 case GET_RES_PUBLISHER_INFO:
                     try {
@@ -419,12 +421,12 @@ public class ResourceDesc {
                         HashMap<String, String> mp = new HashMap<>();
                         int code= userObject.getInt("status");
                         mp.put(RESOURCE_STATUS_JSON_KEY, code + "");
-                        mp.put(RESOURCE_USERHEAD_JSON_KEY,
-                                userObject.getString(RESOURCE_USERHEAD_JSON_KEY));
+                        mp.put(RESOURCE_USER_HEAD_JSON_KEY,
+                                userObject.getString(RESOURCE_USER_HEAD_JSON_KEY));
                         mp.put(RESOURCE_USERNAME_JSON_KEY,
                                 userObject.getString(RESOURCE_USERNAME_JSON_KEY));
-                        mp.put(RESOURCE_USERLASTLOGIN_JSON_KEY,
-                                userObject.getString(RESOURCE_USERLASTLOGIN_JSON_KEY));
+                        mp.put(RESOURCE_USER_LAST_LOGIN_JSON_KEY,
+                                userObject.getString(RESOURCE_USER_LAST_LOGIN_JSON_KEY));
                         callback.onSuccess(code, mp, GET_RES_PUBLISHER_INFO);
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -438,14 +440,13 @@ public class ResourceDesc {
                         HashMap<String, String> mp = new HashMap<>();
                         mp.put(RESOURCE_STATUS_JSON_KEY, code + "");
                         mp.put(RESOURCE_TITLE_JSON_KEY,
-                                userObject.getString("Res_title"));
-                        mp.put(RRESOURCE_DETAIL_JSON_KEY, userObject.getString("Res_detail"));
-                        mp.put(RRESOURCE_PRICE_JSON_KEY,
-                                userObject.getString("price"));
-                        mp.put(PUBLISHDATE, userObject.getString("publishDate"));
-                        mp.put(DEADLINE, userObject.getString("deadline"));
-                        mp.put(IMAGENUMBERS, userObject.getString("imageNumbers"));
-                        mp.put(PUBLISHSTATE, userObject.getString("resourceStatus"));
+                                userObject.getString(RESOURCE_TITLE_JSON_KEY));
+                        mp.put(RESOURCE_DETAIL_JSON_KEY, userObject.getString(RESOURCE_DETAIL_JSON_KEY));
+                        mp.put(RESOURCE_PRICE_JSON_KEY,
+                                userObject.getString(RESOURCE_PRICE_JSON_KEY));
+                        mp.put(PUBLISH_DATE, userObject.getString(PUBLISH_DATE));
+                        mp.put(DEADLINE, userObject.getString(DEADLINE));
+                        mp.put(IMAGE_NUMBERS, userObject.getString(IMAGE_NUMBERS));
                         callback.onSuccess(code, mp, GET_RESOURCE_DESC);
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -464,7 +465,7 @@ public class ResourceDesc {
                             mp.put("" + i, userObject.getString("" + i));
                         }
 
-                        callback.onSuccess(code, null, 0);
+                        callback.onSuccess(code, mp, GET_RESOURCE_COMMENT);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -473,13 +474,13 @@ public class ResourceDesc {
                     try {
                         JSONObject userObject = new JSONObject(Response);
                         int code=userObject.getInt("status");
-                        String publishState = userObject.getString("publishState");
+                        String publishState = userObject.getString(PUBLISH_STATE);
                         String resourceID = userObject.getString("resourceID");
                         String _1local = userObject.getString("1");
                         HashMap<String, String> mp = new HashMap<>();
                         mp.put(_1, _1local);
-                        mp.put(RESOURCESTATUS, resourceID);
-                        mp.put(PUBLISHSTATE, publishState);
+                        mp.put(RESOURCE_STATUS, resourceID);
+                        mp.put(PUBLISH_STATE, publishState);
 
                         callback.onSuccess(code, mp, PUBLISH_COMMENT);
                     } catch (JSONException e) {

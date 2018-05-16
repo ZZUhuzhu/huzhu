@@ -54,7 +54,7 @@
             android:background="@drawable/oval_stroke_black_pressed_bg_gray"
             android:layout_margin="@dimen/common_margin_small"
             android:scaleType="fitCenter"
-            android:src="@drawable/plus_icon"/>
+            android:src="@drawable/plus_icon_black"/>
     </LinearLayout>
     <android.support.v7.widget.RecyclerView
         android:id="@+id/ChatRoomActivity_recycler_view"

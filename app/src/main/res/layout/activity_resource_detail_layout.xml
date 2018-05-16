@@ -57,8 +57,7 @@
                         android:layout_marginTop="@dimen/common_margin_small"
                         android:maxLines="1"
                         android:textColor="@color/colorBlack"
-                        android:textSize="@dimen/common_text_size_large"
-                        android:text="@string/solider"/>
+                        android:textSize="@dimen/common_text_size_large"/>
                     <TextView
                         android:id="@+id/ResourceDetail_res_price_text_view"
                         android:layout_width="50dp"
@@ -79,8 +78,7 @@
                         android:maxLines="1"
                         android:layout_below="@id/ResourceDetail_res_user_name_text_view"
                         android:layout_toEndOf="@id/ResourceDetail_res_user_image_view"
-                        android:layout_marginTop="@dimen/common_margin_small"
-                        android:text="@string/twoHoursAgo"/>
+                        android:layout_marginTop="@dimen/common_margin_small"/>
                 </RelativeLayout>
                 <TextView
                     android:id="@+id/ResourceDetail_res_desc_text_view"
@@ -96,14 +94,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="@dimen/common_margin_normal">
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="180dp"
-                        android:contentDescription="@string/app_name"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/background_small"/>
                 </LinearLayout>
                 <TextView
+                    android:id="@+id/ResourceDetail_deadline_text_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:maxLines="1"

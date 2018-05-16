@@ -26,20 +26,25 @@ public class CommonResourcesAdapter extends RecyclerView.Adapter<CommonResources
     private ArrayList<NewResourceItem> list;
     private Context context;
     private boolean showStatus;
-    @Override
-    public CommonResourcesAdapter.ViewHolder onCreateViewHolder(final ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_new_resource_item_view, parent, false);
-        return new ViewHolder(view);
-    }
+
     public CommonResourcesAdapter(ArrayList<NewResourceItem> list, Context context){
         this.list = list;
         this.context = context;
     }
+
     public CommonResourcesAdapter(ArrayList<NewResourceItem> list, Context context, boolean showStatus){
         this.list = list;
         this.context = context;
         this.showStatus = showStatus;
     }
+
+    @Override
+    public CommonResourcesAdapter.ViewHolder onCreateViewHolder(final ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).
+                inflate(R.layout.recycler_new_resource_item_view, parent, false);
+        return new ViewHolder(view);
+    }
+
     @Override
     public void onBindViewHolder(CommonResourcesAdapter.ViewHolder holder, int position) {
         NewResourceItem item = list.get(position);
@@ -82,7 +87,7 @@ public class CommonResourcesAdapter extends RecyclerView.Adapter<CommonResources
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ResourceDetailActivity.startMe(context);
+                    ResourceDetailActivity.startMe(context, list.get(getAdapterPosition()).getItemID());
                 }
             });
             imageView = itemView.findViewById(R.id.NewResourceItem_thumbnail);

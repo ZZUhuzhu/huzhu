@@ -28,6 +28,7 @@ import com.example.zzu.huzhucommunity.customlayout.ResReqDetailBottomButtonLayou
 import java.util.GregorianCalendar;
 
 public class RequestDetailActivity extends BaseActivity {
+    private static final String REQ_ID_EXTRA = "reqID";
     private boolean requestStarred = false;
     private ResReqDetailBottomButtonLayout receiveButton;
     private LinearLayout commentHolder;
@@ -175,7 +176,9 @@ public class RequestDetailActivity extends BaseActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-    public static void startMe(Context context){
-        context.startActivity(new Intent(context, RequestDetailActivity.class));
+    public static void startMe(Context context, String reqID){
+        Intent intent = new Intent(context, RequestDetailActivity.class);
+        intent.putExtra(REQ_ID_EXTRA, reqID);
+        context.startActivity(intent);
     }
 }

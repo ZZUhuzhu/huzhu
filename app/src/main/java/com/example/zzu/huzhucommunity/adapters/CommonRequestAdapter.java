@@ -84,7 +84,7 @@ public class CommonRequestAdapter extends RecyclerView.Adapter<CommonRequestAdap
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    RequestDetailActivity.startMe(context);
+                    RequestDetailActivity.startMe(context, list.get(getAdapterPosition()).getItemID());
                 }
             });
             imageView = itemView.findViewById(R.id.NewResourceItem_thumbnail);

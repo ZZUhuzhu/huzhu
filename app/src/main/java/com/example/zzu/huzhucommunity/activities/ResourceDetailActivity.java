@@ -5,6 +5,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.os.Bundle;
@@ -13,24 +15,49 @@ import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.zzu.huzhucommunity.R;
 import com.example.zzu.huzhucommunity.asynchttp.AsyncHttpCallback;
+import com.example.zzu.huzhucommunity.asynchttp.ResourceDesc;
 import com.example.zzu.huzhucommunity.commonclass.CommentItem;
 import com.example.zzu.huzhucommunity.commonclass.MyApplication;
 import com.example.zzu.huzhucommunity.commonclass.Utilities;
 import com.example.zzu.huzhucommunity.customlayout.CommentItemLayout;
 import com.example.zzu.huzhucommunity.customlayout.ResReqDetailBottomButtonLayout;
 
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 
 public class ResourceDetailActivity extends BaseActivity implements AsyncHttpCallback {
-    private LinearLayout commentHolder;
+    private static final String RES_ID_EXTRA = "resID";
+    private static final int LOAD_USER_HEAD = 1;
+
+    private LinearLayout commentHolder, imageHolder;
     private boolean resStarred = false;
     private ResReqDetailBottomButtonLayout receiveButton;
+
+    private TextView userNameTextView, userLastLoginTextView;
+    private ImageView userHeadView;
+    private TextView priceTextView, resDetail, deadlineTextView;
+
+    private Handler handler = new Handler(new Handler.Callback() {
+        @Override
+        public boolean handleMessage(Message msg) {
+            switch (msg.what){
+                case LOAD_USER_HEAD:
+                    userHeadView.setImageBitmap((Bitmap) msg.obj);
+                    break;
+            }
+            return false;
+        }
+    });
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,8 +69,16 @@ public class ResourceDetailActivity extends BaseActivity implements AsyncHttpCal
         if(actionBar != null){
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
+        String resID = getIntent().getStringExtra(RES_ID_EXTRA);
 
+        imageHolder = findViewById(R.id.ResourceDetail_res_images_holder);
         receiveButton = findViewById(R.id.ResourceDetail_receive_it_button);
+        userNameTextView = findViewById(R.id.ResourceDetail_res_user_name_text_view);
+        userLastLoginTextView = findViewById(R.id.ResourceDetail_user_active_time_text_view);
+        priceTextView = findViewById(R.id.ResourceDetail_res_price_text_view);
+        resDetail = findViewById(R.id.ResourceDetail_res_desc_text_view);
+        deadlineTextView = findViewById(R.id.ResourceDetail_deadline_text_view);
+        userHeadView = findViewById(R.id.ResourceDetail_res_user_image_view);
 
         addListener(R.id.ResourceDetail_star_button);
         addListener(R.id.ResourceDetail_comment_it_button);
@@ -51,6 +86,12 @@ public class ResourceDetailActivity extends BaseActivity implements AsyncHttpCal
         addListener(R.id.ResourceDetail_chat_button);
         addListener(R.id.ResourceDetail_res_user_image_view);
         initComment();
+
+        if (Utilities.GetSettingOption(Utilities.RECORD_TRACK_KEY))
+            ResourceDesc.getOurInstance().addToTrack(Utilities.GetStringLoginUserId(), resID, this);
+        ResourceDesc.getOurInstance().getResPublisherInfo(resID, this);
+        ResourceDesc.getOurInstance().getResourceDesc(resID, this);
+        ResourceDesc.getOurInstance().getResourceComment(resID, this);
     }
 
     /**
@@ -175,13 +216,70 @@ public class ResourceDetailActivity extends BaseActivity implements AsyncHttpCal
         }
         return super.onOptionsItemSelected(item);
     }
-    public static void startMe(Context context){
-        context.startActivity(new Intent(context, ResourceDetailActivity.class));
+
+    public static void startMe(Context context, String resID){
+        Intent intent = new Intent(context, ResourceDetailActivity.class);
+        intent.putExtra(RES_ID_EXTRA, resID);
+        context.startActivity(intent);
     }
 
     @Override
     public void onSuccess(int statusCode, HashMap<String, String> mp, int requestCode) {
-
+        if (statusCode != 200)
+            return;
+        switch (requestCode){
+            case ResourceDesc.GET_RESOURCE_DESC:
+                resDetail.setText(mp.get(ResourceDesc.RESOURCE_DETAIL_JSON_KEY));
+                priceTextView.setText(mp.get(ResourceDesc.RESOURCE_PRICE_JSON_KEY));
+                deadlineTextView.setText(mp.get(ResourceDesc.DEADLINE));
+                int num = Integer.parseInt(mp.get(ResourceDesc.IMAGE_NUMBERS));
+                for (int i = 0; i < num; i++){
+                    ImageView tmp = new ImageView(this);
+                    tmp.setScaleType(ImageView.ScaleType.FIT_XY);
+                    tmp.setImageResource(R.drawable.profile_head_over_watch);
+                    imageHolder.addView(tmp);
+                }
+                break;
+            case ResourceDesc.GET_RES_PUBLISHER_INFO:
+                String userName = mp.get(ResourceDesc.RESOURCE_USERNAME_JSON_KEY);
+                userNameTextView.setText(userName);
+                String userLastLogin = mp.get(ResourceDesc.RESOURCE_USER_LAST_LOGIN_JSON_KEY);
+                userLastLoginTextView.setText(String.format("上次登录:%s", userLastLogin.substring(0, userLastLogin.length() - 3)));
+                final String userHead = mp.get(ResourceDesc.RESOURCE_USER_HEAD_JSON_KEY);
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        HttpURLConnection con = null;
+                        try {
+                            URL url = new URL(userHead);
+                            con = (HttpURLConnection) url.openConnection();
+                            Bitmap bitmap = BitmapFactory.decodeStream(con.getInputStream());
+                            Message message = new Message();
+                            message.what = LOAD_USER_HEAD;
+                            message.obj = bitmap;
+                            handler.sendMessage(message);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        finally {
+                            if (con != null) {
+                                con.disconnect();
+                            }
+                        }
+                    }
+                }).start();
+                break;
+            case ResourceDesc.GET_RESOURCE_COMMENT:
+                break;
+            case ResourceDesc.PUBLISH_COMMENT:
+                break;
+            case ResourceDesc.UPDATE_STAR:
+                    break;
+            case ResourceDesc.RECEIVE_RESOURCE:
+                break;
+            case ResourceDesc.ADD_TO_TRACK:
+                break;
+        }
     }
 
     @Override

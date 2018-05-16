@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.example.zzu.huzhucommunity.asynchttp.HTTPConstant;
 import com.example.zzu.huzhucommunity.dataclass.Request;
 
 import java.util.ArrayList;
@@ -14,44 +15,50 @@ import java.util.ArrayList;
  * 保存主界面显示最新请求的RecyclerView的列表中每一项的信息
  */
 
-public class NewRequestItem implements Parcelable {
+public class NewRequestItem{
     private String itemID;
     private String itemDetail;
     private String itemTitle;
     private long itemPublishTime;
     private double itemPrice;
-    private int itemThumbnailAmount;
-    private ArrayList<Bitmap> itemThumbnails;
+    private int itemImageNumber;
+    private ArrayList<Bitmap> itemImages;
     private boolean received;
     private String itemPublishTimeStr;
     private String itemImageUrl;
-    //todo 重构 Parcelable
+    private ArrayList<String> itemImageUrls;
+    private String deadline;
 
     public NewRequestItem(String itemID, String itemTitle, String itemDetail,
-                           long itemPublishTime,double itemPrice, ArrayList<Bitmap> itemThumbnails){
+                           long itemPublishTime,double itemPrice, ArrayList<Bitmap> itemImages){
         this.itemID = itemID;
         this.received = Math.random() * 100 > 50;
         this.itemTitle = itemTitle;
         this.itemDetail = itemDetail;
         this.itemPrice = itemPrice;
         this.itemPublishTime = itemPublishTime;
-        if(itemThumbnails == null)
-            itemThumbnailAmount = 0;
+        if(itemImages == null)
+            itemImageNumber = 0;
         else
-            itemThumbnailAmount = itemThumbnails.size();
-        this.itemThumbnails = itemThumbnails;
+            itemImageNumber = itemImages.size();
+        this.itemImages = itemImages;
         this.itemPublishTimeStr = Utilities.convertTimeInMillToString(itemPublishTime);
     }
 
-    private NewRequestItem(String itemID, String itemTitle, String itemDetail,
-                           String itemDate, String imageUrl, String itemPrice){
+    private NewRequestItem(String itemID, String itemTitle, String itemDetail, String itemDate,
+                           String imageUrl, String itemPrice, String imageNumbers, String deadline){
         this.itemDetail = itemDetail;
         this.itemID = itemID;
         this.itemPublishTimeStr = itemDate;
         this.itemTitle = itemTitle;
         this.itemImageUrl = imageUrl;
         this.itemPrice = Double.parseDouble(itemPrice);
-        this.itemThumbnails = new ArrayList<>();
+        this.itemImageNumber = Integer.parseInt(imageNumbers);
+        this.deadline = deadline;
+        this.itemImages = new ArrayList<>();
+        this.itemImageUrls = new ArrayList<>();
+        for (int i = 1; i <= itemImageNumber; i++)
+            itemImageUrls.add(HTTPConstant.IMAGE_URL_PREFIX + itemID + "_" + i + HTTPConstant.IMAGE_URL_SUFFIX);
     }
 
     public boolean isReceived() {
@@ -62,17 +69,6 @@ public class NewRequestItem implements Parcelable {
         this.received = true;
     }
 
-    public static final Parcelable.Creator<NewRequestItem> CREATOR = new Parcelable.Creator<NewRequestItem>() {
-        @Override
-        public NewRequestItem createFromParcel(Parcel in) {
-            return new NewRequestItem(in);
-        }
-
-        @Override
-        public NewRequestItem[] newArray(int size) {
-            return new NewRequestItem[size];
-        }
-    };
 
     public String getItemDetail() {
         return itemDetail;
@@ -91,12 +87,12 @@ public class NewRequestItem implements Parcelable {
     }
 
     public void addItemThumbnail(Bitmap bitmap){
-        itemThumbnails.add(bitmap);
-        itemThumbnailAmount++;
+        itemImages.add(bitmap);
+        itemImageNumber++;
     }
 
     private boolean itemHasThumbnails(){
-        return itemThumbnailAmount > 0;
+        return itemImageNumber > 0 && itemImages != null && itemImages.size() > 0;
     }
 
     public void setItemID(String itemID) {
@@ -109,34 +105,8 @@ public class NewRequestItem implements Parcelable {
 
     public Bitmap getItemThumbnail() {
         if(itemHasThumbnails())
-            return itemThumbnails.get(0);
+            return itemImages.get(0);
         return null;
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    private NewRequestItem(Parcel in) {
-        itemID = in.readString();
-        itemDetail = in.readString();
-        itemTitle = in.readString();
-        itemPublishTime = in.readLong();
-        itemPrice = in.readDouble();
-        itemThumbnailAmount = in.readInt();
-        itemThumbnails = in.createTypedArrayList(Bitmap.CREATOR);
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(itemID);
-        dest.writeString(itemDetail);
-        dest.writeString(itemTitle);
-        dest.writeLong(itemPublishTime);
-        dest.writeDouble(itemPrice);
-        dest.writeInt(itemThumbnailAmount);
-        dest.writeTypedList(itemThumbnails);
     }
 
     public String getItemImageUrl() {
@@ -153,9 +123,25 @@ public class NewRequestItem implements Parcelable {
 
     public void setItemPublishTimeStr(String itemPublishTimeStr) {
         this.itemPublishTimeStr = itemPublishTimeStr;
+    }  public ArrayList<String> getItemImageUrls() {
+        return itemImageUrls;
     }
+
+    public void setItemImageUrls(ArrayList<String> itemImageUrls) {
+        this.itemImageUrls = itemImageUrls;
+    }
+
+    public String getDeadline() {
+        return deadline;
+    }
+
+    public void setDeadline(String deadline) {
+        this.deadline = deadline;
+    }
+
     public static NewRequestItem TransferToMe(Request request){
         return new NewRequestItem(request.getResourceID(), request.getResourceTitle(), request.getResourceDetail(),
-                request.getPublishDate().substring(5, 16), request.getImageURL(), request.getResourcePrice());
+                request.getPublishDate().substring(5, 16), request.getImageURL(), request.getResourcePrice(),
+                request.getResourceImageNumber(), request.getDeadline());
     }
 }

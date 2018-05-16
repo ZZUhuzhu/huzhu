@@ -160,7 +160,7 @@ public class Setting {
                         HashMap<String, String> mp = new HashMap<>();
                         mp.put("code", code + "");
                         mp.put(URL_JOSN_KEY, URL);
-
+                        //todo update url
                         callback.onSuccess(code, mp, CHECK_FOR_UPDATE);
                     } catch (JSONException e) {
                         e.printStackTrace();

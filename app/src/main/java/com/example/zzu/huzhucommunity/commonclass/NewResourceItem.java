@@ -5,6 +5,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 
+import com.example.zzu.huzhucommunity.asynchttp.HTTPConstant;
 import com.example.zzu.huzhucommunity.dataclass.Resource;
 
 import java.util.ArrayList;
@@ -15,18 +16,19 @@ import java.util.ArrayList;
  * 保存主界面显示最新资源信息的RecyclerView的列表中每一项的信息
  */
 
-public class NewResourceItem implements Parcelable {
+public class NewResourceItem {
     private String itemID;
     private String itemDetail;
     private String itemTitle;
     private long itemPublishTime;
     private double itemPrice;
-    private int itemThumbnailAmount;
-    private ArrayList<Bitmap> itemThumbnails;
+    private int itemImageNumber;
+    private ArrayList<Bitmap> itemImages;
     private boolean received;
-    //todo 添加到 Parcelable
     private String itemPublishTimeStr;
     private String itemImageUrl;
+    private String deadline;
+    private ArrayList<String> itemImageUrls;
 
     public NewResourceItem(String itemID, String itemTitle, String itemDetail,
                            long itemPublishTime,double itemPrice, ArrayList<Bitmap> itemThumbnails){
@@ -37,21 +39,26 @@ public class NewResourceItem implements Parcelable {
         this.itemPrice = itemPrice;
         this.itemPublishTime = itemPublishTime;
         if(itemThumbnails == null)
-            itemThumbnailAmount = 0;
+            itemImageNumber = 0;
         else
-            itemThumbnailAmount = itemThumbnails.size();
-        this.itemThumbnails = itemThumbnails;
+            itemImageNumber = itemThumbnails.size();
+        this.itemImages = itemThumbnails;
     }
 
-    private NewResourceItem(String itemID, String itemTitle, String itemDetail,
-                            String itemPrice, String itemImageUrl, String itemPublishTimeStr){
+    private NewResourceItem(String itemID, String itemTitle, String itemDetail, String itemPrice, String itemImageUrl,
+                            String itemPublishTimeStr, String itemImageNumber, String deadline){
         this.itemID = itemID;
         this.itemTitle = itemTitle;
         this.itemDetail = itemDetail;
         this.itemPrice = Double.parseDouble(itemPrice);
         this.itemPublishTimeStr = itemPublishTimeStr;
         this.itemImageUrl = itemImageUrl;
-        itemThumbnails = new ArrayList<>();
+        this.itemImageNumber = Integer.parseInt(itemImageNumber);
+        this.deadline = deadline;
+        itemImageUrls = new ArrayList<>();
+        itemImages = new ArrayList<>();
+        for (int i = 1; i <= this.itemImageNumber; i++)
+            itemImageUrls.add(HTTPConstant.IMAGE_URL_PREFIX + itemID + "_" + i + HTTPConstant.IMAGE_URL_SUFFIX);
     }
 
     public boolean isReceived() {
@@ -61,18 +68,6 @@ public class NewResourceItem implements Parcelable {
     public void setReceived() {
         this.received = true;
     }
-
-    public static final Creator<NewResourceItem> CREATOR = new Creator<NewResourceItem>() {
-        @Override
-        public NewResourceItem createFromParcel(Parcel in) {
-            return new NewResourceItem(in);
-        }
-
-        @Override
-        public NewResourceItem[] newArray(int size) {
-            return new NewResourceItem[size];
-        }
-    };
 
     public String getItemDetail() {
         return itemDetail;
@@ -91,8 +86,8 @@ public class NewResourceItem implements Parcelable {
     }
 
     public void addItemThumbnail(Bitmap bitmap){
-        itemThumbnails.add(bitmap);
-        itemThumbnailAmount++;
+        itemImages.add(bitmap);
+        itemImageNumber++;
     }
 
     public void setItemID(String itemID) {
@@ -104,35 +99,9 @@ public class NewResourceItem implements Parcelable {
     }
 
     public Bitmap getItemThumbnail() {
-        if(itemThumbnailAmount > 0)
-            return itemThumbnails.get(0);
+        if(itemImageNumber > 0 && itemImages != null && itemImages.size() > 0)
+            return itemImages.get(0);
         return null;
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    private NewResourceItem(Parcel in) {
-        itemID = in.readString();
-        itemDetail = in.readString();
-        itemTitle = in.readString();
-        itemPublishTime = in.readLong();
-        itemPrice = in.readDouble();
-        itemThumbnailAmount = in.readInt();
-        itemThumbnails = in.createTypedArrayList(Bitmap.CREATOR);
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(itemID);
-        dest.writeString(itemDetail);
-        dest.writeString(itemTitle);
-        dest.writeLong(itemPublishTime);
-        dest.writeDouble(itemPrice);
-        dest.writeInt(itemThumbnailAmount);
-        dest.writeTypedList(itemThumbnails);
     }
 
     public String getItemImageUrl() {
@@ -151,9 +120,26 @@ public class NewResourceItem implements Parcelable {
         this.itemPublishTimeStr = itemPublishTimeStr;
     }
 
+    public ArrayList<String> getItemImageUrls() {
+        return itemImageUrls;
+    }
+
+    public void setItemImageUrls(ArrayList<String> itemImageUrls) {
+        this.itemImageUrls = itemImageUrls;
+    }
+
+    public String getDeadline() {
+        return deadline;
+    }
+
+    public void setDeadline(String deadline) {
+        this.deadline = deadline;
+    }
+
     @NonNull
     public static NewResourceItem TransferToMe(Resource resource){
         return new NewResourceItem(resource.getResourceID(), resource.getResourceTitle(), resource.getResourceDetail(),
-                resource.getResourcePrice(), resource.getImageURL(), resource.getPublishDate().substring(5, 16));
+                resource.getResourcePrice(), resource.getImageURL(), resource.getPublishDate().substring(5, 16),
+                resource.getResourceImageNumber(), resource.getDeadline());
     }
 }

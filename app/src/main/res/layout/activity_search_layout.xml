@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    android:background="@color/colorWhite"
+    android:background="@color/colorDeepSkyBlue"
     tools:context="com.example.zzu.huzhucommunity.activities.SearchActivity">
     <android.support.v7.widget.Toolbar
         android:id="@+id/SearchActivity_toolbar"
@@ -21,6 +21,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal"
+            android:background="@color/colorWhite"
             android:gravity="center_vertical">
             <RelativeLayout
                 android:orientation="horizontal"

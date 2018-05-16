@@ -35,6 +35,7 @@ import com.example.zzu.huzhucommunity.customlayout.PullUpLoadRecycler;
 import com.example.zzu.huzhucommunity.dataclass.Request;
 import com.example.zzu.huzhucommunity.dataclass.Resource;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -53,9 +54,6 @@ public class MainActivity extends BaseActivity implements AsyncHttpCallback {
     private static final String REFRESH_FINISH = "刷新完成";
     public static final String PUBLISH_TYPE = "PUBLISH_TYPE";
     private static long lastTimeBackPressed = 0;
-
-    private static final int REFRESHING_RES = 3;
-    private static final int REFRESHING_REQ = 2;
 
     private static final int LOAD_RES_IMAGE = 11;
     private static final int LOAD_REQ_IMAGE = 12;
@@ -126,6 +124,7 @@ public class MainActivity extends BaseActivity implements AsyncHttpCallback {
         });
 
         resSwipeRefreshLayout = new SwipeRefreshLayout(this);
+        resSwipeRefreshLayout.setColorSchemeResources(R.color.colorDeepSkyBlue);
         resSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -153,6 +152,7 @@ public class MainActivity extends BaseActivity implements AsyncHttpCallback {
         requestSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                requestSwipeRefreshLayout.setColorSchemeResources(R.color.colorDeepSkyBlue);
                 Main.getOurInstance().checkNewReqUpdate(requestItems, MainActivity.this);
             }
         });
@@ -187,7 +187,7 @@ public class MainActivity extends BaseActivity implements AsyncHttpCallback {
     }
 
     /**
-     * 获取用户头像
+     * 初始化用户头像
      */
     public void initUserHeadImage(){
         Bitmap bitmap = Utilities.GetLoginUserHeadBitmapFromSP();
@@ -213,6 +213,8 @@ public class MainActivity extends BaseActivity implements AsyncHttpCallback {
 
     /**
      * 加载资源，请求之后加载每一项的(缩略)图片
+     * @param seq 序列号，用来同步
+     * @param startInd 起始下标
      */
     public void loadResItemImage(final int seq, int startInd){
         for (int i = startInd; i < resourceItems.size(); i++){
@@ -224,11 +226,12 @@ public class MainActivity extends BaseActivity implements AsyncHttpCallback {
                     if (seq != curLoadImageSeq)
                         return;
                     Bitmap bitmap;
+                    InputStream in = null;
                     try {
                         URL url = new URL(tmpUrl);
                         HttpURLConnection con = (HttpURLConnection) url.openConnection();
                         con.setConnectTimeout(2000);
-                        InputStream in = con.getInputStream();
+                        in = con.getInputStream();
                         bitmap = BitmapFactory.decodeStream(in);
                         Message message = new Message();
                         message.obj = bitmap;
@@ -240,10 +243,24 @@ public class MainActivity extends BaseActivity implements AsyncHttpCallback {
                     } catch (Exception e) {
                         //e.printStackTrace();
                     }
+                    finally {
+                        if (in != null)
+                            try {
+                                in.close();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                    }
                 }
             }).start();
         }
     }
+
+    /**
+     * 加载请求的缩略图
+     * @param seq 序列号，用来同步
+     * @param startInd 起始下标
+     */
     public void loadReqItemImage(final int seq, int startInd){
         for (int i = startInd; i < requestItems.size(); i++){
             final int ind = i;
@@ -254,11 +271,12 @@ public class MainActivity extends BaseActivity implements AsyncHttpCallback {
                     if (seq != curLoadImageSeq)
                         return;
                     Bitmap bitmap;
+                    InputStream in = null;
                     try {
                         URL url = new URL(tmpUrl);
                         HttpURLConnection con = (HttpURLConnection) url.openConnection();
                         con.setConnectTimeout(2000);
-                        InputStream in = con.getInputStream();
+                        in = con.getInputStream();
                         bitmap = BitmapFactory.decodeStream(in);
                         Message message = new Message();
                         message.obj = bitmap;
@@ -269,6 +287,14 @@ public class MainActivity extends BaseActivity implements AsyncHttpCallback {
                         in.close();
                     } catch (Exception e) {
                         e.printStackTrace();
+                    }
+                    finally {
+                        if (in != null)
+                            try {
+                                in.close();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
                     }
                 }
             }).start();

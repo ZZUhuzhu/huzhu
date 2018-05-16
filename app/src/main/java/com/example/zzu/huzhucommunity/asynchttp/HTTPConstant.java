@@ -11,4 +11,6 @@ public class HTTPConstant {
     public static String IP_DB = "139.199.38.177";
     public static String PHP_LOGIN = "http://" + IP_PHP + "/huzhu/php/login.php";
     public static String PHP_REGISTER = "http://" + IP_PHP + "/huzhu/php/register.php";
+    public static String IMAGE_URL_PREFIX = "http://139.199.38.177/huzhu/abbr/";
+    public static String IMAGE_URL_SUFFIX = ".jpg";
 }
