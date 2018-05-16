@@ -15,6 +15,7 @@ import com.example.zzu.huzhucommunity.commonclass.Utilities;
  */
 public abstract class BaseActivity extends AppCompatActivity {
     private static final String TAG = "BaseActivity";
+    private static boolean AllNOTSwipeToFinish = false;
     private boolean swipeToFinish = true;
     private GestureDetector detector;
 
@@ -44,7 +45,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
-        if (swipeToFinish && detector != null){
+        if (!AllNOTSwipeToFinish && swipeToFinish && detector != null){
             if (detector.onTouchEvent(ev))
                 return true;
         }
@@ -57,6 +58,13 @@ public abstract class BaseActivity extends AppCompatActivity {
      */
     protected final void setSwipeToFinishOff(){
         swipeToFinish = false;
+    }
+
+    /**
+     * 设置全局不能右滑返回
+     */
+    public static void SetAllNotSwipeToFinish(boolean allNOTSwipeToFinish){
+        AllNOTSwipeToFinish = allNOTSwipeToFinish;
     }
     /**
      * 销毁活动时将其从ActivityCollector中删除

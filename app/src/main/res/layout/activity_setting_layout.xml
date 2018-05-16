@@ -101,7 +101,7 @@
                     android:layout_height="wrap_content"
                     android:clickable="true"
                     android:focusable="true"
-                    android:text="@string/helpAndFeedback"
+                    android:text="@string/feedback"
                     app:switch_on="false" />
             </LinearLayout>
             <LinearLayout

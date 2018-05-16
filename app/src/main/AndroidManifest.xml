@@ -85,8 +85,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.UpdatePasswordActivity"
-            android:theme="@style/TranslucentTheme"/>
+        <activity
+            android:name=".activities.UpdatePasswordActivity"
+            android:theme="@style/TranslucentTheme" />
+        <activity
+            android:name=".activities.FeedbackActivity"
+            android:theme="@style/TranslucentTheme" />
+        <activity android:name=".activities.AboutUsActivity"
+            android:theme="@style/TranslucentTheme" />
     </application>
 
 </manifest>

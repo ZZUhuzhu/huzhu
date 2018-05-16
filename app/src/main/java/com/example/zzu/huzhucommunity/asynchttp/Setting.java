@@ -22,8 +22,8 @@ import java.util.HashMap;
 public class Setting {
     private static final Setting ourInstance = new Setting();
     private AsyncHttpCallback callback;
-    private static final int RECORD_USER_FEEDBACK = 11601;
-    private static final int CHECK_FOR_UPDATE = 11602;
+    public static final int RECORD_USER_FEEDBACK = 11601;
+    public static final int CHECK_FOR_UPDATE = 11602;
 
     /**
      * 外部调用类方法，获得单体实例
@@ -111,7 +111,6 @@ public class Setting {
                                 message.what = CHECK_FOR_UPDATE;
                                 message.obj = result;
                                 handler.sendMessage(message);
-                                cBack.onSuccess(i, null, 0);
                             } catch (UnsupportedEncodingException e) {
                                 e.printStackTrace();
                             }
@@ -152,8 +151,8 @@ public class Setting {
                 }
                 break;
                 case CHECK_FOR_UPDATE:
-
-                break;
+                    callback.onSuccess(200, null, CHECK_FOR_UPDATE);
+                    break;
                 default:
                     break;
             }

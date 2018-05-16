@@ -17,6 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.example.zzu.huzhucommunity.R;
+import com.example.zzu.huzhucommunity.asynchttp.AsyncHttpCallback;
 import com.example.zzu.huzhucommunity.commonclass.CommentItem;
 import com.example.zzu.huzhucommunity.commonclass.MyApplication;
 import com.example.zzu.huzhucommunity.commonclass.Utilities;
@@ -24,8 +25,9 @@ import com.example.zzu.huzhucommunity.customlayout.CommentItemLayout;
 import com.example.zzu.huzhucommunity.customlayout.ResReqDetailBottomButtonLayout;
 
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 
-public class ResourceDetailActivity extends BaseActivity {
+public class ResourceDetailActivity extends BaseActivity implements AsyncHttpCallback {
     private LinearLayout commentHolder;
     private boolean resStarred = false;
     private ResReqDetailBottomButtonLayout receiveButton;
@@ -175,5 +177,15 @@ public class ResourceDetailActivity extends BaseActivity {
     }
     public static void startMe(Context context){
         context.startActivity(new Intent(context, ResourceDetailActivity.class));
+    }
+
+    @Override
+    public void onSuccess(int statusCode, HashMap<String, String> mp, int requestCode) {
+
+    }
+
+    @Override
+    public void onError(int statusCode) {
+
     }
 }

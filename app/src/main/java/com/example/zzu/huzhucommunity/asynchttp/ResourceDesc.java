@@ -67,6 +67,11 @@ public class ResourceDesc {
         return this.callback;
     }
 
+    /**
+     * 获取资源发布者的信息
+     * @param resourceID 资源ID
+     * @param cBack 回调对象
+     */
     public void getResPublisherInfo(final String resourceID, final AsyncHttpCallback cBack) {
         try {
             if (resourceID != null && cBack != null) {
@@ -88,7 +93,6 @@ public class ResourceDesc {
                                 message.what = GET_RES_PUBLISHER_INFO;
                                 message.obj = result;
                                 handler.sendMessage(message);
-                                cBack.onSuccess(i, null, 0);
                             } catch (UnsupportedEncodingException e) {
                                 e.printStackTrace();
                             }
@@ -109,6 +113,11 @@ public class ResourceDesc {
         }
     }
 
+    /**
+     * 获取资源详情
+     * @param resourceID 资源ID
+     * @param cBack 回调对象
+     */
     public void getResourceDesc(final String resourceID,final AsyncHttpCallback cBack) {
         try {
             if ( resourceID!= null && cBack != null) {
@@ -130,7 +139,6 @@ public class ResourceDesc {
                                 message.what = GET_RESOURCE_DESC;
                                 message.obj = result;
                                 handler.sendMessage(message);
-                                cBack.onSuccess(i, null, 0);
                             } catch (UnsupportedEncodingException e) {
                                 e.printStackTrace();
                             }
@@ -151,6 +159,11 @@ public class ResourceDesc {
         }
     }
 
+    /**
+     * 获取资源相关评论
+     * @param resourceID 资源ID
+     * @param cBack 回调对象
+     */
     public void getResourceComment(final String resourceID ,final AsyncHttpCallback cBack) {
         try {
             if (resourceID != null && cBack != null) {
@@ -172,7 +185,6 @@ public class ResourceDesc {
                                 message.what = GET_RESOURCE_COMMENT;
                                 message.obj = result;
                                 handler.sendMessage(message);
-                                cBack.onSuccess(i, null, 0);
                             } catch (UnsupportedEncodingException e) {
                                 e.printStackTrace();
                             }
@@ -193,7 +205,17 @@ public class ResourceDesc {
         }
     }
 
-    public void publishComment(final String userID, final String commentFather,final String commentDetail,final String commentType,final String commentResource,final AsyncHttpCallback cBack) {
+    /**
+     * 发布评论
+     * @param userID 发布者
+     * @param commentFather 评论的对象ID
+     * @param commentDetail 评论内容
+     * @param commentType 评论类型
+     * @param commentResource 评论的资源
+     * @param cBack 回调对象
+     */
+    public void publishComment(final String userID, final String commentFather,final String commentDetail,
+                               final String commentType,final String commentResource,final AsyncHttpCallback cBack) {
         try {
             if (userID != null && commentFather != null && commentDetail != null && cBack != null) {
                 this.callback = cBack;
@@ -218,7 +240,6 @@ public class ResourceDesc {
                                 message.what = PUBLISH_COMMENT;
                                 message.obj = result;
                                 handler.sendMessage(message);
-                                cBack.onSuccess(i, null, 0);
                             } catch (UnsupportedEncodingException e) {
                                 e.printStackTrace();
                             }
@@ -239,7 +260,15 @@ public class ResourceDesc {
         }
     }
 
-    public void updateStar(final String userID, final String resourceID,final String isStarred, final AsyncHttpCallback cBack) {
+    /**
+     * 更新收藏信息
+     * @param userID 用户ID
+     * @param resourceID 资源ID
+     * @param isStarred 是否已经收藏
+     * @param cBack 回调对象
+     */
+    public void updateStar(final String userID, final String resourceID,
+                           final String isStarred, final AsyncHttpCallback cBack) {
         try {
             if (userID != null && resourceID != null && isStarred != null && cBack != null) {
                 this.callback = cBack;
@@ -262,7 +291,6 @@ public class ResourceDesc {
                                 message.what = UPDATE_STAR;
                                 message.obj = result;
                                 handler.sendMessage(message);
-                                cBack.onSuccess(i, null, 0);
                             } catch (UnsupportedEncodingException e) {
                                 e.printStackTrace();
                             }
@@ -283,6 +311,12 @@ public class ResourceDesc {
         }
     }
 
+    /**
+     * 接单
+     * @param userID 用户ID
+     * @param resourceID 资源ID
+     * @param cBack 回调对象
+     */
     public void receiveResource(final String userID, final String resourceID, final AsyncHttpCallback cBack) {
         try {
             if ( userID!= null && resourceID!= null && cBack != null) {
@@ -305,7 +339,6 @@ public class ResourceDesc {
                                 message.what = RECEIVE_RESOURCE;
                                 message.obj = result;
                                 handler.sendMessage(message);
-                                cBack.onSuccess(i, null, 0);
                             } catch (UnsupportedEncodingException e) {
                                 e.printStackTrace();
                             }
@@ -326,6 +359,12 @@ public class ResourceDesc {
         }
     }
 
+    /**
+     * 添加到足迹
+     * @param userID 用户ID
+     * @param resourceID 资源ID
+     * @param cBack 回调对象
+     */
     public void addToTrack(final String userID, final String resourceID, final AsyncHttpCallback cBack) {
         try {
             if (userID != null && resourceID != null && cBack != null) {
@@ -348,7 +387,6 @@ public class ResourceDesc {
                                 message.what = ADD_TO_TRACK;
                                 message.obj = result;
                                 handler.sendMessage(message);
-                                cBack.onSuccess(i, null, 0);
                             } catch (UnsupportedEncodingException e) {
                                 e.printStackTrace();
                             }

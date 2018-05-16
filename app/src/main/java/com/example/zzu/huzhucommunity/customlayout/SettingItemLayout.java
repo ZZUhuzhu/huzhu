@@ -36,10 +36,16 @@ public class SettingItemLayout extends LinearLayout {
     public void setOnCheckStatusListener(CompoundButton.OnCheckedChangeListener checkStatusListener){
         tmpSwitch.setOnCheckedChangeListener(checkStatusListener);
     }
-    public void changeCheckStatus(){
+
+    /**
+     * 更改设置项的状态
+     * @return 返回开关是否开启
+     */
+    public boolean changeCheckStatus(){
         if(tmpSwitch.isChecked())
             tmpSwitch.setChecked(false);
         else
             tmpSwitch.setChecked(true);
+        return tmpSwitch.isChecked();
     }
 }

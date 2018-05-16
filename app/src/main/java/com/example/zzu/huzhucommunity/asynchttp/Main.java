@@ -298,7 +298,6 @@ public class Main {
                                 json.append("]");
                                 List<Request> resList = new Gson().fromJson(json.toString(),
                                         new TypeToken<List<Request>>() {}.getType());
-                                Log.e(TAG, "onSuccess: id: " + resList.get(0).getResourceID());
                                 if (!resList.get(0).getResourceID().equals(list.get(0).getItemID())){
                                     int code = userObject.getInt("status");
                                     String number = userObject.getString("number");
@@ -358,7 +357,6 @@ public class Main {
                     break;
                 case GET_NEW_REQUEST:
                     try {
-                        Log.e(TAG, "handleMessage: handle request");
                         JSONObject userObject = new JSONObject(Response);
                         int code = userObject.getInt("status");
                         String number = userObject.getString("number");

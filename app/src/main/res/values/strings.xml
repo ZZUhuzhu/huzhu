@@ -69,7 +69,7 @@
     <string name="clearCache">清除缓存</string>
     <string name="checkUpdate">检查更新</string>
     <string name="aboutUs">关于我们</string>
-    <string name="helpAndFeedback">帮助与反馈</string>
+    <string name="feedback">反馈</string>
     <string name="exit">退出程序</string>
 
     <!--AccountProfileActivity-->
@@ -112,6 +112,12 @@
     <string name="virtualResourceDetail">这是一个每个人都需要的富含咖啡因，内啡肽，以及各种有助于健康的神经递质的只要998的含片</string>
     <string name="virtualComment">这玩意儿用着还不错，比较上手</string>
     <string name="searchResultOf">的搜索结果</string>
+    <string name="inputProblemOrOpinion">请输入遇到的问题或意见</string>
+    <string name="commit">提交</string>
+    <string name="wyb">武一博</string>
+    <string name="sjf">申敬飞</string>
+    <string name="qwj">秦文杰</string>
+    <string name="wth">\@2018 ZZU Huzhu Community</string>
 
     <string-array name="sexChoice">
         <item>男</item>

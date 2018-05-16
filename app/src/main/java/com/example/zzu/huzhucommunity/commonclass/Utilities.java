@@ -19,6 +19,7 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 
 import com.example.zzu.huzhucommunity.R;
+import com.example.zzu.huzhucommunity.asynchttp.Main;
 import com.example.zzu.huzhucommunity.asynchttp.Star;
 import com.example.zzu.huzhucommunity.dataclass.ChatRecord;
 import com.example.zzu.huzhucommunity.dataclass.RelatedUserID;
@@ -66,6 +67,14 @@ public class Utilities {
      */
     public static final String MALE = "male";
     public static final String FEMALE = "female";
+
+    /**
+     * 与设置项相关的项
+     */
+    private static final String SETTING_SP_NAME = "appSetting";
+    public static final String RECORD_TRACK_KEY = "recordTrack";
+    public static final String NEW_MESSAGE_NOTIFY_KEY = "newMessage";
+    public static final String RIGHT_SWIPE_BACK_KEY = "rightSwipeBack";
     /**
      * 用户ID --> sharedPreference 文件名
      * 文件名后缀
@@ -152,6 +161,12 @@ public class Utilities {
         editor.putString(USER_HEAD_KEY_SHARED_PREFERENCE, userHead);
         editor.apply();
     }
+
+    /**
+     * 存储指定的个人信息
+     * @param info 信息
+     * @param target 指定的对象
+     */
     public static void SaveLoginUserProfile(String info, int target){
         SharedPreferences sp = MyApplication.getContext().getSharedPreferences(
                 GetSPFileNameFromUserID(GetStringLoginUserId()), Context.MODE_PRIVATE);
@@ -235,6 +250,17 @@ public class Utilities {
     }
 
     /**
+     * 获取字符串形式的已经登录的用户ID
+     * @return 若已登录（sharedPreference文件中已存储信息）则返回用户ID
+     *          否则返回 {@link #USER_NOT_FOUND}
+     */
+    public static String GetStringLoginUserId(){
+        SharedPreferences sharedPreferences = MyApplication.getContext().getSharedPreferences
+                (USER_ID_TO_PROFILE_FILE_NAME, Context.MODE_PRIVATE);
+        return sharedPreferences.getString(LOGIN_USER_ID_KEY, USER_NOT_FOUND);
+    }
+
+    /**
      * 获取 sharedPreference 中的用户账户信息
      * @return 返回存放信息的 map
      */
@@ -270,11 +296,6 @@ public class Utilities {
         ByteArrayInputStream bais = new ByteArrayInputStream(Base64.decode(temp.getBytes(), Base64.DEFAULT));
         return BitmapFactory.decodeStream(bais);
     }
-    public static String GetStringLoginUserId(){
-        SharedPreferences sharedPreferences = MyApplication.getContext().getSharedPreferences
-                (USER_ID_TO_PROFILE_FILE_NAME, Context.MODE_PRIVATE);
-        return sharedPreferences.getString(LOGIN_USER_ID_KEY, USER_NOT_FOUND);
-    }
 
     /**
      * 从 sharedPreference 获取已登录用户的头像 URL
@@ -287,13 +308,35 @@ public class Utilities {
     }
 
     /**
-     * 用户登出时清空 SP 中的
+     * 用户登出时清空 SP 中的内容
      */
-    public static void Logout(){
+    static void Logout(){
         SharedPreferences.Editor editor = MyApplication.getContext().
                 getSharedPreferences(USER_ID_TO_PROFILE_FILE_NAME, Context.MODE_PRIVATE).edit();
         editor.remove(LOGIN_USER_ID_KEY);
         editor.apply();
+    }
+
+    /**
+     * 设置里面的项
+     * @param target 目标
+     * @param on 是否开启
+     */
+    public static void SaveSettingOption(String target, boolean on){
+        SharedPreferences.Editor editor = MyApplication.getContext().getSharedPreferences(
+                SETTING_SP_NAME, Context.MODE_PRIVATE).edit();
+        editor.putBoolean(target, on);
+        editor.apply();
+    }
+
+    /**
+     * 获取设置中的项
+     * @param target 获取目标
+     * @return 是否已开启
+     */
+    public static boolean GetSettingOption(String target){
+        return MyApplication.getContext().getSharedPreferences(SETTING_SP_NAME, Context.MODE_PRIVATE)
+                .getBoolean(target, false);
     }
 
     /**
@@ -365,6 +408,7 @@ public class Utilities {
         }
         return null;
     }
+
     /**
      * This method converts dp unit to equivalent pixels, depending on device density.
      *
@@ -409,6 +453,7 @@ public class Utilities {
      * by wj
      *2018-5-10 16:31:12
      */
+    @Nullable
     public static List<Request> getRequest(HashMap<String, String> mp) {
         try {
             StringBuilder json = new StringBuilder("[");
@@ -427,6 +472,7 @@ public class Utilities {
             return null;
         }
     }
+    @Nullable
     public static List<Resource> getResource(HashMap<String, String> mp) {
         try {
             StringBuilder json = new StringBuilder("[");
@@ -445,6 +491,7 @@ public class Utilities {
             return null;
         }
     }
+    @Nullable
     public static List<Star> getStar(HashMap<String, String> mp) {
         try {
             StringBuilder json = new StringBuilder("[");
@@ -463,6 +510,7 @@ public class Utilities {
             return null;
         }
     }
+    @Nullable
     public static List<UserTrack> getUserTrack(HashMap<String, String> mp) {
         try {
             StringBuilder json = new StringBuilder("[");
@@ -481,6 +529,7 @@ public class Utilities {
             return null;
         }
     }
+    @Nullable
     public static List<RelatedUserID> getRelatedUserID(HashMap<String, String> mp) {
         try {
             StringBuilder json = new StringBuilder("[");
@@ -499,6 +548,7 @@ public class Utilities {
             return null;
         }
     }
+    @Nullable
     public static List<ChatRecord> getChatRecord(HashMap<String, String> mp) {
         try {
             StringBuilder json = new StringBuilder("[");
