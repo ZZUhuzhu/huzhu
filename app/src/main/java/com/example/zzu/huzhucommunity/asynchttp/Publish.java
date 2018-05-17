@@ -165,23 +165,24 @@ public class Publish {
     public void uploadImage(ArrayList<Bitmap> bitmaps, ArrayList<String> names, final AsyncHttpCallback callback){
         if (names == null || bitmaps == null)
             return;
-        for (int i = 0; i < bitmaps.size(); i++){
+        final int sz = bitmaps.size();
+        for (int outI = 0; outI < sz; outI++){
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-            bitmaps.get(i).compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
+            bitmaps.get(outI).compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
             String encodedImage = Base64.encodeToString(byteArrayOutputStream.toByteArray(), Base64.DEFAULT);
 
             AsyncHttpClient client = new AsyncHttpClient();
             client.setTimeout(3000);
             RequestParams params = new RequestParams();
-            params.add(NAME_PARA, names.get(i));
+            params.add(NAME_PARA, names.get(outI));
             params.add(IMAGE_PARA, encodedImage);
+            final int tmpOI = outI;
             client.post(SERVER_PATH, params, new AsyncHttpResponseHandler() {
                 @Override
                 public void onSuccess(int i, Header[] headers, byte[] bytes) {
-                    Log.e(TAG, "onSuccess: upload image 3 status: " + i);
-                    if (i == 200)
+                    if (i == 200 && tmpOI == sz - 1)
                         callback.onSuccess(i, null, UPLOAD_IMAGE);
-                    else
+                    else if (i != 200)
                         callback.onError(i);
                 }
 

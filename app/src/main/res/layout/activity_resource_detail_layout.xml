@@ -47,7 +47,7 @@
                         android:layout_margin="@dimen/common_margin_normal"
                         android:contentDescription="@string/app_name"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/profile_head_over_watch"/>
+                        android:src="@drawable/profile_head"/>
                     <TextView
                         android:id="@+id/ResourceDetail_res_user_name_text_view"
                         android:layout_width="280dp"
@@ -57,20 +57,20 @@
                         android:layout_marginTop="@dimen/common_margin_small"
                         android:maxLines="1"
                         android:textColor="@color/colorBlack"
+                        android:hint="@string/loading"
                         android:textSize="@dimen/common_text_size_large"/>
                     <TextView
                         android:id="@+id/ResourceDetail_res_price_text_view"
-                        android:layout_width="50dp"
+                        android:layout_width="100dp"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
-                        android:gravity="center"
+                        android:gravity="end"
                         android:maxLines="1"
                         android:layout_centerVertical="true"
                         android:layout_marginEnd="@dimen/common_margin_small"
                         android:layout_marginTop="@dimen/common_margin_large"
                         android:textSize="@dimen/common_text_size_large"
-                        android:textColor="@color/colorLightRed"
-                        android:text="@string/twoYuan"/>
+                        android:textColor="@color/colorLightRed"/>
                     <TextView
                         android:id="@+id/ResourceDetail_user_active_time_text_view"
                         android:layout_width="wrap_content"
@@ -87,7 +87,7 @@
                     android:layout_margin="@dimen/common_margin_normal"
                     android:textSize="@dimen/common_text_size_large"
                     android:textColor="@color/colorBlack"
-                    android:text="@string/virtualResourceDetail"/>
+                    android:hint="@string/loading"/>
                 <LinearLayout
                     android:id="@+id/ResourceDetail_res_images_holder"
                     android:orientation="vertical"
@@ -104,7 +104,7 @@
                     android:layout_marginEnd="@dimen/common_margin_normal"
                     android:textSize="@dimen/common_text_size_normal"
                     android:textColor="@color/colorPrimary"
-                    android:text="@string/finishedInTwoDays"/>
+                    android:hint="@string/loading"/>
                 <LinearLayout
                     android:id="@+id/ResourceDetail_comment_holder"
                     android:orientation="vertical"

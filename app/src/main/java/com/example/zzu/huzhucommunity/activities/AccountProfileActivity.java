@@ -12,7 +12,6 @@ import android.support.v7.app.ActionBar;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Base64;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -264,7 +263,7 @@ public class AccountProfileActivity extends BaseActivity implements AsyncHttpCal
                 finish();
                 break;
             case R.id.account_profile_menu_item_change_image:
-                Utilities.startPickImageDialog(this);
+                Utilities.StartPickImageDialog(this);
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -291,7 +290,7 @@ public class AccountProfileActivity extends BaseActivity implements AsyncHttpCal
         switch (requestCode){
             case Utilities.PICK_IMAGE_FROM_CAMERA:
             case Utilities.PICK_IMAGE_FROM_GALLERY:
-                Bitmap bitmap = Utilities.getImageFromDialog(requestCode, resultCode, data);
+                Bitmap bitmap = Utilities.GetImageFromDialog(requestCode, resultCode, data);
                 if (bitmap != null){
                     ((ImageView) findViewById(R.id.AccountProfileActivity_head_image_view)).setImageBitmap(bitmap);
                     ((ImageView) findViewById(R.id.AccountProfileActivity_expanded_image_view)).setImageBitmap(bitmap);

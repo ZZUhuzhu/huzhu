@@ -14,7 +14,6 @@ import com.example.zzu.huzhucommunity.commonclass.Utilities;
  * 与ActivityCollector类配合
  */
 public abstract class BaseActivity extends AppCompatActivity {
-    private static final String TAG = "BaseActivity";
     private static boolean AllNOTSwipeToFinish = false;
     private boolean swipeToFinish = true;
     private GestureDetector detector;
@@ -40,7 +39,6 @@ public abstract class BaseActivity extends AppCompatActivity {
                 return super.onFling(e1, e2, velocityX, velocityY);
             }
         });
-        Log.d(TAG, "onCreate: " + getLocalClassName());
     }
 
     @Override
@@ -73,7 +71,6 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         ActivitiesCollector.removeActivity(this);
-        Log.d(TAG, "onDestroy: " + getLocalClassName());
     }
     /**
      * 为这个活动中的每个控件添加监听器

@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.example.zzu.huzhucommunity.R;
 import com.example.zzu.huzhucommunity.activities.RequestDetailActivity;
+import com.example.zzu.huzhucommunity.activities.ResourceDetailActivity;
 import com.example.zzu.huzhucommunity.commonclass.NewRequestItem;
 
 import java.util.ArrayList;
@@ -84,7 +85,7 @@ public class CommonRequestAdapter extends RecyclerView.Adapter<CommonRequestAdap
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    RequestDetailActivity.startMe(context, list.get(getAdapterPosition()).getItemID());
+                    ResourceDetailActivity.startMe(context, list.get(getAdapterPosition()).getItemID());
                 }
             });
             imageView = itemView.findViewById(R.id.NewResourceItem_thumbnail);

@@ -53,4 +53,12 @@ public class CommentItemLayout extends RelativeLayout {
         commentContentTextView.setText(commentContent);
         commentTimeTextView.setText(commentTime);
     }
+
+    /**
+     * 设置评论的用户头像
+     * @param bitmap 用户头像
+     */
+    public void setCommentUserHead(Bitmap bitmap){
+        userHeadImageView.setImageBitmap(bitmap);
+    }
 }

@@ -18,6 +18,9 @@ public class CommentItem {
     private String  userName;
     private long timeInMills;
     private String content;
+    private String userHeadUrl;
+    private String commentDate;
+    private String commentFather;
     private Bitmap userHeadBitmap;
 
     public CommentItem(String content, long timeInMills){
@@ -33,6 +36,19 @@ public class CommentItem {
         this.userName = userName;
         this.content = content;
         this.timeInMills = timeInMills;
+        this.userHeadBitmap = userHeadBitmap;
+    }
+    public CommentItem(int userID, String userName, String content, String commentFa, String userHeadUrl, String commentDate){
+        this.userID = userID;
+        this.userName = userName;
+        this.content = content;
+        this.commentDate = commentDate;
+        this.userHeadUrl = userHeadUrl;
+        this.commentFather = commentFa;
+        this.userHeadBitmap = BitmapFactory.decodeResource(MyApplication.getContext().getResources(), R.drawable.profile_head);
+    }
+
+    public void setUserHeadBitmap(Bitmap userHeadBitmap) {
         this.userHeadBitmap = userHeadBitmap;
     }
 
@@ -54,5 +70,29 @@ public class CommentItem {
 
     public String getContent() {
         return content;
+    }
+
+    public String getCommentDate() {
+        return commentDate;
+    }
+
+    public void setCommentDate(String commentDate) {
+        this.commentDate = commentDate;
+    }
+
+    public String getUserHeadUrl() {
+        return userHeadUrl;
+    }
+
+    public void setUserHeadUrl(String userHeadUrl) {
+        this.userHeadUrl = userHeadUrl;
+    }
+
+    public String getCommentFather() {
+        return commentFather;
+    }
+
+    public void setCommentFather(String commentFather) {
+        this.commentFather = commentFather;
     }
 }

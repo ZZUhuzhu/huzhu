@@ -14,6 +14,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -22,6 +23,7 @@ import android.widget.Toast;
 
 import com.example.zzu.huzhucommunity.R;
 import com.example.zzu.huzhucommunity.asynchttp.AsyncHttpCallback;
+import com.example.zzu.huzhucommunity.asynchttp.HTTPConstant;
 import com.example.zzu.huzhucommunity.asynchttp.ResourceDesc;
 import com.example.zzu.huzhucommunity.commonclass.CommentItem;
 import com.example.zzu.huzhucommunity.commonclass.MyApplication;
@@ -29,23 +31,34 @@ import com.example.zzu.huzhucommunity.commonclass.Utilities;
 import com.example.zzu.huzhucommunity.customlayout.CommentItemLayout;
 import com.example.zzu.huzhucommunity.customlayout.ResReqDetailBottomButtonLayout;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 
 public class ResourceDetailActivity extends BaseActivity implements AsyncHttpCallback {
     private static final String RES_ID_EXTRA = "resID";
     private static final int LOAD_USER_HEAD = 1;
+    private static final int LOAD_RES_IMAGE = 2;
+    private static final int LOAD_COMMENT_USER_HEAD = 3;
 
-    private LinearLayout commentHolder, imageHolder;
     private boolean resStarred = false;
-    private ResReqDetailBottomButtonLayout receiveButton;
+    private String resID;
 
+    private ResReqDetailBottomButtonLayout receiveButton;
+    private ArrayList<ImageView> imageViewList;
+    private LinearLayout commentHolder, imageHolder;
     private TextView userNameTextView, userLastLoginTextView;
     private ImageView userHeadView;
     private TextView priceTextView, resDetail, deadlineTextView;
+
+    private ArrayList<CommentItem> commentItems;
+    private ArrayList<CommentItemLayout> commentItemLayoutList;
 
     private Handler handler = new Handler(new Handler.Callback() {
         @Override
@@ -53,6 +66,16 @@ public class ResourceDetailActivity extends BaseActivity implements AsyncHttpCal
             switch (msg.what){
                 case LOAD_USER_HEAD:
                     userHeadView.setImageBitmap((Bitmap) msg.obj);
+                    break;
+                case LOAD_RES_IMAGE:
+                    if (imageViewList != null && msg.arg1 < imageViewList.size()){
+                        imageViewList.get(msg.arg1).setImageBitmap((Bitmap) msg.obj);
+                    }
+                    break;
+                case LOAD_COMMENT_USER_HEAD:
+                    int i = msg.arg1;
+                    commentItems.get(i).setUserHeadBitmap((Bitmap) msg.obj);
+                    commentItemLayoutList.get(i).setCommentUserHead((Bitmap) msg.obj);
                     break;
             }
             return false;
@@ -69,8 +92,11 @@ public class ResourceDetailActivity extends BaseActivity implements AsyncHttpCal
         if(actionBar != null){
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
-        String resID = getIntent().getStringExtra(RES_ID_EXTRA);
+        resID = getIntent().getStringExtra(RES_ID_EXTRA);
 
+        commentItems = new ArrayList<>();
+        commentItemLayoutList = new ArrayList<>();
+        imageViewList = new ArrayList<>();
         imageHolder = findViewById(R.id.ResourceDetail_res_images_holder);
         receiveButton = findViewById(R.id.ResourceDetail_receive_it_button);
         userNameTextView = findViewById(R.id.ResourceDetail_res_user_name_text_view);
@@ -79,13 +105,13 @@ public class ResourceDetailActivity extends BaseActivity implements AsyncHttpCal
         resDetail = findViewById(R.id.ResourceDetail_res_desc_text_view);
         deadlineTextView = findViewById(R.id.ResourceDetail_deadline_text_view);
         userHeadView = findViewById(R.id.ResourceDetail_res_user_image_view);
+        commentHolder = findViewById(R.id.ResourceDetail_comment_holder);
 
         addListener(R.id.ResourceDetail_star_button);
         addListener(R.id.ResourceDetail_comment_it_button);
         addListener(R.id.ResourceDetail_receive_it_button);
         addListener(R.id.ResourceDetail_chat_button);
         addListener(R.id.ResourceDetail_res_user_image_view);
-        initComment();
 
         if (Utilities.GetSettingOption(Utilities.RECORD_TRACK_KEY))
             ResourceDesc.getOurInstance().addToTrack(Utilities.GetStringLoginUserId(), resID, this);
@@ -128,7 +154,8 @@ public class ResourceDetailActivity extends BaseActivity implements AsyncHttpCal
                                         receiveButton.setText(getString(R.string.received));
                                         receiveButton.setClickable(false);
                                         dialog.dismiss();
-                                        Toast.makeText(MyApplication.getContext(), "正在全力开发中...", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(MyApplication.getContext(), "正在全力开发中...",
+                                                Toast.LENGTH_SHORT).show();
                                     }
                                 })
                                 .setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -178,22 +205,6 @@ public class ResourceDetailActivity extends BaseActivity implements AsyncHttpCal
     }
 
     /**
-     * 添加一些评论
-     */
-    public void initComment(){
-        commentHolder = findViewById(R.id.ResourceDetail_comment_holder);
-        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.profile_head_over_watch);
-        String time;
-        CommentItemLayout commentItemLayout;
-        for(int i = 1; i < 12; i++){
-            commentItemLayout = new CommentItemLayout(this, View.GONE);
-            time = "2018-" + i + "-25 21:29";
-            commentItemLayout.setCommentItemDetail(bitmap, getString(R.string.solider),time , getString(R.string.virtualComment));
-            commentHolder.addView(commentItemLayout);
-        }
-    }
-
-    /**
      * 添加一项评论（临时工）
      * @param text 评论内容
      */
@@ -230,15 +241,48 @@ public class ResourceDetailActivity extends BaseActivity implements AsyncHttpCal
         switch (requestCode){
             case ResourceDesc.GET_RESOURCE_DESC:
                 resDetail.setText(mp.get(ResourceDesc.RESOURCE_DETAIL_JSON_KEY));
-                priceTextView.setText(mp.get(ResourceDesc.RESOURCE_PRICE_JSON_KEY));
-                deadlineTextView.setText(mp.get(ResourceDesc.DEADLINE));
-                int num = Integer.parseInt(mp.get(ResourceDesc.IMAGE_NUMBERS));
+                priceTextView.setText(String.format("%s￥", mp.get(ResourceDesc.RESOURCE_PRICE_JSON_KEY)));
+                String deadline = mp.get(ResourceDesc.DEADLINE);
+                if (Utilities.CheckTimeExceed(deadline)){
+                    receiveButton.setText(getString(R.string.received));
+                    receiveButton.setEnabled(false);
+                }
+                deadlineTextView.setText(deadline.substring(0, deadline.length() - 3));
+                final int num = Integer.parseInt(mp.get(ResourceDesc.IMAGE_NUMBERS));
                 for (int i = 0; i < num; i++){
                     ImageView tmp = new ImageView(this);
-                    tmp.setScaleType(ImageView.ScaleType.FIT_XY);
-                    tmp.setImageResource(R.drawable.profile_head_over_watch);
+                    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams
+                            (ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                    params.setMargins(0, 20, 0, 0);
+                    tmp.setLayoutParams(params);
+                    tmp.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                    imageViewList.add(tmp);
                     imageHolder.addView(tmp);
                 }
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        for (int i  = 1; i <= num; i++){
+                            HttpURLConnection con = null;
+                            try {
+                                URL url = new URL(HTTPConstant.IMAGE_URL_PREFIX + resID + '_' + i + HTTPConstant.IMAGE_URL_SUFFIX);
+                                con = (HttpURLConnection) url.openConnection();
+                                Bitmap tmp = BitmapFactory.decodeStream(con.getInputStream());
+                                Message message = new Message();
+                                message.what = LOAD_RES_IMAGE;
+                                message.obj = tmp;
+                                message.arg1 = i - 1;
+                                handler.sendMessage(message);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                            finally {
+                                if (con != null)
+                                    con.disconnect();
+                            }
+                        }
+                    }
+                }).start();
                 break;
             case ResourceDesc.GET_RES_PUBLISHER_INFO:
                 String userName = mp.get(ResourceDesc.RESOURCE_USERNAME_JSON_KEY);
@@ -270,6 +314,48 @@ public class ResourceDetailActivity extends BaseActivity implements AsyncHttpCal
                 }).start();
                 break;
             case ResourceDesc.GET_RESOURCE_COMMENT:
+                final int n = Integer.parseInt(mp.get(ResourceDesc.RESOURCE_NUMBER_JSON_KEY));
+                for (int i = 0; i < n; i++){
+                    String tmp = mp.get(i + "");
+                    try {
+                        JSONObject object = new JSONObject(tmp);
+                        String detail = (String) object.get(ResourceDesc.COMMENTDetail),
+                                date = (String) object.get(ResourceDesc.COMMENTDate),
+                                fa = (String) object.get(ResourceDesc.COMMENTFather),
+                                uName = (String) object.get(ResourceDesc.USERName),
+                                uHead = (String) object.get(ResourceDesc.USERHead);
+                        CommentItem item = new CommentItem(1, uName, detail, fa, uHead, date);
+                        CommentItemLayout itemLayout = new CommentItemLayout(this, View.INVISIBLE, item);
+                        commentItems.add(item);
+                        commentItemLayoutList.add(itemLayout);
+                        commentHolder.addView(itemLayout);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        for (int i = 0; i < n; i++){
+                            HttpURLConnection con = null;
+                            try {
+                                URL url = new URL(commentItems.get(i).getUserHeadUrl());
+                                con = (HttpURLConnection) url.openConnection();
+                                Bitmap tmp = BitmapFactory.decodeStream(con.getInputStream());
+                                Message message = new Message();
+                                message.what = LOAD_COMMENT_USER_HEAD;
+                                message.arg1 = i;
+                                message.obj = tmp;
+                                handler.sendMessage(message);
+                            } catch (Exception e) {
+                                if (con != null) {
+                                    con.disconnect();
+                                }
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                }).start();
                 break;
             case ResourceDesc.PUBLISH_COMMENT:
                 break;

@@ -2,7 +2,6 @@ package com.example.zzu.huzhucommunity.asynchttp;
 
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -47,6 +46,8 @@ public class ResourceDesc {
             PUBLISH_STATE = "publishState",
             RESOURCE_NUMBER_JSON_KEY = "number",
             _1 = "1";
+    public static final String COMMENTDetail = "commentDetail", COMMENTFather = "commentFather",
+            COMMENTDate = "commentDate", USERName = "userName", USERHead = "userHead";
 
 
 
@@ -464,7 +465,6 @@ public class ResourceDesc {
                         for (int i = 0; i < n; ++i) {
                             mp.put("" + i, userObject.getString("" + i));
                         }
-
                         callback.onSuccess(code, mp, GET_RESOURCE_COMMENT);
                     } catch (JSONException e) {
                         e.printStackTrace();

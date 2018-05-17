@@ -85,7 +85,7 @@ public class UserProfileActivity extends BaseActivity {
                         AccountProfileActivity.startMe(UserProfileActivity.this);
                         break;
                     case R.id.UserProfile_top_background_image_view:
-                        Utilities.startPickImageDialog(UserProfileActivity.this);
+                        Utilities.StartPickImageDialog(UserProfileActivity.this);
                         break;
                 }
             }
@@ -156,7 +156,7 @@ public class UserProfileActivity extends BaseActivity {
         switch (requestCode){
             case Utilities.PICK_IMAGE_FROM_CAMERA:
             case Utilities.PICK_IMAGE_FROM_GALLERY:
-                Bitmap bitmap = Utilities.getImageFromDialog(requestCode, resultCode, data);
+                Bitmap bitmap = Utilities.GetImageFromDialog(requestCode, resultCode, data);
                 if (bitmap != null){
                     ((ImageView) findViewById(R.id.UserProfile_top_background_image_view)).setImageBitmap(bitmap);
                 }

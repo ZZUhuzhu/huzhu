@@ -37,6 +37,7 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 
 import static android.content.ContentValues.TAG;
 import static com.example.zzu.huzhucommunity.asynchttp.Profile.GET_ACCOUNT_PROFILE_LOGIN_TIME_KEY;
@@ -355,7 +356,7 @@ public class Utilities {
      * 选择照片对话框
      * @param context 上下文
      */
-    public static void startPickImageDialog(final Context context){
+    public static void StartPickImageDialog(final Context context){
         AlertDialog.Builder dialog = new AlertDialog.Builder(context);
         dialog.setItems(R.array.AddImageFrom, new DialogInterface.OnClickListener() {
             Intent intent;
@@ -384,7 +385,7 @@ public class Utilities {
      * @return 照片或者null
      */
     @Nullable
-    public static Bitmap getImageFromDialog(int requestCode, int resultCode, Intent data){
+    public static Bitmap GetImageFromDialog(int requestCode, int resultCode, Intent data){
         if (resultCode == Activity.RESULT_OK){
             switch (requestCode) {
                 case PICK_IMAGE_FROM_CAMERA:
@@ -447,6 +448,22 @@ public class Utilities {
                 + calendar.get(Calendar.HOUR_OF_DAY) + ":"
                 + calendar.get(Calendar.MINUTE) + ":"
                 + calendar.get(Calendar.SECOND);
+    }
+
+    /**
+     * 检查 time 中的时间与当前时间相比是否已经过期
+     * @param time 时间，格式为 year-mo-da ho:mi:se
+     * @return 如果已过期则返回 true
+     *          否则返回 false
+     */
+    public static boolean CheckTimeExceed(String time){
+        String year = time.substring(0, 4), month = time.substring(5, 7),
+                day = time.substring(8, 10);
+        String hour = time.substring(11, 13), min = time.substring(14, 16), sec = time.substring(17, 19);
+        GregorianCalendar tiCalendar = new GregorianCalendar(Integer.parseInt(year), Integer.parseInt(month),
+                Integer.parseInt(day), Integer.parseInt(hour), Integer.parseInt(min), Integer.parseInt(sec));
+        GregorianCalendar meCalendar = new GregorianCalendar();
+        return tiCalendar.before(meCalendar);
     }
 
     /**

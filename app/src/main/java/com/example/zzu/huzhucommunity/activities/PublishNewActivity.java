@@ -1,13 +1,14 @@
 package com.example.zzu.huzhucommunity.activities;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.support.v7.app.ActionBar;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -23,7 +24,6 @@ import android.widget.Toast;
 
 import com.example.zzu.huzhucommunity.R;
 import com.example.zzu.huzhucommunity.asynchttp.AsyncHttpCallback;
-import com.example.zzu.huzhucommunity.asynchttp.Profile;
 import com.example.zzu.huzhucommunity.asynchttp.Publish;
 import com.example.zzu.huzhucommunity.commonclass.MyApplication;
 import com.example.zzu.huzhucommunity.commonclass.Utilities;
@@ -38,6 +38,7 @@ public class PublishNewActivity extends BaseActivity implements AsyncHttpCallbac
     public static final int PUBLISH_NEW_REQUEST = 2;
 
     private static final String PUBLISH_SUCCESS = "发布成功";
+    private static final String COMPLETE_RES_REQ_INFO = "请完善信息";
 
     private int publishWhich;
 
@@ -91,6 +92,8 @@ public class PublishNewActivity extends BaseActivity implements AsyncHttpCallbac
         addListener(R.id.PublishNewRes_date_text_view);
         addListener(R.id.PublishNewRes_price_edit_text);
         addListener(R.id.PublishNewRes_publish_button);
+
+        setResult(RESULT_CANCELED);
     }
 
     public void addListener(final int res){
@@ -99,7 +102,7 @@ public class PublishNewActivity extends BaseActivity implements AsyncHttpCallbac
             public void onClick(View v) {
                 switch (res){
                     case R.id.PublishNewRes_add_image_button:
-                        Utilities.startPickImageDialog(PublishNewActivity.this);
+                        Utilities.StartPickImageDialog(PublishNewActivity.this);
                         break;
                     case R.id.PublishNewRes_time_text_view:
                         TimePickerDialog timePickerDialog = new TimePickerDialog(PublishNewActivity.this,
@@ -151,6 +154,10 @@ public class PublishNewActivity extends BaseActivity implements AsyncHttpCallbac
                 time = timeTextView.getText().toString(),
                 price = priceEditText.getText().toString();
         String type = (String) typeSpinner.getSelectedItem();
+        if (TextUtils.isEmpty(time) || TextUtils.isEmpty(title) || TextUtils.isEmpty(content) || TextUtils.isEmpty(price)){
+            Toast.makeText(MyApplication.getContext(), COMPLETE_RES_REQ_INFO, Toast.LENGTH_SHORT).show();
+            return;
+        }
         switch (publishWhich){
             case PUBLISH_NEW_REQUEST:
                 Publish.getOurInstance().publishResource(userID, PUBLISH_NEW_REQUEST + "", title, content,
@@ -181,7 +188,7 @@ public class PublishNewActivity extends BaseActivity implements AsyncHttpCallbac
         switch (requestCode){
             case Utilities.PICK_IMAGE_FROM_GALLERY:
             case Utilities.PICK_IMAGE_FROM_CAMERA:
-                Bitmap bitmap = Utilities.getImageFromDialog(requestCode, resultCode, data);
+                Bitmap bitmap = Utilities.GetImageFromDialog(requestCode, resultCode, data);
                 if (bitmap != null){
                     imageView.setImageBitmap(bitmap);
                     layout.addView(imageView, 0);
@@ -191,10 +198,10 @@ public class PublishNewActivity extends BaseActivity implements AsyncHttpCallbac
         }
     }
 
-    public static void startMe(Context context, int typeExtra){
+    public static void startMe(Activity context, int typeExtra, int reqCode){
         Intent intent = new Intent(context, PublishNewActivity.class);
         intent.putExtra(MainActivity.PUBLISH_TYPE, typeExtra);
-        context.startActivity(intent);
+        context.startActivityForResult(intent, reqCode);
     }
 
     @Override
@@ -223,6 +230,7 @@ public class PublishNewActivity extends BaseActivity implements AsyncHttpCallbac
                 break;
             case Publish.UPLOAD_IMAGE:
                 Toast.makeText(MyApplication.getContext(), PUBLISH_SUCCESS, Toast.LENGTH_SHORT).show();
+                setResult(RESULT_OK);
                 finish();
                 break;
         }

@@ -12,6 +12,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
@@ -241,7 +242,8 @@ public class MainActivity extends BaseActivity implements AsyncHttpCallback {
                         handler.sendMessage(message);
                         in.close();
                     } catch (Exception e) {
-                        //e.printStackTrace();
+                        Log.e(TAG, "run: url: " + tmpUrl);
+                        e.printStackTrace();
                     }
                     finally {
                         if (in != null)
@@ -352,9 +354,11 @@ public class MainActivity extends BaseActivity implements AsyncHttpCallback {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 if (which == 0)
-                                    PublishNewActivity.startMe(MainActivity.this, PublishNewActivity.PUBLISH_NEW_RESOURCE);
+                                    PublishNewActivity.startMe(MainActivity.this, PublishNewActivity.PUBLISH_NEW_RESOURCE,
+                                            PublishNewActivity.PUBLISH_NEW_RESOURCE);
                                 else if (which == 1)
-                                    PublishNewActivity.startMe(MainActivity.this, PublishNewActivity.PUBLISH_NEW_REQUEST);
+                                    PublishNewActivity.startMe(MainActivity.this, PublishNewActivity.PUBLISH_NEW_REQUEST,
+                                            PublishNewActivity.PUBLISH_NEW_REQUEST);
                             }
                         });
                         dialog.show();
@@ -500,5 +504,16 @@ public class MainActivity extends BaseActivity implements AsyncHttpCallback {
             resSwipeRefreshLayout.setRefreshing(false);
         if (requestSwipeRefreshLayout.isRefreshing())
             requestSwipeRefreshLayout.setRefreshing(false);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_CANCELED)
+            return;
+        if (requestCode == PublishNewActivity.PUBLISH_NEW_RESOURCE)
+            Main.getOurInstance().checkNewResUpdate(resourceItems, MainActivity.this);
+        else if (requestCode == PublishNewActivity.PUBLISH_NEW_REQUEST)
+            Main.getOurInstance().checkNewReqUpdate(requestItems, MainActivity.this);
     }
 }

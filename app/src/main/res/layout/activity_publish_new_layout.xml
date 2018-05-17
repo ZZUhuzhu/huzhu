@@ -78,7 +78,7 @@
                     android:layout_marginStart="@dimen/common_margin_normal"
                     android:scaleType="fitCenter"
                     android:background="@drawable/rectangle_black_stroke_pressed_gray"
-                    android:src="@drawable/plus_icon"/>
+                    android:src="@drawable/plus_icon_black"/>
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"

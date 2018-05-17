@@ -121,7 +121,7 @@ public class ChatRoomActivity extends BaseActivity {
                         inputEditText.setText("");
                         break;
                     case R.id.ChatRoomActivity_send_image_button:
-                        Utilities.startPickImageDialog(ChatRoomActivity.this);
+                        Utilities.StartPickImageDialog(ChatRoomActivity.this);
                         break;
                 }
             }
