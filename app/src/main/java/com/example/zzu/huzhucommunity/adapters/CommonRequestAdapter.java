@@ -15,6 +15,7 @@ import com.example.zzu.huzhucommunity.R;
 import com.example.zzu.huzhucommunity.activities.MainActivity;
 import com.example.zzu.huzhucommunity.activities.ResourceDetailActivity;
 import com.example.zzu.huzhucommunity.asynchttp.Main;
+import com.example.zzu.huzhucommunity.commonclass.MyApplication;
 import com.example.zzu.huzhucommunity.commonclass.NewRequestItem;
 
 import java.util.ArrayList;
@@ -50,6 +51,8 @@ public class CommonRequestAdapter extends RecyclerView.Adapter<CommonRequestAdap
         NewRequestItem item = list.get(position);
         if (item.getItemThumbnail() != null)
             holder.imageView.setImageBitmap(item.getItemThumbnail());
+        else
+            holder.imageView.setImageDrawable(MyApplication.getContext().getDrawable(R.drawable.default_image));
         holder.titleTextView.setText(item.getItemTitle());
         holder.detailTextView.setText(item.getItemDetail());
         String time = "" + item.getItemPublishTimeStr();
@@ -88,8 +91,9 @@ public class CommonRequestAdapter extends RecyclerView.Adapter<CommonRequestAdap
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    NewRequestItem temp = list.get(getAdapterPosition());
-                    ResourceDetailActivity.startMe((Activity) context, temp.getItemID(), temp.getItemTitle(),
+                    int pos = getAdapterPosition();
+                    NewRequestItem temp = list.get(pos);
+                    ResourceDetailActivity.startMe((Activity) context, temp.getItemID(), temp.getItemTitle(), pos,
                             MainActivity.REQUEST_CODE_GET_REQ_DESC);
                 }
             });

@@ -2,7 +2,6 @@ package com.example.zzu.huzhucommunity.asynchttp;
 
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -31,24 +30,26 @@ public class ResourceDesc {
     public static final int PUBLISH_COMMENT = 10804;
     public static final int UPDATE_STAR = 10805;
     public static final int RECEIVE_RESOURCE = 10806;
-    public static final int ADD_TO_TRACK = 10807;
+    private static final int ADD_TO_TRACK = 10807;
+    public static final int GET_RES_STATUS_INFO = 10808;
 
-    public static final String RESOURCE_STATUS_JSON_KEY ="status",
-            RESOURCE_USER_HEAD_JSON_KEY = "userHead",
-            RESOURCE_USERNAME_JSON_KEY = "userName",
-            RESOURCE_USER_LAST_LOGIN_JSON_KEY = "userLastLogin",
-            RESOURCE_TITLE_JSON_KEY = "resourceTitle",
-            RESOURCE_DETAIL_JSON_KEY = "resourceDetail",
-            RESOURCE_PRICE_JSON_KEY = "resourcePrice",
-            PUBLISH_DATE = "publishDate",
-            DEADLINE = "deadline",
-            IMAGE_NUMBERS = "resourceImageNumber",
-            RESOURCE_STATUS = "resourceStatus",
-            PUBLISH_STATE = "publishState",
-            RESOURCE_NUMBER_JSON_KEY = "number",
-            _1 = "1";
+    public static final String RES_IS_STARRED = "isStar";
+    public static final String RES_IS_RECEIVED = "isReceive";
+
+    private static final String RESOURCE_STATUS_JSON_KEY ="status";
+    public static final String RESOURCE_USER_HEAD_JSON_KEY = "userHead";
+    public static final String RESOURCE_USERNAME_JSON_KEY = "userName";
+    public static final String RESOURCE_USER_LAST_LOGIN_JSON_KEY = "userLastLogin";
+    private static final String RESOURCE_TITLE_JSON_KEY = "resourceTitle";
+    public static final String RESOURCE_DETAIL_JSON_KEY = "resourceDetail";
+    public static final String RESOURCE_PRICE_JSON_KEY = "resourcePrice";
+    private static final String PUBLISH_DATE = "publishDate";
+    public static final String DEADLINE = "deadline";
+
+    public static final String IMAGE_NUMBERS = "resourceImageNumber";
+    public static final String RESOURCE_NUMBER_JSON_KEY = "number";
     public static final String COMMENTDetail = "commentDetail", COMMENTFather = "commentFather",  COMMENTDate = "commentDate",
-            USERName = "userName", USERHead = "userHead", USERID = "userID";
+            USERName = "userName", USERHead = "userHead", USERId = "userID";
 
 
 
@@ -411,6 +412,43 @@ public class ResourceDesc {
         }
     }
 
+    /**
+     * 获取资源（或请求）的状态信息， 用户是否已经收藏，资源是否已经被接单
+     * @param userID 用户ID
+     * @param resID 资源ID
+     * @param callback 回调对象
+     */
+    public void getResStatusInfo(String userID, String resID, final AsyncHttpCallback callback){
+        AsyncHttpClient client = new AsyncHttpClient();
+        client.setTimeout(3000);
+        RequestParams params = new RequestParams();
+        params.put(USERId, userID);
+        params.put("resourceID", resID);
+        String path = "http://139.199.38.177/huzhu/php/GetResStatusInfo.php";
+        client.post(path, params, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int i, Header[] headers, byte[] bytes) {
+                if (i != 200)
+                    callback.onError(i);
+                try {
+                    JSONObject userObject = new JSONObject(new String(bytes, "utf-8"));
+                    HashMap<String, String> mp = new HashMap<>();
+                    mp.put(RESOURCE_STATUS_JSON_KEY, userObject.getString(RESOURCE_STATUS_JSON_KEY));
+                    mp.put(RES_IS_RECEIVED, userObject.getString(RES_IS_RECEIVED));
+                    mp.put(RES_IS_STARRED, userObject.getString(RES_IS_STARRED));
+                    callback.onSuccess(i, mp, GET_RES_STATUS_INFO);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    callback.onError(i);
+                }
+            }
+
+            @Override
+            public void onFailure(int i, Header[] headers, byte[] bytes, Throwable throwable) {
+                callback.onError(i);
+            }
+        });
+    }
 
     private Handler handler = new Handler(new Handler.Callback() {
         @Override
@@ -511,7 +549,7 @@ public class ResourceDesc {
                         HashMap<String, String> mp = new HashMap<>();
                         mp.put(RESOURCE_STATUS_JSON_KEY, code + "");
 
-                        callback.onSuccess(code, mp, RECEIVE_RESOURCE);
+                        callback.onSuccess(code, mp, ADD_TO_TRACK);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }

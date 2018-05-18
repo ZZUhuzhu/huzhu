@@ -60,6 +60,7 @@ public class MainActivity extends BaseActivity implements AsyncHttpCallback {
     private static final int LOAD_RES_IMAGE = 11;
     private static final int LOAD_REQ_IMAGE = 12;
 
+    //todo change background one thread multi image
     private Handler handler = new Handler(new Handler.Callback() {
         @Override
         public boolean handleMessage(Message msg) {
@@ -69,10 +70,14 @@ public class MainActivity extends BaseActivity implements AsyncHttpCallback {
                     Bitmap bitmap = (Bitmap) msg.obj;
                     int ind = msg.arg1;
                     if (msg.what == LOAD_REQ_IMAGE){
+                        if (ind >= requestItems.size())
+                            break;
                         requestItems.get(ind).addItemThumbnail(bitmap);
                         requestAdapter.notifyItemChanged(ind);
                     }
                     else {
+                        if (ind >= resourceItems.size())
+                            break;
                         resourceItems.get(ind).addItemThumbnail(bitmap);
                         resourceAdapter.notifyItemChanged(ind);
                     }
@@ -221,13 +226,14 @@ public class MainActivity extends BaseActivity implements AsyncHttpCallback {
      * @param seq 序列号，用来同步
      * @param startInd 起始下标
      */
-    public void loadResItemImage(final int seq, int startInd){
-        for (int i = startInd; i < resourceItems.size(); i++){
-            final int ind = i;
-            final String tmpUrl = resourceItems.get(i).getItemImageUrl();
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
+    public void loadResItemImage(final int seq, final int startInd){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                for (int i = startInd; i < resourceItems.size(); i++){
+                    if (i >= resourceItems.size())
+                        break;
+                    final String tmpUrl = resourceItems.get(i).getItemImageUrl();
                     if (seq != curLoadImageSeq)
                         return;
                     Bitmap bitmap;
@@ -241,7 +247,7 @@ public class MainActivity extends BaseActivity implements AsyncHttpCallback {
                         Message message = new Message();
                         message.obj = bitmap;
                         message.what = LOAD_RES_IMAGE;
-                        message.arg1 = ind;
+                        message.arg1 = i;
                         message.arg2 = seq;
                         handler.sendMessage(message);
                         in.close();
@@ -249,16 +255,17 @@ public class MainActivity extends BaseActivity implements AsyncHttpCallback {
                         e.printStackTrace();
                     }
                     finally {
-                        if (in != null)
+                        if (in != null){
                             try {
                                 in.close();
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
+                        }
                     }
                 }
-            }).start();
-        }
+            }
+        }).start();
     }
 
     /**
@@ -266,13 +273,14 @@ public class MainActivity extends BaseActivity implements AsyncHttpCallback {
      * @param seq 序列号，用来同步
      * @param startInd 起始下标
      */
-    public void loadReqItemImage(final int seq, int startInd){
-        for (int i = startInd; i < requestItems.size(); i++){
-            final int ind = i;
-            final String tmpUrl = requestItems.get(i).getItemImageUrl();
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
+    public void loadReqItemImage(final int seq, final int startInd){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                for (int i = startInd; i < requestItems.size(); i++){
+                    if (i >= requestItems.size())
+                        break;
+                    final String tmpUrl = requestItems.get(i).getItemImageUrl();
                     if (seq != curLoadImageSeq)
                         return;
                     Bitmap bitmap;
@@ -286,7 +294,7 @@ public class MainActivity extends BaseActivity implements AsyncHttpCallback {
                         Message message = new Message();
                         message.obj = bitmap;
                         message.what = LOAD_REQ_IMAGE;
-                        message.arg1 = ind;
+                        message.arg1 = i;
                         message.arg2 = seq;
                         handler.sendMessage(message);
                         in.close();
@@ -294,16 +302,17 @@ public class MainActivity extends BaseActivity implements AsyncHttpCallback {
                         e.printStackTrace();
                     }
                     finally {
-                        if (in != null)
+                        if (in != null){
                             try {
                                 in.close();
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
+                        }
                     }
                 }
-            }).start();
-        }
+            }
+        }).start();
     }
 
     /**
@@ -396,10 +405,6 @@ public class MainActivity extends BaseActivity implements AsyncHttpCallback {
         Bitmap bitmap = Utilities.GetLoginUserHeadBitmapFromSP();
         if (bitmap != null)
             ((ImageView) findViewById(R.id.MainActivity_head_button)).setImageBitmap(bitmap);
-    }
-
-    public static void startMe(Context context){
-        context.startActivity(new Intent(context, MainActivity.class));
     }
 
     /**
@@ -513,26 +518,43 @@ public class MainActivity extends BaseActivity implements AsyncHttpCallback {
         }
     }
 
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        if (resultCode == RESULT_CANCELED)
-//            return;
-//        switch (requestCode){
-//            case REQUEST_CODE_GET_RES_DESC:
-//            case PublishNewActivity.PUBLISH_NEW_RESOURCE:
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_CANCELED)
+            return;
+        switch (requestCode){
+            case REQUEST_CODE_GET_RES_DESC:
+                int resPos = data.getIntExtra(ResourceDetailActivity.RES_ADAPTER_POS, -1);
+                if (resPos != -1 && resPos < resourceItems.size()){
+                    resourceItems.remove(resPos);
+                    resourceAdapter.notifyItemChanged(resPos);
+                }
+                break;
+            case REQUEST_CODE_GET_REQ_DESC:
+                int reqPos = data.getIntExtra(ResourceDetailActivity.RES_ADAPTER_POS, -1);
+                if (reqPos != -1 && reqPos < requestItems.size()){
+                    requestItems.remove(reqPos);
+                    requestAdapter.notifyItemChanged(reqPos);
+                }
+                break;
+            case PublishNewActivity.PUBLISH_NEW_RESOURCE:
 //                resSwipeRefreshLayout.setRefreshing(true);
 //                loadingMoreRes = true;
 //                newResourceRecyclerView.smoothScrollToPosition(0);
 //                Main.getOurInstance().checkNewResUpdate(resourceItems, MainActivity.this);
-//                break;
-//            case REQUEST_CODE_GET_REQ_DESC:
-//            case PublishNewActivity.PUBLISH_NEW_REQUEST:
+                break;
+            case PublishNewActivity.PUBLISH_NEW_REQUEST:
 //                requestSwipeRefreshLayout.setRefreshing(true);
 //                newRequestRecyclerView.smoothScrollToPosition(0);
 //                loadingMoreReq = true;
 //                Main.getOurInstance().checkNewReqUpdate(requestItems, MainActivity.this);
-//                break;
-//        }
-//    }
+                break;
+        }
+    }
+
+    public static void startMe(Context context){
+        context.startActivity(new Intent(context, MainActivity.class));
+    }
+
 }

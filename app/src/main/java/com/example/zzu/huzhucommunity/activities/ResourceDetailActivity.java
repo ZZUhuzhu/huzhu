@@ -1,7 +1,6 @@
 package com.example.zzu.huzhucommunity.activities;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -13,6 +12,7 @@ import android.support.v7.app.AlertDialog;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,15 +36,19 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 
 public class ResourceDetailActivity extends BaseActivity implements AsyncHttpCallback {
+    private static final String TAG = "ResourceDetailActivity";
     private static final String RES_ID_EXTRA = "resID";
     private static final String RES_TITLE_EXTRA = "resTitle";
+    public static final String RES_ADAPTER_POS = "resAdapterPos";
+
+    private static final String STARRED = "已收藏";
+    private static final String TO_STAR = "收藏";
+    private static final String STAR_CANCLED = "已取消收藏";
 
     private static final int LOAD_USER_HEAD = 1;
     private static final int LOAD_RES_IMAGE = 2;
@@ -52,6 +56,7 @@ public class ResourceDetailActivity extends BaseActivity implements AsyncHttpCal
 
     private boolean resStarred = false;
     private String resID, userID;
+    private int resAdapterPos;
 
     private ResReqDetailBottomButtonLayout receiveButton;
     private ArrayList<ImageView> imageViewList;
@@ -100,6 +105,7 @@ public class ResourceDetailActivity extends BaseActivity implements AsyncHttpCal
         }
         resID = getIntent().getStringExtra(RES_ID_EXTRA);
         userID = Utilities.GetStringLoginUserId();
+        resAdapterPos = getIntent().getIntExtra(RES_ADAPTER_POS, -1);
 
         commentItems = new ArrayList<>();
         commentItemLayoutList = new ArrayList<>();
@@ -125,6 +131,7 @@ public class ResourceDetailActivity extends BaseActivity implements AsyncHttpCal
         ResourceDesc.getOurInstance().getResPublisherInfo(resID, this);
         ResourceDesc.getOurInstance().getResourceDesc(resID, this);
         ResourceDesc.getOurInstance().getResourceComment(resID, this);
+        ResourceDesc.getOurInstance().getResStatusInfo(userID, resID, this);
     }
 
     /**
@@ -209,17 +216,12 @@ public class ResourceDetailActivity extends BaseActivity implements AsyncHttpCal
         return super.onOptionsItemSelected(item);
     }
 
-    public static void startMe(Activity context, String resID, String resTitle, int reqCode){
-        Intent intent = new Intent(context, ResourceDetailActivity.class);
-        intent.putExtra(RES_ID_EXTRA, resID);
-        intent.putExtra(RES_TITLE_EXTRA, resTitle);
-        context.startActivityForResult(intent, reqCode);
-    }
-
     @Override
     public void onSuccess(int statusCode, HashMap<String, String> mp, int requestCode) {
-        if (statusCode != 200)
+        if (statusCode != 200){
+            Log.e(TAG, "onSuccess: call back status: " + statusCode);
             return;
+        }
         switch (requestCode){
             case ResourceDesc.GET_RESOURCE_DESC:
                 resDetail.setText(mp.get(ResourceDesc.RESOURCE_DETAIL_JSON_KEY));
@@ -308,7 +310,7 @@ public class ResourceDetailActivity extends BaseActivity implements AsyncHttpCal
                                 fa = (String) object.get(ResourceDesc.COMMENTFather),
                                 uName = (String) object.get(ResourceDesc.USERName),
                                 uHead = (String) object.get(ResourceDesc.USERHead),
-                                uID = (String) object.get(ResourceDesc.USERID);
+                                uID = (String) object.get(ResourceDesc.USERId);
                         CommentItem item = new CommentItem(Integer.parseInt(uID), uName, detail, fa, uHead, date);
                         CommentItemLayout itemLayout = new CommentItemLayout(this, View.GONE, item);
                         commentItems.add(item);
@@ -355,13 +357,13 @@ public class ResourceDetailActivity extends BaseActivity implements AsyncHttpCal
             case ResourceDesc.UPDATE_STAR:
                 ResReqDetailBottomButtonLayout temp = findViewById(R.id.ResourceDetail_star_button);
                 if(resStarred) {
-                    Toast.makeText(MyApplication.getContext(), "已取消收藏", Toast.LENGTH_SHORT).show();
-                    temp.setText("收藏");
+                    Toast.makeText(MyApplication.getContext(), STAR_CANCLED, Toast.LENGTH_SHORT).show();
+                    temp.setText(TO_STAR);
                     temp.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.star));
                 }
                 else{
-                    Toast.makeText(MyApplication.getContext(), "已收藏", Toast.LENGTH_SHORT).show();
-                    temp.setText("已收藏");
+                    Toast.makeText(MyApplication.getContext(), STARRED, Toast.LENGTH_SHORT).show();
+                    temp.setText(STARRED);
                     temp.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.star_yellow));
                 }
                 resStarred = !resStarred;
@@ -370,8 +372,23 @@ public class ResourceDetailActivity extends BaseActivity implements AsyncHttpCal
                 receiveButton.setText(getString(R.string.received));
                 receiveButton.setClickable(false);
                 Toast.makeText(MyApplication.getContext(), "接单成功，请您尽快联系对方", Toast.LENGTH_SHORT).show();
-                setResult(RESULT_OK);
+                Intent data = new Intent();
+                data.putExtra(RES_ADAPTER_POS, resAdapterPos);
+                setResult(RESULT_OK, data);
                 break;
+            case ResourceDesc.GET_RES_STATUS_INFO:
+                temp = findViewById(R.id.ResourceDetail_star_button);
+                if (Boolean.parseBoolean(mp.get(ResourceDesc.RES_IS_STARRED))){
+                    temp.setText(STARRED);
+                    temp.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.star_yellow));
+                }
+                else{
+                    temp.setText(TO_STAR);
+                    temp.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.star));
+                }
+                break;
+            default:
+                    break;
         }
     }
 
@@ -379,4 +396,13 @@ public class ResourceDetailActivity extends BaseActivity implements AsyncHttpCal
     public void onError(int statusCode) {
         Toast.makeText(MyApplication.getContext(), Utilities.TOAST_NET_WORK_ERROR, Toast.LENGTH_SHORT).show();
     }
+
+    public static void startMe(Activity context, String resID, String resTitle, int resAdapterPos, int reqCode){
+        Intent intent = new Intent(context, ResourceDetailActivity.class);
+        intent.putExtra(RES_ID_EXTRA, resID);
+        intent.putExtra(RES_TITLE_EXTRA, resTitle);
+        intent.putExtra(RES_ADAPTER_POS, resAdapterPos);
+        context.startActivityForResult(intent, reqCode);
+    }
+
 }

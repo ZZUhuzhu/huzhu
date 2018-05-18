@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    android:background="@drawable/login_background"
+    android:background="@drawable/login_background_2"
     tools:context=".activities.LoginActivity">
     <ImageView
         android:id="@+id/LoginActivity_profile_image_view"

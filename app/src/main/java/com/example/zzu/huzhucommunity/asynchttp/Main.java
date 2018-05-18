@@ -231,11 +231,11 @@ public class Main {
                                 json.append("]");
                                 List<Resource> resList = new Gson().fromJson(json.toString(),
                                         new TypeToken<List<Resource>>() {}.getType());
-                                String stId = resList.get(0).getResourceID(),
-                                        edId = resList.get(resList.size() - 1).getResourceID();
-                                String curStId = list.get(0).getItemID(),
-                                        curEdId = list.get(list.size() - 1).getItemID();
-                                if ((!stId.equals(curStId)) || (!edId.equals(curEdId)) || resList.size() != list.size()){
+
+                                int nowSz = resList.size(), oldSz = list.size();
+                                Log.e(TAG, "onSuccess: now size: " + nowSz + " oldSz: " + oldSz);
+                                if ((nowSz < 20 && nowSz != oldSz) || (nowSz >= 20 && (oldSz < 20 ||
+                                        !resList.get(19).getResourceID().equals(list.get(19).getItemID())))){
                                     int code = userObject.getInt("status");
                                     String number = userObject.getString("number");
                                     HashMap<String, String> mp = new HashMap<>();
@@ -302,11 +302,10 @@ public class Main {
                                 json.append("]");
                                 List<Request> resList = new Gson().fromJson(json.toString(),
                                         new TypeToken<List<Request>>() {}.getType());
-                                String stId = resList.get(0).getResourceID(),
-                                        edId = resList.get(resList.size() - 1).getResourceID();
-                                String curStId = list.get(0).getItemID(),
-                                        curEdId = list.get(list.size() - 1).getItemID();
-                                if ((!stId.equals(curStId)) || (!edId.equals(curEdId)) || resList.size() != list.size()){
+
+                                int nowSz = resList.size(), oldSz = list.size();
+                                if ((nowSz < 20 && nowSz != oldSz) || (nowSz >= 20 && (oldSz < 20 ||
+                                        !resList.get(19).getResourceID().equals(list.get(19).getItemID())))){
                                     int code = userObject.getInt("status");
                                     String number = userObject.getString("number");
                                     HashMap<String, String> mp = new HashMap<>();
