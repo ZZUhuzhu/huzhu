@@ -214,6 +214,7 @@ public class PublishNewActivity extends BaseActivity implements AsyncHttpCallbac
 
                 if (bitmapSz == 0){
                     Toast.makeText(MyApplication.getContext(), PUBLISH_SUCCESS, Toast.LENGTH_SHORT).show();
+                    setResult(RESULT_OK);
                     finish();
                     return;
                 }

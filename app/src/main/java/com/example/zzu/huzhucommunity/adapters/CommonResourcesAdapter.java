@@ -1,5 +1,6 @@
 package com.example.zzu.huzhucommunity.adapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
@@ -11,6 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.zzu.huzhucommunity.R;
+import com.example.zzu.huzhucommunity.activities.MainActivity;
 import com.example.zzu.huzhucommunity.activities.ResourceDetailActivity;
 import com.example.zzu.huzhucommunity.commonclass.NewRequestItem;
 import com.example.zzu.huzhucommunity.commonclass.NewResourceItem;
@@ -88,7 +90,9 @@ public class CommonResourcesAdapter extends RecyclerView.Adapter<CommonResources
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ResourceDetailActivity.startMe(context, list.get(getAdapterPosition()).getItemID());
+                    NewResourceItem temp = list.get(getAdapterPosition());
+                    ResourceDetailActivity.startMe((Activity) context, temp.getItemID(), temp.getItemTitle(),
+                            MainActivity.REQUEST_CODE_GET_RES_DESC);
                 }
             });
             imageView = itemView.findViewById(R.id.NewResourceItem_thumbnail);

@@ -52,7 +52,7 @@
     <string name="content">内容</string>
     <string name="type_with_colon">类型:</string>
     <string name="yuan">￥</string>
-    <string name="deadline_with_colon">截止日期:</string>
+    <string name="deadline_with_colon">截止日期：</string>
     <string name="price_with_colon">价格:</string>
     <string name="publish">发布</string>
 

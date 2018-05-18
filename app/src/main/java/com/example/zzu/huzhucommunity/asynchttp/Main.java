@@ -231,7 +231,11 @@ public class Main {
                                 json.append("]");
                                 List<Resource> resList = new Gson().fromJson(json.toString(),
                                         new TypeToken<List<Resource>>() {}.getType());
-                                if (!resList.get(0).getResourceID().equals(list.get(0).getItemID())){
+                                String stId = resList.get(0).getResourceID(),
+                                        edId = resList.get(resList.size() - 1).getResourceID();
+                                String curStId = list.get(0).getItemID(),
+                                        curEdId = list.get(list.size() - 1).getItemID();
+                                if ((!stId.equals(curStId)) || (!edId.equals(curEdId)) || resList.size() != list.size()){
                                     int code = userObject.getInt("status");
                                     String number = userObject.getString("number");
                                     HashMap<String, String> mp = new HashMap<>();
@@ -298,7 +302,11 @@ public class Main {
                                 json.append("]");
                                 List<Request> resList = new Gson().fromJson(json.toString(),
                                         new TypeToken<List<Request>>() {}.getType());
-                                if (!resList.get(0).getResourceID().equals(list.get(0).getItemID())){
+                                String stId = resList.get(0).getResourceID(),
+                                        edId = resList.get(resList.size() - 1).getResourceID();
+                                String curStId = list.get(0).getItemID(),
+                                        curEdId = list.get(list.size() - 1).getItemID();
+                                if ((!stId.equals(curStId)) || (!edId.equals(curEdId)) || resList.size() != list.size()){
                                     int code = userObject.getInt("status");
                                     String number = userObject.getString("number");
                                     HashMap<String, String> mp = new HashMap<>();

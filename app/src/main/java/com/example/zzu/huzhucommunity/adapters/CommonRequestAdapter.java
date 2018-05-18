@@ -1,5 +1,6 @@
 package com.example.zzu.huzhucommunity.adapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
@@ -11,7 +12,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.zzu.huzhucommunity.R;
+import com.example.zzu.huzhucommunity.activities.MainActivity;
 import com.example.zzu.huzhucommunity.activities.ResourceDetailActivity;
+import com.example.zzu.huzhucommunity.asynchttp.Main;
 import com.example.zzu.huzhucommunity.commonclass.NewRequestItem;
 
 import java.util.ArrayList;
@@ -45,7 +48,8 @@ public class CommonRequestAdapter extends RecyclerView.Adapter<CommonRequestAdap
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         NewRequestItem item = list.get(position);
-        holder.imageView.setImageBitmap(item.getItemThumbnail());
+        if (item.getItemThumbnail() != null)
+            holder.imageView.setImageBitmap(item.getItemThumbnail());
         holder.titleTextView.setText(item.getItemTitle());
         holder.detailTextView.setText(item.getItemDetail());
         String time = "" + item.getItemPublishTimeStr();
@@ -84,7 +88,9 @@ public class CommonRequestAdapter extends RecyclerView.Adapter<CommonRequestAdap
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ResourceDetailActivity.startMe(context, list.get(getAdapterPosition()).getItemID());
+                    NewRequestItem temp = list.get(getAdapterPosition());
+                    ResourceDetailActivity.startMe((Activity) context, temp.getItemID(), temp.getItemTitle(),
+                            MainActivity.REQUEST_CODE_GET_REQ_DESC);
                 }
             });
             imageView = itemView.findViewById(R.id.NewResourceItem_thumbnail);

@@ -37,7 +37,7 @@ public class CommentItemLayout extends RelativeLayout {
         userHeadImageView.setImageBitmap(commentItem.getUserHeadBitmap());
         userNameTextView.setText(commentItem.getUserName());
         commentContentTextView.setText(commentItem.getContent());
-        commentTimeTextView.setText(commentItem.getTimeString());
+        commentTimeTextView.setText(commentItem.getCommentDate());
     }
     /**
      * 设置评论的详细内容

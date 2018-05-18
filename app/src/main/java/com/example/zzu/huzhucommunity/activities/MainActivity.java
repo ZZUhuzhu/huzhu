@@ -12,7 +12,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
@@ -50,6 +49,8 @@ import java.util.List;
  */
 public class MainActivity extends BaseActivity implements AsyncHttpCallback {
     private static final String TAG = "MainActivity";
+    public static final int REQUEST_CODE_GET_RES_DESC = 111;
+    public static final int REQUEST_CODE_GET_REQ_DESC = 222;
 
     private static final String NO_MORE = "没有更多了";
     private static final String REFRESH_FINISH = "刷新完成";
@@ -96,6 +97,9 @@ public class MainActivity extends BaseActivity implements AsyncHttpCallback {
     private ViewPager mainViewPager;
     private ArrayList<View> pagerViews = new ArrayList<>();
 
+    /**
+     * 用来线程同步的序列号
+     */
     private int curLoadImageSeq = 0x80000000;
     private int curResTimes = 0, curReqTimes = 0;
     private boolean loadingMoreRes = false, loadingMoreReq = false;
@@ -499,20 +503,36 @@ public class MainActivity extends BaseActivity implements AsyncHttpCallback {
     @Override
     public void onError(int statusCode) {
         Toast.makeText(MyApplication.getContext(), Utilities.TOAST_NET_WORK_ERROR, Toast.LENGTH_SHORT).show();
-        if (resSwipeRefreshLayout.isRefreshing())
+        if (resSwipeRefreshLayout.isRefreshing()){
+            loadingMoreRes = false;
             resSwipeRefreshLayout.setRefreshing(false);
-        if (requestSwipeRefreshLayout.isRefreshing())
+        }
+        if (requestSwipeRefreshLayout.isRefreshing()){
+            loadingMoreReq = false;
             requestSwipeRefreshLayout.setRefreshing(false);
+        }
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_CANCELED)
-            return;
-        if (requestCode == PublishNewActivity.PUBLISH_NEW_RESOURCE)
-            Main.getOurInstance().checkNewResUpdate(resourceItems, MainActivity.this);
-        else if (requestCode == PublishNewActivity.PUBLISH_NEW_REQUEST)
-            Main.getOurInstance().checkNewReqUpdate(requestItems, MainActivity.this);
-    }
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//        if (resultCode == RESULT_CANCELED)
+//            return;
+//        switch (requestCode){
+//            case REQUEST_CODE_GET_RES_DESC:
+//            case PublishNewActivity.PUBLISH_NEW_RESOURCE:
+//                resSwipeRefreshLayout.setRefreshing(true);
+//                loadingMoreRes = true;
+//                newResourceRecyclerView.smoothScrollToPosition(0);
+//                Main.getOurInstance().checkNewResUpdate(resourceItems, MainActivity.this);
+//                break;
+//            case REQUEST_CODE_GET_REQ_DESC:
+//            case PublishNewActivity.PUBLISH_NEW_REQUEST:
+//                requestSwipeRefreshLayout.setRefreshing(true);
+//                newRequestRecyclerView.smoothScrollToPosition(0);
+//                loadingMoreReq = true;
+//                Main.getOurInstance().checkNewReqUpdate(requestItems, MainActivity.this);
+//                break;
+//        }
+//    }
 }

@@ -48,7 +48,7 @@ public class ResourceDesc {
             RESOURCE_NUMBER_JSON_KEY = "number",
             _1 = "1";
     public static final String COMMENTDetail = "commentDetail", COMMENTFather = "commentFather",  COMMENTDate = "commentDate",
-            USERName = "userName", USERHead = "userHead", USERID = "commentRelatedUser";
+            USERName = "userName", USERHead = "userHead", USERID = "userID";
 
 
 
@@ -475,15 +475,7 @@ public class ResourceDesc {
                     try {
                         JSONObject userObject = new JSONObject(Response);
                         int code=userObject.getInt("status");
-                        String publishState = userObject.getString(PUBLISH_STATE);
-                        String resourceID = userObject.getString("resourceID");
-                        String _1local = userObject.getString("1");
-                        HashMap<String, String> mp = new HashMap<>();
-                        mp.put(_1, _1local);
-                        mp.put(RESOURCE_STATUS, resourceID);
-                        mp.put(PUBLISH_STATE, publishState);
-
-                        callback.onSuccess(code, mp, PUBLISH_COMMENT);
+                        callback.onSuccess(code, null, PUBLISH_COMMENT);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }

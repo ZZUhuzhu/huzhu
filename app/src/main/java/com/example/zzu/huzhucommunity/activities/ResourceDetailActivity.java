@@ -1,5 +1,6 @@
 package com.example.zzu.huzhucommunity.activities;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -43,6 +44,8 @@ import java.util.HashMap;
 
 public class ResourceDetailActivity extends BaseActivity implements AsyncHttpCallback {
     private static final String RES_ID_EXTRA = "resID";
+    private static final String RES_TITLE_EXTRA = "resTitle";
+
     private static final int LOAD_USER_HEAD = 1;
     private static final int LOAD_RES_IMAGE = 2;
     private static final int LOAD_COMMENT_USER_HEAD = 3;
@@ -93,6 +96,7 @@ public class ResourceDetailActivity extends BaseActivity implements AsyncHttpCal
         ActionBar actionBar = getSupportActionBar();
         if(actionBar != null){
             actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setTitle(getIntent().getStringExtra(RES_TITLE_EXTRA));
         }
         resID = getIntent().getStringExtra(RES_ID_EXTRA);
         userID = Utilities.GetStringLoginUserId();
@@ -144,11 +148,8 @@ public class ResourceDetailActivity extends BaseActivity implements AsyncHttpCal
                                 .setPositiveButton("确认", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        receiveButton.setText(getString(R.string.received));
-                                        receiveButton.setClickable(false);
+                                        ResourceDesc.getOurInstance().receiveResource(userID, resID, ResourceDetailActivity.this);
                                         dialog.dismiss();
-                                        Toast.makeText(MyApplication.getContext(), "正在全力开发中...",
-                                                Toast.LENGTH_SHORT).show();
                                     }
                                 })
                                 .setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -198,20 +199,6 @@ public class ResourceDetailActivity extends BaseActivity implements AsyncHttpCal
         });
     }
 
-    /**
-     * 添加一项评论（临时工）
-     * @param text 评论内容
-     */
-    public void addComment(String text){
-        if (TextUtils.isEmpty(text))
-            return;
-        commentHolder = findViewById(R.id.ResourceDetail_comment_holder);
-        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.profile_head_over_watch);
-        long time = GregorianCalendar.getInstance().getTimeInMillis();
-        CommentItemLayout commentItemLayout =
-                new CommentItemLayout(this, View.GONE, new CommentItem(1, getString(R.string.solider), text, time, bitmap));
-        commentHolder.addView(commentItemLayout, 0);
-    }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
@@ -222,10 +209,11 @@ public class ResourceDetailActivity extends BaseActivity implements AsyncHttpCal
         return super.onOptionsItemSelected(item);
     }
 
-    public static void startMe(Context context, String resID){
+    public static void startMe(Activity context, String resID, String resTitle, int reqCode){
         Intent intent = new Intent(context, ResourceDetailActivity.class);
         intent.putExtra(RES_ID_EXTRA, resID);
-        context.startActivity(intent);
+        intent.putExtra(RES_TITLE_EXTRA, resTitle);
+        context.startActivityForResult(intent, reqCode);
     }
 
     @Override
@@ -245,6 +233,7 @@ public class ResourceDetailActivity extends BaseActivity implements AsyncHttpCal
                 final int num = Integer.parseInt(mp.get(ResourceDesc.IMAGE_NUMBERS));
                 for (int i = 0; i < num; i++){
                     ImageView tmp = new ImageView(this);
+                    tmp.setImageDrawable(getDrawable(R.drawable.default_image));
                     tmp.setMinimumHeight(600);
                     LinearLayout.LayoutParams params = new LinearLayout.LayoutParams
                             (ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -321,7 +310,7 @@ public class ResourceDetailActivity extends BaseActivity implements AsyncHttpCal
                                 uHead = (String) object.get(ResourceDesc.USERHead),
                                 uID = (String) object.get(ResourceDesc.USERID);
                         CommentItem item = new CommentItem(Integer.parseInt(uID), uName, detail, fa, uHead, date);
-                        CommentItemLayout itemLayout = new CommentItemLayout(this, View.INVISIBLE, item);
+                        CommentItemLayout itemLayout = new CommentItemLayout(this, View.GONE, item);
                         commentItems.add(item);
                         commentItemLayoutList.add(itemLayout);
                         commentHolder.addView(itemLayout);
@@ -356,7 +345,6 @@ public class ResourceDetailActivity extends BaseActivity implements AsyncHttpCal
             case ResourceDesc.PUBLISH_COMMENT:
                 if (TextUtils.isEmpty(tmpComment))
                     break;
-                addComment(tmpComment);
                 commentHolder = findViewById(R.id.ResourceDetail_comment_holder);
                 CommentItemLayout commentItemLayout =
                         new CommentItemLayout(this, View.GONE,
@@ -379,8 +367,10 @@ public class ResourceDetailActivity extends BaseActivity implements AsyncHttpCal
                 resStarred = !resStarred;
                 break;
             case ResourceDesc.RECEIVE_RESOURCE:
-                break;
-            case ResourceDesc.ADD_TO_TRACK:
+                receiveButton.setText(getString(R.string.received));
+                receiveButton.setClickable(false);
+                Toast.makeText(MyApplication.getContext(), "接单成功，请您尽快联系对方", Toast.LENGTH_SHORT).show();
+                setResult(RESULT_OK);
                 break;
         }
     }
