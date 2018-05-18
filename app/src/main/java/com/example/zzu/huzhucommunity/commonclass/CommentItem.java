@@ -38,6 +38,13 @@ public class CommentItem {
         this.timeInMills = timeInMills;
         this.userHeadBitmap = userHeadBitmap;
     }
+    public CommentItem(int userID, String userName, String content, String commentDate, Bitmap userHeadBitmap){
+        this.userID = userID;
+        this.userName = userName;
+        this.content = content;
+        this.commentDate = commentDate;
+        this.userHeadBitmap = userHeadBitmap;
+    }
     public CommentItem(int userID, String userName, String content, String commentFa, String userHeadUrl, String commentDate){
         this.userID = userID;
         this.userName = userName;

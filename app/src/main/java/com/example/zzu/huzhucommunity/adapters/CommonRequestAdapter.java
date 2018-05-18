@@ -11,7 +11,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.zzu.huzhucommunity.R;
-import com.example.zzu.huzhucommunity.activities.RequestDetailActivity;
 import com.example.zzu.huzhucommunity.activities.ResourceDetailActivity;
 import com.example.zzu.huzhucommunity.commonclass.NewRequestItem;
 

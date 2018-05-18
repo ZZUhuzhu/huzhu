@@ -242,7 +242,6 @@ public class MainActivity extends BaseActivity implements AsyncHttpCallback {
                         handler.sendMessage(message);
                         in.close();
                     } catch (Exception e) {
-                        Log.e(TAG, "run: url: " + tmpUrl);
                         e.printStackTrace();
                     }
                     finally {

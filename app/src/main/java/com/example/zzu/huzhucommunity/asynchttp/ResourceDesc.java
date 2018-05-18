@@ -2,6 +2,7 @@ package com.example.zzu.huzhucommunity.asynchttp;
 
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -46,8 +47,8 @@ public class ResourceDesc {
             PUBLISH_STATE = "publishState",
             RESOURCE_NUMBER_JSON_KEY = "number",
             _1 = "1";
-    public static final String COMMENTDetail = "commentDetail", COMMENTFather = "commentFather",
-            COMMENTDate = "commentDate", USERName = "userName", USERHead = "userHead";
+    public static final String COMMENTDetail = "commentDetail", COMMENTFather = "commentFather",  COMMENTDate = "commentDate",
+            USERName = "userName", USERHead = "userHead", USERID = "commentRelatedUser";
 
 
 
@@ -266,7 +267,7 @@ public class ResourceDesc {
     /**
      * 更新收藏信息
      * @param userID 用户ID
-     * @param resourceID 资源ID
+     * @param resourceID 资源 ID
      * @param isStarred 是否已经收藏
      * @param cBack 回调对象
      */

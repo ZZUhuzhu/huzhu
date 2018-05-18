@@ -48,7 +48,8 @@ public class CommonResourcesAdapter extends RecyclerView.Adapter<CommonResources
     @Override
     public void onBindViewHolder(CommonResourcesAdapter.ViewHolder holder, int position) {
         NewResourceItem item = list.get(position);
-        holder.imageView.setImageBitmap(item.getItemThumbnail());
+        if (item.getItemThumbnail() != null)
+            holder.imageView.setImageBitmap(item.getItemThumbnail());
         holder.titleTextView.setText(item.getItemTitle());
         holder.detailTextView.setText(item.getItemDetail());
         String time = "" + item.getItemPublishTimeStr();

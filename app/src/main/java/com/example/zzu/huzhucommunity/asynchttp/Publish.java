@@ -89,7 +89,7 @@ public class Publish {
                 params.put("resourceDetail", resourceDetail);
                 params.put("resourceImageNumber", resourceImageNumber);
                 params.put("resourcePrice", resourcePrice);
-                params.put("resourceDeadline", resourceDeadline);
+                params.put("resourceDeadLine", resourceDeadline);
                 String path = "http://139.199.38.177/huzhu/php/publishResource.php";
                 client.post(path, params, new AsyncHttpResponseHandler() {
                     @Override
@@ -200,14 +200,14 @@ public class Publish {
             String Response = message.obj.toString();
             switch (message.what) {
                 case PUBLISH_RES_REQ:
-                try {
-                    JSONObject userObject = new JSONObject(Response);
-                    HashMap<String, String> mp = new HashMap<>();
-                    mp.put(PUBLISH_RET_RES_ID_KEY, userObject.getString(PUBLISH_RET_RES_ID_KEY));
-                    callback.onSuccess(200, mp, PUBLISH_RES_REQ);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                    try {
+                        JSONObject userObject = new JSONObject(Response);
+                        HashMap<String, String> mp = new HashMap<>();
+                        mp.put(PUBLISH_RET_RES_ID_KEY, userObject.getString(PUBLISH_RET_RES_ID_KEY));
+                        callback.onSuccess((Integer) userObject.get("publishState"), mp, PUBLISH_RES_REQ);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                     break;
                 default:
                     break;

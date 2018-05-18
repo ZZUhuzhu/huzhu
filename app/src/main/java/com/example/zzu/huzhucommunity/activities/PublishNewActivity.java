@@ -9,6 +9,7 @@ import android.support.v7.app.ActionBar;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -34,6 +35,7 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 
 public class PublishNewActivity extends BaseActivity implements AsyncHttpCallback {
+    private static final String TAG = "PublishNewActivity";
     public static final int PUBLISH_NEW_RESOURCE = 1;
     public static final int PUBLISH_NEW_REQUEST = 2;
 
@@ -76,9 +78,11 @@ public class PublishNewActivity extends BaseActivity implements AsyncHttpCallbac
         priceEditText = findViewById(R.id.PublishNewRes_price_edit_text);
         typeSpinner = findViewById(R.id.PublishNewRes_type_spinner);
 
-        String curDate = calendar.get(Calendar.YEAR) + "-" + (calendar.get(Calendar.MONTH) + 1) + "-"
-                + calendar.get(Calendar.DAY_OF_MONTH);
-        String curTime = calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE);
+        int year = calendar.get(Calendar.YEAR), mon = calendar.get(Calendar.MONTH) + 1,
+                day = calendar.get(Calendar.DAY_OF_MONTH);
+        int hour = calendar.get(Calendar.HOUR_OF_DAY), min = calendar.get(Calendar.MINUTE);
+        String curDate = Utilities.formatTime(year, mon, day);
+        String curTime = Utilities.formatTime(hour, min);
         dateTextView.setText(curDate);
         timeTextView.setText(curTime);
 
@@ -109,13 +113,7 @@ public class PublishNewActivity extends BaseActivity implements AsyncHttpCallbac
                                 new TimePickerDialog.OnTimeSetListener() {
                                     @Override
                                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                                        String hour = "" + hourOfDay, min = "" + minute;
-                                        if (hour.length() == 1)
-                                            hour = "0" + hour;
-                                        if (min.length() == 1)
-                                            min = "0" + min;
-                                        String pickedTime = hour + ":" + min;
-                                        timeTextView.setText(pickedTime);
+                                        timeTextView.setText(Utilities.formatTime(hourOfDay, minute));
                                     }
                                 }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true);
                         timePickerDialog.show();
@@ -125,8 +123,7 @@ public class PublishNewActivity extends BaseActivity implements AsyncHttpCallbac
                                 new DatePickerDialog.OnDateSetListener() {
                                     @Override
                                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                                        String setDate = year + "-" + (month + 1) + "-" + dayOfMonth;
-                                        dateTextView.setText(setDate);
+                                        dateTextView.setText(Utilities.formatTime(year, month + 1, dayOfMonth));
                                     }
                                 }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
                         datePickerDialog.show();
@@ -151,7 +148,7 @@ public class PublishNewActivity extends BaseActivity implements AsyncHttpCallbac
         String title = titleEditText.getText().toString();
         String content = contentEditText.getText().toString(),
                 date = dateTextView.getText().toString(),
-                time = timeTextView.getText().toString(),
+                time = timeTextView.getText().toString() + ":00",
                 price = priceEditText.getText().toString();
         String type = (String) typeSpinner.getSelectedItem();
         if (TextUtils.isEmpty(time) || TextUtils.isEmpty(title) || TextUtils.isEmpty(content) || TextUtils.isEmpty(price)){
@@ -206,8 +203,10 @@ public class PublishNewActivity extends BaseActivity implements AsyncHttpCallbac
 
     @Override
     public void onSuccess(int statusCode, HashMap<String, String> mp, int requestCode) {
-        if (statusCode != 200)
+        if (statusCode != 200){
+            Toast.makeText(MyApplication.getContext(), Utilities.TOAST_NET_WORK_ERROR, Toast.LENGTH_SHORT).show();
             return;
+        }
         switch (requestCode){
             case Publish.PUBLISH_RES_REQ:
                 String resID = mp.get(Publish.PUBLISH_RET_RES_ID_KEY);

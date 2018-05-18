@@ -391,7 +391,14 @@ public class Utilities {
                 case PICK_IMAGE_FROM_CAMERA:
                     Bundle bundle = data.getExtras();
                     if (bundle != null) {
-                        return (Bitmap) bundle.get("data");
+                        Bitmap bitmap = (Bitmap) bundle.get("data");
+                        ByteArrayOutputStream tmpOS = new ByteArrayOutputStream();
+                        if (bitmap != null) {
+                            bitmap.compress(Bitmap.CompressFormat.JPEG, 10, tmpOS);
+                            byte[] tmp = tmpOS.toByteArray();
+                            bitmap = BitmapFactory.decodeByteArray(tmp, 0, tmp.length);
+                        }
+                        return bitmap;
                     }
                     return null;
                 case PICK_IMAGE_FROM_GALLERY:
@@ -400,7 +407,9 @@ public class Utilities {
                         return null;
                     ContentResolver contentResolver = MyApplication.getContext().getContentResolver();
                     try {
-                        return BitmapFactory.decodeStream(contentResolver.openInputStream(uri));
+                        BitmapFactory.Options options = new BitmapFactory.Options();
+                        options.inSampleSize = 10;
+                        return BitmapFactory.decodeStream(contentResolver.openInputStream(uri), null, options);
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                         return null;
@@ -464,6 +473,18 @@ public class Utilities {
                 Integer.parseInt(day), Integer.parseInt(hour), Integer.parseInt(min), Integer.parseInt(sec));
         GregorianCalendar meCalendar = new GregorianCalendar();
         return tiCalendar.before(meCalendar);
+    }
+
+    public static String formatTime(int y, int mo, int d){
+        return y + "-" + (mo < 10? "0" + mo: mo) + "-" + (d < 10? "0" + d: d);
+    }
+    public static String formatTime(int h, int mi){
+        return (h < 10? "0" + h: h) + ":" + (mi < 10? "0" + mi: mi);
+    }
+    public static String GetCurFormatTime(){
+        GregorianCalendar calendar = new GregorianCalendar();
+        return formatTime(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)) +
+                " " + formatTime(calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE));
     }
 
     /**
