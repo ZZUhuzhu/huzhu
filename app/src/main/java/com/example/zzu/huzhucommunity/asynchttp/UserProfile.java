@@ -41,7 +41,13 @@ public class UserProfile {
     private static final String USER_SEX_JSON_key = "userSex";
     private static final String USER_GRADE_JSON_KEY = "userGrade";
     private static final String USER_DEPARTMENT_JSON_KEY = "userDepartment";
-    private static final String USER_PHONE_JSON_KEY = "userPhone";
+    private static final String USER_PHONE_JSON_KEY = "userPhone",
+            STATUS_JOSN_KEY = "status",
+            PUBLISHNUMBER_JSON_KEY = "publishNumber",
+            STARNUMBER_JSON_KEY = "starNumber",
+            TRACKNUMBER_JSON_KEY = "trackNumber",
+            COMMENTNUMBER_JSON_KEY = "commentNumber",
+            COMPLETERNUMBER_JSON_KEY = "completerNumber";
 
 
     /**
@@ -191,7 +197,15 @@ public class UserProfile {
                     try {
                         JSONObject userObject = new JSONObject(Response);
                         int code=userObject.getInt(USER_STATUS_JSON_KEY);
-                        callback.onSuccess(code, null, 0);
+                        HashMap<String, String> mp = new HashMap<>(); //线程不安全
+                        mp.put(STATUS_JOSN_KEY, code + "");
+                        mp.put(PUBLISHNUMBER_JSON_KEY, userObject.getString("publishNumber"));
+                        mp.put(STARNUMBER_JSON_KEY, userObject.getString("starNumber"));
+                        mp.put(TRACKNUMBER_JSON_KEY, userObject.getString("trackNumber"));
+                        mp.put(COMMENTNUMBER_JSON_KEY, "commentNumber");
+                        mp.put(COMPLETERNUMBER_JSON_KEY, "completerNumber");
+
+                        callback.onSuccess(code, mp, GET_USER_ALL_KINDS_NUMBER);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
