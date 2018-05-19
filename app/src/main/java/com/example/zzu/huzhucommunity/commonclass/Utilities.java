@@ -3,6 +3,7 @@ package com.example.zzu.huzhucommunity.commonclass;
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -11,6 +12,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
@@ -31,7 +33,12 @@ import com.google.gson.reflect.TypeToken;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
@@ -50,12 +57,22 @@ import static com.example.zzu.huzhucommunity.asynchttp.Profile.GET_ACCOUNT_PROFI
 import static com.example.zzu.huzhucommunity.asynchttp.Profile.GET_ACCOUNT_PROFILE_USER_PHONE_KEY;
 import static com.example.zzu.huzhucommunity.asynchttp.Profile.GET_ACCOUNT_PROFILE_USER_REG_TIME_KEY;
 import static com.example.zzu.huzhucommunity.asynchttp.Profile.GET_ACCOUNT_PROFILE_USER_SEX_KEY;
+import static com.example.zzu.huzhucommunity.commonclass.MyApplication.getContext;
 
 /**
  * Created by FEI on 2018/5/8.
  * 工具类，包含与活动无关的功能及常量：
  *      存放已登录用户个人信息
  *      获取已登录用户ID
+ *
+ * 由 {@link #USER_ID_TO_PROFILE_FILE_NAME} SP 存放的 ID -> FILENAME 映射
+ * 获得特定用户的 SP 文件 : {@link #GetSPFileNameFromUserID(String)}
+ *
+ * 通过获得的名字即可打开相应的 SharedPreference 进行操作
+ *
+ * 设置项与应用有关，与用户无关
+ *
+ * 用户头像，UserProfile 界面背景图存放在相应用户 SP 文件中
  */
 
 public class Utilities {
@@ -87,6 +104,7 @@ public class Utilities {
     /**
      * 存放到sharedPreference时的键
      */
+    private static final String USER_PROFILE_BG_KEY = "userProfileBG";
     private static final String USER_ID_KEY_SHARED_PREFERENCE = "userAccount";
     private static final String USER_NAME_KEY_SHARED_PREFERENCE = "userName";
     private static final String USER_HEAD_KEY_SHARED_PREFERENCE = "userHead";
@@ -129,7 +147,7 @@ public class Utilities {
      * @return 存放用户个人信息的文件名
      */
     private static String GetSPFileNameFromUserID(String userID){
-        SharedPreferences sp = MyApplication.getContext().
+        SharedPreferences sp = getContext().
                 getSharedPreferences(USER_ID_TO_PROFILE_FILE_NAME, Context.MODE_PRIVATE);
         String fileName = sp.getString(userID, null);
         if (fileName != null){
@@ -151,11 +169,11 @@ public class Utilities {
      */
     public static void SaveLoginUserProfile(String userID, String userName, String userHead){
         SharedPreferences.Editor editor;
-        editor = MyApplication.getContext().getSharedPreferences(
+        editor = getContext().getSharedPreferences(
                 USER_ID_TO_PROFILE_FILE_NAME, Context.MODE_PRIVATE).edit();
         editor.putString(LOGIN_USER_ID_KEY, userID);
         editor.apply();
-        editor = MyApplication.getContext().getSharedPreferences(
+        editor = getContext().getSharedPreferences(
                 GetSPFileNameFromUserID(userID), Context.MODE_PRIVATE).edit();
         editor.putString(USER_ID_KEY_SHARED_PREFERENCE, userID);
         editor.putString(USER_NAME_KEY_SHARED_PREFERENCE, userName);
@@ -169,7 +187,7 @@ public class Utilities {
      * @param target 指定的对象
      */
     public static void SaveLoginUserProfile(String info, int target){
-        SharedPreferences sp = MyApplication.getContext().getSharedPreferences(
+        SharedPreferences sp = getContext().getSharedPreferences(
                 GetSPFileNameFromUserID(GetStringLoginUserId()), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
         switch (target){
@@ -202,7 +220,7 @@ public class Utilities {
      * @param mp 待保存的数据集
      */
     public static void SaveLoginUserProfile(HashMap<String, String> mp){
-        SharedPreferences.Editor editor = MyApplication.getContext().
+        SharedPreferences.Editor editor = getContext().
                 getSharedPreferences(GetSPFileNameFromUserID(GetStringLoginUserId()), Context.MODE_PRIVATE).edit();
         for (Object o : mp.entrySet()) {
             Map.Entry entry = (Map.Entry) o;
@@ -219,7 +237,7 @@ public class Utilities {
      * @param bitmap 待保存的 bitmap
      */
     public static void SaveLoginUserHeadBitmap(Bitmap bitmap){
-        SharedPreferences.Editor editor = MyApplication.getContext().
+        SharedPreferences.Editor editor = getContext().
                 getSharedPreferences(GetSPFileNameFromUserID(GetStringLoginUserId()), Context.MODE_PRIVATE).edit();
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG, 50, baos);
@@ -233,7 +251,7 @@ public class Utilities {
      * @return 返回已登录用户的用户名
      */
     public static String GetLoginUserUserName(){
-        SharedPreferences sp = MyApplication.getContext().
+        SharedPreferences sp = getContext().
                 getSharedPreferences(GetSPFileNameFromUserID(GetStringLoginUserId()), Context.MODE_PRIVATE);
         return sp.getString(GET_ACCOUNT_PROFILE_USER_NAME_KEY, DEF_STRING_VALUE_SHARED_PREFERENCE);
     }
@@ -244,7 +262,7 @@ public class Utilities {
      *          否则返回 {@link #USER_NOT_FOUND}
      */
     public static int GetLoginUserId(){
-        SharedPreferences sharedPreferences = MyApplication.getContext().getSharedPreferences
+        SharedPreferences sharedPreferences = getContext().getSharedPreferences
                 (USER_ID_TO_PROFILE_FILE_NAME, Context.MODE_PRIVATE);
 
         return Integer.parseInt(sharedPreferences.getString(LOGIN_USER_ID_KEY, USER_NOT_FOUND));
@@ -256,7 +274,7 @@ public class Utilities {
      *          否则返回 {@link #USER_NOT_FOUND}
      */
     public static String GetStringLoginUserId(){
-        SharedPreferences sharedPreferences = MyApplication.getContext().getSharedPreferences
+        SharedPreferences sharedPreferences = getContext().getSharedPreferences
                 (USER_ID_TO_PROFILE_FILE_NAME, Context.MODE_PRIVATE);
         return sharedPreferences.getString(LOGIN_USER_ID_KEY, USER_NOT_FOUND);
     }
@@ -266,7 +284,7 @@ public class Utilities {
      * @return 返回存放信息的 map
      */
     public static HashMap<String, String> GetLoginUserAccountProfile(){
-        SharedPreferences sp = MyApplication.getContext().
+        SharedPreferences sp = getContext().
                 getSharedPreferences(GetSPFileNameFromUserID(GetStringLoginUserId()), Context.MODE_PRIVATE);
         HashMap<String, String> mp = new HashMap<>();
         mp.put(STATUS_JSON_KEY, sp.getString(STATUS_JSON_KEY, DEF_STRING_VALUE_SHARED_PREFERENCE));
@@ -289,7 +307,7 @@ public class Utilities {
      */
     @Nullable
     public static Bitmap GetLoginUserHeadBitmapFromSP(){
-        SharedPreferences sharedPreferences = MyApplication.getContext().
+        SharedPreferences sharedPreferences = getContext().
                 getSharedPreferences(GetSPFileNameFromUserID(GetStringLoginUserId()), Context.MODE_PRIVATE);
         if (!sharedPreferences.contains(USER_HEAD_IMAGE_SHARED_PREFERENCE))
             return null;
@@ -303,7 +321,7 @@ public class Utilities {
      * @return 返回已登录用户的头像 URL
      */
     public static String GetLoginUserHeadUrl(){
-        SharedPreferences sharedPreferences = MyApplication.getContext().getSharedPreferences(
+        SharedPreferences sharedPreferences = getContext().getSharedPreferences(
                 GetSPFileNameFromUserID(GetStringLoginUserId()), Context.MODE_PRIVATE);
         return sharedPreferences.getString(USER_HEAD_KEY_SHARED_PREFERENCE, "");
     }
@@ -312,7 +330,7 @@ public class Utilities {
      * 用户登出时清空 SP 中的内容
      */
     static void Logout(){
-        SharedPreferences.Editor editor = MyApplication.getContext().
+        SharedPreferences.Editor editor = getContext().
                 getSharedPreferences(USER_ID_TO_PROFILE_FILE_NAME, Context.MODE_PRIVATE).edit();
         editor.remove(LOGIN_USER_ID_KEY);
         editor.apply();
@@ -324,7 +342,7 @@ public class Utilities {
      * @param on 是否开启
      */
     public static void SaveSettingOption(String target, boolean on){
-        SharedPreferences.Editor editor = MyApplication.getContext().getSharedPreferences(
+        SharedPreferences.Editor editor = getContext().getSharedPreferences(
                 SETTING_SP_NAME, Context.MODE_PRIVATE).edit();
         editor.putBoolean(target, on);
         editor.apply();
@@ -336,7 +354,7 @@ public class Utilities {
      * @return 是否已开启
      */
     public static boolean GetSettingOption(String target){
-        return MyApplication.getContext().getSharedPreferences(SETTING_SP_NAME, Context.MODE_PRIVATE)
+        return getContext().getSharedPreferences(SETTING_SP_NAME, Context.MODE_PRIVATE)
                 .getBoolean(target, false);
     }
 
@@ -346,10 +364,56 @@ public class Utilities {
      *          false：未存储
      */
     public static boolean IsLoginUserAccountProfileStored(){
-        SharedPreferences sharedPreferences = MyApplication.getContext().
+        SharedPreferences sharedPreferences = getContext().
                 getSharedPreferences(GetSPFileNameFromUserID(GetStringLoginUserId()), Context.MODE_PRIVATE);
         return sharedPreferences.contains(ACCOUNT_PROFILE_INSIDE_SHARED_PREFERENCE) &&
                 sharedPreferences.getBoolean(ACCOUNT_PROFILE_INSIDE_SHARED_PREFERENCE, false);
+    }
+
+    private static String userProfileBGPath = null;
+    /**
+     * 将用户信息界面的背景图片存放到内部存储中
+     * 存储路径 {@link #userProfileBGPath}
+     *
+     * @param bitmap 图片
+     */
+    public static void SaveUserProfileBGImage(Bitmap bitmap){
+        File dir = new ContextWrapper(getContext()).getDir("imageDir", Context.MODE_PRIVATE);
+        File myPath = new File(dir, "profileBG.jpg");
+        userProfileBGPath = myPath.getAbsolutePath();
+        FileOutputStream fos = null;
+        try {
+            fos = new FileOutputStream(myPath);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        finally {
+            if (fos != null){
+                try {
+                    fos.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    /**
+     * 获得内部存储中存放的用户信息界面的背景图片
+     * @return 图片或 null 如果抛出异常或内部存储中没有
+     */
+    @Nullable
+    public static Bitmap GetUserProfileBGImage(){
+        if (userProfileBGPath == null)
+            return null;
+        File f = new File(userProfileBGPath);
+        try {
+            return BitmapFactory.decodeStream(new FileInputStream(f));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     /**
@@ -394,7 +458,7 @@ public class Utilities {
                         Bitmap bitmap = (Bitmap) bundle.get("data");
                         ByteArrayOutputStream tmpOS = new ByteArrayOutputStream();
                         if (bitmap != null) {
-                            bitmap.compress(Bitmap.CompressFormat.JPEG, 10, tmpOS);
+                            bitmap.compress(Bitmap.CompressFormat.JPEG, 35, tmpOS);
                             byte[] tmp = tmpOS.toByteArray();
                             bitmap = BitmapFactory.decodeByteArray(tmp, 0, tmp.length);
                         }
@@ -405,10 +469,10 @@ public class Utilities {
                     Uri uri = data.getData();
                     if (uri == null)
                         return null;
-                    ContentResolver contentResolver = MyApplication.getContext().getContentResolver();
+                    ContentResolver contentResolver = getContext().getContentResolver();
                     try {
                         BitmapFactory.Options options = new BitmapFactory.Options();
-                        options.inSampleSize = 10;
+                        options.inSampleSize = 7;
                         return BitmapFactory.decodeStream(contentResolver.openInputStream(uri), null, options);
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
@@ -426,7 +490,7 @@ public class Utilities {
      * @return A float value to represent px equivalent to dp depending on device density
      */
     public static float convertDpToPixel(float dp){
-        Resources resources = MyApplication.getContext().getResources();
+        Resources resources = getContext().getResources();
         DisplayMetrics metrics = resources.getDisplayMetrics();
         return dp * ((float)metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT);
     }
@@ -438,7 +502,7 @@ public class Utilities {
      * @return A float value to represent dp equivalent to px value
      */
     public static float convertPixelsToDp(float px){
-        Resources resources = MyApplication.getContext().getResources();
+        Resources resources = getContext().getResources();
         DisplayMetrics metrics = resources.getDisplayMetrics();
         return px / ((float)metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT);
     }

@@ -15,18 +15,21 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.zzu.huzhucommunity.R;
+import com.example.zzu.huzhucommunity.asynchttp.AsyncHttpCallback;
 import com.example.zzu.huzhucommunity.asynchttp.UserProfile;
 import com.example.zzu.huzhucommunity.commonclass.Utilities;
 import com.example.zzu.huzhucommunity.customlayout.UserProfileItemLayout;
 
+import java.util.HashMap;
 import java.util.Objects;
 
-public class UserProfileActivity extends BaseActivity {
+public class UserProfileActivity extends BaseActivity implements AsyncHttpCallback {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile_layout);
+
         Toolbar toolbar = findViewById(R.id.UserProfile_me_top_toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
@@ -34,8 +37,11 @@ public class UserProfileActivity extends BaseActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
+        findViewById(R.id.UserProfile_top_holder).setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+
         TextView userNameTextView = findViewById(R.id.UserProfile_me_name_text_view);
         ImageView userHeadImageView = findViewById(R.id.UserProfile_me_image_view);
+        ImageView bgImageView = findViewById(R.id.UserProfile_top_background_image_view);
         userNameTextView.setText(R.string.solider);
         userHeadImageView.setImageDrawable(getDrawable(R.drawable.profile_head_over_watch));
 
@@ -50,6 +56,9 @@ public class UserProfileActivity extends BaseActivity {
         addListener(R.id.UserProfile_top_background_image_view);
 
         initNumberAndUserHead();
+        Bitmap bitmap = Utilities.GetUserProfileBGImage();
+        if (bitmap != null)
+            bgImageView.setImageBitmap(bitmap);
     }
     /**
      * 为每个控件添加监听器
@@ -159,6 +168,7 @@ public class UserProfileActivity extends BaseActivity {
                 Bitmap bitmap = Utilities.GetImageFromDialog(requestCode, resultCode, data);
                 if (bitmap != null){
                     ((ImageView) findViewById(R.id.UserProfile_top_background_image_view)).setImageBitmap(bitmap);
+                    Utilities.SaveUserProfileBGImage(bitmap);
                 }
                 break;
         }
@@ -172,5 +182,15 @@ public class UserProfileActivity extends BaseActivity {
 
     public static void startMe(Context context){
         context.startActivity(new Intent(context, UserProfileActivity.class));
+    }
+
+    @Override
+    public void onSuccess(int statusCode, HashMap<String, String> mp, int requestCode) {
+
+    }
+
+    @Override
+    public void onError(int statusCode) {
+
     }
 }

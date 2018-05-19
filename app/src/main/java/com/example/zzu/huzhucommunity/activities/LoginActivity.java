@@ -2,6 +2,8 @@ package com.example.zzu.huzhucommunity.activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v7.app.ActionBar;
 import android.os.Bundle;
 import android.text.Editable;
@@ -12,6 +14,7 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -45,6 +48,12 @@ public class LoginActivity extends BaseActivity implements AsyncHttpCallback {
         passwordEditText = findViewById(R.id.LoginActivity_password_edit_text);
         accountCancelButton = findViewById(R.id.LoginActivity_account_cancel_button);
         accountEditText = findViewById(R.id.LoginActivity_account_edit_text);
+
+        findViewById(R.id.LoginActivity_top_view).setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+        ImageView tmp = findViewById(R.id.LoginActivity_profile_image_view);
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.profile_head);
+
+        tmp.setImageBitmap(bitmap);
 
         addListener(R.id.LoginActivity_login_button);
         addListener(R.id.LoginActivity_register_text_view);

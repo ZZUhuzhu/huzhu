@@ -86,7 +86,6 @@ public class UserProfile {
                                 message.what = GET_USER_ALL_KINDS_NUMBER;
                                 message.obj = result;
                                 handler.sendMessage(message);
-                                cBack.onSuccess(i, null, 0);
                             } catch (UnsupportedEncodingException e) {
                                 e.printStackTrace();
                             }

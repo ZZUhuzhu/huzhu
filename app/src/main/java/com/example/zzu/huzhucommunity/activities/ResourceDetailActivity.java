@@ -48,14 +48,14 @@ public class ResourceDetailActivity extends BaseActivity implements AsyncHttpCal
 
     private static final String STARRED = "已收藏";
     private static final String TO_STAR = "收藏";
-    private static final String STAR_CANCLED = "已取消收藏";
+    private static final String STAR_CANCELED = "已取消收藏";
 
     private static final int LOAD_USER_HEAD = 1;
     private static final int LOAD_RES_IMAGE = 2;
     private static final int LOAD_COMMENT_USER_HEAD = 3;
 
     private boolean resStarred = false;
-    private String resID, userID;
+    private String resID, userID, publisherID;
     private int resAdapterPos;
 
     private ResReqDetailBottomButtonLayout receiveButton;
@@ -357,7 +357,7 @@ public class ResourceDetailActivity extends BaseActivity implements AsyncHttpCal
             case ResourceDesc.UPDATE_STAR:
                 ResReqDetailBottomButtonLayout temp = findViewById(R.id.ResourceDetail_star_button);
                 if(resStarred) {
-                    Toast.makeText(MyApplication.getContext(), STAR_CANCLED, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MyApplication.getContext(), STAR_CANCELED, Toast.LENGTH_SHORT).show();
                     temp.setText(TO_STAR);
                     temp.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.star));
                 }

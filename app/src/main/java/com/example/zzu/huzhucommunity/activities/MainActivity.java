@@ -44,6 +44,8 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 /**
  * 登录成功后的主界面
  */
@@ -113,6 +115,8 @@ public class MainActivity extends BaseActivity implements AsyncHttpCallback {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_layout);
+
+        findViewById(R.id.MainActivity_top_holder).setLayerType(View.LAYER_TYPE_SOFTWARE, null);
 
         setSwipeToFinishOff();
 
@@ -208,7 +212,7 @@ public class MainActivity extends BaseActivity implements AsyncHttpCallback {
                     if (msg.what == UserProfile.GET_IMAGE_BITMAP_BY_URL){
                         Bitmap bitmap = (Bitmap) msg.obj;
                         if (bitmap != null){
-                            ((ImageView) findViewById(R.id.MainActivity_head_button)).setImageBitmap(bitmap);
+                            ((CircleImageView) findViewById(R.id.MainActivity_head_button)).setImageBitmap(bitmap);
                             Utilities.SaveLoginUserHeadBitmap(bitmap);
                         }
                     }

@@ -2,19 +2,19 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/LoginActivity_top_view"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     android:background="@drawable/login_background_2"
     tools:context=".activities.LoginActivity">
-    <ImageView
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/LoginActivity_profile_image_view"
         android:layout_width="@dimen/login_profile_image_size"
         android:layout_height="@dimen/login_profile_image_size"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="@dimen/login_margin_large"
-        android:src="@drawable/profile_head"
         android:contentDescription="@string/app_name"/>
     <RelativeLayout
         android:id="@+id/LoginActivity_account_edit_text_holder"
