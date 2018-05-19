@@ -14,6 +14,7 @@
         android:layout_width="@dimen/login_profile_image_size"
         android:layout_height="@dimen/login_profile_image_size"
         android:layout_centerHorizontal="true"
+        android:src="@drawable/profile_head"
         android:layout_marginTop="@dimen/login_margin_large"
         android:contentDescription="@string/app_name"/>
     <RelativeLayout

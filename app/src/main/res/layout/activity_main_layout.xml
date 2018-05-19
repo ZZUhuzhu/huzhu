@@ -83,7 +83,7 @@
             android:clickable="true"
             android:focusable="true"
             android:layout_height="match_parent"
-            android:background="@color/colorWhite"
+            android:background="@color/colorRiceWhite"
             android:orientation="vertical">
             <ImageButton
                 android:id="@+id/MainActivity_resource_button"
@@ -123,6 +123,7 @@
                 android:contentDescription="@string/resource"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
+                android:layout_marginTop="3dp"
                 android:background="@drawable/oval_blue_pressed_deep_button"
                 android:layout_gravity="center"
                 android:scaleType="fitCenter"
@@ -146,7 +147,7 @@
             android:clickable="true"
             android:focusable="true"
             android:layout_height="match_parent"
-            android:background="@color/colorWhite"
+            android:background="@color/colorRiceWhite"
             android:orientation="vertical">
             <ImageButton
                 android:id="@+id/MainActivity_request_button"

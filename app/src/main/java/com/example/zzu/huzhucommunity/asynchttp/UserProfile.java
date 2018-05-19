@@ -1,11 +1,8 @@
 package com.example.zzu.huzhucommunity.asynchttp;
 
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Handler;
 import android.os.Message;
-import android.support.annotation.Nullable;
-import android.util.Log;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -28,7 +25,7 @@ public class UserProfile {
 
     private static final UserProfile ourInstance = new UserProfile();
     private AsyncHttpCallback callback;
-    private static final int GET_USER_ALL_KINDS_NUMBER = 10601;
+    public static final int GET_USER_ALL_KINDS_NUMBER = 10601;
     private static final int GET_USER_PROFILE = 10901;
     public static final int GET_IMAGE_BITMAP_BY_URL = 11201;
     /**
@@ -41,13 +38,13 @@ public class UserProfile {
     private static final String USER_SEX_JSON_key = "userSex";
     private static final String USER_GRADE_JSON_KEY = "userGrade";
     private static final String USER_DEPARTMENT_JSON_KEY = "userDepartment";
-    private static final String USER_PHONE_JSON_KEY = "userPhone",
-            STATUS_JOSN_KEY = "status",
-            PUBLISHNUMBER_JSON_KEY = "publishNumber",
-            STARNUMBER_JSON_KEY = "starNumber",
-            TRACKNUMBER_JSON_KEY = "trackNumber",
-            COMMENTNUMBER_JSON_KEY = "commentNumber",
-            COMPLETERNUMBER_JSON_KEY = "completerNumber";
+    public static final String USER_PHONE_JSON_KEY = "userPhone",
+            STATUS_JSON_KEY = "status",
+            PUBLISH_NUMBER_JSON_KEY = "publishNumber",
+            STAR_NUMBER_JSON_KEY = "starNumber",
+            TRACK_NUMBER_JSON_KEY = "trackNumber",
+            COMMENT_NUMBER_JSON_KEY = "commentNumber",
+            RECEIVED_NUMBER_JSON_KEY = "completerNumber";
 
 
     /**
@@ -198,12 +195,12 @@ public class UserProfile {
                         JSONObject userObject = new JSONObject(Response);
                         int code=userObject.getInt(USER_STATUS_JSON_KEY);
                         HashMap<String, String> mp = new HashMap<>(); //线程不安全
-                        mp.put(STATUS_JOSN_KEY, code + "");
-                        mp.put(PUBLISHNUMBER_JSON_KEY, userObject.getString("publishNumber"));
-                        mp.put(STARNUMBER_JSON_KEY, userObject.getString("starNumber"));
-                        mp.put(TRACKNUMBER_JSON_KEY, userObject.getString("trackNumber"));
-                        mp.put(COMMENTNUMBER_JSON_KEY, "commentNumber");
-                        mp.put(COMPLETERNUMBER_JSON_KEY, "completerNumber");
+                        mp.put(STATUS_JSON_KEY, code + "");
+                        mp.put(PUBLISH_NUMBER_JSON_KEY, userObject.getString("publishNumber"));
+                        mp.put(STAR_NUMBER_JSON_KEY, userObject.getString("starNumber"));
+                        mp.put(TRACK_NUMBER_JSON_KEY, userObject.getString("trackNumber"));
+                        mp.put(COMMENT_NUMBER_JSON_KEY, "commentNumber");
+                        mp.put(RECEIVED_NUMBER_JSON_KEY, "completerNumber");
 
                         callback.onSuccess(code, mp, GET_USER_ALL_KINDS_NUMBER);
                     } catch (JSONException e) {

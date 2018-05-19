@@ -13,10 +13,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.zzu.huzhucommunity.R;
 import com.example.zzu.huzhucommunity.asynchttp.AsyncHttpCallback;
+import com.example.zzu.huzhucommunity.asynchttp.Main;
 import com.example.zzu.huzhucommunity.asynchttp.UserProfile;
+import com.example.zzu.huzhucommunity.commonclass.MyApplication;
 import com.example.zzu.huzhucommunity.commonclass.Utilities;
 import com.example.zzu.huzhucommunity.customlayout.UserProfileItemLayout;
 
@@ -59,6 +62,8 @@ public class UserProfileActivity extends BaseActivity implements AsyncHttpCallba
         Bitmap bitmap = Utilities.GetUserProfileBGImage();
         if (bitmap != null)
             bgImageView.setImageBitmap(bitmap);
+
+        UserProfile.getOurInstance().getUserAllKindsNumber(Utilities.GetStringLoginUserId(), this);
     }
     /**
      * 为每个控件添加监听器
@@ -127,19 +132,19 @@ public class UserProfileActivity extends BaseActivity implements AsyncHttpCallba
         else {
             ((ImageView) findViewById(R.id.UserProfile_me_image_view)).setImageBitmap(bitmap);
         }
-
-        UserProfileItemLayout itemLayout = findViewById(R.id.UserProfile_resource_published_item);
-        itemLayout.setAmount(0);
-        itemLayout = findViewById(R.id.UserProfile_resource_received_item);
-        itemLayout.setAmount(1);
-        itemLayout = findViewById(R.id.UserProfile_star_item);
-        itemLayout.setAmount(2);
-        itemLayout = findViewById(R.id.UserProfile_track_item);
-        itemLayout.setAmount(3);
-        itemLayout = findViewById(R.id.UserProfile_comment_item);
-        itemLayout.setAmount(4);
-        itemLayout = findViewById(R.id.UserProfile_message_item);
-        itemLayout.setAmount(5);
+//
+//        UserProfileItemLayout itemLayout = findViewById(R.id.UserProfile_resource_published_item);
+//        itemLayout.setAmount(0);
+//        itemLayout = findViewById(R.id.UserProfile_resource_received_item);
+//        itemLayout.setAmount(1);
+//        itemLayout = findViewById(R.id.UserProfile_star_item);
+//        itemLayout.setAmount(2);
+//        itemLayout = findViewById(R.id.UserProfile_track_item);
+//        itemLayout.setAmount(3);
+//        itemLayout = findViewById(R.id.UserProfile_comment_item);
+//        itemLayout.setAmount(4);
+//        itemLayout = findViewById(R.id.UserProfile_message_item);
+//        itemLayout.setAmount(5);
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -186,7 +191,29 @@ public class UserProfileActivity extends BaseActivity implements AsyncHttpCallba
 
     @Override
     public void onSuccess(int statusCode, HashMap<String, String> mp, int requestCode) {
-
+        if (statusCode != 200){
+            Toast.makeText(MyApplication.getContext(), Utilities.TOAST_NET_WORK_ERROR, Toast.LENGTH_SHORT).show();
+            return;
+        }
+        switch (requestCode){
+            case UserProfile.GET_USER_ALL_KINDS_NUMBER:
+                UserProfileItemLayout itemLayout = findViewById(R.id.UserProfile_resource_published_item);
+                int publishNum = Integer.parseInt(mp.get(UserProfile.PUBLISH_NUMBER_JSON_KEY));
+                itemLayout.setAmount(publishNum);
+                itemLayout = findViewById(R.id.UserProfile_star_item);
+                int starNum = Integer.parseInt(mp.get(UserProfile.STAR_NUMBER_JSON_KEY));
+                itemLayout.setAmount(starNum);
+                itemLayout = findViewById(R.id.UserProfile_track_item);
+                int trackNum = Integer.parseInt(mp.get(UserProfile.TRACK_NUMBER_JSON_KEY));
+                itemLayout.setAmount(trackNum);
+                itemLayout = findViewById(R.id.UserProfile_comment_item);
+                int commentNum = Integer.parseInt(mp.get(UserProfile.COMMENT_NUMBER_JSON_KEY));
+                itemLayout.setAmount(commentNum);
+                itemLayout = findViewById(R.id.UserProfile_resource_received_item);
+                int receivedNum = Integer.parseInt(mp.get(UserProfile.RECEIVED_NUMBER_JSON_KEY));
+                itemLayout.setAmount(receivedNum);
+                break;
+        }
     }
 
     @Override

@@ -44,6 +44,7 @@
                     android:layout_height="wrap_content"
                     android:clickable="true"
                     android:focusable="true"
+                    app:amount_visibility="false"
                     app:image_src="@drawable/publish_plane_blue"
                     app:item_text="@string/publishedByMe"/>
                 <com.example.zzu.huzhucommunity.customlayout.UserProfileItemLayout
@@ -52,6 +53,7 @@
                     android:layout_height="wrap_content"
                     android:clickable="true"
                     android:focusable="true"
+                    app:amount_visibility="false"
                     app:item_text="@string/receivedByMe"
                     app:image_src="@drawable/receive_green"/>
             </LinearLayout>
@@ -65,6 +67,7 @@
                     android:id="@+id/UserProfile_star_item"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    app:amount_visibility="false"
                     android:clickable="true"
                     android:focusable="true"
                     app:image_src="@drawable/star_yellow"
@@ -73,6 +76,7 @@
                     android:id="@+id/UserProfile_track_item"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    app:amount_visibility="false"
                     android:clickable="true"
                     android:focusable="true"
                     app:item_text="@string/myTrack"
@@ -88,6 +92,7 @@
                     android:id="@+id/UserProfile_comment_item"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    app:amount_visibility="false"
                     android:clickable="true"
                     android:focusable="true"
                     app:image_src="@drawable/comment_colorfule"
@@ -96,6 +101,7 @@
                     android:id="@+id/UserProfile_message_item"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    app:amount_visibility="false"
                     android:clickable="true"
                     android:focusable="true"
                     app:item_text="@string/myMessage"
