@@ -35,7 +35,8 @@ public class Publish {
 
     private static final String NAME_PARA = "name";
     private static final String IMAGE_PARA = "image";
-    private static final String SERVER_PATH = "http://139.199.38.177/huzhu/php/SavePicture.php";
+    private static final String UPLOAD_IMAGE_TYPE = "type";
+    private static final String USER_ID_PARA = "userID";
 
     public static final String PUBLISH_RET_RES_ID_KEY = "resourceID";
 
@@ -130,7 +131,7 @@ public class Publish {
      * @param name 图片名
      * @param callback 回调对象
      */
-    public void uploadImage(Bitmap image, String name, final AsyncHttpCallback callback){
+    public void uploadImage(Bitmap image, String name, String type, String id, final AsyncHttpCallback callback){
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         image.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
         String encodedImage = Base64.encodeToString(byteArrayOutputStream.toByteArray(), Base64.DEFAULT);
@@ -138,8 +139,11 @@ public class Publish {
         AsyncHttpClient client = new AsyncHttpClient();
         client.setTimeout(3000);
         RequestParams params = new RequestParams();
+        params.add(UPLOAD_IMAGE_TYPE, type);
+        params.add(USER_ID_PARA, id);
         params.add(NAME_PARA, name);
         params.add(IMAGE_PARA, encodedImage);
+        String SERVER_PATH = "http://139.199.38.177/huzhu/php/SavePicture.php";
         client.post(SERVER_PATH, params, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int i, Header[] headers, byte[] bytes) {
@@ -177,6 +181,7 @@ public class Publish {
             params.add(NAME_PARA, names.get(outI));
             params.add(IMAGE_PARA, encodedImage);
             final int tmpOI = outI;
+            String SERVER_PATH = "http://139.199.38.177/huzhu/php/SavePicture.php";
             client.post(SERVER_PATH, params, new AsyncHttpResponseHandler() {
                 @Override
                 public void onSuccess(int i, Header[] headers, byte[] bytes) {

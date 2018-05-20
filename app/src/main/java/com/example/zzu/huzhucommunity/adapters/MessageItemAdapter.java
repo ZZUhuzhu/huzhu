@@ -118,8 +118,8 @@ public class MessageItemAdapter extends RecyclerView.Adapter<MessageItemAdapter.
             messageHolder.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-
-                            ChatRoomActivity.startMe(context);
+                            NewMessagesItem item = messagesItems.get(getAdapterPosition());
+                            ChatRoomActivity.startMe(context, item.getSenderID() + "", item.getSenderName());
                             messagesItems.get(getAdapterPosition()).setRead(true);
                         }
                     });

@@ -219,7 +219,7 @@ public class PublishNewActivity extends BaseActivity implements AsyncHttpCallbac
                     return;
                 }
                 else if (bitmapSz == 1){
-                    Publish.getOurInstance().uploadImage(bitmaps.get(0), resID + "_1", this);
+                    Publish.getOurInstance().uploadImage(bitmaps.get(0), resID + "_1", "1", "0", this);
                 }
                 else{
                     ArrayList<String> names = new ArrayList<>();

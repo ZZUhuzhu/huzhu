@@ -3,7 +3,9 @@ package com.example.zzu.huzhucommunity.asynchttp;
 import android.graphics.BitmapFactory;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 
+import com.example.zzu.huzhucommunity.commonclass.Utilities;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -26,25 +28,25 @@ public class UserProfile {
     private static final UserProfile ourInstance = new UserProfile();
     private AsyncHttpCallback callback;
     public static final int GET_USER_ALL_KINDS_NUMBER = 10601;
-    private static final int GET_USER_PROFILE = 10901;
-    public static final int GET_IMAGE_BITMAP_BY_URL = 11201;
+    public static final int GET_USER_PROFILE = 10901;
     /**
      * 获取用户账户信息时的 JSON 键
      * 以及放入map里面时的键
      */
     private static final String USER_STATUS_JSON_KEY = "status";
-    private static final String USER_HEAD_JSON_KEY = "userHead";
-    private static final String USER_NAME_JSON_KEY = "userName";
-    private static final String USER_SEX_JSON_key = "userSex";
-    private static final String USER_GRADE_JSON_KEY = "userGrade";
-    private static final String USER_DEPARTMENT_JSON_KEY = "userDepartment";
-    public static final String USER_PHONE_JSON_KEY = "userPhone",
-            STATUS_JSON_KEY = "status",
-            PUBLISH_NUMBER_JSON_KEY = "publishNumber",
-            STAR_NUMBER_JSON_KEY = "starNumber",
-            TRACK_NUMBER_JSON_KEY = "trackNumber",
-            COMMENT_NUMBER_JSON_KEY = "commentNumber",
-            RECEIVED_NUMBER_JSON_KEY = "completerNumber";
+    public static final String USER_HEAD_JSON_KEY = "userHead";
+    public static final String USER_NAME_JSON_KEY = "userName";
+    public static final String USER_SEX_JSON_key = "userSex";
+    public static final String USER_GRADE_JSON_KEY = "userGrade";
+    public static final String USER_DEPARTMENT_JSON_KEY = "userDepartment";
+    public static final String USER_PHONE_JSON_KEY = "userPhone";
+    private static final String STATUS_JSON_KEY = "status";
+    public static final String PUBLISH_NUMBER_JSON_KEY = "publishNumber";
+    public static final String STAR_NUMBER_JSON_KEY = "starNumber";
+    public static final String TRACK_NUMBER_JSON_KEY = "trackNumber";
+    public static final String COMMENT_NUMBER_JSON_KEY = "commentNumber";
+    public static final String RECEIVED_NUMBER_JSON_KEY = "completerNumber";
+    public static final String USER_REGISTER_TIME = "userRegisterTime ";
 
 
     /**
@@ -136,7 +138,6 @@ public class UserProfile {
                                 message.what = GET_USER_PROFILE;
                                 message.obj = result;
                                 handler.sendMessage(message);
-                                cBack.onSuccess(i, null, 0);
                             } catch (UnsupportedEncodingException e) {
                                 e.printStackTrace();
                             }
@@ -157,51 +158,22 @@ public class UserProfile {
         }
     }
 
-    /**
-     * 通过给定的图片 URL 获取用户头像并通过 handler 返回
-     * @param imageUrl 图片网络位置
-     */
-    public void getImageBitmapByUrl(String imageUrl, final Handler handler){
-        AsyncHttpClient client = new AsyncHttpClient();
-        client.setTimeout(3000);
-        client.get(imageUrl, new AsyncHttpResponseHandler() {
-            @Override
-            public void onSuccess(int i, Header[] headers, byte[] bytes) {
-                if (i == 200){
-                    Message message = new Message();
-                    message.what = GET_IMAGE_BITMAP_BY_URL;
-                    message.obj = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                    handler.sendMessage(message);
-                }
-            }
-            @Override
-            public void onFailure(int i, Header[] headers, byte[] bytes, Throwable throwable) {
-                Message message = new Message();
-                message.what = GET_IMAGE_BITMAP_BY_URL;
-                message.obj = null;
-                handler.sendMessage(message);
-            }
-        });
-    }
-
-
     private Handler handler = new Handler(new Handler.Callback() {
         @Override
         public boolean handleMessage(Message message) {
-            String Response = message.toString();
+            String Response = message.obj.toString();
             switch (message.what) {
                 case GET_USER_ALL_KINDS_NUMBER:
                     try {
                         JSONObject userObject = new JSONObject(Response);
                         int code=userObject.getInt(USER_STATUS_JSON_KEY);
-                        HashMap<String, String> mp = new HashMap<>(); //线程不安全
+                        HashMap<String, String> mp = new HashMap<>();
                         mp.put(STATUS_JSON_KEY, code + "");
-                        mp.put(PUBLISH_NUMBER_JSON_KEY, userObject.getString("publishNumber"));
-                        mp.put(STAR_NUMBER_JSON_KEY, userObject.getString("starNumber"));
-                        mp.put(TRACK_NUMBER_JSON_KEY, userObject.getString("trackNumber"));
-                        mp.put(COMMENT_NUMBER_JSON_KEY, "commentNumber");
-                        mp.put(RECEIVED_NUMBER_JSON_KEY, "completerNumber");
-
+                        mp.put(PUBLISH_NUMBER_JSON_KEY, userObject.getString(PUBLISH_NUMBER_JSON_KEY));
+                        mp.put(STAR_NUMBER_JSON_KEY, userObject.getString(STAR_NUMBER_JSON_KEY));
+                        mp.put(TRACK_NUMBER_JSON_KEY, userObject.getString(TRACK_NUMBER_JSON_KEY));
+                        mp.put(COMMENT_NUMBER_JSON_KEY, userObject.getString(COMMENT_NUMBER_JSON_KEY));
+                        mp.put(RECEIVED_NUMBER_JSON_KEY, userObject.getString(RECEIVED_NUMBER_JSON_KEY));
                         callback.onSuccess(code, mp, GET_USER_ALL_KINDS_NUMBER);
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -210,7 +182,6 @@ public class UserProfile {
                 case GET_USER_PROFILE:
                     try {
                         JSONObject userObject = new JSONObject(Response);
-                        // code 200 表示成功，map中的无用
                         int code = userObject.getInt(USER_STATUS_JSON_KEY);
                         String userHead = userObject.getString(USER_HEAD_JSON_KEY);
                         String userName = userObject.getString(USER_NAME_JSON_KEY);
@@ -226,7 +197,8 @@ public class UserProfile {
                         mp.put(USER_DEPARTMENT_JSON_KEY, userDepartment);
                         mp.put(USER_PHONE_JSON_KEY, userPhone);
                         mp.put(USER_STATUS_JSON_KEY, "" + code);
-                        callback.onSuccess(code, mp, 0);
+                        mp.put(USER_REGISTER_TIME, userObject.getString(USER_REGISTER_TIME));
+                        callback.onSuccess(code, mp, GET_USER_PROFILE);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }

@@ -206,10 +206,10 @@ public class MainActivity extends BaseActivity implements AsyncHttpCallback {
     public void initUserHeadImage(){
         Bitmap bitmap = Utilities.GetLoginUserHeadBitmapFromSP();
         if (bitmap == null){
-            UserProfile.getOurInstance().getImageBitmapByUrl(Utilities.GetLoginUserHeadUrl(), new Handler(new Handler.Callback() {
+            Utilities.getImageBitmapByUrl(Utilities.GetLoginUserHeadUrl(), new Handler(new Handler.Callback() {
                 @Override
                 public boolean handleMessage(Message msg) {
-                    if (msg.what == UserProfile.GET_IMAGE_BITMAP_BY_URL){
+                    if (msg.what == Utilities.GET_IMAGE_BITMAP_BY_URL){
                         Bitmap bitmap = (Bitmap) msg.obj;
                         if (bitmap != null){
                             ((CircleImageView) findViewById(R.id.MainActivity_head_button)).setImageBitmap(bitmap);

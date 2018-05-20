@@ -21,7 +21,9 @@ import android.widget.Toast;
 import com.example.zzu.huzhucommunity.R;
 import com.example.zzu.huzhucommunity.asynchttp.AsyncHttpCallback;
 import com.example.zzu.huzhucommunity.asynchttp.LoginRegister;
+import com.example.zzu.huzhucommunity.commonclass.ActivitiesCollector;
 import com.example.zzu.huzhucommunity.commonclass.MyApplication;
+import com.example.zzu.huzhucommunity.commonclass.Utilities;
 
 import java.util.HashMap;
 
@@ -61,6 +63,11 @@ public class LoginActivity extends BaseActivity implements AsyncHttpCallback {
         addListener(R.id.LoginActivity_account_edit_text);
         addListener(R.id.LoginActivity_password_edit_text);
         addListener(R.id.LoginActivity_account_cancel_button);
+    }
+
+    @Override
+    public void onBackPressed() {
+        ActivitiesCollector.finishAll();
     }
 
     /**

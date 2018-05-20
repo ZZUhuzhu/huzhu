@@ -294,8 +294,9 @@ public class AccountProfileActivity extends BaseActivity implements AsyncHttpCal
                 if (bitmap != null){
                     ((ImageView) findViewById(R.id.AccountProfileActivity_head_image_view)).setImageBitmap(bitmap);
                     ((ImageView) findViewById(R.id.AccountProfileActivity_expanded_image_view)).setImageBitmap(bitmap);
-                    Publish.getOurInstance().uploadImage(bitmap,
-                            Utilities.GetStringLoginUserId() + USER_HEAD_IMG_NAME_SUFFIX, this);
+                    String loginUserId = Utilities.GetStringLoginUserId();
+                    Publish.getOurInstance().uploadImage(bitmap, loginUserId + USER_HEAD_IMG_NAME_SUFFIX,
+                            "0", loginUserId, this);
                     ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
                     bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
                     newInfo = Base64.encodeToString(outputStream.toByteArray(), Base64.DEFAULT);

@@ -13,17 +13,19 @@
         android:fitsSystemWindows="true"
         app:elevation="0dp">
         <android.support.design.widget.CollapsingToolbarLayout
+            android:id="@+id/OthersProfileActivity_collapsing_tool_bar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
             app:contentScrim="@color/colorDeepSkyBlue"
             app:statusBarScrim="@color/colorDeepSkyBlue"
-            app:title="@string/solider"
+            app:title="@string/loading"
             app:expandedTitleTextAppearance="?android:attr/textAppearanceLarge"
             app:expandedTitleMarginStart="@dimen/common_margin_large"
             app:layout_scrollFlags="exitUntilCollapsed|scroll">
             <ImageView
+                android:id="@+id/OthersProfileActivity_head_image_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:contentDescription="@string/app_name"

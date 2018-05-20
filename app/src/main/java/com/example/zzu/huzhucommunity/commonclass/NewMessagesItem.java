@@ -64,6 +64,10 @@ public class NewMessagesItem implements Parcelable {
         return scrolled;
     }
 
+    public int getSenderID() {
+        return senderID;
+    }
+
     public boolean isRead() {return read;}
     public String getSenderName() {
         return senderName;

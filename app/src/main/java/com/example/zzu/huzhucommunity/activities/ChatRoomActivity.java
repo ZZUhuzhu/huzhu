@@ -36,6 +36,9 @@ import java.util.ArrayList;
  * 聊天界面活动
  */
 public class ChatRoomActivity extends BaseActivity {
+    private static final String USER_ID_EXTRA = "userID";
+    private static final String USER_NAME_EXTRA = "userName";
+
     private ImageButton sendImageButton;
     private Button sendButton;
     private ChatRoomMessageAdapter adapter;
@@ -43,15 +46,26 @@ public class ChatRoomActivity extends BaseActivity {
     private ArrayList<ChatRoomMessageItem> list = new ArrayList<>();
     private RecyclerView recyclerView;
 
+    private String userID, userName;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat_room_layout);
+
+        Intent intent = getIntent();
+        userID = intent.getStringExtra(USER_ID_EXTRA);
+        userName = intent.getStringExtra(USER_NAME_EXTRA);
+
         Toolbar toolbar = findViewById(R.id.ChatRoomActivity_toolbar);
         toolbar.setTitle(R.string.solider);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
-        if(actionBar != null) actionBar.setDisplayHomeAsUpEnabled(true);
+        if(actionBar != null) {
+            actionBar.setTitle(userName);
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+
 
         sendImageButton = findViewById(R.id.ChatRoomActivity_send_image_button);
         sendButton = findViewById(R.id.ChatRoomActivity_send_button);
@@ -134,7 +148,7 @@ public class ChatRoomActivity extends BaseActivity {
                 finish();
                 return true;
             case R.id.ChatRoom_sender_profile_menu_item:
-                OthersProfileActivity.startMe(ChatRoomActivity.this, 0);
+                OthersProfileActivity.startMe(ChatRoomActivity.this, userID);
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -180,7 +194,10 @@ public class ChatRoomActivity extends BaseActivity {
         }
     }
 
-    public static void startMe(Context context){
-        context.startActivity(new Intent(context, ChatRoomActivity.class));
+    public static void startMe(Context context, String userID, String userName){
+        Intent intent = new Intent(context, ChatRoomActivity.class);
+        intent.putExtra(USER_ID_EXTRA, userID);
+        intent.putExtra(USER_NAME_EXTRA, userName);
+        context.startActivity(new Intent());
     }
 }

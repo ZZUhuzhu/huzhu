@@ -2,6 +2,7 @@ package com.example.zzu.huzhucommunity.asynchttp;
 
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -461,6 +462,7 @@ public class ResourceDesc {
                         HashMap<String, String> mp = new HashMap<>();
                         int code= userObject.getInt("status");
                         mp.put(RESOURCE_STATUS_JSON_KEY, code + "");
+                        mp.put(USERId, userObject.getString(USERId));
                         mp.put(RESOURCE_USER_HEAD_JSON_KEY,
                                 userObject.getString(RESOURCE_USER_HEAD_JSON_KEY));
                         mp.put(RESOURCE_USERNAME_JSON_KEY,

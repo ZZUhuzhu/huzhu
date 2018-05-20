@@ -27,7 +27,7 @@ public class Received {
     private static final int DELETE_RECEIVED_RESOURCE = 11302;
 
     public static final String STATUS_JSON_KEY = "code";
-    public static final String NUNBER_JSON_KEY = "number";
+    public static final String NUMBER_JSON_KEY = "number";
 
     /**
      * 外部调用类方法，获得单体实例
@@ -144,11 +144,11 @@ public class Received {
                     try {
                         JSONObject userObject = new JSONObject(Response);
                         int code=userObject.getInt("status");
-                        String number = userObject.getString(NUNBER_JSON_KEY);
+                        String number = userObject.getString(NUMBER_JSON_KEY);
                         int n = Integer.parseInt(number);
                         HashMap<String, String> mp = new HashMap<>();
                         mp.put(STATUS_JSON_KEY, code + "");
-                        mp.put(NUNBER_JSON_KEY, number);
+                        mp.put(NUMBER_JSON_KEY, number);
                         for (int i = 0; i < n; ++i) {
                             mp.put("" + i, userObject.getString("" + i));
                         }

@@ -13,12 +13,15 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.util.Base64;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.util.Pair;
 
 import com.example.zzu.huzhucommunity.R;
 import com.example.zzu.huzhucommunity.asynchttp.Main;
@@ -30,6 +33,10 @@ import com.example.zzu.huzhucommunity.dataclass.Resource;
 import com.example.zzu.huzhucommunity.dataclass.UserTrack;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.AsyncHttpResponseHandler;
+
+import org.apache.http.Header;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -329,7 +336,7 @@ public class Utilities {
     /**
      * 用户登出时清空 SP 中的内容
      */
-    static void Logout(){
+    static void ClearSPToLogout(){
         SharedPreferences.Editor editor = getContext().
                 getSharedPreferences(USER_ID_TO_PROFILE_FILE_NAME, Context.MODE_PRIVATE).edit();
         editor.remove(LOGIN_USER_ID_KEY);
@@ -370,17 +377,14 @@ public class Utilities {
                 sharedPreferences.getBoolean(ACCOUNT_PROFILE_INSIDE_SHARED_PREFERENCE, false);
     }
 
-    private static String userProfileBGPath = null;
     /**
      * 将用户信息界面的背景图片存放到内部存储中
-     * 存储路径 {@link #userProfileBGPath}
      *
      * @param bitmap 图片
      */
     public static void SaveUserProfileBGImage(Bitmap bitmap){
         File dir = new ContextWrapper(getContext()).getDir("imageDir", Context.MODE_PRIVATE);
         File myPath = new File(dir, "profileBG.jpg");
-        userProfileBGPath = myPath.getAbsolutePath();
         FileOutputStream fos = null;
         try {
             fos = new FileOutputStream(myPath);
@@ -405,13 +409,13 @@ public class Utilities {
      */
     @Nullable
     public static Bitmap GetUserProfileBGImage(){
-        if (userProfileBGPath == null)
-            return null;
-        File f = new File(userProfileBGPath);
-        try {
-            return BitmapFactory.decodeStream(new FileInputStream(f));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
+        File f = new File(getContext().getDir("imageDir", Context.MODE_PRIVATE) + "/profileBG.jpg");
+        if (f.exists()){
+            try {
+                return BitmapFactory.decodeStream(new FileInputStream(f));
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
         }
         return null;
     }
@@ -533,7 +537,7 @@ public class Utilities {
         String year = time.substring(0, 4), month = time.substring(5, 7),
                 day = time.substring(8, 10);
         String hour = time.substring(11, 13), min = time.substring(14, 16), sec = time.substring(17, 19);
-        GregorianCalendar tiCalendar = new GregorianCalendar(Integer.parseInt(year), Integer.parseInt(month),
+        GregorianCalendar tiCalendar = new GregorianCalendar(Integer.parseInt(year), Integer.parseInt(month) - 1,
                 Integer.parseInt(day), Integer.parseInt(hour), Integer.parseInt(min), Integer.parseInt(sec));
         GregorianCalendar meCalendar = new GregorianCalendar();
         return tiCalendar.before(meCalendar);
@@ -549,6 +553,34 @@ public class Utilities {
         GregorianCalendar calendar = new GregorianCalendar();
         return formatTime(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)) +
                 " " + formatTime(calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE));
+    }
+
+    public static final int GET_IMAGE_BITMAP_BY_URL = 11201;
+    /**
+     * 通过给定的图片 URL 获取用户头像并通过 handler 返回
+     * @param imageUrl 图片网络位置
+     */
+    public static void getImageBitmapByUrl(String imageUrl, final Handler handler){
+        AsyncHttpClient client = new AsyncHttpClient();
+        client.setTimeout(3000);
+        client.get(imageUrl, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int i, Header[] headers, byte[] bytes) {
+                if (i == 200){
+                    Message message = new Message();
+                    message.what = GET_IMAGE_BITMAP_BY_URL;
+                    message.obj = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                    handler.sendMessage(message);
+                }
+            }
+            @Override
+            public void onFailure(int i, Header[] headers, byte[] bytes, Throwable throwable) {
+                Message message = new Message();
+                message.what = GET_IMAGE_BITMAP_BY_URL;
+                message.obj = null;
+                handler.sendMessage(message);
+            }
+        });
     }
 
     /**

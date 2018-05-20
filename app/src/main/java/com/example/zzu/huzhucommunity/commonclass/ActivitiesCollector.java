@@ -1,13 +1,11 @@
 package com.example.zzu.huzhucommunity.commonclass;
 
-import android.app.Activity;
 import android.content.Context;
 
 import com.example.zzu.huzhucommunity.activities.BaseActivity;
 import com.example.zzu.huzhucommunity.activities.LoginActivity;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by FEI on 2018/2/1.
@@ -28,6 +26,7 @@ public class ActivitiesCollector {
      * 结束所有活动
      */
     public static void finishAll(){
+        Utilities.ClearSPToLogout();
         for (BaseActivity activity: activities){
             if(activity != null)
                 activity.finish();
@@ -38,7 +37,7 @@ public class ActivitiesCollector {
      * 退出程序并回到登录界面
      */
     public static void exitLogin(Context context){
-        Utilities.Logout();
+        Utilities.ClearSPToLogout();
         LoginActivity.startMe(context);
         for (int i = 0; i < activities.size(); i++){
             activities.get(i).finish();

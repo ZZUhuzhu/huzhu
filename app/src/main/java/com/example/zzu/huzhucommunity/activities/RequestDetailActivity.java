@@ -130,11 +130,11 @@ public class RequestDetailActivity extends BaseActivity {
                         dialog.show();
                         break;
                     case R.id.RequestDetail_chat_button:
-                        ChatRoomActivity.startMe(RequestDetailActivity.this);
+//                        ChatRoomActivity.startMe(RequestDetailActivity.this);
                         break;
                     case R.id.RequestDetail_request_user_name_text_view:
                     case R.id.RequestDetail_request_user_image_view:
-                        OthersProfileActivity.startMe(RequestDetailActivity.this, -1);
+                        OthersProfileActivity.startMe(RequestDetailActivity.this, "-1");
                         break;
                 }
             }

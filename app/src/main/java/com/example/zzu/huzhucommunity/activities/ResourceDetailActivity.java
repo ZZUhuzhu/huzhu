@@ -55,7 +55,7 @@ public class ResourceDetailActivity extends BaseActivity implements AsyncHttpCal
     private static final int LOAD_COMMENT_USER_HEAD = 3;
 
     private boolean resStarred = false;
-    private String resID, userID, publisherID;
+    private String resID, loginUserID, publisherID, publisherName;
     private int resAdapterPos;
 
     private ResReqDetailBottomButtonLayout receiveButton;
@@ -104,7 +104,7 @@ public class ResourceDetailActivity extends BaseActivity implements AsyncHttpCal
             actionBar.setTitle(getIntent().getStringExtra(RES_TITLE_EXTRA));
         }
         resID = getIntent().getStringExtra(RES_ID_EXTRA);
-        userID = Utilities.GetStringLoginUserId();
+        loginUserID = Utilities.GetStringLoginUserId();
         resAdapterPos = getIntent().getIntExtra(RES_ADAPTER_POS, -1);
 
         commentItems = new ArrayList<>();
@@ -127,11 +127,11 @@ public class ResourceDetailActivity extends BaseActivity implements AsyncHttpCal
         addListener(R.id.ResourceDetail_res_user_image_view);
 
         if (Utilities.GetSettingOption(Utilities.RECORD_TRACK_KEY))
-            ResourceDesc.getOurInstance().addToTrack(userID, resID, this);
+            ResourceDesc.getOurInstance().addToTrack(loginUserID, resID, this);
         ResourceDesc.getOurInstance().getResPublisherInfo(resID, this);
         ResourceDesc.getOurInstance().getResourceDesc(resID, this);
         ResourceDesc.getOurInstance().getResourceComment(resID, this);
-        ResourceDesc.getOurInstance().getResStatusInfo(userID, resID, this);
+        ResourceDesc.getOurInstance().getResStatusInfo(loginUserID, resID, this);
     }
 
     /**
@@ -144,7 +144,7 @@ public class ResourceDetailActivity extends BaseActivity implements AsyncHttpCal
             public void onClick(View v) {
                 switch (res){
                     case R.id.ResourceDetail_star_button:
-                        ResourceDesc.getOurInstance().updateStar(userID, resID,
+                        ResourceDesc.getOurInstance().updateStar(loginUserID, resID,
                                 String.valueOf(!resStarred), ResourceDetailActivity.this);
                         break;
                     case R.id.ResourceDetail_receive_it_button:
@@ -155,7 +155,7 @@ public class ResourceDetailActivity extends BaseActivity implements AsyncHttpCal
                                 .setPositiveButton("确认", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        ResourceDesc.getOurInstance().receiveResource(userID, resID, ResourceDetailActivity.this);
+                                        ResourceDesc.getOurInstance().receiveResource(loginUserID, resID, ResourceDetailActivity.this);
                                         dialog.dismiss();
                                     }
                                 })
@@ -181,7 +181,7 @@ public class ResourceDetailActivity extends BaseActivity implements AsyncHttpCal
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         tmpComment = tmpEditText.getText().toString();
-                                        ResourceDesc.getOurInstance().publishComment(userID,
+                                        ResourceDesc.getOurInstance().publishComment(loginUserID,
                                                 "1", tmpComment, "0", resID, ResourceDetailActivity.this);
                                         dialog.dismiss();
                                     }
@@ -195,11 +195,19 @@ public class ResourceDetailActivity extends BaseActivity implements AsyncHttpCal
                                 .show();
                         break;
                     case R.id.ResourceDetail_chat_button:
-                        ChatRoomActivity.startMe(ResourceDetailActivity.this);
+                        if (publisherID != null && publisherName != null)
+                            ChatRoomActivity.startMe(ResourceDetailActivity.this, publisherID, publisherName);
                         break;
                     case R.id.ResourceDetail_res_user_name_text_view:
                     case R.id.ResourceDetail_res_user_image_view:
-                        OthersProfileActivity.startMe(ResourceDetailActivity.this, -1);
+                        if (loginUserID == null || publisherID == null){
+                            onError(2);
+                        }
+                        else if (loginUserID.equals(publisherID)){
+                            AccountProfileActivity.startMe(ResourceDetailActivity.this);
+                        }
+                        else
+                            OthersProfileActivity.startMe(ResourceDetailActivity.this, publisherID);
                         break;
                 }
             }
@@ -271,9 +279,10 @@ public class ResourceDetailActivity extends BaseActivity implements AsyncHttpCal
                 }).start();
                 break;
             case ResourceDesc.GET_RES_PUBLISHER_INFO:
-                String userName = mp.get(ResourceDesc.RESOURCE_USERNAME_JSON_KEY);
-                userNameTextView.setText(userName);
+                publisherName = mp.get(ResourceDesc.RESOURCE_USERNAME_JSON_KEY);
+                userNameTextView.setText(publisherName);
                 String userLastLogin = mp.get(ResourceDesc.RESOURCE_USER_LAST_LOGIN_JSON_KEY);
+                publisherID = mp.get(ResourceDesc.USERId);
                 userLastLoginTextView.setText(String.format("上次登录:%s", userLastLogin.substring(0, userLastLogin.length() - 3)));
                 final String userHead = mp.get(ResourceDesc.RESOURCE_USER_HEAD_JSON_KEY);
                 new Thread(new Runnable() {
@@ -350,7 +359,7 @@ public class ResourceDetailActivity extends BaseActivity implements AsyncHttpCal
                 commentHolder = findViewById(R.id.ResourceDetail_comment_holder);
                 CommentItemLayout commentItemLayout =
                         new CommentItemLayout(this, View.GONE,
-                                new CommentItem(Integer.parseInt(userID), Utilities.GetLoginUserUserName(),
+                                new CommentItem(Integer.parseInt(loginUserID), Utilities.GetLoginUserUserName(),
                                         tmpComment, Utilities.GetCurFormatTime(), Utilities.GetLoginUserHeadBitmapFromSP()));
                 commentHolder.addView(commentItemLayout, 0);
                 break;

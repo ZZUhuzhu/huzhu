@@ -17,7 +17,6 @@ import android.widget.Toast;
 
 import com.example.zzu.huzhucommunity.R;
 import com.example.zzu.huzhucommunity.asynchttp.AsyncHttpCallback;
-import com.example.zzu.huzhucommunity.asynchttp.Main;
 import com.example.zzu.huzhucommunity.asynchttp.UserProfile;
 import com.example.zzu.huzhucommunity.commonclass.MyApplication;
 import com.example.zzu.huzhucommunity.commonclass.Utilities;
@@ -58,7 +57,7 @@ public class UserProfileActivity extends BaseActivity implements AsyncHttpCallba
         addListener(R.id.UserProfile_me_holder);
         addListener(R.id.UserProfile_top_background_image_view);
 
-        initNumberAndUserHead();
+        initUserHead();
         Bitmap bitmap = Utilities.GetUserProfileBGImage();
         if (bitmap != null)
             bgImageView.setImageBitmap(bitmap);
@@ -109,16 +108,16 @@ public class UserProfileActivity extends BaseActivity implements AsyncHttpCallba
     /**
      * 初始化用户头像和数字信息
      */
-    public void initNumberAndUserHead(){
+    public void initUserHead(){
         String userName = Utilities.GetLoginUserUserName();
         if (!Objects.equals(userName, Utilities.DEF_STRING_VALUE_SHARED_PREFERENCE))
             ((TextView)findViewById(R.id.UserProfile_me_name_text_view)).setText(userName);
         Bitmap bitmap = Utilities.GetLoginUserHeadBitmapFromSP();
         if (bitmap == null){
-            UserProfile.getOurInstance().getImageBitmapByUrl(Utilities.GetLoginUserHeadUrl(), new Handler(new Handler.Callback() {
+            Utilities.getImageBitmapByUrl(Utilities.GetLoginUserHeadUrl(), new Handler(new Handler.Callback() {
                 @Override
                 public boolean handleMessage(Message msg) {
-                    if (msg.what == UserProfile.GET_IMAGE_BITMAP_BY_URL){
+                    if (msg.what == Utilities.GET_IMAGE_BITMAP_BY_URL){
                         Bitmap bitmap = (Bitmap) msg.obj;
                         if (bitmap != null){
                             ((ImageView) findViewById(R.id.UserProfile_me_image_view)).setImageBitmap(bitmap);
@@ -132,19 +131,6 @@ public class UserProfileActivity extends BaseActivity implements AsyncHttpCallba
         else {
             ((ImageView) findViewById(R.id.UserProfile_me_image_view)).setImageBitmap(bitmap);
         }
-//
-//        UserProfileItemLayout itemLayout = findViewById(R.id.UserProfile_resource_published_item);
-//        itemLayout.setAmount(0);
-//        itemLayout = findViewById(R.id.UserProfile_resource_received_item);
-//        itemLayout.setAmount(1);
-//        itemLayout = findViewById(R.id.UserProfile_star_item);
-//        itemLayout.setAmount(2);
-//        itemLayout = findViewById(R.id.UserProfile_track_item);
-//        itemLayout.setAmount(3);
-//        itemLayout = findViewById(R.id.UserProfile_comment_item);
-//        itemLayout.setAmount(4);
-//        itemLayout = findViewById(R.id.UserProfile_message_item);
-//        itemLayout.setAmount(5);
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -182,7 +168,7 @@ public class UserProfileActivity extends BaseActivity implements AsyncHttpCallba
     @Override
     protected void onResume() {
         super.onResume();
-        initNumberAndUserHead();
+        initUserHead();
     }
 
     public static void startMe(Context context){
