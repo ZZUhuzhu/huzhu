@@ -33,6 +33,7 @@ public class SettingItemLayout extends LinearLayout {
             tmpSwitch.setVisibility(GONE);
         typedArray.recycle();
     }
+
     public void setOnCheckStatusListener(CompoundButton.OnCheckedChangeListener checkStatusListener){
         tmpSwitch.setOnCheckedChangeListener(checkStatusListener);
     }

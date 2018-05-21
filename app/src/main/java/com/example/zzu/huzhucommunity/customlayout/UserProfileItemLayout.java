@@ -40,8 +40,6 @@ public class UserProfileItemLayout extends LinearLayout {
      * @param amount 需要显示的数字
      */
     public void setAmount(int amount){
-        if (amount == 0)
-            settingAmountTextView.setVisibility(GONE);
         String tmp = "" + amount;
         settingAmountTextView.setVisibility(VISIBLE);
         settingAmountTextView.setText(tmp);

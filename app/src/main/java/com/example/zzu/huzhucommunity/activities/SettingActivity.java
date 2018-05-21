@@ -5,8 +5,11 @@ import android.content.Intent;
 import android.support.v7.app.ActionBar;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import com.example.zzu.huzhucommunity.R;
@@ -16,11 +19,12 @@ import com.example.zzu.huzhucommunity.commonclass.ActivitiesCollector;
 import com.example.zzu.huzhucommunity.commonclass.MyApplication;
 import com.example.zzu.huzhucommunity.commonclass.Utilities;
 import com.example.zzu.huzhucommunity.customlayout.SettingItemLayout;
+import com.example.zzu.huzhucommunity.customlayout.UserProfileItemLayout;
 
 import java.util.HashMap;
 
 public class SettingActivity extends BaseActivity implements AsyncHttpCallback {
-
+    private static final String TAG = "SettingActivity";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,6 +45,30 @@ public class SettingActivity extends BaseActivity implements AsyncHttpCallback {
         addListener(R.id.SettingActivity_swipe_to_finish_on);
 
         SettingItemLayout itemLayout = findViewById(R.id.SettingActivity_new_message_notify_button);
+        itemLayout.setOnCheckStatusListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                Utilities.SaveSettingOption(Utilities.NEW_MESSAGE_NOTIFY_KEY, isChecked);
+            }
+        });
+        itemLayout = findViewById(R.id.SettingActivity_record_track_button);
+        itemLayout.setOnCheckStatusListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                Utilities.SaveSettingOption(Utilities.RECORD_TRACK_KEY, isChecked);
+            }
+        });
+        itemLayout = findViewById(R.id.SettingActivity_swipe_to_finish_on);
+        itemLayout.setOnCheckStatusListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                Utilities.SaveSettingOption(Utilities.RIGHT_SWIPE_BACK_KEY, isChecked);
+                BaseActivity.SetAllNotSwipeToFinish(!isChecked);
+            }
+        });
+
+
+        itemLayout = findViewById(R.id.SettingActivity_new_message_notify_button);
         if (Utilities.GetSettingOption(Utilities.NEW_MESSAGE_NOTIFY_KEY))
             itemLayout.changeCheckStatus();
         itemLayout = findViewById(R.id.SettingActivity_record_track_button);

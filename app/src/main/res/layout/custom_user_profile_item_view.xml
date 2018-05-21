@@ -33,12 +33,9 @@
         android:minWidth="19dp"
         android:gravity="center"
         android:layout_marginStart="@dimen/common_margin_small"
-        android:background="@drawable/new_message_amount_red_background"
-        android:paddingStart="@dimen/common_margin_small"
-        android:paddingEnd="@dimen/common_margin_small"
         android:layout_gravity="center_vertical"
-        android:textSize="@dimen/common_text_size_small"
-        android:textColor="@color/colorWhite"/>
+        android:textSize="@dimen/common_text_size_large"
+        android:textColor="@color/colorGray"/>
     <ImageView
         android:id="@+id/UserProfileItem_setting_arrow_image"
         android:contentDescription="@string/app_name"
